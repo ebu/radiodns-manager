@@ -1,6 +1,8 @@
 from utils import get_db
+import dns.resolver
 
 db = get_db()
+
 
 def to_json(inst, cls, bonusProps=[]):
     """
@@ -64,7 +66,13 @@ class Channel(db.Model):
     station_id = db.Column(db.Integer, db.ForeignKey('station.id'))
     name = db.Column(db.String(255))
 
-    TYPE_ID_CHOICES = [('fm', 'VHF/FM'), ('dab', 'DAB'), ('drm', 'DRM'), ('amss', 'AMSS'), ('hd', 'HD Radio'), ('id', 'IP')]
+    TYPE_ID_CHOICES = [ ('fm',   'VHF/FM',    ['ecc_id', 'pi', 'frequency']), 
+                        ('dab',  'DAB',       ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']), 
+                        ('drm',  'DRM',       ['sid']), 
+                        ('amss', 'AMSS',      ['sid']), 
+                        ('hd',   'HD Radio',  ['cc', 'tx']),
+                        ('id',   'IP',        ['fqdn', 'serviceIdentifier'])
+                        ]
 
     type_id = db.Column(db.String(5))
 
@@ -90,13 +98,47 @@ class Channel(db.Model):
         return '<Channel %r[%s]>' % (self.name, self.station.__repr__)
 
     @property
-    def radiodns_entry(self):
-        return "!"
+    def topic(self):
+        pass
 
     @property
+    def radiodns_entry(self):
+        val = self.type_id + '.radiodns.org.'
+        for (t, _, props) in Channel.TYPE_ID_CHOICES:
+            if t == self.type_id:
+                for v in props:
+                    if getattr(self, v) is not None:
+                        value = str(getattr(self, v)).lower() 
+
+                        if v == 'ecc_id':  # Special case
+                            cc_obj = Ecc.query.filter_by(id = value).first()
+                            value = (cc_obj.pi + cc_obj.ecc).lower()
+
+                        val = value + '.' + val
+        return val
+    @property
     def station_name(self):
-        return self.station.name
+        if self.station:
+            return self.station.name
+        else:
+            return ''
 
     @property
     def json(self):
         return to_json(self, self.__class__, ['radiodns_entry', 'station_name'])
+
+    @property
+    def dns_values(self):
+        fqdn = ''
+        vis = ''
+        epg = ''
+
+        try:
+            fqdn = str(dns.resolver.query(self.radiodns_entry, 'CNAME')[0])
+            vis = str(dns.resolver.query('_radiovis._tcp.' + fqdn, 'SRV')[0])
+            epg = str(dns.resolver.query('_radioepg._tcp.' + fqdn, 'SRV')[0])
+
+        except dns.resolver.NXDOMAIN:
+            pass
+
+        return (fqdn, vis, epg)

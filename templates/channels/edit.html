@@ -32,6 +32,87 @@
 		<label>Name</label>
 		<input type="text" name="name" value="{{object.name}}">
 
+		<label>Transmitter type</label>
+		<select name="type_id" id="type" onchange="update_display();">
+			{% for t in types_id %}
+				<option value="{{t.0}}" {% if object.type_id == t.0 %}selected{% endif %}>{{t.1}}</option>
+			{% endfor %}
+		</select>
+
+		<div class="opblk opblk_ecc_id">
+			<label>ECC</label>
+			<select name="ecc_id" id="ecc" cval="{{object.ecc_id}}">
+			</select>
+		</div>
+
+		<div class="opblk opblk_pi">
+			<label>PI</label>
+			<input type="text" name="pi" value="{{object.pi}}">
+			<small>Programme Identfcaton</small>
+		</div>
+
+		<div class="opblk opblk_frequency">
+			<label>Frequency</label>
+			<input type="text" name="frequency" value="{{object.frequency}}">
+			<small>wildcard * possible</small>
+		</div>
+
+		<div class="opblk opblk_eid">
+			<label>EID</label>
+			<input type="text" name="eid" value="{{object.eid}}">
+			<small>Ensemble ID</small>
+		</div>
+
+		<div class="opblk opblk_sid">
+			<label>SID</label>
+			<input type="text" name="sid" value="{{object.sid}}">
+			<small>Service ID</small>
+		</div>
+
+		<div class="opblk opblk_scids">
+			<label>SCIDS</label>
+			<input type="text" name="scids" value="{{object.scids}}">
+			<small>Service Component Identifier</small>
+		</div>
+
+		<div class="opblk opblk_appty_uatype">
+			<label>appty-uatype</label>
+			<input type="text" name="appty_uatype" value="{{object.appty_uatype}}">
+			<small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
+		</div>
+
+		<div class="opblk opblk_pa">
+			<label>PA</label>
+			<input type="text" name="pa" value="{{object.pa}}">
+			<small>Packet Address</small>
+		</div>
+
+		<div class="opblk opblk_tx">
+			<label>TX</label>
+			<input type="text" name="tx" value="{{object.tx}}">
+			<small>Transmiter Identifier</small>
+		</div>
+
+		<div class="opblk opblk_cc">
+			<label>CC</label>
+			<select name="cc" id="cc" cval="{{object.cc}}">
+
+			</select>
+			<small>Country Code</small>
+		</div>
+
+		<div class="opblk opblk_fqdn">
+			<label>FQDN</label>
+			<input type="text" name="fqdn" value="{{object.fqdn}}">
+			<small>Authoritative FQDN</small>
+		</div>
+
+		<div class="opblk opblk_serviceIdentifier">
+			<label>serviceIdentifier</label>
+			<input type="text" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
+			<small>Service Identifier</small>
+		</div>
+
 		<span style="float: right;">
 			<a href="{{ebuio_baseUrl}}channels" class="btn">Cancel</a>
 			<input type="submit" class="btn btn-primary" value="Save">
@@ -40,6 +121,63 @@
 	</form>
 
 	<hr style="visibility: hidden; clear: both;">
+
+	<script type="text/javascript">
+
+		function load_countries() {
+			$.ajax({
+				url: '{{ebuio_baseUrl}}ecc_list',
+				dataType: 'json',
+				success: function(data) {
+					cc_val = $('#cc').attr('cval');
+					cc_id = '';
+
+					$(data.list).each(function(_, el) {
+						opt = '<option value="' + el.id + '">' + el.name + ' (' + el.iso + ') [' + el.pi + el.ecc + ']</option>';
+
+						//Find cc id (as we store the cc and not the id to the country)
+						if (cc_val == (el.pi + el.ecc)){
+							cc_id = el.id;
+						}
+
+
+						$('#cc').append(opt);
+						$('#ecc').append(opt);
+					})
+
+					$('#cc').val(cc_id);
+					$('#ecc').val($('#ecc').attr('cval'));
+				}
+			})
+		}
+
+		function update_display() {
+			$('.opblk').hide();
+
+			var cVal = $('#type').val();
+
+			{% for t in types_id %}
+				if (cVal == '{{t.0}}') {
+					{% for v in t.2 %}
+						$('.opblk_{{v}}').show();
+					{% endfor %}
+				}
+			{% endfor %}
+
+			$('.opblk').each(function(_, el) {
+
+				if ($(el).css('display') == 'none') {
+					$(el).find('input').val('');
+					$(el).find('select').val('');
+				}
+			});		
+
+		}
+
+		update_display();
+		load_countries();
+
+	</script>
 
 {% endblock %}
 
