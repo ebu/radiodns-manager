@@ -3,6 +3,9 @@
 """Utils and decorators"""
 
 import hashlib
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+import config
 
 # Decorators
 
@@ -113,3 +116,12 @@ class PlugItSendFile():
         self.filename = filename
         self.as_attachment = as_attachment
         self.attachment_filename = attachment_filename
+
+def get_db():
+    """Return the database"""
+
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_URL
+    db = SQLAlchemy(app)
+
+    return db
