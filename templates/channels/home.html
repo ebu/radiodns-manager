@@ -1,0 +1,109 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Channels :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Channels</h3>
+
+	{% if saved %}
+		<div class="alert">
+			Channel has been saved
+		</div>
+	{% endif %}
+
+	{% if deleted %}
+		<div class="alert">
+			Channel has been deleted
+		</div>
+	{% endif %}
+
+	<table class="table table-striped table-hover table-condensed">
+		<thead>
+			<tr>
+				<th>Station</th>
+				<th>Name</th>
+				<th>RadioDNS entry</th>
+				<th>DNS Authoritative FQDN</th>
+				<th>VIS server</th>
+				<th>EPG server</th>
+				<th style="width: 100px;"></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for c in list %}
+				<tr>
+					<td>{{c.station_name}}</td>
+					<td>{{c.name}}</td>
+					<td>{{c.radiodns_entry}}</td>
+					<td id="fqdn-{{c.id}}">?</td>
+					<td id="vis-{{c.id}}">?</td>
+					<td id="epg-{{c.id}}">?</td>
+					<td>
+						{% if ebuio_u.ebuio_orga_admin %}
+							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-mini">Edit</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% if ebuio_u.ebuio_orga_admin %}
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}channels/export/" class="btn">Export to zone file</a>
+			<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
+		</span>
+	{% endif %}
+
+	<script type="text/javascript">
+		function checkChannel(id) {
+			$.ajax({
+				url: '{{ebuio_baseUrl}}channels/check/' + id,
+				dataType: 'json',
+				success: function(data) {
+					if (data.fqdn) {
+						$('#fqdn-' + id).html(data.fqdn);
+						$('#fqdn-' + id).addClass('text-success');
+					} else {
+						$('#fqdn-' + id).html('no radiodns entry');
+						$('#fqdn-' + id).addClass('text-error');
+					}
+
+					if (data.vis) {
+						vis = data.vis.split(' ');
+
+						$('#vis-' + id).html(vis[3] + ':' + vis[2]);
+						$('#vis-' + id).addClass('text-success');
+					} else {
+						$('#vis-' + id).html('no service');
+						$('#vis-' + id).addClass('text-error');
+					}
+
+					if (data.epg) {
+						epg = data.epg.split(' ');
+
+						$('#epg-' + id).html(epg[3] + ':' + epg[2]);
+						$('#epg-' + id).addClass('text-success');
+					} else {
+						$('#epg-' + id).html('no service');
+						$('#epg-' + id).addClass('text-error');
+					}
+				}
+			});
+		}
+
+		{% for c in list %}
+			checkChannel({{c.id}});
+		{% endfor %}
+	</script>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

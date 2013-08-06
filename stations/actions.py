@@ -35,17 +35,18 @@ def stations_edit(request, id):
 
     if request.method == 'POST':
 
+        if not object:
+            object = Station(int(request.form.get('ebuio_orgapk')))
+
+        object.name = request.form.get('name')
+
         # Check errors
-        if request.form.get('name', '') == '':
+        if object.name == '':
             errors.append("Please set a name")
 
         # If no errors, save
         if not errors:
-            if not object:
-                object = Station(int(request.form.get('ebuio_orgapk')))
             
-            object.name = request.form.get('name')
-
             if not object.id:
                 db.session.add(object)
 
@@ -53,9 +54,8 @@ def stations_edit(request, id):
 
             return PlugItRedirect('stations/?saved=yes')
 
-    else:
-        if object:
-            object = object.json
+    if object:
+        object = object.json
        
     return {'object': object, 'errors': errors}
 
