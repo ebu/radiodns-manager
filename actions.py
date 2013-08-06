@@ -6,6 +6,9 @@ from main.actions import *
 # Include stations methods
 from stations.actions import *
 
+# Include channls methods
+from channels.actions import *
+
 from utils import action
 
 
