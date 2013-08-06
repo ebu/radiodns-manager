@@ -102,8 +102,8 @@ class Channel(db.Model):
         pass
 
     @property
-    def radiodns_entry(self):
-        val = self.type_id + '.radiodns.org.'
+    def dns_entry(self):
+        val = self.type_id
         for (t, _, props) in Channel.TYPE_ID_CHOICES:
             if t == self.type_id:
                 for v in props:
@@ -116,6 +116,11 @@ class Channel(db.Model):
 
                         val = value + '.' + val
         return val
+
+    @property
+    def radiodns_entry(self):
+        return self.dns_entry + '.radiodns.org.'
+        
     @property
     def station_name(self):
         if self.station:
@@ -133,8 +138,14 @@ class Channel(db.Model):
         vis = ''
         epg = ''
 
+        dns_entry = self.radiodns_entry
+
+        # Special case with *
+        if dns_entry[0] == '*':
+            dns_entry = '10800' + dns_entry[1:]
+
         try:
-            fqdn = str(dns.resolver.query(self.radiodns_entry, 'CNAME')[0])
+            fqdn = str(dns.resolver.query(dns_entry, 'CNAME')[0])
             vis = str(dns.resolver.query('_radiovis._tcp.' + fqdn, 'SRV')[0])
             epg = str(dns.resolver.query('_radioepg._tcp.' + fqdn, 'SRV')[0])
 
