@@ -1,0 +1,38 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Stations :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Edit a station</h3>
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST">
+		{% csrf_token %}
+
+		<label>Name</label>
+		<input type="text" name="name" value="{{object.name}}">
+
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}stations" class="btn">Cancel</a>
+			<input type="submit" class="btn btn-primary" value="Save">
+		</span>
+
+	</form>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

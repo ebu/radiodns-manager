@@ -1,2 +1,4 @@
 
 API_URL = ""
+
+SQLALCHEMY_URL = ""
