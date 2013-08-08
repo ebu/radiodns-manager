@@ -53,6 +53,11 @@ class RabbitConnexion():
 
     def run(self):
         """Thread with connection to rabbitmq"""
+
+        if config.RABBITMQ_LOOPBACK:
+            self.logger.warning("Looopback mode: No connection, waiting for ever...")
+            while True:
+                time.sleep(1)
         
         while True:
             try:
@@ -105,7 +110,19 @@ class RabbitConnexion():
     def send_message(self, headers, message):
         """Send a message to the queue"""
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
-        self.ch.basic.publish( Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '' )
+
+        if config.RABBITMQ_LOOPBACK:
+            self.logger.info("Sending using loopback, calling function directly")
+
+            class FalseMsg():
+                def __init__(self, body, headers):
+                    self.body = body
+                    self.properties = {'application_headers': headers}
+
+            self.consumer(FalseMsg(message, headers))
+
+        else:
+            self.ch.basic.publish( Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '' )
 
     def add_stomp_server(self, s):
         """Handle a new stomp server"""
