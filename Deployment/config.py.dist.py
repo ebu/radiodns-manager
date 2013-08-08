@@ -1,0 +1,4 @@
+SSH_USER = ''
+SSH_PRIVKEY = ''
+
+USE_SSH_CONFIG = False
