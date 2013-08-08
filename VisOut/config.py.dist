@@ -1,0 +1,14 @@
+import logging
+
+LOG_LEVEL = logging.DEBUG
+
+RABBITMQ_HOST = 'radiovis.ebu.io'
+RABBITMQ_PORT = 5672
+RABBITMQ_USER = 'guest'
+RABBITMQ_PASSWORD = 'guest'
+RABBITMQ_VHOST = '/'
+RABBITMQ_DEBUG = True
+
+
+STOMP_IP = '0.0.0.0'
+STOMP_PORT = 61613
