@@ -1,0 +1,116 @@
+from haigha.connection import Connection
+
+import logging
+import time
+
+import config
+
+from haigha.message import Message
+
+class RabbitConnexion():
+    """Manage connexion to Rabiit"""
+
+    def __init__(self, LAST_MESSAGES):
+        self.logger = logging.getLogger('radiovisserver.rabbitmq')
+
+        # List of stompservers
+        self.stompservers = []
+
+        # Save LAST_MESSAGES
+        self.LAST_MESSAGES = LAST_MESSAGES
+
+    def consumer(self, msg):
+        """Called when a rabbitmq message arrive"""
+
+        try:
+            headers = msg.properties['application_headers']
+
+            if 'topic' in headers:
+                body = msg.body
+                topic = headers['topic']
+
+                bonusHeaders = []
+
+                # Get the list of extras headers (eg: link, trigger-time)
+                for name in headers:
+                    if name == 'topic':  #Internal header
+                        continue
+                    bonusHeaders.append((name, headers[name]))
+
+                self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
+
+                # Save the message as the last one
+                self.LAST_MESSAGES[topic] = (body, bonusHeaders)
+
+                # Broadcast message to all clients
+                for c in self.stompservers:
+                    c.new_message(topic, body, bonusHeaders)
+
+            else:
+                self.logger.warning("Got message without topic: %s" % (msg, ))
+        except Exception as e:
+            self.logger.error("Error in consumer: %s", (e, ))
+
+    def run(self):
+        """Thread with connection to rabbitmq"""
+        
+        while True:
+            try:
+                time.sleep(1)
+                self.logger.debug("Connecting to RabbitMQ (user=%s,host=%s,port=%s,vhost=%s)" % (config.RABBITMQ_USER, config.RABBITMQ_HOST, config.RABBITMQ_PORT, config.RABBITMQ_VHOST))
+                self.cox = Connection(user=config.RABBITMQ_USER, password=config.RABBITMQ_PASSWORD, vhost=config.RABBITMQ_VHOST, host=config.RABBITMQ_HOST, port=config.RABBITMQ_PORT, debug=config.RABBITMQ_DEBUG)
+
+                self.logger.debug("Creating the channel")
+                self.ch = self.cox.channel()
+
+                # Name will come from a callback
+                global queue_name
+                queue_name = None
+
+                def queue_qb(queue, msg_count, consumer_count):
+                    self.logger.debug("Created queue %s" % (queue, ))
+                    global queue_name
+                    queue_name = queue
+
+                self.logger.debug("Creating the queue")
+                self.ch.queue.declare(auto_delete=True, nowait=False, cb=queue_qb)
+
+                for i in range(0, 10):  # Max 10 seconds
+                    if queue_name is None:
+                        time.sleep(1)
+
+                if queue_name is None:
+                    self.logger.warning("Queue creation timeout !")
+                    raise Exception("Cannot create queue !")
+
+                self.logger.debug("Binding the exchange %s" % (config.RABBITMQ_EXCHANGE, ))
+                self.ch.queue.bind(queue_name, config.RABBITMQ_EXCHANGE, '')
+
+                self.logger.debug("Binding the comsumer")
+                self.ch.basic.consume(queue_name, self.consumer)
+
+                self.logger.debug("Ready, waiting for events !")
+                while True:
+                    if not hasattr(self.ch, 'channel') or (hasattr(self.ch.channel, '_closed') and self.ch.channel._closed):
+                        self.logger.warning("Channel is closed")
+                        raise Exception("Connexion or channel closed !")
+                    self.cox.read_frames()
+                        
+
+            except Exception as e:
+                self.logger.error("Error in run: %s" % (e, ))
+            finally:
+                self.cox.close()
+
+    def send_message(self, headers, message):
+        """Send a message to the queue"""
+        self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
+        self.ch.basic.publish( Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '' )
+
+    def add_stomp_server(self, s):
+        """Handle a new stomp server"""
+        self.stompservers.append(s)
+
+    def remove_stomp_server(self, s):
+        """Stop handeling a stomp server"""
+        self.stompservers.remove(s)
