@@ -2,6 +2,7 @@ import logging
 
 LOG_LEVEL = logging.DEBUG
 
+
 RABBITMQ_HOST = 'radiovis.ebu.io'
 RABBITMQ_PORT = 5672
 RABBITMQ_USER = 'guest'
@@ -15,3 +16,8 @@ STOMP_IP = '0.0.0.0'
 STOMP_PORT = 61613
 
 API_URL = ''
+
+#http://beaker.readthedocs.org/en/latest/configuration.html#configuration
+CACHE_OPTS = {
+    'cache.type': 'memory',
+}

@@ -11,10 +11,12 @@ import os
 import sys
 
 from werkzeug import secure_filename
+from flask import abort
 
 from PIL import Image
 import imghdr
 
+import config
 
 @action(route="/radiovis/gallery/", template="radiovis/gallery/home.html")
 @only_orga_member_user()
@@ -180,3 +182,52 @@ def radiovis_channels_set(request, id, pictureid):
     db.session.commit()
 
     return {}
+
+
+@action(route="/radiovis/api/<secret>/check_auth")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_check_auth(request, secret):
+    """Api call to authenticate a station"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    user = request.form.get('username')
+    password = request.form.get('password')
+
+    # Find the station
+    id = user.split('.')[0]
+
+    object = Station.query.filter_by(id=int(id)).first()
+
+    if not object:
+        return {'result': False, 'error': 'No station'}
+
+    if object.stomp_username != user:
+        return {'result': False, 'error': 'Wrong username'}
+
+    if object.random_password != password:
+        return {'result': False, 'error': 'Wrong password'}
+
+    return {'result': True}
+
+@action(route="/radiovis/api/<secret>/get_channels")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_get_channels(request, secret):
+    """Api call to get a list of channels"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    list = []
+
+    object = Station.query.filter_by(id=int(request.form.get('station_id'))).first()
+
+    for channel in object.channels:
+        list.append(channel.topic)
+
+    return {'list': list}

@@ -2,3 +2,5 @@
 API_URL = ""
 
 SQLALCHEMY_URL = ""
+
+API_SECRET = ""

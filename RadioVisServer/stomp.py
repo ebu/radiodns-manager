@@ -6,6 +6,10 @@ from gevent.coros import RLock
 
 from gevent import spawn, queue
 
+from radiodns import RadioDns
+
+# API
+radioDns = RadioDns()
 
 class StompServer():
     """A basic stomp server"""
@@ -36,6 +40,9 @@ class StompServer():
 
         # RabbitCox
         self.rabbitcox = rabbitcox
+
+        # Station id, if authenticated
+        self.station_id = None
 
 
     def get_frame(self):
@@ -147,9 +154,29 @@ class StompServer():
             if command != 'CONNECT':
                 self.logger.error("Unexcepted command, %s instead of CONNECT" % (command, ))
                 self.send_frame('ERROR', [('message', 'Excepted CONNECT')], '')
+                return
 
-            # We accept any username/password, so we don't need to check them :)
+            # Check username and password, if any
+            user = get_header_value(headers, 'login')
+            password = get_header_value(headers, 'passcode')
 
+            if user is None:
+                user = ''
+            if password is None:
+                password = ''
+
+            if user != '' or password != '':
+                if radioDns.check_auth(user, password):
+                    self.station_id = user.split('.')[0]
+                    self.logger.info("Logged as station #%s" % (self.station_id, ))    
+                else:
+                    self.logger.warning("Wrong password, closing connexion...")
+                    self.send_frame('ERROR', [('message', 'Wrong credentials')], '')
+                    return
+
+            else:
+                self.logger.info("Anonymous user")
+                
             # Create a session id
             self.session_id = str(uuid.uuid4())
 
@@ -222,9 +249,11 @@ class StompServer():
                     if channel is None:
                         if id is None:
                             self.logger.error("Unsubscribe without channel and id !")
+                            self.send_frame('ERROR', [('message', 'No ID or channel')], '')
                         else:
                             if id not in self.channelsByIds:
                                 self.logger.error("Unsubscribe with unknow id (%s)" % (id, ))
+                                self.send_frame('ERROR', [('message', 'Unknow ID')], '')
                             else:
                                 channel = self.channelsByIds[id]
 
@@ -237,40 +266,70 @@ class StompServer():
 
                 elif command == 'SEND':
 
+                    if self.station_id is None:
+                        self.logger.warning("Tried to SEND without been authenticated !")
+                        self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
+
+                    # List of allowed channels
+                    allowed_channels = radioDns.get_channels(self.station_id)
+
                     # Check rights
                     destination = get_header_value(headers, 'destination')
 
                     if destination is None:
                         self.logger.error("SEND without destination !")
+                        self.send_frame('ERROR', [('message', 'No destination ?')], '')
 
                     else:
 
+                        # Sepcial case: all destination:
+                        all_destinations = destination[:9] == '/topic/*/'
 
-                        # Prepare headers
-                        msg_headers = {}
+                        # Find if the channel is allowed (It's a prefix of the destination !)
+                        channel_ok = False
+                        for chan in allowed_channels:
+                            if destination[:len(chan)] == chan:
+                                channel_ok = True
+                                break
 
-                        # Copy trigger time
-                        trigger_time = get_header_value(headers, 'trigger-time')
-                        if trigger_time:
-                            msg_headers['trigger_time'] = trigger_time
+                        if not all_destinations and not channel_ok:
+                            self.logger.warning("Tryed to send to a destination not autorized ! (%s vs %s)" % (destination, allowed_channels))
+                            self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
+                        else:
+                            self.logger.debug("Allowed to send the message to %s" % (destination, ))
+                            # Prepare headers
+                            msg_headers = {}
 
-                        # Copy link
-                        link = get_header_value(headers, 'link')
-                        if link:
-                            msg_headers['link'] = link
+                            # Copy trigger time
+                            trigger_time = get_header_value(headers, 'trigger-time')
+                            if trigger_time:
+                                msg_headers['trigger_time'] = trigger_time
 
-                        # Message id
-                        message_id = get_header_value(headers, 'message-id')
-                        if not message_id:
-                            message_id = str(uuid.uuid4())
-                        msg_headers['message-id'] = message_id
+                            # Copy link
+                            link = get_header_value(headers, 'link')
+                            if link:
+                                msg_headers['link'] = link
 
-                        # Destination
-                        msg_headers['topic'] = destination
+                            # Message id
+                            message_id = get_header_value(headers, 'message-id')
+                            if not message_id:
+                                message_id = str(uuid.uuid4())
+                            msg_headers['message-id'] = message_id
 
-                        self.logger.debug("Sending message %s to %s (headers: %s)" % (body, destination, msg_headers))
+                            def send_to_dest(destination):
+                                # Destination
+                                msg_headers['topic'] = destination
 
-                        self.rabbitcox.send_message(msg_headers, body)
+                                self.logger.debug("Sending message %s to %s (headers: %s)" % (body, destination, msg_headers))
+
+                                self.rabbitcox.send_message(msg_headers, body)
+
+                            if all_destinations:
+                                self.logger.debug("Broadcasting to all channels !!")
+                                for dest in allowed_channels:
+                                    send_to_dest(dest + destination[9:])
+                            else:   
+                                send_to_dest(destination)
 
                 else:
                     self.logger.warning("Unexcepted command %s %s %s" % (command, headers, body))

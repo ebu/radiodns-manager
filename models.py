@@ -111,7 +111,7 @@ class Channel(db.Model):
 
     @property
     def topic(self):
-        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1])
+        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1]) + '/'
 
     @property
     def dns_entry(self):
