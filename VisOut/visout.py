@@ -109,12 +109,17 @@ class StompServer():
         try:
             while True:
                 self.logger.debug("Waiting for message in queue")
-                topic, message = self.queue.get()
-                self.logger.debug("Got a message on topic %s: %s" % (topic, message))
+                topic, message, bonusHeaders = self.queue.get()
+                self.logger.debug("Got a message on topic %s: %s (headers: %s)" % (topic, message, bonusHeaders))
                 
                 if topic in self.topics:
                     self.logger.debug("Sending the message to the client !")
-                    self.send_frame("MESSAGE", [('destination', topic), ('message-id', str(uuid.uuid4()))], message)
+                    headers = [('destination', topic), ('message-id', str(uuid.uuid4()))]
+
+                    for header in bonusHeaders:
+                        headers.append(header)
+
+                    self.send_frame("MESSAGE", headers , message)
 
         except Exception as e:
             self.logger.error("Error in consume_queue: %s" % (e, ))
@@ -190,8 +195,9 @@ class StompServer():
 
                     # Send the last message from the topic. A message may be send twice, but that should be ok
                     if channel in LAST_MESSAGES:
-                        self.logger.debug("Quick sending the previous message %s" % (LAST_MESSAGES[channel], ))
-                        self.queue.put((channel, LAST_MESSAGES[channel]))
+                        body, headers = LAST_MESSAGES[channel]
+                        self.logger.debug("Quick sending the previous message %s (headers: %s)" % (body, headers))
+                        self.queue.put((channel, body, headers))
 
                 elif command == 'UNSUBSCRIBE':
                     # Remove subscription
@@ -217,21 +223,34 @@ class StompServer():
 
 # Called when a rabbitmq message arrive
 def rabbitmq_consumer(msg):
-    if 'topic' in msg.properties['application_headers']:
-        body = msg.body
-        topic = msg.properties['application_headers']['topic']
+    try:
+        headers = msg.properties['application_headers']
 
-        rabbitlogger.info("Got message on topic %s: %s" % (topic, body))
+        if 'topic' in headers:
+            body = msg.body
+            topic = headers['topic']
 
-        # Save the message as the last one
-        LAST_MESSAGES[topic] = body
+            bonusHeaders = []
 
-        # Broadcast message to all clients
-        for c in CURRENT_STOMPSSERVERS:
-            c.queue.put((topic, body))
+            # Get the list of extras headers (eg: link, trigger-time)
+            for name in headers:
+                if name == 'topic':  #Internal header
+                    continue
+                bonusHeaders.append((name, headers[name]))
 
-    else:
-        rabbitlogger.warning("Got message without topic: %s" % (msg, ))
+            rabbitlogger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
+
+            # Save the message as the last one
+            LAST_MESSAGES[topic] = (body, bonusHeaders)
+
+            # Broadcast message to all clients
+            for c in CURRENT_STOMPSSERVERS:
+                c.queue.put((topic, body, bonusHeaders))
+
+        else:
+            rabbitlogger.warning("Got message without topic: %s" % (msg, ))
+    except Exception as e:
+        rabbitlogger.error("Error in rabbitmq_consumer: %s", (e, ))
 
 
 # Thread with connection to rabbitmq
