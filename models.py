@@ -94,12 +94,14 @@ class Channel(db.Model):
     fqdn = db.Column(db.String(255))
     serviceIdentifier = db.Column(db.String(16))
 
+    default_picture_id = db.Column(db.Integer, db.ForeignKey('picture.id'))
+
     def __repr__(self):
         return '<Channel %r[%s]>' % (self.name, self.station.__repr__)
 
     @property
     def topic(self):
-        pass
+        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1])
 
     @property
     def dns_entry(self):
@@ -129,8 +131,15 @@ class Channel(db.Model):
             return ''
 
     @property
+    def default_picture_data(self):
+        if self.default_picture:
+            return self.default_picture.json
+        else:
+            return None
+
+    @property
     def json(self):
-        return to_json(self, self.__class__, ['radiodns_entry', 'station_name'])
+        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data'])
 
     @property
     def dns_values(self):
@@ -153,3 +162,31 @@ class Channel(db.Model):
             pass
 
         return (fqdn, vis, epg)
+
+class Picture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    orga = db.Column(db.Integer)
+    name = db.Column(db.String(80))
+    filename = db.Column(db.String(255))
+    radiotext = db.Column(db.String(255))
+    radiolink = db.Column(db.String(255))
+
+    channels = db.relationship('Channel', backref='default_picture', lazy='dynamic')
+
+
+    def __init__(self, orga):
+        self.orga = orga
+
+    def __repr__(self):
+        return '<Picture %r[%s]>' % (self.name, self.orga)
+
+    @property
+    def clean_filename(self):
+        if not self.filename:
+            return ''
+
+        return self.filename.split('/')[-1]
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['clean_filename'])

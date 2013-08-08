@@ -9,6 +9,9 @@ from stations.actions import *
 # Include channls methods
 from channels.actions import *
 
+# Include radiovis methods
+from radiovis.actions import *
+
 from utils import action
 
 
