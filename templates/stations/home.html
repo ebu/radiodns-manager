@@ -21,11 +21,23 @@
 		</div>
 	{% endif %}
 
+	{% if passworded %}
+		<div class="alert">
+			A new password has been generated
+		</div>
+	{% endif %}
+
+	
+
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th style="width: 100px;"></th>
+				{% if ebuio_u.ebuio_orga_admin %}
+					<th>Stomp username</th>
+					<th>Stomp password</th>
+				{% endif %}
+				<th style="width: 200px;"></th>
 			</tr>
 		</thead>
 
@@ -33,8 +45,13 @@
 			{% for s in list %}
 				<tr>
 					<td>{{s.name}}</td>
+					{% if ebuio_u.ebuio_orga_admin %}
+						<td>{{s.stomp_username}}</td>
+						<td>{{s.random_password}}</td>
+					{% endif %}
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
+							<a href="{{ebuio_baseUrl}}stations/newpassword/{{s.id}}" class="btn btn-mini btn-warning" onclick="return confirm('Are you sure ?');">New password</a>
 							<a href="{{ebuio_baseUrl}}stations/delete/{{s.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
 							<a href="{{ebuio_baseUrl}}stations/edit/{{s.id}}" class="btn btn-mini">Edit</a>
 						{% endif %}

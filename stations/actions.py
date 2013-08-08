@@ -18,8 +18,10 @@ def stations_home(request):
 
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
+    passworded = request.args.get('passworded') == 'yes'
     
-    return {'list': list, 'saved': saved, 'deleted': deleted}
+    
+    return {'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded}
 
 
 @action(route="/stations/edit/<id>", template="stations/edit.html", methods=['POST', 'GET'])
@@ -48,6 +50,7 @@ def stations_edit(request, id):
         if not errors:
             
             if not object.id:
+                object.gen_random_password()
                 db.session.add(object)
 
             db.session.commit()
@@ -70,3 +73,15 @@ def stations_delete(request, id):
     db.session.commit()
 
     return PlugItRedirect('stations/?deleted=yes')
+
+@action(route="/stations/newpassword/<id>")
+@json_only()
+@only_orga_admin_user()
+def stations_newpassword(request, id):
+    """Delete a station."""
+
+    object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+    object.gen_random_password()
+    db.session.commit()
+
+    return PlugItRedirect('stations/?passworded=yes')
