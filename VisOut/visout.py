@@ -101,11 +101,11 @@ class StompServer():
         self.logger.debug("Frame send !")
 
     def consume_queue(self):
-        """A thead who read topics from the queue of message and send them to the client, if requested"""
+        """A thread who read topics from the queue of message and send them to the client, if requested"""
         
         try:
             while True:
-                self.logger.debug("Waiting for mesasge in queue")
+                self.logger.debug("Waiting for message in queue")
                 topic, message = self.queue.get()
                 self.logger.debug("Got a message on topic %s: %s" % (topic, message))
                 
