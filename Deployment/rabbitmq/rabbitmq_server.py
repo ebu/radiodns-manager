@@ -65,7 +65,7 @@ def setup_auth():
     rabbitmq_ctl("set_user_tags", config.RABBITMQ_USER, "administrator")
 
     #Set guest permistions (read only)
-    rabbitmq_ctl("set_permissions", "-p", "/", "guest", '"^amq\.gen\.*$"', '"^amq\.gen\.*$"', '".*"')
+    rabbitmq_ctl("set_permissions", "-p", "/", "guest", '"^amq.gen.*$"', '"^amq.gen.*$"', '".*"')
     rabbitmq_ctl("set_user_tags", "guest")
 
 
