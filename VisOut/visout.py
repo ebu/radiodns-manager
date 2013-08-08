@@ -47,6 +47,13 @@ class StompServer():
         # Lock to send frame
         self.lock = RLock()
 
+        # Mapping channel -> id for subscritions
+        self.idsByChannels = {}
+
+        # Mapping id- -> channel for subscritions
+        self.channelsByIds = {}
+
+
     def get_frame(self):
         """Get one stomp frame"""
         
@@ -119,6 +126,10 @@ class StompServer():
                     for header in bonusHeaders:
                         headers.append(header)
 
+                    # If subscribled with an ID, add the subscription header
+                    if topic in self.idsByChannels:
+                        headers.append(('subscription', self.idsByChannels[topic]))
+
                     self.send_frame("MESSAGE", headers , message)
 
         except Exception as e:
@@ -190,8 +201,15 @@ class StompServer():
                 elif command == 'SUBSCRIBE':
                     # New subscription
                     channel = get_header_value(headers, 'destination').strip()
+
+                    id = get_header_value(headers, 'id')
+
+                    if id:
+                        self.channelsByIds[id] = channel
+                        self.idsByChannels[channel] = id
+
                     self.topics.append(channel)
-                    self.logger.debug("Client is now subscribled to %s" % (channel,))
+                    self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel,id))
 
                     # Send the last message from the topic. A message may be send twice, but that should be ok
                     if channel in LAST_MESSAGES:
@@ -201,9 +219,25 @@ class StompServer():
 
                 elif command == 'UNSUBSCRIBE':
                     # Remove subscription
-                    channel = get_header_value(headers, 'destination').strip()
+                    channel = get_header_value(headers, 'destination')
+                    id = get_header_value(headers, 'id')
+
+                    if channel is None:
+                        if id is None:
+                            self.logger.error("Unsubscribe without channel and id !")
+                        else:
+                            if id not in self.channelsByIds:
+                                self.logger.error("Unsubscribe with unknow id (%s)" % (id, ))
+                            else:
+                                channel = self.channelsByIds[id]
+
                     self.topics.remove(channel)
-                    self.logger.debug("Client unsubscribled from %s" % (channel,))
+
+                    del self.channelsByIds[id]
+                    del self.idsByChannels[channel] 
+
+
+                    self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel,id))
 
                 else:
                     self.logger.info("Unexcepted command %s %s %s" % (command, headers, body))
