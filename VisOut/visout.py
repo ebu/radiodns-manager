@@ -26,6 +26,9 @@ rabbitlogger = logging.getLogger('visout.rabbitmq')
 # Global variable with the list of stompservers
 CURRENT_STOMPSSERVERS = []
 
+# Last message by TOPIC
+LAST_MESSAGES = {}
+
 class StompServer():
     """A basic stomp server"""
 
@@ -185,6 +188,11 @@ class StompServer():
                     self.topics.append(channel)
                     self.logger.debug("Client is now subscribled to %s" % (channel,))
 
+                    # Send the last message from the topic. A message may be send twice, but that should be ok
+                    if channel in LAST_MESSAGES:
+                        self.logger.debug("Quick sending the previous message %s" % (LAST_MESSAGES[channel], ))
+                        self.queue.put((channel, LAST_MESSAGES[channel]))
+
                 elif command == 'UNSUBSCRIBE':
                     # Remove subscription
                     channel = get_header_value(headers, 'destination').strip()
@@ -215,9 +223,13 @@ def rabbitmq_consumer(msg):
 
         rabbitlogger.info("Got message on topic %s: %s" % (topic, body))
 
+        # Save the message as the last one
+        LAST_MESSAGES[topic] = body
+
         # Broadcast message to all clients
         for c in CURRENT_STOMPSSERVERS:
-            c.queue.put((topic, body))                      
+            c.queue.put((topic, body))
+
     else:
         rabbitlogger.warning("Got message without topic: %s" % (msg, ))
 
