@@ -139,7 +139,9 @@ def radiovis_gallery_delete(request, id):
     """Delete a picture."""
 
     object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
-
+    
+    os.unlink(object.filename)
+    
     db.session.delete(object)
     db.session.commit()
 
