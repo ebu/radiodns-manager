@@ -70,8 +70,8 @@ class StompServer():
             if x == '' and headerMode:  # Switch from headers to body
                 headerMode = False
             elif headerMode:  # Add header to the lsit 
-                splited_header = x.split(':', 1)
-                headers.append((splited_header[0], splited_header[1]))
+                key, value = x.split(':', 1)
+                headers.append((key, value))
             else:  # Compute the body
                 body += x + '\n'
 
