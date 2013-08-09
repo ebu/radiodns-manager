@@ -24,12 +24,12 @@ class RadioDns():
 			self.logger.error("Error trying query %s" % (url, ))
 			return None
 
-	def check_auth(self, user, password):
+	def check_auth(self, user, password, ip):
 		"""Check an username and password"""
 
 		self.logger.debug("Checking username and password for %s" % (user,))
 
-		result = self.do_query('check_auth', {'username': user, 'password': password})
+		result = self.do_query('check_auth', {'username': user, 'password': password, 'ip': ip})
 
 		if result:
 			if result['result']:
