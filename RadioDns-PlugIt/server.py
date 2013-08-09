@@ -9,9 +9,10 @@ from utils import md5Checksum, PlugItRedirect, PlugItSendFile, addressInNetwork
 
 from datetime import datetime, timedelta
 
+import config
 
 # Global parameters
-DEBUG = True
+DEBUG = config.DEBUG
 
 # PlugIt Parameters
 
@@ -22,10 +23,10 @@ else:
     PI_META_CACHE = 5 * 60  # 5 minutes
 
 # Allow the API to be located at another endpoint (to share call with another API)
-PI_BASE_URL = '/'
+PI_BASE_URL = config.PI_BASE_URL
 
 # IP allowed to use the PlugIt API.
-PI_ALLOWED_NETWORKS = ['127.0.0.1/32']
+PI_ALLOWED_NETWORKS = config.PI_ALLOWED_NETWORKS
 
 ## Does not edit code bellow !
 

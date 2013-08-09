@@ -1,0 +1,8 @@
+flask
+sqlalchemy
+Flask-SQLAlchemy
+alembic
+dnspython
+haigha
+requests
+beaker
