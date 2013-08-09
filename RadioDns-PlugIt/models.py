@@ -35,6 +35,8 @@ class Station(db.Model):
     name = db.Column(db.String(80))
     random_password = db.Column(db.String(32))
 
+    ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
+
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
 
 
@@ -163,13 +165,35 @@ class Channel(db.Model):
         if dns_entry[0] == '*':
             dns_entry = '10800' + dns_entry[1:]
 
-        try:
-            fqdn = str(dns.resolver.query(dns_entry, 'CNAME')[0])
-            vis = str(dns.resolver.query('_radiovis._tcp.' + fqdn, 'SRV')[0])
-            epg = str(dns.resolver.query('_radioepg._tcp.' + fqdn, 'SRV')[0])
+        
+        # Find radiodns servers
+        ns = str(dns.resolver.query('radiodns.org', 'NS')[0])
+        ip = str(dns.resolver.query(ns, 'A')[0])
 
-        except dns.resolver.NXDOMAIN:
+        # Build a resolver using radiodns.org nameserver, timeout of 2, to be sure to have the latested FQDN
+        resolver = dns.resolver.Resolver()
+        resolver.lifetime = 2  # Timeout of 2
+        resolver.nameservers = [ip]  # Use radiodns.org servers
+
+        try:
+            fqdn = str(resolver.query(dns_entry, 'CNAME')[0])
+        except:
             pass
+
+        # Build resolver for others queries using local nameserver
+        resolver = dns.resolver.Resolver()
+        resolver.lifetime = 2  # Timeout of 2
+
+        if fqdn:
+            try:
+                vis = str(resolver.query('_radiovis._tcp.' + fqdn, 'SRV')[0])
+            except:
+                pass
+
+            try:
+                epg = str(resolver.query('_radioepg._tcp.' + fqdn, 'SRV')[0])
+            except:
+                pass
 
         return (fqdn, vis, epg)
 

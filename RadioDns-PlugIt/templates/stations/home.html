@@ -36,6 +36,7 @@
 				{% if ebuio_u.ebuio_orga_admin %}
 					<th>Stomp username</th>
 					<th>Stomp password</th>
+					<th>Allowed IPs</th>
 				{% endif %}
 				<th style="width: 200px;"></th>
 			</tr>
@@ -48,6 +49,7 @@
 					{% if ebuio_u.ebuio_orga_admin %}
 						<td>{{s.stomp_username}}</td>
 						<td>{{s.random_password}}</td>
+						<td>{{s.ip_allowed}}</td>
 					{% endif %}
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}

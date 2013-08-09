@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
+from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
 from models import db, Station, Channel, Picture
 
@@ -198,6 +198,7 @@ def radiovis_api_check_auth(request, secret):
 
     user = request.form.get('username')
     password = request.form.get('password')
+    ip = request.form.get('ip')
 
     # Find the station
     id = user.split('.')[0]
@@ -212,6 +213,17 @@ def radiovis_api_check_auth(request, secret):
 
     if object.random_password != password:
         return {'result': False, 'error': 'Wrong password'}
+
+    if ip:
+        allowd = False
+
+        for subnetAllowed in object.ip_allowed.split(','):
+            if addressInNetwork(ip, subnetAllowed):
+                allowd = True
+                break
+
+        if not allowd:
+            return {'result': False, 'error': 'IP not allowed'}
 
     return {'result': True}
 
