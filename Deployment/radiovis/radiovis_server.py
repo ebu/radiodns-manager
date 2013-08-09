@@ -2,7 +2,7 @@ from fabric.api import sudo, run, task, env, settings, put, cd
 import config
 import utils
 
-from fabric.contrib.files import upload_template
+from fabric.contrib.files import upload_template, append
 
 
 #list of dependencies to install
@@ -48,14 +48,14 @@ def git_init():
     run('chmod 600 ~/.ssh/id_rsa')
 
     # To avoid testing of the server key (who ask a question)
-    run('echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config')
+    append('~/.ssh/config', "Host github.com\n\tStrictHostKeyChecking no\n")
 
     # Init the repo in ~/gitrepo and pull the folder with the django application
     run('git init ~/gitrepo-radiovis')
     with cd('~/gitrepo-radiovis'):
         run('git remote add -m ' + config.GIT_BRANCH + ' origin ' + config.GIT_REPO)
         run('git config core.sparsecheckout true')
-        run('echo ' + config.GIT_RADIOVISDIR + ' >> .git/info/sparse-checkout')
+        append(".git/info/sparse-checkout", config.GIT_RADIOVISDIR)
         run('git pull origin ' + config.GIT_BRANCH)
 
 
@@ -117,3 +117,10 @@ def deploy():
     git_init()
     configure()
     start_radiovis()
+
+
+@task
+def update():
+    """Upgrade code to the latest version"""
+    pull_code()
+    restart_radiovis()
