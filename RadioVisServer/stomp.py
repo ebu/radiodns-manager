@@ -166,7 +166,7 @@ class StompServer():
                 password = ''
 
             if user != '' or password != '':
-                if radioDns.check_auth(user, password):
+                if radioDns.check_auth(user, password, self.socket.getpeername()[0]):
                     self.station_id = user.split('.')[0]
                     self.logger.info("Logged as station #%s" % (self.station_id, ))    
                 else:

@@ -125,3 +125,17 @@ def get_db():
     db = SQLAlchemy(app)
 
     return db
+
+
+
+def addressInNetwork(ip, net):
+    "Is an address in a network"
+    #http://stackoverflow.com/questions/819355/how-can-i-check-if-an-ip-is-in-a-network-in-python
+    import socket
+    import struct
+    ipaddr = struct.unpack('=L', socket.inet_aton(ip))[0]
+    netaddr, bits = net.split('/')
+    if int(bits) == 0:
+        return True
+    netmask = struct.unpack('=L', socket.inet_aton(netaddr))[0] & ((2L << int(bits)-1) - 1)
+    return ipaddr & netmask == netmask
