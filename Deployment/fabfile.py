@@ -4,6 +4,8 @@ from fabric.state import output
 
 from rabbitmq import rabbitmq_server
 
+from plugit import plugit_server
+
 from radiovis import radiovis_server
 
 import config
