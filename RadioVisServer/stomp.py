@@ -49,7 +49,12 @@ class StompServer():
         """Get one stomp frame"""
         
         while not "\x00" in self.incomingData:
-            self.incomingData += self.socket.recv(1024)
+            data = self.socket.recv(1024)
+            if data is None or data == '':
+               self.logger.warning("Socket seem closed")
+               raise Exception("Socket seem closed.")
+            else:
+               self.incomingData += data
 
         # Get only one frame
         splited_data = self.incomingData.split('\x00', 1)
@@ -166,7 +171,7 @@ class StompServer():
                 password = ''
 
             if user != '' or password != '':
-                if radioDns.check_auth(user, password):
+                if radioDns.check_auth(user, password, self.socket.getpeername()[0]):
                     self.station_id = user.split('.')[0]
                     self.logger.info("Logged as station #%s" % (self.station_id, ))    
                 else:

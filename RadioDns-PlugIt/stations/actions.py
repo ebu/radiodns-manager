@@ -41,6 +41,7 @@ def stations_edit(request, id):
             object = Station(int(request.form.get('ebuio_orgapk')))
 
         object.name = request.form.get('name')
+        object.ip_allowed = request.form.get('ip_allowed')
 
         # Check errors
         if object.name == '':
