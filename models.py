@@ -1,5 +1,7 @@
 from utils import get_db
 import dns.resolver
+import string
+import random
 
 db = get_db()
 
@@ -31,6 +33,7 @@ class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer)
     name = db.Column(db.String(80))
+    random_password = db.Column(db.String(32))
 
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
 
@@ -41,9 +44,16 @@ class Station(db.Model):
     def __repr__(self):
         return '<Station %r[%s]>' % (self.name, self.orga)
 
+    def gen_random_password(self):
+        self.random_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
+
+    @property
+    def stomp_username(self):
+        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters, self.name.lower())
+
     @property
     def json(self):
-        return to_json(self, self.__class__)
+        return to_json(self, self.__class__, ['stomp_username'])
 
 
 class Ecc(db.Model):
@@ -101,7 +111,7 @@ class Channel(db.Model):
 
     @property
     def topic(self):
-        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1])
+        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1]) + '/'
 
     @property
     def dns_entry(self):
