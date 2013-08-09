@@ -34,4 +34,4 @@ nosetests.xml
 .project
 .pydevproject
 
-config.py
+RadioDns-PlugIt/config.py
