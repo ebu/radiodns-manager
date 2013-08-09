@@ -8,7 +8,7 @@ import config
 from haigha.message import Message
 
 class RabbitConnexion():
-    """Manage connexion to Rabiit"""
+    """Manage connexion to Rabbit"""
 
     def __init__(self, LAST_MESSAGES):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
