@@ -187,6 +187,26 @@ def radiovis_channels_set(request, id, pictureid):
     return {}
 
 
+@action(route="/radiovis/channels/logs/<id>/", template="radiovis/channels/logs.html")
+@only_orga_admin_user()
+def radiovis_channels_logs(request, id):
+    """Show logs for a channel"""
+
+   
+    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+
+    if not object:
+        abort(404)
+        return
+
+    list = []
+
+    for logentry in LogEntry.query.filter(LogEntry.topic.ilike(object.topic + '%')).order_by(-LogEntry.reception_timestamp).all():
+        list.append(logentry.json)
+
+    return {'list': list, 'channel': object.json}
+
+
 @action(route="/radiovis/api/<secret>/check_auth")
 @only_orga_admin_user()  # To prevent call from IO
 @json_only()
