@@ -21,3 +21,14 @@ API_URL = ''
 CACHE_OPTS = {
     'cache.type': 'memory',
 }
+
+FB_CHANNEL_CACHE = 60  # 1 minute
+FB_QUEUE = 'fallbacklogs'
+
+FB_FALLBACK_CHECK = 15  # The time when we check for timeouted channels. (Each FB_FALLBACK_CHECK seconds)
+FB_FALLBACK_TIME = 60  # The time before a channel is consided dead
+
+FB_IMAGE_LOCATIONS = ''  # Should be the public url of plugit
+
+FB_LOGS_MAX_AGE = 60 * 60 * 24  # Cleanup logs if > 24h
+FB_LOGS_CLEANUP = 60 * 60  # Cleanup logs each 1h

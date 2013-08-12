@@ -120,17 +120,23 @@ class StompServer():
                 self.logger.debug("Waiting for message in queue")
                 topic, message, bonusHeaders = self.queue.get()
                 self.logger.debug("Got a message on topic %s: %s (headers: %s)" % (topic, message, bonusHeaders))
-                
+
+                # Is the user subscribled ?
                 if topic in self.topics:
+                    topicMatching = topic
+                else:  # Is the user subscribled because of a special case ?
+                    topicMatching = radioDns.check_special_matchs(topic, self.topics)
+                
+                if topicMatching is not None:
                     self.logger.debug("Sending the message to the client !")
-                    headers = [('destination', topic)]
+                    headers = [('destination', topicMatching)]
 
                     for header in bonusHeaders:
                         headers.append(header)
 
                     # If subscribled with an ID, add the subscription header
-                    if topic in self.idsByChannels:
-                        headers.append(('subscription', self.idsByChannels[topic]))
+                    if topicMatching in self.idsByChannels:
+                        headers.append(('subscription', self.idsByChannels[topicMatching]))
 
                     self.send_frame("MESSAGE", headers , message)
 
@@ -291,9 +297,11 @@ class StompServer():
                         all_destinations = destination[:9] == '/topic/*/'
 
                         # Find if the channel is allowed (It's a prefix of the destination !)
+                        convertedDest = radioDns.convert_fm_topic_to_gcc(destination)
                         channel_ok = False
                         for chan in allowed_channels:
-                            if destination[:len(chan)] == chan:
+                            chan = radioDns.convert_fm_topic_to_gcc(chan)
+                            if convertedDest[:len(chan)] == chan:
                                 channel_ok = True
                                 break
 

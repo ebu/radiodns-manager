@@ -39,7 +39,8 @@
 						{% endif %}
 					</td>
 					<td>
-						<a href="http://www.ebulabs.org/tools/radiovis-ajaxplayer/player.php?topic={{c.topic}}" target="_blank" class="icon-eye-open"></a>
+						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class=" icon-list-alt" title="Logs"></a>
+						<a href="http://www.ebulabs.org/tools/radiovis-ajaxplayer/player.php?topic={{c.topic}}" target="_blank" class="icon-eye-open" title="Ajax player"></a>
 					</td>
 				</tr>
 			{% endfor %}
