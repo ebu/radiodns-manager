@@ -200,8 +200,9 @@ class StompServer():
             if request_id:
                 response_headers.append(('response-id', request_id))
 
-            if get_header_value(headers, "receipt"):
-                response_headers.append(('receipt-id', self.session_id))
+            receipt_id = get_header_value(headers, "receipt")
+            if receipt_id:
+                response_headers.append(('receipt-id', receipt_id))
 
             response_headers.append(('session', self.session_id))
 

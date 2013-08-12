@@ -9,9 +9,11 @@ from beaker.util import parse_cache_config_options
 
 import json
 
+import sys
 
 
-class RadioDns():
+
+class RadioDns_():
 	"""Class to handle connection to the radioDns database: listing of topics and logins, special topic rules"""
 
 	def __init__(self):
@@ -151,3 +153,21 @@ class RadioDns():
 		if result is None:
 			self.logger.error("No reply when cleanup_logs ?")
 
+
+class RadioDnsTesting(RadioDns_):
+	"""Special class for testing"""
+
+	def do_query(self, url):
+		"""Never do a real query !"""
+		return None
+
+	def check_auth(self, user, password, ip):
+		if user == "testip":
+			return ip == password
+		return user == "test" and password == "test"
+
+
+if len(sys.argv) > 1 and sys.argv[1] == '--test':
+	RadioDns = RadioDnsTesting
+else:
+	RadioDns = RadioDns_
