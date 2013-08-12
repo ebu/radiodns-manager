@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""Main file for the radiovis server.
+
+The RadioVis server handle stomp connections from clients (radios or content managers) and take care of forwarding messages.
+
+"""
+
 from gevent import monkey
 monkey.patch_all()
 

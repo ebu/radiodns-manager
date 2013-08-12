@@ -10,7 +10,7 @@ from haigha.message import Message
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
-    def __init__(self, LAST_MESSAGES):
+    def __init__(self, LAST_MESSAGES, watchdog = None):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
 
         # List of stompservers
@@ -18,6 +18,9 @@ class RabbitConnexion():
 
         # Save LAST_MESSAGES
         self.LAST_MESSAGES = LAST_MESSAGES
+
+        # Save the watchdog
+        self.watchdog = watchdog
 
     def consumer(self, msg):
         """Called when a rabbitmq message arrive"""
@@ -45,6 +48,10 @@ class RabbitConnexion():
                 # Broadcast message to all clients
                 for c in self.stompservers:
                     c.new_message(topic, body, bonusHeaders)
+
+                # Inform the watchdog
+                if self.watchdog:
+                    self.watchdog.new_message(topic, body, bonusHeaders, int(headers['when']))
 
             else:
                 self.logger.warning("Got message without topic: %s" % (msg, ))
@@ -78,7 +85,12 @@ class RabbitConnexion():
                     queue_name = queue
 
                 self.logger.debug("Creating the queue")
-                self.ch.queue.declare(auto_delete=True, nowait=False, cb=queue_qb)
+                if not self.watchdog:
+                    # 'Normal', tempory queue
+                    self.ch.queue.declare(auto_delete=True, nowait=False, cb=queue_qb)
+                else:
+                    # Persistant queue
+                    self.ch.queue.declare(config.FB_QUEUE, auto_delete=False, nowait=False, cb=queue_qb)
 
                 for i in range(0, 10):  # Max 10 seconds
                     if queue_name is None:
@@ -109,6 +121,10 @@ class RabbitConnexion():
 
     def send_message(self, headers, message):
         """Send a message to the queue"""
+
+        # Append current ts
+        headers['when'] = str(int(time.time()))
+
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
         if config.RABBITMQ_LOOPBACK:

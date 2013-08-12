@@ -2,6 +2,7 @@ from utils import get_db
 import dns.resolver
 import string
 import random
+import datetime
 
 db = get_db()
 
@@ -224,3 +225,18 @@ class Picture(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['clean_filename'])
+
+class LogEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    topic = db.Column(db.String(255))
+    body = db.Column(db.Text())
+    headers = db.Column(db.Text())
+    reception_timestamp = db.Column(db.Integer())
+
+    @property
+    def reception_date(self):
+        return datetime.datetime.fromtimestamp(self.reception_timestamp)
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['reception_date'])
