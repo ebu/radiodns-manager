@@ -224,3 +224,14 @@ class Picture(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['clean_filename'])
+
+class LogEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    topic = db.Column(db.String(255))
+    body = db.Column(db.Text())
+    headers = db.Column(db.Text())
+    reception_timestamp = db.Column(db.Integer())
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)

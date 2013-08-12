@@ -3,12 +3,13 @@
 # Utils
 from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
-from models import db, Station, Channel, Picture, Ecc
+from models import db, Station, Channel, Picture, Ecc, LogEntry
 
 import urlparse
 
 import os
 import sys
+import time
 
 from werkzeug import secure_filename
 from flask import abort
@@ -259,3 +260,84 @@ def radiovis_api_get_gcc(request, secret):
     object = Ecc.query.filter_by(iso=request.form.get('cc').upper()).first()
 
     return {'gcc': (object.pi + object.ecc).lower()}
+
+
+@action(route="/radiovis/api/<secret>/get_all_channels")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_get_all_channels(request, secret):
+    """Retrun the list of all channels"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    list = []
+
+    for channel in Channel.query.all():
+        list.append((channel.topic, channel.id))
+
+    return {'list': list}
+
+@action(route="/radiovis/api/<secret>/get_channel_default")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_get_channel_default(request, secret):
+    """Return the default value for a channel"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    channel = Channel.query.filter_by(id=request.form.get('id')).first()
+
+    dp = channel.default_picture
+
+    if dp:
+        return {'info': dp.json}
+    else:
+        return {'info': None}
+
+
+
+@action(route="/radiovis/api/<secret>/cleanup_logs")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_cleanup_logs(request, secret):
+    """Cleanup logs if timestamp < time.time() - max_age"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    for object in LogEntry.query.filter(LogEntry.reception_timestamp < (time.time() - int(request.form.get('max_age')))).all():
+        db.session.delete(object)
+    
+    db.session.commit()
+
+    return {}
+
+@action(route="/radiovis/api/<secret>/add_log")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_add_log(request, secret):
+    """Add a new log entrie"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    object = LogEntry()
+
+    object.topic = request.form.get('topic')
+    object.body = request.form.get('message')
+    object.headers = request.form.get('headers')
+    object.reception_timestamp = int(request.form.get('timestamp'))
+
+    db.session.add(object)
+    
+    db.session.commit()
+
+    return {}
+
+

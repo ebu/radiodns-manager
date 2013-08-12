@@ -7,6 +7,8 @@ import requests
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
+import json
+
 
 
 class RadioDns():
@@ -106,4 +108,46 @@ class RadioDns():
 				return subTopic
 
 		return None
+
+	def get_all_channels(self):
+		"""Return the list of all channels"""
+
+		result = self.do_query('get_all_channels', {})
+
+		if result is None:
+			self.logger.error("No reply when get_all_channels ?")
+			return []
+
+		retour = []
+
+		for (topic, id) in result['list']:
+			retour.append((self.convert_fm_topic_to_gcc(topic), id))
+
+		return retour
+
+	def get_channel_default(self, id):
+		"""Return the default image, link and message for a channel"""
+
+		result = self.do_query('get_channel_default', {'id': id})
+
+		if result is None:
+			self.logger.error("No reply when get_channel_default %s ?" % (id, ))
+			return []
+
+		return result['info']
+
+	def add_log(self, topic, message, headers, timestamp):
+		"""Add a log entry"""
+
+		result = self.do_query('add_log', {'topic': topic, 'message': str(message), 'headers': json.dumps(headers), 'timestamp': timestamp })
+
+		if result is None:
+			self.logger.error("No reply when add_log %s %s %s %s ?" % (topic, message, headers, timestamp, ))
+
+	def cleanup_logs(self, max_age):
+		"""Clean logs"""
+		result = self.do_query('cleanup_logs', {'max_age': max_age})
+
+		if result is None:
+			self.logger.error("No reply when cleanup_logs ?")
 
