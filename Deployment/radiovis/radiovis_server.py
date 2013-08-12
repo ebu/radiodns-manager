@@ -66,6 +66,28 @@ def pull_code():
         run('git pull origin ' + config.GIT_BRANCH)
 
 
+
+@task
+def start_fallback():
+    """Start the fallback server (using supervisord)"""
+    with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
+        run('supervisord -c supervisord-fallback.conf')
+
+@task
+def stop_fallback():
+    """Stop the fallback server (using supervisord)"""
+    with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
+        run('supervisorctl -c supervisord-fallback.conf stop fallbackserver')
+        run('supervisorctl -c supervisord-fallback.conf shutdown')
+
+@task
+def restart_fallback():
+    """Restart the fallback server (using supervisord)"""
+    with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
+        run('supervisorctl -c supervisord-fallback.conf restart fallbackserver')
+
+
+
 @task
 def start_radiovis():
     """Start the radiovis server (using supervisord)"""
@@ -97,11 +119,16 @@ def configure():
            'RABBITMQ_USER': config.RABBITMQ_USER,
            'RABBITMQ_PASS': config.RABBITMQ_PASS,
            'RADIOVIS_RABBITMQ_QUEUE': config.RADIOVIS_RABBITMQ_QUEUE,
-           'RADIOVIS_API_URL': config.RADIOVIS_API_URL
+           'RADIOVIS_API_URL': config.RADIOVIS_API_URL,
+           'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
 
         })
 
     upload_template(conf('supervisord-radiovis.conf'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'supervisord-radiovis.conf', {
+
+        })
+
+    upload_template(conf('supervisord-fallback.conf'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'supervisord-fallback.conf', {
 
         })
 
@@ -118,9 +145,21 @@ def deploy():
     configure()
     start_radiovis()
 
+@task
+def deploy_withfallback():
+    """Deploy a radiovis server on the current host, with fallback server
+    """
+    deploy()
+    start_fallback()
 
 @task
 def update():
     """Upgrade code to the latest version"""
     pull_code()
     restart_radiovis()
+
+@task
+def update_withfallback():
+    """Upgrade code to the latest version, including fallback server"""
+    update()
+    restart_fallback()
