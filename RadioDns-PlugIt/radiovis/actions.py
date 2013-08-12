@@ -3,7 +3,7 @@
 # Utils
 from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
-from models import db, Station, Channel, Picture
+from models import db, Station, Channel, Picture, Ecc
 
 import urlparse
 
@@ -245,3 +245,17 @@ def radiovis_api_get_channels(request, secret):
         list.append(channel.topic)
 
     return {'list': list}
+
+@action(route="/radiovis/api/<secret>/get_gcc")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_get_gcc(request, secret):
+    """Api call to get a gcc based on a cc"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return 
+
+    object = Ecc.query.filter_by(iso=request.form.get('cc').upper()).first()
+
+    return {'gcc': (object.pi + object.ecc).lower()}
