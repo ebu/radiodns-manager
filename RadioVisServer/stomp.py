@@ -50,7 +50,7 @@ class StompServer():
         
         while not "\x00" in self.incomingData:
             data = self.socket.recv(1024)
-            if data is None or data == '':
+            if not data:
                self.logger.warning("Socket seem closed")
                raise Exception("Socket seem closed.")
             else:

@@ -32,7 +32,7 @@ class Main():
         
         while not "\x00" in self.incomingData:
             data = self.socket.recv(1024)
-            if data is None or data == '':
+            if not data:
                raise Exception("Socket seem closed.")
             else:
                self.incomingData += data
@@ -123,7 +123,7 @@ class MainTests(unittest.TestCase):
 
     @nottest
     def test_bogus_frame(self, frame):
-        """Generic function to send a bogus frame"""
+        """Generic function to test if the stomp client is able to handle a bogus frame"""
         m = Main()
         m.tcp_connect()
         m.send_connect({})
