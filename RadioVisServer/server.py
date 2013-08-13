@@ -20,6 +20,8 @@ from stomp import StompServer
 
 from rabbitmq import RabbitConnexion
 
+import sys
+
 # The logger
 logging.basicConfig(level=config.LOG_LEVEL)
 logger = logging.getLogger('radiovisserver')
@@ -60,7 +62,12 @@ if __name__ == '__main__':
     spawn(rabbitcox.run)
 
     # Start stomp server
-    server = StreamServer((config.STOMP_IP, config.STOMP_PORT), stomp_client)
-    logger.debug('Starting stomp server on %s:%s' % (config.STOMP_IP, config.STOMP_PORT) )
+    if len(sys.argv) > 1 and sys.argv[1] == '--test':
+        server = StreamServer(('127.0.0.1', 61424), stomp_client)
+        logger.debug('Starting stomp server on %s:%s [TESTMODE!]' % ('127.0.0.1', 61424) )
+
+    else:
+        server = StreamServer((config.STOMP_IP, config.STOMP_PORT), stomp_client)
+        logger.debug('Starting stomp server on %s:%s' % (config.STOMP_IP, config.STOMP_PORT) )
     logger.info('RadioVis server started !')
     server.serve_forever()
