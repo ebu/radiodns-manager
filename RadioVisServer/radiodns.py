@@ -202,7 +202,7 @@ class RadioDnsTesting(RadioDns_):
 			data = json.dumps(params)
 			socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(data, ('127.0.0.1', 61422))
 		else:
-			raise Exception("Not implemented query %s" % (url,))
+			raise NotImplementedError("Not implemented query %s" % (url,))
 
 		return result
 
