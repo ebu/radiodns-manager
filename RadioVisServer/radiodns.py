@@ -11,7 +11,7 @@ import json
 
 import sys
 
-
+import socket
 
 class RadioDns_():
 	"""Class to handle connection to the radioDns database: listing of topics and logins, special topic rules"""
@@ -177,6 +177,8 @@ class RadioDnsTesting(RadioDns_):
 				result['list'] = config.TEST_TOPICS 
 			elif params['station_id'] == '3':  # GCC/CC tests
 				result['list'] = [config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_CC]
+			elif params['station_id'] == '4':  # Watchdog test
+				result['list'] = [config.TEST_WATCHDOG_TOPIC[0][0]]
 			else:
 				result['list'] = []
 
@@ -185,6 +187,20 @@ class RadioDnsTesting(RadioDns_):
 			if params['cc'] in config.TEST_ECC:
 				result['gcc'] = config.TEST_ECC[params['cc']]
 
+		elif url == 'get_all_channels':
+			result['list'] = config.TEST_WATCHDOG_TOPIC
+		elif url == 'get_channel_default':
+			result['info'] = {}
+			if params['id'] == 1:
+				result['info'] = config.TEST_CHANNEL_DEFAULT
+		elif url == 'add_log':
+			params['type'] = 'log'
+			data = json.dumps(params)
+			socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(data, ('127.0.0.1', 61422))
+		elif url == 'cleanup_logs':
+			params['type'] = 'cleanup_logs'
+			data = json.dumps(params)
+			socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(data, ('127.0.0.1', 61422))
 		else:
 			raise Exception("Not implemented query %s" % (url,))
 

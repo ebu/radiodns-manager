@@ -5,6 +5,7 @@ import time
 import socket
 import uuid
 import config
+import json
 
 def get_header_value(headers, header):
     """Return the value of an header"""
@@ -19,6 +20,8 @@ class Main():
     def __init__(self):
         """Initlialzse values"""
         self.incomingData = ''
+
+        
 
     def tcp_connect(self):
         self.socket = socket.socket()
@@ -79,6 +82,11 @@ class Main():
     def send_connect(self, args):
         self.send_frame('CONNECT', args, '')
 
+    def get_watchdogsocket(self):
+        watchdogsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        watchdogsock.bind(('127.0.0.1', 61422))
+        return watchdogsock
+
 
     def __del__(self):
         """Delete the socket when we're done"""
@@ -87,6 +95,8 @@ class Main():
         except:
             pass
 
+
+
 class MainTests(unittest.TestCase):
 
     @classmethod
@@ -94,12 +104,17 @@ class MainTests(unittest.TestCase):
         """Setup the testcase"""
         cls.subp = subprocess.Popen('python server.py --test')
         cls.proc = psutil.Process(cls.subp.pid)
+
+        cls.subpWD = subprocess.Popen('python fallback.py --test')
+        cls.procWD = psutil.Process(cls.subpWD.pid)
+
         time.sleep(2)
 
     @classmethod
     def teardown_class(cls):
         """Shutdown the testcase"""
         cls.proc.kill()
+        cls.procWD.kill()
 
     def test_tcp_cox_stomp(self):
         """Test the tcp connection to the stomp server"""
@@ -266,6 +281,19 @@ class MainTests(unittest.TestCase):
         m.send_connect([('login', '1.test'), ('passcode', 'test')])
         m.get_frame()  # Connected frame
         m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], 'TEST')
+        # Wait for a reply
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_send_message_subtopic_auth(self):
+        """Test if the server accept a send on a good topic, subtopic, authentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0] + 'testtingsubtopic')], 'TEST')
         # Wait for a reply
         m.socket.settimeout(3)
         m.get_frame()
@@ -798,3 +826,168 @@ class MainTests(unittest.TestCase):
 
         m.socket.settimeout(3)
         m.get_frame()
+
+    @timed(2)
+    def test_watchdog_send_logs(self):
+        """Test if the watchdog send logs"""
+
+        m = Main()
+        watchdogsock = m.get_watchdogsocket()
+        m.tcp_connect()
+        m.send_connect([('login', '4.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        # Empty logs
+        watchdogsock.settimeout(0.1)
+        try:
+            while watchdogsock.recvfrom(4096):
+                pass
+        except socket.timeout:
+            pass
+
+        m.send_frame('SEND', [('destination', config.TEST_WATCHDOG_TOPIC[0][0])], msg)
+
+        # Check if we got logs (maximum for 3 seconds)
+        start = time.time()
+
+        watchdogsock.settimeout(1)
+
+        while time.time() < (start + 3):
+            frame, _ = watchdogsock.recvfrom(4096)
+            if frame != '':
+                jframe = json.loads(frame)
+
+                if jframe['type'] == 'log':
+                    if jframe['topic'] == config.TEST_WATCHDOG_TOPIC[0][0] and jframe['message'] == msg:
+                        watchdogsock.close()
+                        return
+        watchdogsock.close()
+        raise Exception("No logs")
+
+    @timed(config.TEST_FB_LOGS_CLEANUP+3)
+    def test_watchdog_send_cleanup_logs(self):
+        """Test if the watchdog send cleanup_logs"""
+
+        m = Main()
+        watchdogsock = m.get_watchdogsocket()
+       
+        # Empty logs
+        watchdogsock.settimeout(0.1)
+        try:
+            while watchdogsock.recvfrom(4096):
+                pass
+        except socket.timeout:
+            pass
+
+        watchdogsock.settimeout(1)
+
+        # Check if we got logs (maximum for TEST_FB_LOGS_CLEANUP+2 seconds)
+        start = time.time()
+
+        while time.time() < (start + config.TEST_FB_LOGS_CLEANUP+2):
+            try:
+                frame, _ = watchdogsock.recvfrom(4096)
+            except socket.timeout:
+                frame = ''
+
+            if frame != '':
+                jframe = json.loads(frame)
+
+                if jframe['type'] == 'cleanup_logs':
+                    watchdogsock.close()
+                    return
+        watchdogsock.close()
+        raise Exception("No cleanup_logs")
+
+    def test_watchdog_is_watchdoging(self):
+        """Test if the watchdog: dosen't send message if one was send, and send one if the channel timeout."""
+
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '4.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        ownMessage = str(uuid.uuid4())
+
+        # Send a message, then subscrible
+        m.send_frame('SEND', [('destination', config.TEST_WATCHDOG_TOPIC[0][0] + 'text')], ownMessage)
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_WATCHDOG_TOPIC[0][0] + 'text'), ('x-ebu-nofastreply', 'yes')], '')
+
+        # There should be no message for TEST_FB_FALLBACK_TIME/2
+        m.socket.settimeout(config.TEST_FB_FALLBACK_TIME/2)
+
+        ok = True
+        
+        try:
+            while True:
+                (result, _, body) = m.get_frame()
+                if result != 'MESSAGE' or body != ownMessage:
+                    ok = False
+        except Exception:
+            pass
+
+        if not ok:
+            raise Exception("Socket didn't timeout !")
+
+        m.send_frame('SEND', [('destination', config.TEST_WATCHDOG_TOPIC[0][0] + 'text')], ownMessage)
+
+        # There should be no message (except our message) for TEST_FB_FALLBACK_TIME-1
+        m.socket.settimeout(config.TEST_FB_FALLBACK_TIME-1)
+        try:
+            while True:
+                (result, _, body) = m.get_frame()
+                if result != 'MESSAGE' or body != ownMessage:
+                    ok = False
+        except Exception:
+            pass
+
+        if not ok:
+            raise Exception("Socket didn't timeout !")
+
+        # There should be a message if we wait for at least 1 + TEST_FB_FALLBACK_CHECK*2
+        time.sleep(1+config.TEST_FB_FALLBACK_CHECK*2)
+        m.socket.settimeout(1)
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+
+    def test_watchdog_send_good_data_image(self):
+        """Test if the watchdog send excepted data on topic /image"""
+
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '4.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        # Send a message, then subscrible
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_WATCHDOG_TOPIC[0][0] + 'image'), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.settimeout(config.TEST_FB_FALLBACK_TIME + config.TEST_FB_FALLBACK_CHECK)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, 'SHOW ' + config.FB_IMAGE_LOCATIONS + config.TEST_CHANNEL_DEFAULT['filename'])
+        eq_(get_header_value(headers, 'trigger-time'), 'NOW')
+        eq_(get_header_value(headers, 'link'), config.TEST_CHANNEL_DEFAULT['radiolink'])
+
+    def test_watchdog_send_good_data_text(self):
+        """Test if the watchdog send excepted data on topic /text"""
+
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '4.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        # Send a message, then subscrible
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_WATCHDOG_TOPIC[0][0] + 'text'), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.settimeout(config.TEST_FB_FALLBACK_TIME + config.TEST_FB_FALLBACK_CHECK)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, 'TEXT ' + config.TEST_CHANNEL_DEFAULT['radiotext'])
+        eq_(get_header_value(headers, 'trigger-time'), 'NOW')
+        eq_(get_header_value(headers, 'link'), config.TEST_CHANNEL_DEFAULT['radiolink'])
+
+
