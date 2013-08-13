@@ -9,9 +9,11 @@ from beaker.util import parse_cache_config_options
 
 import json
 
+import sys
 
+import socket
 
-class RadioDns():
+class RadioDns_():
 	"""Class to handle connection to the radioDns database: listing of topics and logins, special topic rules"""
 
 	def __init__(self):
@@ -90,8 +92,6 @@ class RadioDns():
 
 		return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)
 
-
-
 	def check_special_matchs(self, topic, topics):
 		"""Return true if topic is in the list of topics, using specials rules (eg. fm)"""
 
@@ -151,3 +151,63 @@ class RadioDns():
 		if result is None:
 			self.logger.error("No reply when cleanup_logs ?")
 
+
+class RadioDnsTesting(RadioDns_):
+	"""Special class for testing"""
+
+	def do_query(self, url, params):
+		"""Never do a real query but act as we're the api !"""
+
+		result = {}
+
+		if url == 'check_auth':
+
+			# Authentification: test:test or testip:<theip>
+
+			result['error'] = ''
+			if params['username'] == "2.testip":
+				result['result'] = params['ip'] == params['password']
+			else:
+				result['result'] = params['username'][2:] == "test" and params['password'] == "test"
+
+		elif url == 'get_channels':
+
+			# List of allowed channels
+			if params['station_id'] == '1':  # Normal tests
+				result['list'] = config.TEST_TOPICS 
+			elif params['station_id'] == '3':  # GCC/CC tests
+				result['list'] = [config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_CC]
+			elif params['station_id'] == '4':  # Watchdog test
+				result['list'] = [config.TEST_WATCHDOG_TOPIC[0][0]]
+			else:
+				result['list'] = []
+
+		elif url == 'get_gcc':
+
+			if params['cc'] in config.TEST_ECC:
+				result['gcc'] = config.TEST_ECC[params['cc']]
+
+		elif url == 'get_all_channels':
+			result['list'] = config.TEST_WATCHDOG_TOPIC
+		elif url == 'get_channel_default':
+			result['info'] = {}
+			if params['id'] == 1:
+				result['info'] = config.TEST_CHANNEL_DEFAULT
+		elif url == 'add_log':
+			params['type'] = 'log'
+			data = json.dumps(params)
+			socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(data, ('127.0.0.1', 61422))
+		elif url == 'cleanup_logs':
+			params['type'] = 'cleanup_logs'
+			data = json.dumps(params)
+			socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(data, ('127.0.0.1', 61422))
+		else:
+			raise NotImplementedError("Not implemented query %s" % (url,))
+
+		return result
+
+
+if len(sys.argv) > 1 and sys.argv[1] == '--test':
+	RadioDns = RadioDnsTesting
+else:
+	RadioDns = RadioDns_

@@ -4,6 +4,7 @@ import logging
 import time
 
 import config
+import sys
 
 from haigha.message import Message
 
@@ -89,8 +90,11 @@ class RabbitConnexion():
                     # 'Normal', tempory queue
                     self.ch.queue.declare(auto_delete=True, nowait=False, cb=queue_qb)
                 else:
-                    # Persistant queue
-                    self.ch.queue.declare(config.FB_QUEUE, auto_delete=False, nowait=False, cb=queue_qb)
+                    # Persistant queue, if not in test mode
+                    if len(sys.argv) > 1 and sys.argv[1] == '--test':
+                        self.ch.queue.declare(config.FB_QUEUE, auto_delete=True, nowait=False, cb=queue_qb)
+                    else:
+                        self.ch.queue.declare(config.FB_QUEUE, auto_delete=False, nowait=False, cb=queue_qb)
 
                 for i in range(0, 10):  # Max 10 seconds
                     if queue_name is None:

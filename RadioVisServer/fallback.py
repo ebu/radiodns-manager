@@ -29,6 +29,8 @@ from rabbitmq import RabbitConnexion
 
 import uuid
 
+import sys
+
 # API
 radioDns = RadioDns()
 
@@ -147,10 +149,10 @@ class Fallback():
 
 							self.logger.info("Sending image %s with link %s and text %s on channel %s" % (image, link, text, c))
 
-							headers = {'trigger_time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'text'}
+							headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'text'}
 							self.rabbitmq.send_message(headers, "TEXT " + text)
 
-							headers = {'trigger_time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'image'}
+							headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'image'}
 							self.rabbitmq.send_message(headers, "SHOW " + image)
 
 # The logger
@@ -159,7 +161,18 @@ logger = logging.getLogger('radiovisserver')
 
 if __name__ == '__main__':
     # Start rabbit mq client
-    logger.debug("Starting Fallback !")
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--test':
+    	config.FB_FALLBACK_CHECK = config.TEST_FB_FALLBACK_CHECK
+    	config.FB_FALLBACK_TIME = config.TEST_FB_FALLBACK_TIME
+    	config.FB_QUEUE = config.TEST_FB_QUEUE
+    	config.FB_LOGS_CLEANUP = config.TEST_FB_LOGS_CLEANUP
+
+    	logger.debug("Starting Fallback ! [TESTING MODE]")
+
+    else:
+    	logger.debug("Starting Fallback !")
+
     fb = Fallback()
 
     joinall([spawn(fb.run)])
