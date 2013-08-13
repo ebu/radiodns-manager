@@ -121,6 +121,48 @@ class MainTests(unittest.TestCase):
         m = Main()
         m.tcp_connect()
 
+    @nottest
+    def test_bogus_frame(self, frame):
+        """Generic function to send a bogus frame"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect({})
+        m.get_frame() # Cox frame
+        
+
+        m.socket.send(frame)
+
+        # Server shoudl still ack our commands
+        tmpId = str(uuid.uuid4())
+        m.send_frame("_TEST_NOCOMMAND", [('receipt', tmpId)], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'RECEIPT')
+
+    @timed(2)
+    def test_cox_stomp_bogus_frame_1(self):
+        """Test the connection to the stomp server sending a bogus frame, with an empty commnad"""
+        self.test_bogus_frame('\n\n\x00')
+
+    @timed(2)
+    def test_cox_stomp_bogus_frame_2(self):
+        """Test the connection to the stomp server sending a bogus frame, with no headers commnad"""
+        self.test_bogus_frame('TEST\x00')
+
+    @timed(2)
+    def test_cox_stomp_bogus_frame_3(self):
+        """Test the connection to the stomp server sending a bogus frame, with an empty frame"""
+        self.test_bogus_frame('\x00')
+
+    @timed(2)
+    def test_cox_no_cox_first(self):
+        """Test if the sever need CONNECT frist"""
+        m = Main()
+        m.tcp_connect()
+        m.send_frame("_TEST_NOCOMMAND", [], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+        
+
     @timed(2)
     def test_cox_stomp_with_nothing(self):
         """Test the connection to the stomp server with no parameters"""
