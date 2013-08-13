@@ -236,22 +236,30 @@ class StompServer():
 
                 elif command == 'SUBSCRIBE':
                     # New subscription
-                    channel = get_header_value(headers, 'destination').strip()
+                    channel = get_header_value(headers, 'destination')
 
-                    id = get_header_value(headers, 'id')
+                    if channel is None:
 
-                    if id:
-                        self.channelsByIds[id] = channel
-                        self.idsByChannels[channel] = id
+                        self.logger.warning("SUBSCRIBE without a destination")
+                        self.send_frame('ERROR', [('message', 'I need a destination')], '')
+                    else:
+                        channel = channel.strip()
 
-                    self.topics.append(channel)
-                    self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel,id))
+                        id = get_header_value(headers, 'id')
 
-                    # Send the last message from the topic. A message may be send twice, but that should be ok
-                    if channel in self.LAST_MESSAGES:
-                        body, headers = self.LAST_MESSAGES[channel]
-                        self.logger.debug("Quick sending the previous message %s (headers: %s)" % (body, headers))
-                        self.new_message(channel, body, headers)
+                        if id:
+                            self.channelsByIds[id] = channel
+                            self.idsByChannels[channel] = id
+
+                        self.topics.append(channel)
+                        self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel,id))
+
+                        # Send the last message from the topic. A message may be send twice, but that should be ok
+                        if  get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
+                            if channel in self.LAST_MESSAGES:
+                                body, headers = self.LAST_MESSAGES[channel]
+                                self.logger.debug("Quick sending the previous message %s (headers: %s)" % (body, headers))
+                                self.new_message(channel, body, headers)
 
                 elif command == 'UNSUBSCRIBE':
                     # Remove subscription
@@ -269,81 +277,88 @@ class StompServer():
                             else:
                                 channel = self.channelsByIds[id]
 
-                    self.topics.remove(channel)
+                    if channel not in self.topics:
+                        self.logger.error("Unsubscribe on unsubcribled channel (%s)" % (channel, ))
+                        self.send_frame('ERROR', [('message', 'Not subscribled')], '')
+                    else:
 
-                    del self.channelsByIds[id]
-                    del self.idsByChannels[channel] 
+                        self.topics.remove(channel)
 
-                    self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel,id))
+                        if id and id in self.channelsByIds:
+                            del self.channelsByIds[id]
+                            del self.idsByChannels[channel] 
+
+                        self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel,id))
 
                 elif command == 'SEND':
 
                     if self.station_id is None:
                         self.logger.warning("Tried to SEND without been authenticated !")
                         self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
-
-                    # List of allowed channels
-                    allowed_channels = radioDns.get_channels(self.station_id)
-
-                    # Check rights
-                    destination = get_header_value(headers, 'destination')
-
-                    if destination is None:
-                        self.logger.error("SEND without destination !")
-                        self.send_frame('ERROR', [('message', 'No destination ?')], '')
-
                     else:
 
-                        # Sepcial case: all destination:
-                        all_destinations = destination[:9] == '/topic/*/'
+                        # List of allowed channels
+                        allowed_channels = radioDns.get_channels(self.station_id)
 
-                        # Find if the channel is allowed (It's a prefix of the destination !)
-                        convertedDest = radioDns.convert_fm_topic_to_gcc(destination)
-                        channel_ok = False
-                        for chan in allowed_channels:
-                            chan = radioDns.convert_fm_topic_to_gcc(chan)
-                            if convertedDest[:len(chan)] == chan:
-                                channel_ok = True
-                                break
+                        # Check rights
+                        destination = get_header_value(headers, 'destination')
 
-                        if not all_destinations and not channel_ok:
-                            self.logger.warning("Tryed to send to a destination not autorized ! (%s vs %s)" % (destination, allowed_channels))
-                            self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
+                        if destination is None:
+                            self.logger.error("SEND without destination !")
+                            self.send_frame('ERROR', [('message', 'No destination ?')], '')
+
                         else:
-                            self.logger.debug("Allowed to send the message to %s" % (destination, ))
-                            # Prepare headers
-                            msg_headers = {}
 
-                            # Copy trigger time
-                            trigger_time = get_header_value(headers, 'trigger-time')
-                            if trigger_time:
-                                msg_headers['trigger_time'] = trigger_time
+                            # Sepcial case: all destination:
+                            all_destinations = destination[:9] == '/topic/*/'
 
-                            # Copy link
-                            link = get_header_value(headers, 'link')
-                            if link:
-                                msg_headers['link'] = link
+                            # Find if the channel is allowed (It's a prefix of the destination !)
+                            convertedDest = radioDns.convert_fm_topic_to_gcc(destination)
+                            channel_ok = False
+                            for chan in allowed_channels:
+                                chan = radioDns.convert_fm_topic_to_gcc(chan)
+                                if convertedDest[:len(chan)] == chan:
+                                    channel_ok = True
+                                    break
 
-                            # Message id
-                            message_id = get_header_value(headers, 'message-id')
-                            if not message_id:
-                                message_id = str(uuid.uuid4())
-                            msg_headers['message-id'] = message_id
+                            if not all_destinations and not channel_ok:
+                                self.logger.warning("Tryed to send to a destination not autorized ! (%s vs %s)" % (destination, allowed_channels))
+                                self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
+                            else:
+                                self.logger.debug("Allowed to send the message to %s" % (destination, ))
+                                # Prepare headers
+                                msg_headers = {}
 
-                            def send_to_dest(destination):
-                                # Destination
-                                msg_headers['topic'] = destination
+                                # Copy trigger time
+                                trigger_time = get_header_value(headers, 'trigger-time')
+                                if trigger_time:
+                                    msg_headers['trigger-time'] = trigger_time
 
-                                self.logger.debug("Sending message %s to %s (headers: %s)" % (body, destination, msg_headers))
+                                # Copy link
+                                link = get_header_value(headers, 'link')
+                                if link:
+                                    msg_headers['link'] = link
 
-                                self.rabbitcox.send_message(msg_headers, body)
+                                # Message id
+                                message_id = get_header_value(headers, 'message-id')
+                                if not message_id:
+                                    message_id = str(uuid.uuid4())
+                                msg_headers['message-id'] = message_id
 
-                            if all_destinations:
-                                self.logger.debug("Broadcasting to all channels !!")
-                                for dest in allowed_channels:
-                                    send_to_dest(dest + destination[9:])
-                            else:   
-                                send_to_dest(destination)
+                                def send_to_dest(destination):
+                                    # Destination
+                                    msg_headers['topic'] = destination
+
+                                    self.logger.debug("Sending message %s to %s (headers: %s)" % (body, destination, msg_headers))
+
+                                    self.rabbitcox.send_message(msg_headers, body)
+
+                                if all_destinations:
+                                    self.logger.debug("Broadcasting to all channels !!")
+                                    for dest in allowed_channels:
+                                        send_to_dest(dest + destination[9:])
+                                else:   
+                                    send_to_dest(destination)
 
                 else:
                     self.logger.warning("Unexcepted command %s %s %s" % (command, headers, body))

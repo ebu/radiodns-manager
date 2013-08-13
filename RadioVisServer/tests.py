@@ -4,6 +4,14 @@ import psutil, subprocess
 import time
 import socket
 import uuid
+import config
+
+def get_header_value(headers, header):
+    """Return the value of an header"""
+    for (headerName, value) in headers:
+        if headerName == header:
+            return value
+    return None
 
 class Main():
     """Utils to do test"""
@@ -161,7 +169,7 @@ class MainTests(unittest.TestCase):
         """Test the connection to the stomp server with a good password"""
         m = Main()
         m.tcp_connect()
-        m.send_connect([('login', 'test'), ('passcode', 'test')])
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
         (result, headers, body) = m.get_frame()
         eq_(result, 'CONNECTED')
 
@@ -170,7 +178,7 @@ class MainTests(unittest.TestCase):
         """Test the connection to the stomp server with a wrong password"""
         m = Main()
         m.tcp_connect()
-        m.send_connect([('login', 'test'), ('passcode', 'wrong')])
+        m.send_connect([('login', '1.test'), ('passcode', 'wrong')])
         (result, headers, body) = m.get_frame()
         eq_(result, 'ERROR')
 
@@ -179,7 +187,7 @@ class MainTests(unittest.TestCase):
         """Test the connection to the stomp server with a good ip"""
         m = Main()
         m.tcp_connect()
-        m.send_connect([('login', 'testip'), ('passcode', '127.0.0.1')])
+        m.send_connect([('login', '2.testip'), ('passcode', '127.0.0.1')])
         (result, headers, body) = m.get_frame()
         eq_(result, 'CONNECTED')
 
@@ -188,11 +196,11 @@ class MainTests(unittest.TestCase):
         """Test the connection to the stomp server with a wrong ip"""
         m = Main()
         m.tcp_connect()
-        m.send_connect([('login', 'testip'), ('passcode', '0.0.0.0')])
+        m.send_connect([('login', '2.testip'), ('passcode', '0.0.0.0')])
         (result, headers, body) = m.get_frame()
         eq_(result, 'ERROR')
 
-    @raises(Exception)  # Test must fail :)
+    @raises(socket.timeout)  # Test must fail :)
     @timed(2)
     def test_stomp_randomcommand(self):
         """Test  if the server dosen't reply to an unknow commnad"""
@@ -248,3 +256,545 @@ class MainTests(unittest.TestCase):
     def test_stomp_send_receipt(self):
         """Test the connection if the server send RECEIPT for SEND"""
         self.test_receipt('SEND')
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_send_message_auth(self):
+        """Test if the server accept a send on a good topic, authentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], 'TEST')
+        # Wait for a reply
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @timed(2)
+    def test_send_message_unauth(self):
+        """Test if the server refuse a send on a good topic, unauthentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], 'TEST')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @timed(2)
+    def test_send_message_unallowd(self):
+        """Test if the server refuse a send on a wrong topic, authentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', '/thisisnotavalidtopic')], 'TEST')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_send_message_auth_to_all(self):
+        """Test if the server accept a send on all topics, authentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', '/topic/*/')], 'TEST')
+        # Wait for a reply
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @timed(2)
+    def test_send_message_unauth_to_all(self):
+        """Test if the server refuse a send on a all topics, unauthentified"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SEND', [('destination', '/topic/*/')], 'TEST')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_subscrible(self):
+        """Test if the server accept a subscritpion"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        # Wait for a reply
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_subscrible_with_id(self):
+        """Test if the server accept a subscritpion with an id"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes'), ('id', str(uuid.uuid4()))], '')
+        # Wait for a reply
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @timed(2)
+    def test_subscrible_without_dest(self):
+        """Test if the server refuse a subscription without destination"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([])
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @timed(2)
+    def test_subscrible_message_self(self):
+        """Test if we get our message back on the same connection if we send a message"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+
+    @timed(2)
+    def test_subscrible_message_dual(self):
+        """Test if we get our message back on the others connection if we send a message"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        m2 = Main()
+        m2.tcp_connect()
+        m2.send_connect([]) 
+        m2.get_frame()  # Connected frame
+
+
+        m2.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+
+        (result, headers, body) = m2.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+
+    @timed(2)
+    def test_message_then_subscrible(self):
+        """Test if we get the last message when we subscrible"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+        time.sleep(0.5) 
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0])], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+
+    @raises(socket.timeout)  # Test must fail :)
+    @timed(2)
+    def test_subscrible_other_message(self):
+        """Test if we don't get our message back on the same connection if we send a message to a unsubscribled topic"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[1])], msg)
+
+        m.socket.settimeout(3)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+
+    @timed(2)
+    def test_subscrible_message_on_all(self):
+        """Test if we get message back on all topics if we send a message to /topic/*/"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        clients = {}
+
+        for t in config.TEST_TOPICS:
+            m2 = Main()
+            m2.tcp_connect()
+            m2.send_connect([]) 
+            m2.get_frame()  # Connected frame
+            m2.send_frame('SUBSCRIBE', [('destination', t), ('x-ebu-nofastreply', 'yes')], '')
+
+            clients[t] = m2
+
+        msg = str(uuid.uuid4())
+        m.send_frame('SEND', [('destination', '/topic/*/')], msg)
+
+        for t in config.TEST_TOPICS:
+            (result, headers, body) = clients[t].get_frame()
+            eq_(result, 'MESSAGE')
+            eq_(body, msg)
+            eq_(get_header_value(headers, 'destination'), t)
+
+    @timed(2)
+    def test_subscrible_with_id_message(self):
+        """Test if we get our message back on the same connection if we send a message and subscrible with an id"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        subscribleId = str(uuid.uuid4())
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes'), ('id', subscribleId)], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'subscription'), subscribleId)
+
+    @timed(2)
+    def test_message_forward_link(self):
+        """Test link header is forwarder when we send a message"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+        link = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('link', link)], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'link'), link)
+
+    @timed(2)
+    def test_message_forward_trigger_time(self):
+        """Test trigger-time header is forwarder when we send a message"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+        trigger_time = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('trigger-time', trigger_time)], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'trigger-time'), trigger_time)
+
+    @timed(2)
+    def test_message_id_is_created(self):
+        """Test if message-id is set if we don't"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        assert get_header_value(headers, 'message-id') is not None
+
+    @timed(2)
+    def test_message_id_is_forwarder(self):
+        """Test if message-id is set to our value if we sent it"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'message-id'), message_id)
+
+    @timed(2)
+    def test_randomheaders_arent_forwarded(self):
+        """Test if random headers aren't forwarded"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('_test_header_42', '_test_header_42')], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, '_test_header_42'), None)
+
+    @timed(2)
+    def test_when_is_created(self):
+        """Test if when header is set"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        assert get_header_value(headers, 'when') is not None
+
+    @timed(2)
+    def test_disconnect(self):
+        """Test we can disconnect"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        m.send_frame('DISCONNECT',[] , '')
+
+        m.socket.settimeout(3)
+        data = m.socket.recv(1024)
+        eq_(data, '')  # Closed socket return None
+
+    @nottest
+    def test_if_message_is_send(self, topicSend, topicSubcrible):
+        """Generic function for GCC/CC tests, testing if a message is got using a topic for sending and a topic to subscrible"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '3.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+        m.send_frame('SUBSCRIBE', [('destination', topicSubcrible), ('x-ebu-nofastreply', 'yes')], '')
+        
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', topicSend)], msg)
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), topicSubcrible)
+
+    @timed(2)
+    def test_gcc_gcc(self):
+        """Test that if we subscrible using a GCC topic and send a message using a GCC topic, we still get the message"""
+        self.test_if_message_is_send(config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_GCC)
+
+    @timed(2)
+    def test_gcc_cc(self):
+        """Test that if we subscrible using a GCC topic and send a message using a CC topic, we still get the message"""
+        self.test_if_message_is_send(config.TEST_ECC_TOPIC_CC, config.TEST_ECC_TOPIC_GCC)
+
+    @timed(2)
+    def test_cc_gcc(self):
+        """Test that if we subscrible using a CC topic and send a message using a GCC topic, we still get the message"""
+        self.test_if_message_is_send(config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_CC)
+
+    @timed(2)
+    def test_cc_cc(self):
+        """Test that if we subscrible using a CC topic and send a message using a CC topic, we still get the message"""
+        self.test_if_message_is_send(config.TEST_ECC_TOPIC_CC, config.TEST_ECC_TOPIC_CC)
+
+    @timed(2)
+    def test_unsubscrible_no_subscribled(self):
+        """Test we cannot unsubscrible if we're not subscribled"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        m.send_frame('UNSUBSCRIBE',[('destination', config.TEST_TOPICS[0])] , '')
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @timed(2)
+    def test_unsubscrible_id_no_subscribled(self):
+        """Test we cannot unsubscrible (using id) if we're not subscribled"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('id', '_test_id')] , '')
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @timed(2)
+    def test_unsubscrible_withnothing(self):
+        """Test we cannot unsubscrible if we don't specify a parameter"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[] , '')
+
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'ERROR')
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible(self):
+        """Test we can unsubscrible"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('destination', config.TEST_TOPICS[0])] , '')
+
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible_id(self):
+        """Test we can unsubscrible, using ids"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        id = str(uuid.uuid4())
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('id', id), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('id', id)] , '')
+
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible_id_sub_only(self):
+        """Test we can unsubscrible, using id for subscription only"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([]) 
+        m.get_frame()  # Connected frame
+
+        id = str(uuid.uuid4())
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('id', id), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('destination', config.TEST_TOPICS[0])] , '')
+
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible_dontmnessage(self):
+        """Test if we're unsubscribled, we don't get messages"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('destination', config.TEST_TOPICS[0])] , '')
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], str(uuid.uuid4()))
+
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible_dontmnessage_withid(self):
+        """Test if we're unsubscribled (using ids), we don't get messages"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')]) 
+        m.get_frame()  # Connected frame
+
+        id = str(uuid.uuid4())
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('id', id), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('id', id)] , '')
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], str(uuid.uuid4()))
+
+        m.socket.settimeout(3)
+        m.get_frame()
+
+    @raises(socket.timeout)
+    @timed(2)
+    def test_unsubscrible_dontmnessage_withsubid(self):
+        """Test if we're unsubscribled (using id only for subscription), we don't get messages"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        id = str(uuid.uuid4())
+
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('id', id), ('x-ebu-nofastreply', 'yes')], '')
+        m.send_frame('UNSUBSCRIBE',[('destination', config.TEST_TOPICS[0])] , '')
+
+        m.send_frame('SEND', [('destination', config.TEST_TOPICS[0])], str(uuid.uuid4()))
+
+        m.socket.settimeout(3)
+        m.get_frame()

@@ -92,8 +92,6 @@ class RadioDns_():
 
 		return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)
 
-
-
 	def check_special_matchs(self, topic, topics):
 		"""Return true if topic is in the list of topics, using specials rules (eg. fm)"""
 
@@ -157,14 +155,40 @@ class RadioDns_():
 class RadioDnsTesting(RadioDns_):
 	"""Special class for testing"""
 
-	def do_query(self, url):
-		"""Never do a real query !"""
-		return None
+	def do_query(self, url, params):
+		"""Never do a real query but act as we're the api !"""
 
-	def check_auth(self, user, password, ip):
-		if user == "testip":
-			return ip == password
-		return user == "test" and password == "test"
+		result = {}
+
+		if url == 'check_auth':
+
+			# Authentification: test:test or testip:<theip>
+
+			result['error'] = ''
+			if params['username'] == "2.testip":
+				result['result'] = params['ip'] == params['password']
+			else:
+				result['result'] = params['username'][2:] == "test" and params['password'] == "test"
+
+		elif url == 'get_channels':
+
+			# List of allowed channels
+			if params['station_id'] == '1':  # Normal tests
+				result['list'] = config.TEST_TOPICS 
+			elif params['station_id'] == '3':  # GCC/CC tests
+				result['list'] = [config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_CC]
+			else:
+				result['list'] = []
+
+		elif url == 'get_gcc':
+
+			if params['cc'] in config.TEST_ECC:
+				result['gcc'] = config.TEST_ECC[params['cc']]
+
+		else:
+			raise Exception("Not implemented query %s" % (url,))
+
+		return result
 
 
 if len(sys.argv) > 1 and sys.argv[1] == '--test':
