@@ -13,7 +13,9 @@ Create a `config.py` file, using `config.py.dist.py` as base. Copy the SSH key t
 
 ## Config
 
-### SSH_USER
+### SSH
+
+#### SSH_USER
 The user for SSH connections
 
 #### SSH_PRIVKEY
@@ -21,6 +23,8 @@ The SSH key for SSH connections
 
 #### USE_SSH_CONFIG
 Fabric option to use the local ssh config. Set this to False if you're using windows or you don't have an ssh config file.
+
+### RabbitMQ
 
 #### RABBITMQ_USER
 The username for the rabbitmq admin user
@@ -34,20 +38,15 @@ The rabbitmq host
 #### RADIOVIS_RABBITMQ_QUEUE
 The name of the main queue for rabbitmq. This should be configured as a 'fanout' exchange.
 
-##### API_SECRET
-The secret to use the PlugIt API (from the RadioVisServer)
-
-#### API_BASE_URL
-The base URL for the PlugIt API.
-
-#### API_ALLOWD_IPS
-IPs allowd to use the PlugIt API.
+### RadioVis
 
 #### RADIOVIS_API_URL
 The URL of the PlugIt API, for the RadioVisServer
 
 #### RADIOVIS_LOG_LEVEL
 The level of logging for the RadioVisServer
+
+### Git
 
 #### GIT_REPO
 The git repository to deploy code from
@@ -64,8 +63,12 @@ The folder with RadioVisServer
 #### GIT_PLUGITDIR
 The folder with the PlugIt API
 
+### Deployement
+
 #### CONFIG_DIR
 The folder with configuration files
+
+### MySQL
 
 #### MYSQL_USER 
 The MYSQL user
@@ -76,6 +79,8 @@ The MYSQL database
 #### MYSQL_PASSWORD
 The MYSQL password
 
+### PlugIt 
+
 #### PLUGIT_API_URL
 The URL to callback the Plugit API
 
@@ -84,6 +89,16 @@ The connection string to MYSQL for SqlAlchemy
 
 #### PLUGIT_PUBLIC_ACCESS
 The public URL to access PlugIt (used for fallback medias)
+
+##### API_SECRET
+The secret to use the PlugIt API (from the RadioVisServer)
+
+#### API_BASE_URL
+The base URL for the PlugIt API.
+
+#### API_ALLOWD_IPS
+IPs allowd to use the PlugIt API.
+
 
 # Main commands
 
