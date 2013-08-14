@@ -7,4 +7,4 @@ You can find the plugit client inside `RadioDns-PlugIt`, the RadioVis server ins
 
 ## General architecture
 
-![Image](architecture-radiodns?raw=true)
+![Image](architecture-radiodns.png?raw=true)
