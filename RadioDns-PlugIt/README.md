@@ -30,6 +30,8 @@ The python dependencies are:
 * dnspython
 * requests
 
+You can install them using `pip install _package_`
+
 ## Core
 
 The core of the API is a flask server. It can be runned (for developpement) using `python server.py` or (for production) using the `wsgi.py` wsgi script.

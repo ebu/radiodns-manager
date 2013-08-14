@@ -18,6 +18,8 @@ The python dependencies are:
 * nose (for tests)
 * psutil (for tests)
 
+You can install them using `pip install _package_`. On Windows, gevent can be found [here](https://pypi.python.org/pypi/gevent#downloads), greentlet [here](http://www.lfd.uci.edu/%7Egohlke/pythonlibs/#greenlet) and psutils [here](https://code.google.com/p/psutil/downloads/detail?name=psutil-1.0.1.win32-py2.7.exe&can=2&q=)
+
 # Parts
 
 There is 3 mains parts: The RadioVis server, the fallback server and the test script
