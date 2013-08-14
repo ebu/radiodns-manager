@@ -1,3 +1,6 @@
+Deployement scripts
+===================
+
 This folder contains deployements scripts for each part of the project.
 
 Fabric is used. 
@@ -88,7 +91,7 @@ You can use `fab --list` to list all commands.
 
 #### plugit_server.deploy
 
-Deploy a new RadioDns-PlugIt instance on a server with apache and everything.
+Deploy a new RadioDns-PlugIt instance on a server with apache and everything. Main commands are:
 
 #### plugit_server.upgrade
 
@@ -110,6 +113,6 @@ Deploy a new RadioVis server node, with the fallback client
 
 Update code on a RadioVis server node from GIT
 
-## radiovis_server.update_withfallback
+#### radiovis_server.update_withfallback
 
 Update code on a RadioVis server node from GIT, including the fallback client
