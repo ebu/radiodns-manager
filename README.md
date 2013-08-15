@@ -32,12 +32,12 @@ Dependencies and theirs licenses can be found in specifics READMEs in sub folder
 
 ## Project lead
 
-* Michael Barroco, @barroco
+* Michael Barroco [@barroco](https://github.com/barroco)
 
 ## Core contributors
 
-* Maximilien Cuon, @the-glu
+* Maximilien Cuony [@the-glu](https://github.com/the-glu)
 
 ## Contributors
 
-* Malik Bougacha, @gcmalloc
+* Malik Bougacha [@gcmalloc](https://github.com/gcmalloc)
