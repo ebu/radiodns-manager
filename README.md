@@ -22,7 +22,7 @@ Whenever a newer version is officially adopted, that version shall apply, and in
 
 ### Exceptions
 
-Contact the EBU (barroco@ebu.ch) if you are in need of special licence terms/ distribution rights different from the EU Public Licence.
+Contact the EBU (Michael Barroco, barroco@ebu.ch) if you are in need of special licence terms/ distribution rights different from the EU Public Licence.
 
 ### Disclaimer
 
