@@ -1,0 +1,22 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Channels :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Export to zone file</h3>
+
+	<pre class="pre">{{retour}}</pre>
+
+	<span style="float: right;">
+		<a href="{{ebuio_baseUrl}}channels/" class="btn">Back to the list</a>
+		<a href="{{ebuio_baseUrl}}channels/export/?to=file" class="btn btn-primary">Download to file</a>
+	</span>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+
