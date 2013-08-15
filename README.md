@@ -3,7 +3,7 @@ radiodns-plugit
 
 An implementation of a RadioDns server (Using plugit) and a RadioVis server (without commet support).
 
-You can find the plugit client inside `RadioDns-PlugIt`, the RadioVis server inside `RadioVisServer` and deployements scripts inside `Deployement`. Check each folders for specifics README about each part.
+You can find the plugit client inside `RadioDns-PlugIt`, the RadioVis server inside `RadioVisServer` and deployments scripts inside `Deployment`. Check each folder for specifics README about each part.
 
 ## General architecture
 
@@ -22,7 +22,7 @@ http://ec.europa.eu/idabc/eupl
 Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the Licence for the specific language governing permissions and limitations under the Licence.
 
-Depencencies and theirs licenses can be found in specifics READMEs in subfolders.
+Dependencies and theirs licenses can be found in specifics READMEs in sub folders.
 
 ## Project lead
 

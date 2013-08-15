@@ -26,21 +26,21 @@ There is 3 mains parts: The RadioVis server, the fallback server and the test sc
 
 ## RadioVis server
 
-This part take care of connection to RadioVis clients and forwarding of messages. This can be started using `python server.py`. Multiple instances can be runned.
+This part takes care of connection to RadioVis clients and forwarding of messages. This can be started using `python server.py`. Multiple instances can be ran.
 
-It's possible, for debugging, to run the server without a RabbitMq server. In that case, tests will fail and the fallback server won't works.
+It's possible, for debugging, to run the server without a RabbitMq server. In that case, tests will fail and the fallback server won't work.
 
 ## Fallback server
 
-The fallback server watch topics, and send the default image and text if there is no activity on a topics for a configurable amount of time. It also take care of logging all messages (who are forwarder to the PlugIt server). It's connected directly to the RabbitMq server.
+The fallback server watch topics, and send the default image and text if there is no activity on a topics for a configurable amount of time. It also takes care of logging all messages (who are forwarded to the PlugIt server). It's connected directly to the RabbitMq server.
 
 Only one instance of the fallback server should be running at one time. The command to start it is `python fallback.py`.
 
 ## Test script
 
-A testing unit is available to tests the RadioVis server and the watch dog. It's use _node_. All tests can simply be run using `nosetests`. More details are available in the nose documentation. All tests are inside the file `test.py`.
+A testing unit is available to tests the RadioVis server and the fallback deamon. It's use _node_. All tests can simply be run using `nosetests`. More details are available in the nose documentation. All tests are inside the file `test.py`.
 
-For testing, a speical RadioDns class is used, faking call to the PlugIt API with testing values.
+For testing, a special RadioDns class is used, faking call to the PlugIt API with testing values.
 
 # General architecture
 
@@ -51,24 +51,24 @@ For testing, a speical RadioDns class is used, faking call to the PlugIt API wit
 The fallback process take care of everything related to the watchdog feature and logging. 4 process are spawn.
 
 ### get_channels_threads
-This process retrive the list of topics from the PlugIt server.
+This process retrieve the list of topics from the PlugIt server.
 
 ### connect_to_rabbitmq
 This process ensure we're connected to the RabbitMq server.
 
 ### checks_channels
-This process check if a topics didn't recieve a message for a long time and send the default media if needed.
+This process check if a topics didn't receive a message for a long time and send the default media if needed.
 
 ### cleanup_logs
-This process take care of cleaning logs
+This process takes care of cleaning logs
 
 ## RabbitMq
 
-The Rabbitmq process take care of the communication with the RabbitMq server. It connect to the main exchange, and consume message, broadcasting them to all listening process.
+The Rabbitmq process take care of the communication with the RabbitMq server. It connects to the main exchange, and consume message, broadcasting them to all listening process.
 
 ## RadioDns
 
-The RadioDns class takes care of communications to the PlugIt api server, allowing call e.g. for authentifications, listing of topics, etc.
+The RadioDns class takes care of communications to the PlugIt API server, allowing call e.g. for authentication, listing of topics, etc.
 
 ## Stomp
 
@@ -76,7 +76,7 @@ The Stomp class represent a Stomp connection. It takes care of communications wi
 
 ## Server
 
-The server takes care of incomming Stomp connctions, spawning a stomp server for each new connection and registering them to the RabbitMq process. It also initializes everything at the startup.
+The server takes care of incoming Stomp connections, spawning a stomp server for each new connection and registering them to the RabbitMq process. It also initializes everything at the startup.
 
 # Config
 
@@ -102,7 +102,7 @@ Caching options, see http://beaker.readthedocs.org/en/latest/configuration.html#
 ### RabbitMq
 
 #### RABBITMQ_LOOPBACK
-If set to true, don't use rabbitmq but just send messages back ! (For debugging)
+If set to true, don't use rabbitmq, but just send messages back! (For debugging)
 
 #### RABBITMQ_HOST
 The RabbitMq host
@@ -137,13 +137,13 @@ Persistant queue
 The time when we check for timeouted channels. (Each FB_FALLBACK_CHECK seconds)
 
 #### FB_FALLBACK_TIME
-The time before a channel is consided dead
+The time before a channel is dead
 
 #### FB_IMAGE_LOCATIONS
 The base URL for default images (The PlugIt frontend)
 
 #### FB_LOGS_MAX_AGE
-The maximum number of seconds a log entry is keept
+The maximum number of seconds a log entry is kept
 
 #### FB_LOGS_CLEANUP 
 When logs are cleaned

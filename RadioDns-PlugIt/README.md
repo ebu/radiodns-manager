@@ -13,7 +13,7 @@ The API allow the management of stations and channels.
 
 ## RadioVis
 
-The API allow management of defaults medias, and store logs about messages sent on differents topics.
+The API allow management of defaults medias, and store logs about messages sent on different topics.
 
 # Tools used
 
@@ -34,7 +34,7 @@ You can install them using `pip install _package_`
 
 ## Core
 
-The core of the API is a flask server. It can be runned (for developpement) using `python server.py` or (for production) using the `wsgi.py` wsgi script.
+The core of the API is a flask server. It can be ran (for development) using `python server.py` or (for production) using the `wsgi.py` wsgi script.
 
 All PlugIt actions are in the `actions.py` file. All details are available in the PlugIt documentation (everything is based from the _Simple Flask server_),
 
@@ -57,10 +57,10 @@ The URL to call the PlugIt client
 The connection string to MYSQL for SqlAlchemy
 
 #### API_SECRET
-A secret, shared with teh RadioVisServer to access specials calls.
+A secret, shared with the RadioVisServer to access specials calls.
 
 #### DEBUG
-Set this to True to lanch flask in debug mode.
+Set this to True to launch flask in debug mode.
 
 #### PI_BASE_URL
 The base URL for the PlugIi API (Check PlugIt documentation)

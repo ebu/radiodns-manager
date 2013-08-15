@@ -1,7 +1,7 @@
-Deployement scripts
-===================
+Deployment scripts
+==================
 
-This folder contains deployements scripts for each part of the project.
+This folder contains deployments scripts for each part of the project.
 
 Fabric is used (BSD license)
 
@@ -97,7 +97,7 @@ The secret to use the PlugIt API (from the RadioVisServer)
 The base URL for the PlugIt API.
 
 #### API_ALLOWD_IPS
-IPs allowd to use the PlugIt API.
+Subnets allowed to use the PlugIt API.
 
 
 # Main commands
