@@ -1,5 +1,5 @@
 RadioDns - PlugIt
-#################
+=================
 
 This folder contains the PlugIt server API. It has to run in OrgaMode (see PlugIt README for details).
 
@@ -23,12 +23,12 @@ The server is written in Python.
 
 The python dependencies are:
 
-* flask
-* sqlalchemy
-* Flask-SQLAlchemy
-* alembic
-* dnspython
-* requests
+* flask (BSD license)
+* sqlalchemy (MIT license)
+* Flask-SQLAlchemy (BSD license)
+* alembic (MIT license)
+* dnspython (BSD-style license)
+* requests (Apache2 license)
 
 You can install them using `pip install _package_`
 

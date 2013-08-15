@@ -3,7 +3,7 @@ Deployement scripts
 
 This folder contains deployements scripts for each part of the project.
 
-Fabric is used. 
+Fabric is used (BSD license)
 
 Scripts assume the presence of an ubuntu user and `apt-get` tool. They should work with any fresh install of ubuntu server, with defaults parameters.
 
