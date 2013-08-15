@@ -1,0 +1,44 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Stations :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Edit a station</h3>
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST">
+		{% csrf_token %}
+
+		<label>Name</label>
+		<input type="text" name="name" value="{{object.name}}">
+
+		<label>IPs allowed to connect to the radiovis server</label>
+		<input type="text" name="ip_allowed" value="{{object.ip_allowed}}">
+		<small>
+			A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
+		</small>
+
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}stations/" class="btn">Cancel</a>
+			<input type="submit" class="btn btn-primary" value="Save">
+		</span>
+
+	</form>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

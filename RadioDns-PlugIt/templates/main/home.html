@@ -1,0 +1,18 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Home :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Home</h3>
+
+	<p class="well well-small">
+		Welcome !
+	</p>
+
+	<p>You're currently working with the organization <i>{{ebuio_orga.name}}</i>. use the top-right combo to change at any time !</p>
+{% endblock %}
+
