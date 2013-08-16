@@ -22,6 +22,7 @@ from rabbitmq import RabbitConnexion
 
 import sys
 
+
 # The logger
 logging.basicConfig(level=config.LOG_LEVEL)
 logger = logging.getLogger('radiovisserver')
