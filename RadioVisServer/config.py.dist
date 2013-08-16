@@ -46,3 +46,8 @@ TEST_FB_FALLBACK_TIME = 10
 TEST_FB_QUEUE = FB_QUEUE + '_testMode'
 TEST_FB_LOGS_CLEANUP = 5
 TEST_CHANNEL_DEFAULT = {'id': '1', 'orga': '', 'name': 'test', 'filename': 'testfilename', 'radiotext': 'testdefaultext', 'radiolink': 'testdefaultlink', 'clean_filename': 'testfilename'}
+
+STATS_GAUGE_APPNAME = 'radiovis.app'
+STATS_GAUGE_NB_CLIENTS = 'nb_tcp_cox'
+STATS_COUNTER_NBMESSAGE_SENT = 'radiovis.app.msg_sent'
+STATS_COUNTER_NBMESSAGE_RECV = 'radiovis.app.msg_recv'
