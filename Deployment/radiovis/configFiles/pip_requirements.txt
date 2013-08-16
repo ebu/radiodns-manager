@@ -6,3 +6,4 @@ dnspython
 haigha
 requests
 beaker
+python-statsd
