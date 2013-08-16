@@ -8,6 +8,8 @@ import sys
 
 from haigha.message import Message
 
+import statsd
+
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
@@ -22,6 +24,9 @@ class RabbitConnexion():
 
         # Save the watchdog
         self.watchdog = watchdog
+
+        # The global gauge
+        self.gauge = statsd.Gauge(config.STATS_GAUGE_APPNAME)
 
     def consumer(self, msg):
         """Called when a rabbitmq message arrive"""
@@ -42,6 +47,8 @@ class RabbitConnexion():
                     bonusHeaders.append((name, headers[name]))
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
+
+                statsd.Counter(config.STATS_COUNTER_NBMESSAGE_RECV + '.'.join(topic.split('/'))).increment()
 
                 # Save the message as the last one
                 self.LAST_MESSAGES[topic] = (body, bonusHeaders)
@@ -131,6 +138,8 @@ class RabbitConnexion():
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
+        statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['destination'].split('/'))).increment()
+
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")
 
@@ -147,7 +156,13 @@ class RabbitConnexion():
     def add_stomp_server(self, s):
         """Handle a new stomp server"""
         self.stompservers.append(s)
+        self.update_stats()
 
     def remove_stomp_server(self, s):
         """Stop handeling a stomp server"""
         self.stompservers.remove(s)
+        self.update_stats()
+
+    def update_stats(self):
+        """Update stats"""
+        self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))

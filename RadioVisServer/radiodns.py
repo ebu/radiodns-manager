@@ -13,12 +13,15 @@ import sys
 
 import socket
 
+
+
 class RadioDns_():
 	"""Class to handle connection to the radioDns database: listing of topics and logins, special topic rules"""
 
 	def __init__(self):
 		self.logger = logging.getLogger('radiovisserver.radiodns')
 		self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
+
 
 	def do_query(self, url, params):
 		try:
