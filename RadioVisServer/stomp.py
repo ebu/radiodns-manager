@@ -145,7 +145,6 @@ class StompServer():
         finally:
             self.socket.close()
 
-
     def run(self):
         """Main function to run the stompserver"""
 
