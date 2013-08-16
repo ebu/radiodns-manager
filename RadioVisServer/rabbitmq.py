@@ -48,7 +48,8 @@ class RabbitConnexion():
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
 
-                statsd.Counter(config.STATS_COUNTER_NBMESSAGE_RECV + '.'.join(topic.split('/'))).increment()
+                if self.watchdog:  # If we are the watchdog, send stats
+                    statsd.Counter(config.STATS_COUNTER_NBMESSAGE_RECV + '.'.join(topic.split('/'))).increment()
 
                 # Save the message as the last one
                 self.LAST_MESSAGES[topic] = (body, bonusHeaders)
@@ -138,7 +139,8 @@ class RabbitConnexion():
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
-        statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['destination'].split('/'))).increment()
+        if self.watchdog:  # If we are the watchdog, send stats
+            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['destination'].split('/'))).increment()
 
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")
