@@ -15,8 +15,8 @@
 
         <li class="divider-vertical"></li>
         <li><a href="#"><b>RadioEPG</b></a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/shows/">Shows</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/">Schedule</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/shows/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Shows</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Schedule</a></li>
     </ul>
 </div>
 </div>

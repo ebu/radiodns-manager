@@ -1,0 +1,166 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Schedule :: RadioEPG :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% if nostations %}
+		No stations !
+	{% else %}
+
+		<link href='{{ebuio_baseUrl}}media/css/fullcalendar.css' rel='stylesheet' />
+		<link href='{{ebuio_baseUrl}}media/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+		<script src='{{ebuio_baseUrl}}media/js/jquery-ui-1.10.3.custom.min.js'></script>
+		<script src='{{ebuio_baseUrl}}media/js/fullcalendar.min.js'></script>
+
+		<style>
+			#the_calendar .fc-agenda-slots td {
+				border-top: 1px #ddd solid;
+			}
+			.external-event {
+				z-index: 1000;
+			}
+		</style>
+
+		{% plugitInclude "menubar" %}
+
+		<select style="float: right;" onchange="window.location='?station_id=' + $(this).val();">
+			{% for station in stations %}
+				<option value="{{station.id}}" {% if station.id == current_station.id %}selected{% endif %}>{{station.name}}</option>
+			{% endfor %}
+		</select>
+
+		<h3>RadioEPG: Schedule</h3>
+
+		<div class="row-fluid">
+			<div id="the_calendar" class="span10"></div>
+			<div class="span2">
+				{% if ebuio_u.ebuio_orga_admin %}
+					<div class="box">
+						<div class="box-header"><span class="title">Shows</span></div>
+						<div class="box-content">
+							<div class="nav-menu">
+								<ul class="nav nav-list">
+									{% for show in shows %}
+										<li><a href="#" showPk="{{show.id}}" class="ui-draggable external-event" style="background-color: {{show.color}}; color: #000;">{{show.medium_name}}</a></li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+		
+
+		<script type="text/javascript">
+		 	$.fullCalendar.dayNames
+			
+				$(function() {
+					$( ".ui-draggable" ).draggable({ revert: true });
+				});
+			 $('#the_calendar').fullCalendar({
+				theme: true,
+				header: {
+					//left: 'prev,next today',
+					left:'',
+					center: '',//'title',
+					right:''
+					//right:'month, agendaWeek'
+					//right: 'month,agendaWeek,agendaDay'
+				},
+				axisFormat: 'HH:mm',
+				allDaySlot: false,
+				firstDay:1,
+				selectable:false,
+				selectHelper: false,
+				timeFormat: 'HH:mm{ - HH:mm}',
+				columnFormat:{
+				week: 'ddd'
+				},
+				slotMinutes:60,
+				snapMinutes:15,
+				defaultEventMinutes:60,
+				firstHour: 0,
+				defaultView: 'agendaWeek',
+				editable: true,
+				droppable: true, // this allows things to be dropped onto the calendar !!!
+				select: function(start, end, allDay) {
+					return false;
+				 },
+				{% if ebuio_u.ebuio_orga_admin %}
+				drop: function(date, allDay) { 
+					start = $.fullCalendar.formatDate(date, "HH:mm");
+					timeday = (date.getDay() + 6) % 7;
+					showPk = $(this).attr('showPk');
+					urlnewsched = "{{ebuio_baseUrl}}radioepg/schedule/{{current_station_id}}/create/?start="+start+"&timeday="+timeday+"&showPk="+showPk;
+					$.ajax({
+						url: urlnewsched,
+						success: function(data){
+							refreshCal();
+						}
+					});
+				},
+				eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+					progPk = event.id;
+					urlresizesched = "{{ebuio_baseUrl}}radioepg/schedule/{{current_station_id}}/resize/?deltaMinutes="+minuteDelta+"&progPk="+progPk;
+					$.ajax({
+						url: urlresizesched,
+						success: function(data){
+							refreshCal();
+						}
+					});
+				},
+				eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+					progPk = event.id;
+					newstart = $.fullCalendar.formatDate(event.start, "HH:mm");
+					urlmovesched = "{{ebuio_baseUrl}}radioepg/schedule/{{current_station_id}}/move/?newStart="+newstart+"&deltaDay="+dayDelta+"&progPk="+progPk;
+					$.ajax({
+						url: urlmovesched,
+						success: function(data){
+							refreshCal();
+						}
+					});
+				},
+				eventClick: function(calEvent, jsEvent, view) {
+					progPk = calEvent.id;
+					if(confirm("Are you sure you want to delete schedule of "+calEvent.title)){
+						urldelete = "{{ebuio_baseUrl}}radioepg/schedule/{{current_station_id}}/delete/?progPk=" + progPk;
+						$.ajax({
+							url: urldelete,
+							success: function(data){
+								refreshCal();
+							}
+						});
+					}
+					$('#check').removeClass("ui-state-active");
+					return false;
+				},
+				{% endif %}
+    	        events: function(start, end, callback) {
+			        $.ajax({
+			            url: "{{ebuio_baseUrl}}radioepg/schedule/{{current_station_id}}/events",
+			            dataType: 'json',
+			            data: {
+			                start: Math.round(start.getTime() / 1000),
+			                end: Math.round(end.getTime() / 1000)
+			            },
+			            success: function(data) {
+			                callback(data.list);
+			            }
+			        });
+			    }
+			});
+			function refreshCal(){
+				$("#the_calendar").fullCalendar( 'refetchEvents' );
+			} 
+		</script>
+	{% endif %}
+
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

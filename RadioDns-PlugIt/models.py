@@ -39,6 +39,8 @@ class Station(db.Model):
     ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
 
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
+    shows = db.relationship('Show', backref='station', lazy='dynamic')
+    schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
 
 
     def __init__(self, orga):
@@ -249,6 +251,10 @@ class Show(db.Model):
     description = db.Column(db.String(255))
     color = db.Column(db.String(7))
 
+    station_id = db.Column(db.Integer, db.ForeignKey('station.id'))
+
+    schedules = db.relationship('Schedule', backref='show', lazy='dynamic')
+
     def __init__(self, orga):
         self.orga = orga
 
@@ -258,3 +264,18 @@ class Show(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, [])
+
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    show_id = db.Column(db.Integer, db.ForeignKey('show.id'))
+    station_id = db.Column(db.Integer, db.ForeignKey('station.id'))
+
+    day = db.Column(db.Integer)
+    start_hour = db.Column(db.Integer)
+    start_minute = db.Column(db.Integer)
+    length = db.Column(db.Integer)
+
+    @property
+    def seconds_from_base(self):
+        """The number, in seconds of start, based on monday 00:00"""
+        return self.day * 24 * 60 * 60 + self.start_hour * 60 * 60 + self.start_minute * 60
