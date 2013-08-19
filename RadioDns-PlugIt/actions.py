@@ -12,6 +12,9 @@ from channels.actions import *
 # Include radiovis methods
 from radiovis.actions import *
 
+# Include radioepg methods
+from radioepg.actions import *
+
 from utils import action
 
 

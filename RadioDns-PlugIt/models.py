@@ -240,3 +240,21 @@ class LogEntry(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['reception_date'])
+
+class Show(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    orga = db.Column(db.Integer)
+    medium_name = db.Column(db.String(255))
+    long_name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+    color = db.Column(db.String(7))
+
+    def __init__(self, orga):
+        self.orga = orga
+
+    def __repr__(self):
+        return '<Show %r[%s]>' % (self.medium_name, self.orga)
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, [])
