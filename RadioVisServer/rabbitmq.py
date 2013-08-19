@@ -10,6 +10,8 @@ from haigha.message import Message
 
 import statsd
 
+
+
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
@@ -139,8 +141,10 @@ class RabbitConnexion():
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
-        if self.watchdog:  # If we are the watchdog, send stats
-            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['destination'].split('/'))).increment()
+        if self.watchdog:
+            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['topic'].split('/'))).increment()
+        else:
+            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG + '.'.join(headers['topic'].split('/'))).increment()
 
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")
