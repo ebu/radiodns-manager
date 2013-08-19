@@ -24,6 +24,7 @@ class StompServer():
         self.incomingData = ''
         # Topic the client subscribled to
         self.topics = []
+        
         # Queue of messages
         self.queue = queue.Queue()
         # Lock to send frame
