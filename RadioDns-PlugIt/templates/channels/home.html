@@ -40,9 +40,9 @@
 					<td>{{c.station_name}}</td>
 					<td>{{c.name}}</td>
 					<td>{{c.radiodns_entry}}</td>
-					<td id="fqdn-{{c.id}}">?</td>
-					<td id="vis-{{c.id}}">?</td>
-					<td id="epg-{{c.id}}">?</td>
+					<td id="fqdn-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
+					<td id="vis-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
+					<td id="epg-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
 							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
