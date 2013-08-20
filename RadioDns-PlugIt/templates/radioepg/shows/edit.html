@@ -1,0 +1,51 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Shows :: RadioEPG :: RadioDNS{% endblock %}
+
+{% block content %}
+
+	{% plugitInclude "menubar" %}
+
+	<h3>Edit a show</h3>
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+
+		<label>Medium name</label>
+		<input type="text" name="medium_name" value="{{object.medium_name}}">
+
+		<label>Long name</label>
+		<input type="text" name="long_name" value="{{object.long_name}}">
+
+		<label>Description</label>
+		<textarea name="description">{{object.long_name}}</textarea>
+
+		<label>Color</label>
+		<select name="color">
+			{% for color in colors %}
+				<option style="color: #000; background-color: {{color.1}};" value="{{color.1}}" {% if object.color == color.1 %}selected{% endif %}>{{color.0}}</option>
+			{% endfor %}
+		</select>
+
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}radioepg/shows/" class="btn">Cancel</a>
+			<input type="submit" class="btn btn-primary" value="Save">
+		</span>
+
+	</form>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

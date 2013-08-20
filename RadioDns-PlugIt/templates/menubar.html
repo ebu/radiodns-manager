@@ -6,9 +6,17 @@
         <li><a href="{{ebuio_baseUrl}}">Home</a></li>
         <li><a href="{{ebuio_baseUrl}}stations/">Stations</a></li>
         <li><a href="{{ebuio_baseUrl}}channels/">Channels</a></li>
-        <li><a href="#"><b>RadioVis</b></a></li>
+
+        <li class="divider-vertical"></li>
+
+        <li><a href="#"><b>RadioVIS</b></a></li>
         <li><a href="{{ebuio_baseUrl}}radiovis/gallery/">Gallery</a></li>
         <li><a href="{{ebuio_baseUrl}}radiovis/channels/">Channels</a></li>
+
+        <li class="divider-vertical"></li>
+        <li><a href="#"><b>RadioEPG</b></a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/shows/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Shows</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Schedule</a></li>
     </ul>
 </div>
 </div>

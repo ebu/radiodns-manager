@@ -10,8 +10,6 @@ from haigha.message import Message
 
 import statsd
 
-
-
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
