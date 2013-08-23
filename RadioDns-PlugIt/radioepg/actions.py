@@ -382,3 +382,35 @@ def radioepg_servicefollowing_trun(request, mode, id):
             db.session.commit()
 
     return PlugItRedirect('radioepg/servicefollowing/?turned=' + mode + '&station_id=' + station_id)
+
+@action(route="/radioepg/servicefollowing/xml", template='radioepg/servicefollowing/xml.html')
+@only_orga_member_user()
+def radioepg_servicefollowing_xml(request):
+    """Display servicefollowing as XML"""
+
+    stations = Station.query.all()
+
+    import datetime
+
+    time_format = '%Y%m%dT%H%M%S'
+
+    list = []
+
+    for elem in stations:
+
+        entries = []
+
+        # Channels
+        for elem2 in elem.channels.order_by(Channel.name).all():
+            if elem2.servicefollowingentry.active:
+                entries.append(elem2.servicefollowingentry.json)
+
+        # Custom entries
+        for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+            if elem2.active:
+                entries.append(elem2.json)
+
+        if len(entries) > 0:
+            list.append([elem.json, entries])
+
+    return {'stations': list, 'creation_time': datetime.datetime.now().strftime(time_format)}

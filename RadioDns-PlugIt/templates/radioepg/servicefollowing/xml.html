@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceInformation xmlns="http://radiodns.org/schemas/repgXSI/10" xmlns:epg="http://www.worlddab.org/schemas/epgDataTypes/14"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://radiodns.org/schemas/repgXSI/10 repgXSI_10.xsd" creationTime="{{creation_time}}" originator="RadioDNS - PlugIt" serviceProvider="EBU Technical" xml:lang="en">
+  <services> 
+
+    {% for station in stations %}
+      <service>
+        <radiodns fqdn="rdns.ebulabs.org" serviceIdentifier="ebu"/>
+        {% for entry in station.1 %}
+          <serviceID id="{{entry.uri}}"  {% if entry.cost %}cost="{{entry.cost}}"{% endif %} {% if entry.offset %}offset="{{entry.offset}}"{% endif %} {% if entry.mime_type %}mime="{{entry.mime_type}}"{% endif %}/>
+        {% endfor %}
+          <serviceID id="dab:9e0.0000.abcd1111.434" mime="audio/aacp" cost="100"/>
+        <epg:shortName>{{station.0.name}}</epg:shortName>
+        <epg:mediumName>{{station.0.name}}</epg:mediumName>
+      </service>
+    {% endfor %}
+
+  </services>
+</serviceInformation>
