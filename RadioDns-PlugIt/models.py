@@ -10,12 +10,15 @@ db = get_db()
 def to_json(inst, cls, bonusProps=[]):
     """
     Jsonify the sql alchemy query result.
+    Inspired from http://stackoverflow.com/a/9746249
     """
     convert = dict()
     # add your coversions for things like datetime's 
     # and what-not that aren't serializable.
     d = dict()
     for c in cls.__table__.columns:
+        if not hasattr(inst, c.name):  # If the field was inherited
+            continue
         v = getattr(inst, c.name)
         if c.type in convert.keys() and v is not None:
             try:
@@ -41,6 +44,7 @@ class Station(db.Model):
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
     shows = db.relationship('Show', backref='station', lazy='dynamic')
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
+    servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
 
     def __init__(self, orga):
@@ -111,8 +115,37 @@ class Channel(db.Model):
 
     default_picture_id = db.Column(db.Integer, db.ForeignKey('picture.id'))
 
+    servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='channel', lazy='dynamic')
+
     def __repr__(self):
         return '<Channel %r[%s]>' % (self.name, self.station.__repr__)
+
+    @property
+    def servicefollowingentry(self):
+        """Return (or create) the associated service following entry"""
+
+        # Find in exisiting objects
+        entries = self.servicefollowingentries.all()
+        if len(entries) > 0:
+            return entries[0]
+
+        # Create a new one
+
+        object = GenericServiceFollowingEntry()
+        object.channel_id = self.id
+        object.active = False
+        object.cost = 100
+        object.offset = 0
+
+        if self.type_id == 'dab':
+            object.mime_type = 'audio/mpeg'
+        else:
+            object.mime_type = ''
+
+        db.session.add(object)
+        db.session.commit()
+
+        return object
 
     @property
     def topic(self):
@@ -199,6 +232,12 @@ class Channel(db.Model):
                 pass
 
         return (fqdn, vis, epg)
+
+    @property
+    def epg_uri(self):
+        splited = self.dns_entry.split('.')
+        print 
+        return splited[-1] + ':' + '.'.join(splited[::-1][1:])
 
 class Picture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -304,3 +343,53 @@ class Schedule(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['json_show', 'start_time', 'duration'])
+
+class GenericServiceFollowingEntry(db.Model):
+    """A generic entry for service following"""
+    """If channel id is set, object is linked to a channel, otherwise station_id and channel_uri must be set, linking to a station"""
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    active = db.Column(db.Boolean)
+    cost = db.Column(db.Integer)
+    offset = db.Column(db.Integer)
+    mime_type = db.Column(db.String(255))
+
+    channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'), nullable=True)
+
+    station_id = db.Column(db.Integer, db.ForeignKey('station.id'), nullable=True)
+    channel_uri = db.Column(db.String(255), nullable=True)
+
+    @property
+    def channel_name(self):
+        """The name of the channel, if linked to a channel"""
+        if self.channel:
+            return self.channel.name
+        return ''
+
+    @property
+    def channel_type(self):
+        """The type of the channel, if linked to a channel"""
+        if self.channel:
+            return self.channel.type_id
+        return ''
+
+    @property
+    def uri(self):
+        """The uri to use"""
+        if self.channel:
+            return self.channel.epg_uri
+        else:
+            return self.channel_uri
+
+    @property
+    def type(self):
+        if self.channel:
+            return 'channel'
+        else:
+            return 'ip'
+
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['channel_name', 'uri', 'type', 'channel_type'])
