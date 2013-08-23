@@ -3,7 +3,7 @@
 # Utils
 from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
-from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule
+from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule, GenericServiceFollowingEntry
 
 import urlparse
 
@@ -36,7 +36,7 @@ def radioepg_shows_home(request):
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
-    if len(stations_json) == 0:
+    if not stations_json:
         return {'nostations': True}
 
     current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
@@ -130,7 +130,7 @@ def radioepg_schedule_home(request):
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
-    if len(stations_json) == 0:
+    if not stations_json:
         return {'nostations': True}
 
     current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
@@ -252,3 +252,174 @@ def radioepg_schedule_xml(request, id):
         list.append(elem.json)
 
     return {'schedules': list, 'start_time': start_date.strftime(time_format), 'end_time': end_date.strftime(time_format)}
+
+@action(route="/radioepg/servicefollowing/", template="radioepg/servicefollowing/home.html")
+@only_orga_member_user()
+def radioepg_sf_home(request):
+    """Show the list to manage service following."""
+
+    (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
+
+    if not stations_json:
+        return {'nostations': True}
+
+    current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
+    current_station = stations[current_station_id]
+ 
+    # Build list of entries
+    list = []
+
+    # Channels
+    for elem in current_station.channels.order_by(Channel.name).all():
+        list.append(elem.servicefollowingentry.json)
+
+    # Custom entries
+    for elem in current_station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+        list.append(elem.json)
+    
+    return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json  }
+
+
+@action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html", methods=['POST', 'GET'])
+@only_orga_admin_user()
+def radioepg_servicefollowing_edit(request, id):
+    """Edit a servicefollowing entry."""
+
+    station_id = request.args.get('station_id')
+
+    if not station_id:
+        return None
+
+    object = None
+    errors = []
+
+    if id != '-':
+        object =  GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()
+
+        # Check rights
+        if object.type == 'ip':
+            station_to_test = object.station
+        else:
+            station_to_test = object.channel.station
+
+        if station_to_test.id != int(station_id) or not station_to_test.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
+            object = None
+
+    if request.method == 'POST':
+
+        if not object:
+            object = GenericServiceFollowingEntry()
+            object.station_id = station_id
+
+        object.cost = request.form.get('cost')
+        object.offset = request.form.get('offset')
+        object.mime_type = request.form.get('mime_type')
+
+        if object.type == 'ip':
+            object.channel_uri = request.form.get('channel_uri')
+
+        # Check errors
+        if object.type == 'ip' and object.channel_uri == '':
+            errors.append("You have to set the channel")
+
+        # If no errors, save
+        if not errors:
+            if not object.id:
+                db.session.add(object)
+
+            db.session.commit()
+
+            return PlugItRedirect('radioepg/servicefollowing/?saved=yes')
+
+    if object:
+        object = object.json
+
+    dab_mime_types = [('audio/mpeg', 'DAB'), ('audio/aacp', 'DAB+')]
+      
+    return {'object': object, 'dab_mime_types': dab_mime_types, 'errors': errors, 'current_station_id': station_id }
+
+
+@action(route="/radioepg/servicefollowing/delete/<id>")
+@json_only()
+@only_orga_admin_user()
+def radioepg_servicefollowing_delete(request, id):
+    """Delete a servicefollowing entry."""
+
+    object =  GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()
+
+    station_id = request.args.get('station_id')
+
+    if not station_id:
+        return None
+
+    # Check rights before delete
+
+
+       
+    if object.type == 'ip':
+        if object.station.id == int(station_id):
+            if object.station.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
+                db.session.delete(object)
+                db.session.commit()
+
+    
+
+    return PlugItRedirect('radioepg/servicefollowing/?deleted=yes&station_id=' + station_id)
+
+@action(route="/radioepg/servicefollowing/turn/<mode>/<id>")
+@json_only()
+@only_orga_admin_user()
+def radioepg_servicefollowing_trun(request, mode, id):
+    """Turn on or off a servicefollowing entry."""
+
+    object =  GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()
+
+    station_id = request.args.get('station_id')
+
+    if not station_id:
+        return None
+
+    if object.type == 'ip':
+        station_to_test = object.station
+    else:
+        station_to_test = object.channel.station
+
+    # Check rights before change
+    if station_to_test.id == int(station_id):
+        if station_to_test.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
+            object.active = mode == 'on'
+            db.session.commit()
+
+    return PlugItRedirect('radioepg/servicefollowing/?turned=' + mode + '&station_id=' + station_id)
+
+@action(route="/radioepg/servicefollowing/xml", template='radioepg/servicefollowing/xml.html')
+@only_orga_member_user()
+def radioepg_servicefollowing_xml(request):
+    """Display servicefollowing as XML"""
+
+    stations = Station.query.all()
+
+    import datetime
+
+    time_format = '%Y%m%dT%H%M%S'
+
+    list = []
+
+    for elem in stations:
+
+        entries = []
+
+        # Channels
+        for elem2 in elem.channels.order_by(Channel.name).all():
+            if elem2.servicefollowingentry.active:
+                entries.append(elem2.servicefollowingentry.json)
+
+        # Custom entries
+        for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+            if elem2.active:
+                entries.append(elem2.json)
+
+        if entries:
+            list.append([elem.json, entries])
+
+    return {'stations': list, 'creation_time': datetime.datetime.now().strftime(time_format)}
