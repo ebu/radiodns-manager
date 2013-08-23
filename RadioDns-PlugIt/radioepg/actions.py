@@ -260,7 +260,7 @@ def radioepg_sf_home(request):
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
-    if len(stations_json) == 0:
+    if not stations_json:
         return {'nostations': True}
 
     current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
@@ -419,7 +419,7 @@ def radioepg_servicefollowing_xml(request):
             if elem2.active:
                 entries.append(elem2.json)
 
-        if len(entries) > 0:
+        if entries:
             list.append([elem.json, entries])
 
     return {'stations': list, 'creation_time': datetime.datetime.now().strftime(time_format)}
