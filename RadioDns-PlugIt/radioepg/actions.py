@@ -36,7 +36,7 @@ def radioepg_shows_home(request):
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
-    if len(stations_json) == 0:
+    if not stations_json:
         return {'nostations': True}
 
     current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
@@ -130,7 +130,7 @@ def radioepg_schedule_home(request):
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
-    if len(stations_json) == 0:
+    if not stations_json:
         return {'nostations': True}
 
     current_station_id = int(request.args.get('station_id', stations_json[0]['id']))
