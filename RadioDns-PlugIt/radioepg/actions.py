@@ -287,6 +287,9 @@ def radioepg_servicefollowing_edit(request, id):
 
     station_id = request.args.get('station_id')
 
+    if not station_id:
+        return None
+
     object = None
     errors = []
 
@@ -346,6 +349,9 @@ def radioepg_servicefollowing_delete(request, id):
 
     station_id = request.args.get('station_id')
 
+    if not station_id:
+        return None
+
     # Check rights before delete
 
 
@@ -369,6 +375,9 @@ def radioepg_servicefollowing_trun(request, mode, id):
     object =  GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()
 
     station_id = request.args.get('station_id')
+
+    if not station_id:
+        return None
 
     if object.type == 'ip':
         station_to_test = object.station
