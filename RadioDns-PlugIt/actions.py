@@ -12,7 +12,7 @@ from channels.actions import *
 # Include radiovis methods
 from radiovis.actions import *
 
-from utils import action
+from plugit.utils import action
 
 
 @action(route="/menubar", template="menubar.html")

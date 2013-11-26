@@ -1,10 +1,10 @@
-from utils import get_db
+from plugit import db
 import dns.resolver
 import string
 import random
 import datetime
 
-db = get_db()
+
 
 
 def to_json(inst, cls, bonusProps=[]):

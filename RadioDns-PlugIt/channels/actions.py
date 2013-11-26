@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
 
 from models import db, Station, Channel, Ecc
 
@@ -9,7 +9,7 @@ import re
 
 import config
 
-from plugit_api import PlugItAPI
+from plugit.api import PlugItAPI
 
 import StringIO
 
