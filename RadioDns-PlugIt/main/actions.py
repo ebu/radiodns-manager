@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from utils import action, only_orga_member_user, json_only, cache
+from plugit.utils import action, only_orga_member_user, json_only, cache
 
 from models import Ecc
 

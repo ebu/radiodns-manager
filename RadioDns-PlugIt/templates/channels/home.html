@@ -46,7 +46,7 @@
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
 							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-mini">Edit</a>
+							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-mini btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>
@@ -56,7 +56,7 @@
 
 	{% if ebuio_u.ebuio_orga_admin %}
 		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}channels/export/" class="btn">Export to zone file</a>
+			<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-default">Export to zone file</a>
 			<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
 		</span>
 	{% endif %}

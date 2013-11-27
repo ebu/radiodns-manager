@@ -15,7 +15,7 @@ from radiovis.actions import *
 # Include radioepg methods
 from radioepg.actions import *
 
-from utils import action
+from plugit.utils import action
 
 
 @action(route="/menubar", template="menubar.html")

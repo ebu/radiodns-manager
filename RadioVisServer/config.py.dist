@@ -3,7 +3,7 @@ import logging
 LOG_LEVEL = logging.DEBUG
 
 RABBITMQ_LOOPBACK = False  # If set to true, don't use rabbitmq but just send messages back !
-RABBITMQ_HOST = 'radiovis.ebu.io'
+RABBITMQ_HOST = '127.0.0.1'
 RABBITMQ_PORT = 5672
 RABBITMQ_USER = 'guest'
 RABBITMQ_PASSWORD = 'guest'

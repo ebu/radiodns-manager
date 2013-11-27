@@ -1,10 +1,10 @@
-from utils import get_db
+from plugit import db
 import dns.resolver
 import string
 import random
 import datetime
 
-db = get_db()
+
 
 
 def to_json(inst, cls, bonusProps=[]):
@@ -152,6 +152,10 @@ class Channel(db.Model):
         return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1]) + '/'
 
     @property
+    def topic_no_slash(self):
+        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1])
+
+    @property
     def dns_entry(self):
         val = self.type_id
         for (t, _, props) in Channel.TYPE_ID_CHOICES:
@@ -187,7 +191,7 @@ class Channel(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data'])
+        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
 
     @property
     def dns_values(self):
