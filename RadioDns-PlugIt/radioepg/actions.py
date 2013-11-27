@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
 from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule, GenericServiceFollowingEntry
 
