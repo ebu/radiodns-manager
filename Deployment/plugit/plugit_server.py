@@ -131,6 +131,20 @@ def update_database():
 
 
 @task
+def install_logstash():
+    """Install logstash"""
+
+    sudo('apt-get install -y default-jre')
+
+    sudo('mkdir /home/ubuntu/logstash/')
+    with cd('/home/ubuntu/logstash/'):
+        sudo('wget https://download.elasticsearch.org/logstash/logstash/logstash-1.2.2-flatjar.jar')
+        put(conf('shipper.conf'), '/home/ubuntu/logstash/shipper.conf', use_sudo=True)
+
+    put(conf('logstash.conf'), '/etc/init/logstash.conf', use_sudo=True)
+    sudo('service logstash start')
+
+@task
 def deploy():
     """Deploy a plugit server on the current host
     """
@@ -144,6 +158,7 @@ def deploy():
     create_user()
     update_database()
     restart_apache()
+    install_logstash()
 
 
 
