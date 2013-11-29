@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork, no_template
 
 from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule, GenericServiceFollowingEntry
 
@@ -232,6 +232,7 @@ def radioepg_schedule_delete_events(request, id):
 
 @action(route="/radioepg/schedule/<id>/xml", template='radioepg/schedule/xml.html')
 @only_orga_member_user()
+@no_template()
 def radioepg_schedule_xml(request, id):
     """Display Schedule as XML"""
 
@@ -393,7 +394,7 @@ def radioepg_servicefollowing_trun(request, mode, id):
     return PlugItRedirect('radioepg/servicefollowing/?turned=' + mode + '&station_id=' + station_id)
 
 @action(route="/radioepg/servicefollowing/xml", template='radioepg/servicefollowing/xml.html')
-@only_orga_member_user()
+@no_template()
 def radioepg_servicefollowing_xml(request):
     """Display servicefollowing as XML"""
 
