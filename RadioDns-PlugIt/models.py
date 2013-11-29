@@ -328,17 +328,21 @@ class Schedule(db.Model):
 
         return 'PT' + str(int(self.length/60)) + 'H' + str(self.length%60) + 'M'
 
+    @property
+    def date_of_start_time(self):
+        """Return the start time as a date, assuming start_date has been set as a reference"""
+        import datetime
+        return (self.start_date + datetime.timedelta(days=self.day, hours=self.start_hour, minutes=self.start_minute))
 
     @property
     def start_time(self):
-        """Return the start time, assuming start_date has been set as a reference"""
-        import datetime
+        """Return the start time as a string, assuming start_date has been set as a reference"""
         timetime_format = '%Y%m%dT%H%M%S'
 
         if not hasattr(self, 'start_date'):
             return ''
 
-        return (self.start_date + datetime.timedelta(days=self.day, hours=self.start_hour, minutes=self.start_minute)).strftime(timetime_format)
+        return self.date_of_start_time.strftime(timetime_format)
 
     @property
     def json_show(self):

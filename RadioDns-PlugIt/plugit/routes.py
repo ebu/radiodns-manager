@@ -38,6 +38,58 @@ def load_routes(app,actions):
                 list.append([elem.json, entries])
         return Response(render_template('radioepg/servicefollowing/xml.html', stations=list, creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
 
+    @app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
+    def epg_sch_xml(path, date):
+        """Special call for EPG scheduling xml"""
+
+        from models import Channel
+        from flask import render_template, Response
+
+        base_type = path.split('/')[0]
+        topiced_path = '/topic/' + path
+
+
+        station = None
+
+        for channel in Channel.query.filter(Channel.type_id == base_type).all():
+            if channel.topic_no_slash == topiced_path:
+                station = channel.station
+
+        if station:
+
+            import datetime
+
+            time_format = '%Y%m%dT%H%M%S'
+
+            today = datetime.date.today()
+            start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
+            end_date = start_date + datetime.timedelta(days=6,hours=23,minutes=59,seconds=59)
+
+
+            # Filter by date
+            date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
+            real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
+            real_end_date = start_date + datetime.timedelta(days=6,hours=23,minutes=59,seconds=59)
+
+
+            list = []
+
+            for elem in station.schedules.all():
+                elem.start_date = start_date
+
+                if elem.date_of_start_time.date() == date_to_filter:
+                    list.append(elem.json)
+
+            
+
+            return Response(render_template('radioepg/schedule/xml.html', schedules=list, start_time=real_start_date.strftime(time_format), end_time=real_end_date.strftime(time_format), creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+
+        return 'Station not found'
+
+
+
+    
+
     @app.route(PI_BASE_URL + "ping")
     def ping():
         """The ping method: Just return the data provided"""
