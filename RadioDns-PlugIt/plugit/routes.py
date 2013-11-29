@@ -1,7 +1,42 @@
 from params import PI_BASE_URL
 from views import *
 
+
+
 def load_routes(app,actions):
+
+    @app.route('/radiodns/epg/XSI.xml')
+    def epg_xml():
+        """Special call for EPG xml"""
+
+        from models import Station, Channel, GenericServiceFollowingEntry
+        from flask import render_template, Response
+
+        stations = Station.query.all()
+
+        import datetime
+
+        time_format = '%Y%m%dT%H%M%S'
+
+        list = []
+
+        for elem in stations:
+
+            entries = []
+
+            # Channels
+            for elem2 in elem.channels.order_by(Channel.name).all():
+                if elem2.servicefollowingentry.active:
+                    entries.append(elem2.servicefollowingentry.json)
+
+            # Custom entries
+            for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+                if elem2.active:
+                    entries.append(elem2.json)
+
+            if entries:
+                list.append([elem.json, entries])
+        return Response(render_template('radioepg/servicefollowing/xml.html', stations=list, creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
 
     @app.route(PI_BASE_URL + "ping")
     def ping():
