@@ -9,24 +9,24 @@ You can find the plugit client inside `RadioDns-PlugIt`, the RadioVis server ins
 
 ![Image](architecture-radiodns.png?raw=true)
 
-## License
+## License (BSD)
 
-Copyright (c) 2013 EBU. All rights reserved.
+Copyright (c) 2013, EBU
+All rights reserved.
 
-The project radiodns-plugit has been created by the EBU. It consists of software that dynamically links to different existing open source code repositories. It does not incorporate or combines components through copying them (or parts) into the target application and producing a merged object file that is a stand-alone executable. The radiodns-plugit code and documentation is made available by the EBU on the https://github.com/ebu/radiodns-plugit website, under the terms and conditions of the EUPL (European Union Public Licence) v. 1.1
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-### Latest version of EUPL
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-The EUPL licence v1.1 is available in 22 languages: 22-07-2013, https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-Whenever a newer version is officially adopted, that version shall apply, and in case of doubt, the English version shall prevail.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the EBU nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ### Exceptions
 
-Contact the EBU (Michael Barroco, barroco@ebu.ch) if you are in need of special licence terms/ distribution rights different from the EU Public Licence.
-
-### Disclaimer
-
-For the avoidance of doubt, and in addition to Articles 7 and 8 of the EUPL, this software is provided 'as-is', without any express or implied warranty. In no event will the EBU or the authors be held liable for any damages arising from the use of this software. Furthermore the EBU cannot be held responsible for any use by third parties using the software, for example with a view to produce / manipulate illegal content or not paying for the use of licensed codec's or any other illegal use.
+Contact the EBU (Michael Barroco, barroco@ebu.ch) if you are in need of special licence terms/ distribution rights different from the BSD 3.0.
 
 Dependencies and theirs licenses can be found in specifics READMEs in sub folders.
 
