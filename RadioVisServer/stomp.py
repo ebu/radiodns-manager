@@ -11,6 +11,7 @@ from radiodns import RadioDns
 # API
 radioDns = RadioDns()
 
+
 class StompServer():
     """A basic stomp server"""
 
@@ -24,7 +25,7 @@ class StompServer():
         self.incomingData = ''
         # Topic the client subscribled to
         self.topics = []
-        
+
         # Queue of messages
         self.queue = queue.Queue()
         # Lock to send frame
@@ -45,17 +46,16 @@ class StompServer():
         # Station id, if authenticated
         self.station_id = None
 
-
     def get_frame(self):
         """Get one stomp frame"""
-        
+
         while not "\x00" in self.incomingData:
             data = self.socket.recv(1024)
             if not data:
-               self.logger.warning("Socket seem closed")
-               raise Exception("Socket seem closed.")
+                self.logger.warning("Socket seem closed")
+                raise Exception("Socket seem closed.")
             else:
-               self.incomingData += data
+                self.incomingData += data
 
         # Get only one frame
         splited_data = self.incomingData.split('\x00', 1)
@@ -75,7 +75,7 @@ class StompServer():
         for x in frame_splited[1:]:
             if x == '' and headerMode:  # Switch from headers to body
                 headerMode = False
-            elif headerMode:  # Add header to the lsit 
+            elif headerMode:  # Add header to the lsit
                 key, value = x.split(':', 1)
                 headers.append((key, value))
             else:  # Compute the body
@@ -115,7 +115,7 @@ class StompServer():
 
     def consume_queue(self):
         """A thread who read topics from the queue of message and send them to the client, if requested"""
-        
+
         try:
             while True:
                 self.logger.debug("Waiting for message in queue")
@@ -127,7 +127,7 @@ class StompServer():
                     topicMatching = topic
                 else:  # Is the user subscribled because of a special case ?
                     topicMatching = radioDns.check_special_matchs(topic, self.topics)
-                
+
                 if topicMatching is not None:
                     self.logger.debug("Sending the message to the client !")
                     headers = [('destination', topicMatching)]
@@ -139,12 +139,13 @@ class StompServer():
                     if topicMatching in self.idsByChannels:
                         headers.append(('subscription', self.idsByChannels[topicMatching]))
 
-                    self.send_frame("MESSAGE", headers , message)
+                    self.send_frame("MESSAGE", headers, message)
 
         except Exception as e:
             self.logger.error("Error in consume_queue: %s" % (e, ))
         finally:
             self.socket.close()
+
 
     def run(self):
         """Main function to run the stompserver"""
@@ -179,7 +180,7 @@ class StompServer():
             if user != '' or password != '':
                 if radioDns.check_auth(user, password, self.socket.getpeername()[0]):
                     self.station_id = user.split('.')[0]
-                    self.logger.info("Logged as station #%s" % (self.station_id, ))    
+                    self.logger.info("Logged as station #%s" % (self.station_id, ))
                 else:
                     self.logger.warning("Wrong password, closing connexion...")
                     self.send_frame('ERROR', [('message', 'Wrong credentials')], '')
@@ -187,13 +188,13 @@ class StompServer():
 
             else:
                 self.logger.info("Anonymous user")
-                
+
             # Create a session id
             self.session_id = str(uuid.uuid4())
 
             self.logger.debug("Session ID is %s" % (self.session_id, ))
 
-            # Prepase the response 
+            # Prepase the response
             response_headers = []
 
             request_id = get_header_value(headers, "request-id")
@@ -226,7 +227,6 @@ class StompServer():
                     self.logger.debug("Sending RECEIPT as requested (R-id: %s)" % (receipt,))
                     self.send_frame('RECEIPT', [('receipt-id', receipt)], '')
 
-
                 # Parse the command
                 if command == 'DISCONNECT':
                     # Close and finish
@@ -252,10 +252,10 @@ class StompServer():
                             self.idsByChannels[channel] = id
 
                         self.topics.append(channel)
-                        self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel,id))
+                        self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel, id))
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
-                        if  get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
+                        if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
                             if channel in self.LAST_MESSAGES:
                                 body, headers = self.LAST_MESSAGES[channel]
                                 self.logger.debug("Quick sending the previous message %s (headers: %s)" % (body, headers))
@@ -286,9 +286,9 @@ class StompServer():
 
                         if id and id in self.channelsByIds:
                             del self.channelsByIds[id]
-                            del self.idsByChannels[channel] 
+                            del self.idsByChannels[channel]
 
-                        self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel,id))
+                        self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel, id))
 
                 elif command == 'SEND':
 
@@ -357,13 +357,11 @@ class StompServer():
                                     self.logger.debug("Broadcasting to all channels !!")
                                     for dest in allowed_channels:
                                         send_to_dest(dest + destination[9:])
-                                else:   
+                                else:
                                     send_to_dest(destination)
 
                 else:
                     self.logger.warning("Unexcepted command %s %s %s" % (command, headers, body))
-
-                
 
         except Exception as e:
             self.logger.error("Error in run: %s" % (e, ))

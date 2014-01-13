@@ -10,10 +10,11 @@ from haigha.message import Message
 
 import statsd
 
+
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
-    def __init__(self, LAST_MESSAGES, watchdog = None):
+    def __init__(self, LAST_MESSAGES, watchdog=None):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
 
         # List of stompservers
@@ -42,7 +43,7 @@ class RabbitConnexion():
 
                 # Get the list of extras headers (eg: link, trigger-time)
                 for name in headers:
-                    if name == 'topic':  #Internal header
+                    if name == 'topic':  # Internal header
                         continue
                     bonusHeaders.append((name, headers[name]))
 
@@ -74,7 +75,7 @@ class RabbitConnexion():
             self.logger.warning("Looopback mode: No connection, waiting for ever...")
             while True:
                 time.sleep(1)
-        
+
         while True:
             try:
                 time.sleep(1)
@@ -124,7 +125,6 @@ class RabbitConnexion():
                         self.logger.warning("Channel is closed")
                         raise Exception("Connexion or channel closed !")
                     self.cox.read_frames()
-                        
 
             except Exception as e:
                 self.logger.error("Error in run: %s" % (e, ))
@@ -155,7 +155,7 @@ class RabbitConnexion():
             self.consumer(FalseMsg(message, headers))
 
         else:
-            self.ch.basic.publish( Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '' )
+            self.ch.basic.publish(Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '')
 
     def add_stomp_server(self, s):
         """Handle a new stomp server"""

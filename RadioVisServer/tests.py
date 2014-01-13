@@ -23,7 +23,6 @@ class Main():
         """Initialize values"""
         self.incomingData = ''
 
-
     def tcp_connect(self):
         self.socket = socket.socket()
         self.socket.connect(('127.0.0.1', 61424))
@@ -56,7 +55,7 @@ class Main():
         for x in frame_split[1:]:
             if x == '' and headerMode:  # Switch from headers to body
                 headerMode = False
-            elif headerMode:  # Add header to the lsit 
+            elif headerMode:  # Add header to the lsit
                 key, value = x.split(':', 1)
                 headers.append((key, value))
             else:  # Compute the body
@@ -87,7 +86,6 @@ class Main():
         watchdogsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         watchdogsock.bind(('127.0.0.1', 61422))
         return watchdogsock
-
 
     def __del__(self):
         """Delete the socket when we're done"""
@@ -126,7 +124,7 @@ class MainTests(unittest.TestCase):
         m = Main()
         m.tcp_connect()
         m.send_connect({})
-        m.get_frame() # Cox frame
+        m.get_frame()  # Cox frame
 
         m.socket.send(frame)
 
@@ -159,7 +157,6 @@ class MainTests(unittest.TestCase):
         m.send_frame("_TEST_NOCOMMAND", [], '')
         (result, headers, body) = m.get_frame()
         eq_(result, 'ERROR')
-
 
     @timed(2)
     def test_cox_stomp_with_nothing(self):
@@ -1038,5 +1035,3 @@ class MainTests(unittest.TestCase):
         eq_(body, 'TEXT ' + config.TEST_CHANNEL_DEFAULT['radiotext'])
         eq_(get_header_value(headers, 'trigger-time'), 'NOW')
         eq_(get_header_value(headers, 'link'), config.TEST_CHANNEL_DEFAULT['radiolink'])
-
-
