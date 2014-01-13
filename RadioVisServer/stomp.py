@@ -11,14 +11,16 @@ from radiodns import RadioDns
 # API
 radioDns = RadioDns()
 
+logger = logging.getLogger('radiovisserver.stompserver')
+
 
 class StompServer():
     """A basic stomp server"""
 
     def __init__(self, socket, LAST_MESSAGES, rabbitcox):
-        (ip, port) = socket.getpeername()
+        (self.info_ip, self.info_port) = socket.getpeername()
 
-        self.logger = logging.getLogger('radiovisserver.stompserver.' + ip + '.' + str(port))
+        #logger = %s:%s logging.getLogger('radiovisserver.%s:%s stompserver.' + ip + '.' + str(port))
 
         self.socket = socket
         # Buffer for icoming data
@@ -46,13 +48,16 @@ class StompServer():
         # Station id, if authenticated
         self.station_id = None
 
+        # True if threads should be stopped
+        self.sucide = False
+
     def get_frame(self):
         """Get one stomp frame"""
 
         while not "\x00" in self.incomingData:
             data = self.socket.recv(1024)
             if not data:
-                self.logger.warning("Socket seem closed")
+                logger.warning("%s:%s Socket seem closed" % (self.info_ip, self.info_port))
                 raise Exception("Socket seem closed.")
             else:
                 self.incomingData += data
@@ -84,7 +89,7 @@ class StompServer():
         # Remove last '\n'
         body = body[:-1]
 
-        self.logger.debug("Got one frame: %s %s %s" % (command, headers, body))
+        logger.debug("%s:%s Got one frame: %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         # Return everything
         return (command, headers, body)
@@ -93,7 +98,7 @@ class StompServer():
         """Send a frame to the client"""
 
         # Lock the send, so we don't send a command inside a command
-        self.logger.debug("Wait for lock to send frame: %s %s %s" % (command, headers, body))
+        logger.debug("%s:%s Wait for lock to send frame: %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
         with self.lock:
 
             self.socket.send(command + '\n')
@@ -105,7 +110,7 @@ class StompServer():
             self.socket.send(body)
 
             self.socket.send('\x00')
-        self.logger.debug("Frame send !")
+        logger.debug("%s:%s Frame send !" % (self.info_ip, self.info_port))
 
     def new_message(self, topic, message, headers):
         """Handle a new message"""
@@ -117,35 +122,42 @@ class StompServer():
         """A thread who read topics from the queue of message and send them to the client, if requested"""
 
         try:
-            while True:
-                self.logger.debug("Waiting for message in queue")
-                topic, message, bonusHeaders = self.queue.get()
-                self.logger.debug("Got a message on topic %s: %s (headers: %s)" % (topic, message, bonusHeaders))
+            while not self.sucide:
+                logger.debug("%s:%s Waiting for message in queue" % (self.info_ip, self.info_port))
 
-                # Is the user subscribled ?
-                if topic in self.topics:
-                    topicMatching = topic
-                else:  # Is the user subscribled because of a special case ?
-                    topicMatching = radioDns.check_special_matchs(topic, self.topics)
+                try:
+                    result = self.queue.get(timeout=10)
+                except queue.Empty:
+                    result = None
 
-                if topicMatching is not None:
-                    self.logger.debug("Sending the message to the client !")
-                    headers = [('destination', topicMatching)]
+                if result:
+                    topic, message, bonusHeaders = result
+                    logger.debug("%s:%s Got a message on topic %s: %s (headers: %s)" % (self.info_ip, self.info_port, topic, message, bonusHeaders))
 
-                    for header in bonusHeaders:
-                        headers.append(header)
+                    # Is the user subscribled ?
+                    if topic in self.topics:
+                        topicMatching = topic
+                    else:  # Is the user subscribled because of a special case ?
+                        topicMatching = radioDns.check_special_matchs(topic, self.topics)
 
-                    # If subscribled with an ID, add the subscription header
-                    if topicMatching in self.idsByChannels:
-                        headers.append(('subscription', self.idsByChannels[topicMatching]))
+                    if topicMatching is not None:
+                        logger.debug("%s:%s Sending the message to the client !" % (self.info_ip, self.info_port))
+                        headers = [('destination', topicMatching)]
 
-                    self.send_frame("MESSAGE", headers, message)
+                        for header in bonusHeaders:
+                            headers.append(header)
+
+                        # If subscribled with an ID, add the subscription header
+                        if topicMatching in self.idsByChannels:
+                            headers.append(('subscription', self.idsByChannels[topicMatching]))
+
+                        self.send_frame("MESSAGE", headers, message)
 
         except Exception as e:
-            self.logger.error("Error in consume_queue: %s" % (e, ))
+            logger.error("%s:%s Error in consume_queue: %s" % (self.info_ip, self.info_port, e))
         finally:
+            self.sucide = True
             self.socket.close()
-
 
     def run(self):
         """Main function to run the stompserver"""
@@ -160,11 +172,11 @@ class StompServer():
         try:
 
             # A: Connection. Wait for a connect
-            self.logger.debug("Waiting for CONNECT")
+            logger.debug("%s:%s Waiting for CONNECT" % (self.info_ip, self.info_port))
             (command, headers, body) = self.get_frame()
 
             if command != 'CONNECT':
-                self.logger.error("Unexcepted command, %s instead of CONNECT" % (command, ))
+                logger.error("%s:%s Unexcepted command, %s instead of CONNECT" % (self.info_ip, self.info_port, command))
                 self.send_frame('ERROR', [('message', 'Excepted CONNECT')], '')
                 return
 
@@ -180,19 +192,19 @@ class StompServer():
             if user != '' or password != '':
                 if radioDns.check_auth(user, password, self.socket.getpeername()[0]):
                     self.station_id = user.split('.')[0]
-                    self.logger.info("Logged as station #%s" % (self.station_id, ))
+                    logger.info("%s:%s Logged as station #%s" % (self.info_ip, self.info_port, self.station_id))
                 else:
-                    self.logger.warning("Wrong password, closing connexion...")
+                    logger.warning("%s:%s Wrong password, closing connexion..." % (self.info_ip, self.info_port))
                     self.send_frame('ERROR', [('message', 'Wrong credentials')], '')
                     return
 
             else:
-                self.logger.info("Anonymous user")
+                logger.info("%s:%s Anonymous user" % (self.info_ip, self.info_port))
 
             # Create a session id
             self.session_id = str(uuid.uuid4())
 
-            self.logger.debug("Session ID is %s" % (self.session_id, ))
+            logger.debug("%s:%s Session ID is %s" % (self.info_ip, self.info_port, self.session_id))
 
             # Prepase the response
             response_headers = []
@@ -209,28 +221,28 @@ class StompServer():
 
             self.send_frame('CONNECTED', response_headers, '')
 
-            self.logger.info("Stomp client connected !")
+            logger.info("%s:%s Stomp client connected !" % (self.info_ip, self.info_port))
 
             # Spawn queue consumer
             spawn(self.consume_queue)
 
             # Now we just wait for a command
-            while True:
-                self.logger.debug("Waiting for a command")
+            while not self.sucide:
+                logger.debug("%s:%s Waiting for a command" % (self.info_ip, self.info_port))
                 (command, headers, body) = self.get_frame()
 
-                self.logger.debug("Processing command %s" % (command,))
+                logger.debug("%s:%s Processing command %s" % (self.info_ip, self.info_port, command))
 
                 # If the client want us to ack the server, ackit
                 receipt = get_header_value(headers, 'receipt')
                 if receipt:
-                    self.logger.debug("Sending RECEIPT as requested (R-id: %s)" % (receipt,))
+                    logger.debug("%s:%s Sending RECEIPT as requested (R-id: %s)" % (self.info_ip, self.info_port, receipt))
                     self.send_frame('RECEIPT', [('receipt-id', receipt)], '')
 
                 # Parse the command
                 if command == 'DISCONNECT':
                     # Close and finish
-                    self.logger.info("Client send a DISCONNECT")
+                    logger.info("%s:%s Client send a DISCONNECT" % (self.info_ip, self.info_port))
                     self.socket.close()
                     return
 
@@ -240,7 +252,7 @@ class StompServer():
 
                     if channel is None:
 
-                        self.logger.warning("SUBSCRIBE without a destination")
+                        logger.warning("%s:%s SUBSCRIBE without a destination" % (self.info_ip, self.info_port))
                         self.send_frame('ERROR', [('message', 'I need a destination')], '')
                     else:
                         channel = channel.strip()
@@ -252,13 +264,13 @@ class StompServer():
                             self.idsByChannels[channel] = id
 
                         self.topics.append(channel)
-                        self.logger.debug("Client is now subscribled to %s [ID: %s]" % (channel, id))
+                        logger.debug("%s:%s Client is now subscribled to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
                             if channel in self.LAST_MESSAGES:
                                 body, headers = self.LAST_MESSAGES[channel]
-                                self.logger.debug("Quick sending the previous message %s (headers: %s)" % (body, headers))
+                                logger.debug("%s:%s Quick sending the previous message %s (headers: %s)" % (self.info_ip, self.info_port, body, headers))
                                 self.new_message(channel, body, headers)
 
                 elif command == 'UNSUBSCRIBE':
@@ -268,17 +280,17 @@ class StompServer():
 
                     if channel is None:
                         if id is None:
-                            self.logger.error("Unsubscribe without channel and id !")
+                            logger.error("%s:%s Unsubscribe without channel and id !" % (self.info_ip, self.info_port))
                             self.send_frame('ERROR', [('message', 'No ID or channel')], '')
                         else:
                             if id not in self.channelsByIds:
-                                self.logger.error("Unsubscribe with unknow id (%s)" % (id, ))
+                                logger.error("%s:%s Unsubscribe with unknow id (%s)" % (self.info_ip, self.info_port, id))
                                 self.send_frame('ERROR', [('message', 'Unknow ID')], '')
                             else:
                                 channel = self.channelsByIds[id]
 
                     if channel not in self.topics:
-                        self.logger.error("Unsubscribe on unsubcribled channel (%s)" % (channel, ))
+                        logger.error("%s:%s Unsubscribe on unsubcribled channel (%s)" % (self.info_ip, self.info_port, channel))
                         self.send_frame('ERROR', [('message', 'Not subscribled')], '')
                     else:
 
@@ -288,12 +300,12 @@ class StompServer():
                             del self.channelsByIds[id]
                             del self.idsByChannels[channel]
 
-                        self.logger.debug("Client unsubscribled from %s [ID: %s]" % (channel, id))
+                        logger.debug("%s:%s Client unsubscribled from %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
 
                 elif command == 'SEND':
 
                     if self.station_id is None:
-                        self.logger.warning("Tried to SEND without been authenticated !")
+                        logger.warning("%s:%s Tried to SEND without been authenticated !" % (self.info_ip, self.info_port))
                         self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
                     else:
 
@@ -304,7 +316,7 @@ class StompServer():
                         destination = get_header_value(headers, 'destination')
 
                         if destination is None:
-                            self.logger.error("SEND without destination !")
+                            logger.error("%s:%s SEND without destination !" % (self.info_ip, self.info_port))
                             self.send_frame('ERROR', [('message', 'No destination ?')], '')
 
                         else:
@@ -322,10 +334,10 @@ class StompServer():
                                     break
 
                             if not all_destinations and not channel_ok:
-                                self.logger.warning("Tryed to send to a destination not autorized ! (%s vs %s)" % (destination, allowed_channels))
+                                logger.warning("%s:%s Tryed to send to a destination not autorized ! (%s vs %s)" % (self.info_ip, self.info_port, destination, allowed_channels))
                                 self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
                             else:
-                                self.logger.debug("Allowed to send the message to %s" % (destination, ))
+                                logger.debug("%s:%s Allowed to send the message to %s" % (self.info_ip, self.info_port, destination))
                                 # Prepare headers
                                 msg_headers = {}
 
@@ -349,21 +361,22 @@ class StompServer():
                                     # Destination
                                     msg_headers['topic'] = destination
 
-                                    self.logger.debug("Sending message %s to %s (headers: %s)" % (body, destination, msg_headers))
+                                    logger.debug("%s:%s Sending message %s to %s (headers: %s)" % (self.info_ip, self.info_port, body, destination, msg_headers))
 
                                     self.rabbitcox.send_message(msg_headers, body)
 
                                 if all_destinations:
-                                    self.logger.debug("Broadcasting to all channels !!")
+                                    logger.debug("%s:%s Broadcasting to all channels !!" % (self.info_ip, self.info_port))
                                     for dest in allowed_channels:
                                         send_to_dest(dest + destination[9:])
                                 else:
                                     send_to_dest(destination)
 
                 else:
-                    self.logger.warning("Unexcepted command %s %s %s" % (command, headers, body))
+                    logger.warning("%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         except Exception as e:
-            self.logger.error("Error in run: %s" % (e, ))
+            logger.error("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
         finally:
+            self.sucide = True
             self.socket.close()

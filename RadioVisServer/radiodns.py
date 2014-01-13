@@ -21,7 +21,6 @@ class RadioDns_():
         self.logger = logging.getLogger('radiovisserver.radiodns')
         self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
 
-
     def do_query(self, url, params):
         try:
             return requests.get(config.API_URL + url, data=params).json()
@@ -141,7 +140,7 @@ class RadioDns_():
     def add_log(self, topic, message, headers, timestamp):
         """Add a log entry"""
 
-        result = self.do_query('add_log', {'topic': topic, 'message': str(message), 'headers': json.dumps(headers), 'timestamp': timestamp })
+        result = self.do_query('add_log', {'topic': topic, 'message': str(message), 'headers': json.dumps(headers), 'timestamp': timestamp})
 
         if result is None:
             self.logger.error("No reply when add_log %s %s %s %s ?" % (topic, message, headers, timestamp, ))
@@ -176,7 +175,7 @@ class RadioDnsTesting(RadioDns_):
 
             # List of allowed channels
             if params['station_id'] == '1':  # Normal tests
-                result['list'] = config.TEST_TOPICS 
+                result['list'] = config.TEST_TOPICS
             elif params['station_id'] == '3':  # GCC/CC tests
                 result['list'] = [config.TEST_ECC_TOPIC_GCC, config.TEST_ECC_TOPIC_CC]
             elif params['station_id'] == '4':  # Watchdog test
