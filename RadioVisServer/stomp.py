@@ -69,9 +69,9 @@ class StompServer():
         self.incomingData = splited_data[1]
 
         # Get command, headers and body
-        frame_splited = splited_data[0].split('\n')
+        frame_splited = splited_data[0].replace('\r', '').split('\n')
 
-        command = frame_splited[0]
+        command = frame_splited[0].strip()
 
         headers = []
         body = ""
@@ -81,8 +81,12 @@ class StompServer():
             if x == '' and headerMode:  # Switch from headers to body
                 headerMode = False
             elif headerMode:  # Add header to the lsit
-                key, value = x.split(':', 1)
-                headers.append((key, value))
+                if x:
+                    if ':' in x:
+                        key, value = x.split(':', 1)
+                        headers.append((key, value))
+                    else:  # No value
+                        headers.append((x, ''))
             else:  # Compute the body
                 body += x + '\n'
 
@@ -376,6 +380,7 @@ class StompServer():
                     logger.warning("%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         except Exception as e:
+            raise
             logger.error("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
         finally:
             self.sucide = True
