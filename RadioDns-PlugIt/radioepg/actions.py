@@ -231,6 +231,30 @@ def radioepg_schedule_delete_events(request, id):
     return {}
 
 
+@action(route="/radioepg/schedule/<id>/xml", template='radioepg/schedule/xml.html')
+@only_orga_member_user()
+@no_template()
+def radioepg_schedule_xml(request, id):
+    """Display Schedule as XML"""
+
+    station = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+
+    import datetime, time
+
+    time_format = '%Y%m%dT%H%M%S'
+
+    today = datetime.date.today()
+    start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
+    end_date = start_date + datetime.timedelta(days=6,hours=23,minutes=59,seconds=59)
+
+    list = []
+
+    for elem in station.schedules.all():
+        elem.start_date = start_date
+        list.append(elem.json)
+
+    return {'schedules': list, 'start_time': start_date.strftime(time_format), 'end_time': end_date.strftime(time_format)}
+
 
 @action(route="/radioepg/servicefollowing/", template="radioepg/servicefollowing/home.html")
 @only_orga_member_user()
