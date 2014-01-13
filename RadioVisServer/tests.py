@@ -99,10 +99,10 @@ class MainTests(unittest.TestCase):
     @classmethod
     def setup_class(cls):
         """Setup the testcase"""
-        cls.subp = subprocess.Popen(['python', 'server.py', '--test'])
+        cls.subp = subprocess.Popen(['python2', 'server.py', '--test'])
         cls.proc = psutil.Process(cls.subp.pid)
 
-        cls.subpWD = subprocess.Popen(['python',  'fallback.py', '--test'])
+        cls.subpWD = subprocess.Popen(['python2',  'fallback.py', '--test'])
         cls.procWD = psutil.Process(cls.subpWD.pid)
 
         time.sleep(2)
