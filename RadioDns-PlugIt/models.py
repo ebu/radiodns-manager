@@ -5,15 +5,13 @@ import random
 import datetime
 
 
-
-
 def to_json(inst, cls, bonusProps=[]):
     """
     Jsonify the sql alchemy query result.
     Inspired from http://stackoverflow.com/a/9746249
     """
     convert = dict()
-    # add your coversions for things like datetime's 
+    # add your coversions for things like datetime's
     # and what-not that aren't serializable.
     d = dict()
     for c in cls.__table__.columns:
@@ -33,6 +31,7 @@ def to_json(inst, cls, bonusProps=[]):
         d[p] = getattr(inst, p)
     return d
 
+
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer)
@@ -45,7 +44,6 @@ class Station(db.Model):
     shows = db.relationship('Show', backref='station', lazy='dynamic')
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
-
 
     def __init__(self, orga):
         self.orga = orga
@@ -85,10 +83,10 @@ class Channel(db.Model):
     station_id = db.Column(db.Integer, db.ForeignKey('station.id'))
     name = db.Column(db.String(255))
 
-    TYPE_ID_CHOICES = [ ('fm',   'VHF/FM',    ['ecc_id', 'pi', 'frequency']), 
-                        ('dab',  'DAB',       ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']), 
-                        ('drm',  'DRM',       ['sid']), 
-                        ('amss', 'AMSS',      ['sid']), 
+    TYPE_ID_CHOICES = [ ('fm',   'VHF/FM',    ['ecc_id', 'pi', 'frequency']),
+                        ('dab',  'DAB',       ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']),
+                        ('drm',  'DRM',       ['sid']),
+                        ('amss', 'AMSS',      ['sid']),
                         ('hd',   'HD Radio',  ['cc', 'tx']),
                         ('id',   'IP',        ['fqdn', 'serviceIdentifier'])
                         ]
@@ -162,10 +160,10 @@ class Channel(db.Model):
             if t == self.type_id:
                 for v in props:
                     if getattr(self, v) is not None:
-                        value = str(getattr(self, v)).lower() 
+                        value = str(getattr(self, v)).lower()
 
                         if v == 'ecc_id':  # Special case
-                            cc_obj = Ecc.query.filter_by(id = value).first()
+                            cc_obj = Ecc.query.filter_by(id=value).first()
                             value = (cc_obj.pi + cc_obj.ecc).lower()
 
                         val = value + '.' + val
@@ -174,7 +172,7 @@ class Channel(db.Model):
     @property
     def radiodns_entry(self):
         return self.dns_entry + '.radiodns.org.'
-        
+
     @property
     def station_name(self):
         if self.station:
@@ -205,7 +203,6 @@ class Channel(db.Model):
         if dns_entry[0] == '*':
             dns_entry = '10800' + dns_entry[1:]
 
-        
         # Find radiodns servers
         ns = str(dns.resolver.query('radiodns.org', 'NS')[0])
         ip = str(dns.resolver.query(ns, 'A')[0])
@@ -240,8 +237,8 @@ class Channel(db.Model):
     @property
     def epg_uri(self):
         splited = self.dns_entry.split('.')
-        print 
         return splited[-1] + ':' + '.'.join(splited[::-1][1:])
+
 
 class Picture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -252,7 +249,6 @@ class Picture(db.Model):
     radiolink = db.Column(db.String(255))
 
     channels = db.relationship('Channel', backref='default_picture', lazy='dynamic')
-
 
     def __init__(self, orga):
         self.orga = orga
@@ -271,6 +267,7 @@ class Picture(db.Model):
     def json(self):
         return to_json(self, self.__class__, ['clean_filename'])
 
+
 class LogEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     topic = db.Column(db.String(255))
@@ -285,6 +282,7 @@ class LogEntry(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['reception_date'])
+
 
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -308,6 +306,7 @@ class Show(db.Model):
     def json(self):
         return to_json(self, self.__class__, [])
 
+
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('show.id'))
@@ -326,7 +325,7 @@ class Schedule(db.Model):
     @property
     def duration(self):
 
-        return 'PT' + str(int(self.length/60)) + 'H' + str(self.length%60) + 'M'
+        return 'PT' + str(int(self.length/60)) + 'H' + str(self.length % 60) + 'M'
 
     @property
     def date_of_start_time(self):
@@ -351,6 +350,7 @@ class Schedule(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['json_show', 'start_time', 'duration'])
+
 
 class GenericServiceFollowingEntry(db.Model):
     """A generic entry for service following"""
@@ -396,7 +396,6 @@ class GenericServiceFollowingEntry(db.Model):
             return 'channel'
         else:
             return 'ip'
-
 
     @property
     def json(self):
