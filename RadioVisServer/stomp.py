@@ -380,7 +380,6 @@ class StompServer():
                     logger.warning("%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         except Exception as e:
-            raise
             logger.error("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
         finally:
             self.sucide = True
