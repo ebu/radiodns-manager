@@ -480,6 +480,42 @@ class MainTests(unittest.TestCase):
         eq_(body, msg)
         eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
 
+    @timed(2)
+    def test_message_then_subscrible_cc_to_gcc(self):
+        """Test if we get the last message when we subscrible, mixing CC and GCC"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '3.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_ECC_TOPIC_CC)], msg)
+        time.sleep(0.5)
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_ECC_TOPIC_GCC)], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_ECC_TOPIC_GCC)
+
+    @timed(2)
+    def test_message_then_subscrible_gcc_to_cc(self):
+        """Test if we get the last message when we subscrible, mixing CC and GCC"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '3.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_ECC_TOPIC_GCC)], msg)
+        time.sleep(0.5)
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_ECC_TOPIC_CC)], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_ECC_TOPIC_CC)
+
     @raises(socket.timeout)  # Test must fail :)
     @timed(2)
     def test_subscrible_other_message(self):
