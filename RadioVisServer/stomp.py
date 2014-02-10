@@ -105,15 +105,21 @@ class StompServer():
         logger.debug("%s:%s Wait for lock to send frame: %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
         with self.lock:
 
-            self.socket.send(command + '\n')
+            message_to_send = ''
+
+            message_to_send += command + '\n'
+
             for (header, value) in headers:
-                self.socket.send(header + ':' + value + '\n')
+                message_to_send += header + ':' + value + '\n'
 
-            self.socket.send('\n')
+            message_to_send += '\n'
 
-            self.socket.send(body)
+            message_to_send += body
 
-            self.socket.send('\x00')
+            message_to_send += '\x00'
+
+            self.socket.send(message_to_send)
+
         logger.debug("%s:%s Frame send !" % (self.info_ip, self.info_port))
 
     def new_message(self, topic, message, headers):
