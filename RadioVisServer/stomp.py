@@ -191,8 +191,8 @@ class StompServer():
                 return
 
             # Check username and password, if any
-            user = get_header_value(headers, 'login')
-            password = get_header_value(headers, 'passcode')
+            user = get_header_value(headers, 'login').strip()
+            password = get_header_value(headers, 'passcode').strip()
 
             if user is None:
                 user = ''
