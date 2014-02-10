@@ -191,13 +191,16 @@ class StompServer():
                 return
 
             # Check username and password, if any
-            user = get_header_value(headers, 'login').strip()
-            password = get_header_value(headers, 'passcode').strip()
+            user = get_header_value(headers, 'login')
+            password = get_header_value(headers, 'passcode')
 
             if user is None:
                 user = ''
             if password is None:
                 password = ''
+
+            user = user.strip()
+            password = password.strip()
 
             if user != '' or password != '':
                 if radioDns.check_auth(user, password, self.socket.getpeername()[0]):
