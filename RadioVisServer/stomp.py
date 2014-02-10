@@ -278,8 +278,11 @@ class StompServer():
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
-                            if channel in self.LAST_MESSAGES:
-                                body, headers = self.LAST_MESSAGES[channel]
+                            
+                            converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
+
+                            if converted_channel in self.LAST_MESSAGES:
+                                body, headers = self.LAST_MESSAGES[converted_channel]
                                 logger.debug("%s:%s Quick sending the previous message %s (headers: %s)" % (self.info_ip, self.info_port, body, headers))
                                 self.new_message(channel, body, headers)
 

@@ -10,6 +10,9 @@ from haigha.message import Message
 
 import statsd
 
+from radiodns import RadioDns
+radioDns = RadioDns()
+
 
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
@@ -53,7 +56,8 @@ class RabbitConnexion():
                     statsd.Counter(config.STATS_COUNTER_NBMESSAGE_RECV + '.'.join(topic.split('/'))).increment()
 
                 # Save the message as the last one
-                self.LAST_MESSAGES[topic] = (body, bonusHeaders)
+                converted_topic = radioDns.convert_fm_topic_to_gcc(topic)
+                self.LAST_MESSAGES[converted_topic] = (body, bonusHeaders)
 
                 # Broadcast message to all clients
                 for c in self.stompservers:
