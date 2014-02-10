@@ -148,10 +148,12 @@ class Fallback():
 
                             self.logger.info("Sending image %s with link %s and text %s on channel %s" % (image, link, text, c))
 
-                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'text'}
+                            timestamp = str(int(time.time() * 1000))
+
+                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'text', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "TEXT " + text)
 
-                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'image'}
+                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4()), 'topic': c + 'image', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "SHOW " + image)
 
 # The logger
