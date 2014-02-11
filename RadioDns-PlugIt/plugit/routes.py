@@ -10,6 +10,8 @@ def load_routes(app,actions):
     def epg_xml():
         """Special call for EPG xml"""
 
+        abort(404)
+
         from models import Station, Channel, GenericServiceFollowingEntry
         from flask import render_template, Response
 
