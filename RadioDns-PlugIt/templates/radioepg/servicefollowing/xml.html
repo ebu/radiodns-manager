@@ -4,7 +4,7 @@
 
     {% for station in stations %}
       <service>
-        <radiodns fqdn="rdns.ebulabs.org" serviceIdentifier="ebu"/>
+        <radiodns fqdn="rdns.ebulabs.org" serviceIdentifier="ebu{{station.0.id}}"/>
         {% for entry in station.1 %}
           <serviceID id="{{entry.uri}}"  {% if entry.cost %}cost="{{entry.cost}}"{% endif %} {% if entry.offset %}offset="{{entry.offset}}"{% endif %} {% if entry.mime_type %}mime="{{entry.mime_type}}"{% endif %}/>
         {% endfor %}
