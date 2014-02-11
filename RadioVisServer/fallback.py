@@ -153,7 +153,7 @@ class Fallback():
                             headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int), 'topic': c + 'text', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "TEXT " + text)
 
-                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int), 'topic': c + 'image'} ##, 'expires': '0', 'priority': '0', 'timestamp': timestamp}
+                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int), 'topic': c + 'image', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "SHOW " + image)
 
 # The logger
