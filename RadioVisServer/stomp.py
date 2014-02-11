@@ -69,7 +69,10 @@ class StompServer():
         self.incomingData = splited_data[1]
 
         # Get command, headers and body
-        frame_splited = splited_data[0].replace('\r', '').split('\n')
+
+        frame = splited_data[0].lstrip()  # Remove \n at the begining
+
+        frame_splited = frame.replace('\r', '').split('\n')
 
         command = frame_splited[0].strip()
 
@@ -281,7 +284,7 @@ class StompServer():
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
-                            
+
                             converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
 
                             if converted_channel in self.LAST_MESSAGES:

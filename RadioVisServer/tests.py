@@ -67,17 +67,23 @@ class Main():
         # Return everything
         return (command, headers, body)
 
+    def build_frame(self, command, headers, body):
+        """Build a stom frame"""
+
+        message = command + '\n'
+
+        for (header, value) in headers:
+            message += header + ':' + value + '\n'
+
+        message += '\n'
+        message += body
+        message += '\x00'
+
+        return message
+
     def send_frame(self, command, headers, body):
         """Send a frame to the SERVER"""
-        self.socket.send(command + '\n')
-        for (header, value) in headers:
-            self.socket.send(header + ':' + value + '\n')
-
-        self.socket.send('\n')
-
-        self.socket.send(body)
-
-        self.socket.send('\x00')
+        self.socket.send(self.build_frame(command, headers, body))
 
     def send_connect(self, args):
         self.send_frame('CONNECT', args, '')
@@ -661,6 +667,71 @@ class MainTests(unittest.TestCase):
 
         m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
 
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'message-id'), message_id)
+
+    @timed(2)
+    def test_message_flooding_is_ok(self):
+        """Test if multiple messages are send in one frame, it's ok."""
+        m = Main()
+        m.tcp_connect()
+
+        connect_frame = m.build_frame('CONNECT', [], '')
+        subscrible_frame_1 = m.build_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.send(connect_frame + subscrible_frame_1)
+
+        # Send a frame, we should be subscribled.
+        msg = str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
+
+        m2 = Main()
+        m2.tcp_connect()
+        m2.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m2.get_frame()  # Connected frame
+        m2.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
+
+        # Connect frame should be here
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'CONNECTED')
+
+        # And the message
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'message-id'), message_id)
+
+    @timed(2)
+    def test_message_flooding_with_slashn_is_ok(self):
+        """Test if multiple messages are send in one frame, with a \n return between, it's ok."""
+        m = Main()
+        m.tcp_connect()
+
+        connect_frame = m.build_frame('CONNECT', [], '')
+        subscrible_frame_1 = m.build_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.send(connect_frame + '\n' + subscrible_frame_1)
+        m.socket.settimeout(3)
+
+        # Send a frame, we should be subscribled.
+        msg = str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
+
+        m2 = Main()
+        m2.tcp_connect()
+        m2.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m2.get_frame()  # Connected frame
+        m2.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
+
+        # Connect frame should be here
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'CONNECTED')
+
+        # And the message
         (result, headers, body) = m.get_frame()
         eq_(result, 'MESSAGE')
         eq_(body, msg)
