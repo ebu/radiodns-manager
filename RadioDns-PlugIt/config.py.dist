@@ -15,3 +15,5 @@ PI_ALLOWED_NETWORKS = ['127.0.0.1/32']
 # Flask Log
 FLASK_LOG_PATH = '/home/ubuntu/logs/flask.log'
 FLASK_LOG_SIZE = 1024 * 1024 # 1MB
+
+SENTRY_DSN = ''

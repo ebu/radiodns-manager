@@ -6,3 +6,5 @@ dnspython
 haigha
 requests
 beaker
+blinker
+raven
