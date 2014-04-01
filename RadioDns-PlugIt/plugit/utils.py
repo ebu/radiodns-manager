@@ -6,6 +6,7 @@ from params import PI_ALLOWED_NETWORKS
 import os
 import sys
 
+
 # Decorators
 def action(route, template='', methods=['GET']):
     """Decorator to create an action"""
@@ -123,8 +124,18 @@ def add_unique_postfix(fn):
     return None
 
 
-# Class
+def get_session_from_request(request):
 
+    retour = {}
+
+    for key, value in request.headers.items():
+        if key.startswith('X-Plugitsession-'):
+            retour[key[16:]] = value
+
+    return retour
+
+
+# Class
 class PlugItRedirect():
     """Object to perform a redirection"""
     def __init__(self, url, no_prefix=False):
@@ -142,6 +153,13 @@ class PlugItSendFile():
         self.attachment_filename = attachment_filename
 
 
+class PlugItSetSession():
+    """Object to return normal value, but set elements in the session"""
+    def __init__(self, base, things_to_set={}):
+        self.base = base
+        self.things_to_set = things_to_set
+
+
 def addressInNetwork(ip, net):
     "Is an address in a network"
     #http://stackoverflow.com/questions/819355/how-can-i-check-if-an-ip-is-in-a-network-in-python
@@ -151,8 +169,11 @@ def addressInNetwork(ip, net):
     netaddr, bits = net.split('/')
     if int(bits) == 0:
         return True
-    netmask = struct.unpack('=L', socket.inet_aton(netaddr))[0] & ((2L << int(bits)-1) - 1)
-    return ipaddr & netmask == netmask
+    net = struct.unpack('=L', socket.inet_aton(netaddr))[0]
+
+    mask = ((2L << int(bits) - 1) - 1)
+
+    return (ipaddr & mask) == (net & mask)
 
 
 def check_ip(request):
