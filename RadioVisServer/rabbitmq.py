@@ -61,6 +61,7 @@ class RabbitConnexion():
 
                 # Broadcast message to all clients
                 for c in self.stompservers:
+                    time.sleep(0)  # Switch context
                     c.new_message(topic, body, bonusHeaders)
 
                 # Inform the watchdog

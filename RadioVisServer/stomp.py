@@ -1,6 +1,7 @@
 
 import uuid
 import logging
+import time
 
 from gevent.coros import RLock
 
@@ -20,7 +21,7 @@ class StompServer():
     def __init__(self, socket, LAST_MESSAGES, rabbitcox):
         (self.info_ip, self.info_port) = socket.getpeername()
 
-        #logger = %s:%s logging.getLogger('radiovisserver.%s:%s stompserver.' + ip + '.' + str(port))
+        # logger = %s:%s logging.getLogger('radiovisserver.%s:%s stompserver.' + ip + '.' + str(port))
 
         self.socket = socket
         # Buffer for icoming data
@@ -29,7 +30,7 @@ class StompServer():
         self.topics = []
 
         # Queue of messages
-        self.queue = queue.Queue()
+        self.queue = queue.Queue(maxsize=250)
         # Lock to send frame
         self.lock = RLock()
 
@@ -55,6 +56,7 @@ class StompServer():
         """Get one stomp frame"""
 
         while not "\x00" in self.incomingData:
+            time.sleep(0)  # Switch context
             data = self.socket.recv(1024)
             if not data:
                 logger.warning("%s:%s Socket seem closed" % (self.info_ip, self.info_port))
@@ -128,8 +130,31 @@ class StompServer():
     def new_message(self, topic, message, headers):
         """Handle a new message"""
 
-        # Put it inscide the queue
-        self.queue.put((topic, message, headers))
+        if self.sucide:  # Don't add message to the queue if connection is closed
+            return
+
+        def put_in_queue():
+            try:
+                self.queue.put_nowait((topic, message, headers))
+                return True
+            except:
+                return False
+
+
+        # If queue is not full, put it directry
+        if not self.queue.full():
+            if put_in_queue():  # Another thread can fill the queue
+                return True
+
+        # Queue is full: Sleep a little bit
+        logger.warn("%s:%s Queue is full: Switching context." % (self.info_ip, self.info_port))
+        time.sleep(0)  # Client will probably try to process his queue :)
+
+        # Last try
+        if not put_in_queue():
+            logger.error("%s:%s Queue is full: Destroying the stom server" % (self.info_ip, self.info_port))
+            self.sucide = True
+            self.socket.close()
 
     def consume_queue(self):
         """A thread who read topics from the queue of message and send them to the client, if requested"""
@@ -165,6 +190,8 @@ class StompServer():
                             headers.append(('subscription', self.idsByChannels[topicMatching]))
 
                         self.send_frame("MESSAGE", headers, message)
+
+                    time.sleep(0)  # Switch context
 
         except Exception as e:
             logger.error("%s:%s Error in consume_queue: %s" % (self.info_ip, self.info_port, e))
