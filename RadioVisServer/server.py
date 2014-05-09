@@ -60,7 +60,6 @@ def stomp_client(socket, address):
     s.sucide = True
 
     del s.queue
-
     del s
 
 

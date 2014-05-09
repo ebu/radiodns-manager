@@ -10,7 +10,7 @@ def load_routes(app, actions):
     def epg_xml():
         """Special call for EPG xml"""
 
-        from models import Station, Channel, GenericServiceFollowingEntry
+        from models import Station, Channel, GenericServiceFollowingEntry, Ecc
         from flask import render_template, Response
 
         stations = Station.query.all()
@@ -29,6 +29,30 @@ def load_routes(app, actions):
             for elem2 in elem.channels.order_by(Channel.name).all():
                 if elem2.servicefollowingentry.active:
                     entries.append(elem2.servicefollowingentry.json)
+
+                    if elem2.type_id == 'fm':  # For FM, also add with the country code
+                        try:
+                            data2 = elem2.servicefollowingentry.json
+
+                            # Split the URI
+                            uri_dp = data2['uri'].split(':', 2)
+                            uri_p = uri_dp[1].split('.')
+
+                            pi_code = uri_p[0]
+
+                            # Get the ISO code form the picode
+                            ecc = Ecc.query.filter_by(pi=pi_code[0].upper(), ecc=pi_code[1:].upper()).first()
+
+                            uri_p[0] = ecc.iso.lower()
+
+                            # Update the new URL
+                            data2['uri'] = uri_dp[0] + ':' + '.'.join(uri_p)
+
+                            # Add the service
+                            entries.append(data2)
+
+                        except:
+                            pass
 
             # Custom entries
             for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
