@@ -36,6 +36,7 @@ class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer)
     name = db.Column(db.String(80))
+    short_name = db.Column(db.String(8))
     random_password = db.Column(db.String(32))
 
     ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
@@ -55,12 +56,17 @@ class Station(db.Model):
         self.random_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
 
     @property
+    def short_name_to_use(self):
+        """Return the shortname, based on the name or the short one"""
+        return (self.short_name or self.name)[:8]
+
+    @property
     def stomp_username(self):
         return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters, self.name.lower())
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username'])
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use'])
 
 
 class Ecc(db.Model):

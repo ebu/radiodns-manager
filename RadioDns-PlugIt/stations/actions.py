@@ -19,8 +19,7 @@ def stations_home(request):
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
     passworded = request.args.get('passworded') == 'yes'
-    
-    
+
     return {'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded}
 
 
@@ -41,6 +40,7 @@ def stations_edit(request, id):
             object = Station(int(request.form.get('ebuio_orgapk')))
 
         object.name = request.form.get('name')
+        object.short_name = request.form.get('short_name')
         object.ip_allowed = request.form.get('ip_allowed')
 
         # Check errors
@@ -49,7 +49,7 @@ def stations_edit(request, id):
 
         # If no errors, save
         if not errors:
-            
+
             if not object.id:
                 object.gen_random_password()
                 db.session.add(object)
@@ -60,8 +60,9 @@ def stations_edit(request, id):
 
     if object:
         object = object.json
-       
+
     return {'object': object, 'errors': errors}
+
 
 @action(route="/stations/delete/<id>")
 @json_only()
@@ -74,6 +75,7 @@ def stations_delete(request, id):
     db.session.commit()
 
     return PlugItRedirect('stations/?deleted=yes')
+
 
 @action(route="/stations/newpassword/<id>")
 @json_only()

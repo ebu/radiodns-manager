@@ -8,7 +8,7 @@
         {% for entry in station.1 %}
           <serviceID id="{{entry.uri}}"  {% if entry.cost %}cost="{{entry.cost}}"{% endif %} {% if entry.offset %}offset="{{entry.offset}}"{% endif %} {% if entry.mime_type %}mime="{{entry.mime_type}}"{% endif %}/>
         {% endfor %}
-        <epg:shortName>{{station.0.name}}</epg:shortName>
+        <epg:shortName>{{station.0.short_name_to_use}}</epg:shortName>
         <epg:mediumName>{{station.0.name}}</epg:mediumName>
       </service>
     {% endfor %}

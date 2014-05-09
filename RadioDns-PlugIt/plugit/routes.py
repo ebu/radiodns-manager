@@ -4,7 +4,7 @@ from views import *
 from flask import abort
 
 
-def load_routes(app,actions):
+def load_routes(app, actions):
 
     @app.route('/radiodns/epg/XSI.xml')
     def epg_xml():
@@ -65,7 +65,6 @@ def load_routes(app,actions):
             start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
             end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
 
-
             # Filter by date
             date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
             real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
@@ -82,7 +81,7 @@ def load_routes(app,actions):
             return Response(render_template('radioepg/schedule/xml.html', schedules=list, start_time=real_start_date.strftime(time_format), end_time=real_end_date.strftime(time_format), creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
 
         abort(404)
-        #return 'Station not found'
+        # return 'Station not found'
 
     @app.route(PI_BASE_URL + "ping")
     def ping():
