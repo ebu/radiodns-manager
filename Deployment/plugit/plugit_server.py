@@ -4,8 +4,7 @@ import utils
 
 from fabric.contrib.files import upload_template, append
 
-
-#list of dependencies to install
+# list of dependencies to install
 DEPENDENCIES = ['python-gevent', 'python-setuptools', 'debconf-utils', 'python-mysqldb',  'apache2', 'libapache2-mod-wsgi', 'git', 'python-imaging']
 
 conf = utils.conf_path_builder(__file__)
@@ -18,12 +17,13 @@ def mysql_execute(sql, user, password):
     return run('echo "%s" | mysql --user="%s" --password="%s"' % (sql, user, password))
 
 
-@task 
+@task
 def upgrade():
     """Upgrde the package database and the server packag
     """
     sudo("apt-get update")
     sudo("apt-get upgrade -y")
+
 
 @task
 def create_logs():
@@ -31,6 +31,7 @@ def create_logs():
     with settings(warn_only=True):
         sudo('mkdir /home/ubuntu/logs')
         sudo('chmod 777 /home/ubuntu/logs')
+
 
 @task
 def install_dependencies():
@@ -49,7 +50,8 @@ def install_dependencies():
     # Install mysql
     sudo('aptitude install -y mysql-server')
 
-@task 
+
+@task
 def create_database():
     """Create the mysql database"""
     mysql_execute("CREATE DATABASE %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" % (config.MYSQL_DATABSE,), "root", config.MYSQL_PASSWORD)
@@ -61,6 +63,7 @@ def create_user():
     mysql_execute("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (config.MYSQL_USER, config.MYSQL_PASSWORD), "root", config.MYSQL_PASSWORD)
     mysql_execute("GRANT ALL ON %s.* TO '%s'@'localhost'; FLUSH PRIVILEGES;" % (config.MYSQL_DATABSE, config.MYSQL_USER), "root", config.MYSQL_PASSWORD)
 
+
 @task
 def install_pip_dependencies():
     """Install the PIP_DEPENDENCIES for the project
@@ -68,6 +71,7 @@ def install_pip_dependencies():
     put(conf('pip_requirements.txt'), 'pip_requirements.txt')
     sudo('pip install -r pip_requirements.txt')
     run('rm pip_requirements.txt')
+
 
 @task
 def git_init():
@@ -95,17 +99,17 @@ def pull_code():
     with cd('~/gitrepo-plugit'):
         run('git pull origin ' + config.GIT_BRANCH)
 
+
 @task
 def configure():
     """Configure apache and the flask server"""
 
-
-    upload_template(conf('config.py'), '~/gitrepo-plugit/' + config.GIT_PLUGITDIR + 'config.py',  {
-           'PLUGIT_API_URL': config.PLUGIT_API_URL,
-           'SQLALCHEMY_URL': config.SQLALCHEMY_URL,
-           'API_SECRET': config.API_SECRET,
-           'API_BASE_URL': config.API_BASE_URL,
-           'API_ALLOWD_IPS': config.API_ALLOWD_IPS
+    upload_template(conf('config.py'), '~/gitrepo-plugit/' + config.GIT_PLUGITDIR + 'config.py', {
+        'PLUGIT_API_URL': config.PLUGIT_API_URL,
+        'SQLALCHEMY_URL': config.SQLALCHEMY_URL,
+        'API_SECRET': config.API_SECRET,
+        'API_BASE_URL': config.API_BASE_URL,
+        'API_ALLOWD_IPS': config.API_ALLOWD_IPS
     })
 
     # Disable default site
@@ -117,11 +121,11 @@ def configure():
     sudo('a2ensite apache.conf', pty=True)
 
 
-
 @task
 def restart_apache():
     """Restart apache"""
     sudo("service apache2 restart")
+
 
 @task
 def update_database():
@@ -144,6 +148,7 @@ def install_logstash():
     put(conf('logstash.conf'), '/etc/init/logstash.conf', use_sudo=True)
     sudo('service logstash start')
 
+
 @task
 def deploy():
     """Deploy a plugit server on the current host
@@ -159,7 +164,6 @@ def deploy():
     update_database()
     restart_apache()
     install_logstash()
-
 
 
 @task
