@@ -352,7 +352,7 @@ class Schedule(db.Model):
     @property
     def start_time(self):
         """Return the start time as a string, assuming start_date has been set as a reference"""
-        timetime_format = '%Y-%m-%dT%H:%M:%S'
+        timetime_format = '%Y-%m-%dT%H:%M:%S%z'
 
         if not hasattr(self, 'start_date'):
             return ''

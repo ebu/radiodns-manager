@@ -17,7 +17,7 @@ def load_routes(app, actions):
 
         import datetime
 
-        time_format = '%Y-%m-%dT%H:%M:%S'
+        time_format = '%Y-%m-%dT%H:%M:%S%z'
 
         list = []
 
@@ -114,7 +114,7 @@ def load_routes(app, actions):
 
             import datetime
 
-            time_format = '%Y-%m-%dT%H:%M:%S'
+            time_format = '%Y-%m-%dT%H:%M:%S%z'
 
             today = datetime.date.today()
             start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
