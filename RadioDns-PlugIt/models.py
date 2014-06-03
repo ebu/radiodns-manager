@@ -46,6 +46,16 @@ class Station(db.Model):
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
+    epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+
+    @property
+    def epg_picture_data(self):
+        if self.epg_picture:
+            return self.epg_picture.json
+        else:
+            return None
+
+
     def __init__(self, orga):
         self.orga = orga
 
@@ -66,7 +76,7 @@ class Station(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use'])
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'epg_picture_data'])
 
 
 class Ecc(db.Model):
@@ -118,7 +128,6 @@ class Channel(db.Model):
     serviceIdentifier = db.Column(db.String(16))
 
     default_picture_id = db.Column(db.Integer, db.ForeignKey('picture.id'))
-    epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
 
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='channel', lazy='dynamic')
 
@@ -195,15 +204,8 @@ class Channel(db.Model):
             return None
 
     @property
-    def epg_picture_data(self):
-        if self.epg_picture:
-            return self.epg_picture.json
-        else:
-            return None
-
-    @property
     def json(self):
-        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash', 'epg_picture_data'])
+        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
 
     @property
     def dns_values(self):
@@ -422,7 +424,7 @@ class PictureForEPG(db.Model):
     name = db.Column(db.String(80))
     filename = db.Column(db.String(255))
 
-    channels = db.relationship('Channel', backref='epg_picture', lazy='dynamic')
+    stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
 
     def __init__(self, orga):
         self.orga = orga

@@ -509,11 +509,11 @@ def radioep_gallery_delete(request, id):
 @action(route="/radioepg/logos/", template="radioepg/logos/logos.html")
 @only_orga_member_user()
 def radioepg_logos_home(request):
-    """Show the list of channels to edit current logo."""
+    """Show the list of stations to edit current logo."""
 
     list = []
 
-    for elem in Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Channel.name).all():
+    for elem in Station.query.filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name).all():
         list.append(elem.json)
 
     pictures = []
@@ -528,9 +528,9 @@ def radioepg_logos_home(request):
 @only_orga_admin_user()
 @json_only()
 def radioepg_logos_set(request, id, pictureid):
-    """Set a default value for a channel"""
+    """Set a default value for a station"""
 
-    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Station.query.filter(Station.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
 
     picture = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(pictureid)).first()
 
