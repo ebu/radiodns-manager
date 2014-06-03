@@ -27,7 +27,7 @@
 
 		<label>Photo</label>
 		<input type="file" name="file"> {% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
-		<br /><small>PNG or JPEG</small>
+		<br /><small>PNG or JPEG. Please upload a logo of minimum size 600x600. Logo will be resized to 32x32, 112x32, 128x128, 320x240 and 600x600.</small>
 
 		<span style="float: right;">
 			<a href="{{ebuio_baseUrl}}radioepg/gallery/" class="btn btn-default">Cancel</a>
