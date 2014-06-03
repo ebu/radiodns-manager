@@ -41,6 +41,7 @@ def stations_edit(request, id):
 
         object.name = request.form.get('name')
         object.short_name = request.form.get('short_name')
+        object.short_description = request.form.get('short_description')
         object.ip_allowed = request.form.get('ip_allowed')
 
         # Check errors

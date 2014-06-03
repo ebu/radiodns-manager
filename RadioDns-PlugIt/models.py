@@ -41,6 +41,8 @@ class Station(db.Model):
 
     ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
 
+    short_description = db.Column(db.String(180))
+
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
     shows = db.relationship('Show', backref='station', lazy='dynamic')
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
@@ -54,7 +56,6 @@ class Station(db.Model):
             return self.epg_picture.json
         else:
             return None
-
 
     def __init__(self, orga):
         self.orga = orga
