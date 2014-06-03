@@ -1,7 +1,7 @@
 from params import PI_BASE_URL
 from views import *
 
-from flask import abort
+from flask import abort, send_from_directory
 
 
 def load_routes(app, actions):
@@ -62,6 +62,37 @@ def load_routes(app, actions):
             if entries:
                 list.append([elem.json, entries])
         return Response(render_template('radioepg/servicefollowing/xml.html', stations=list, creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+
+    @app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
+    def logo(id, w, h):
+        """Return a logo for a station"""
+
+        from models import Station
+        import os
+
+        station = Station.query.filter(Station.id == id).first()
+
+        if not station:
+            abort(404)
+
+        dest_file = 'media/uploads/radioepg/cache/S%s_W%s_H%s_L%s.png' % (str(int(id)), str(int(w)), str(int(h)), str(station.epg_picture_id) if station.epg_picture_id else 'B')
+
+        if not os.path.isfile(dest_file):
+
+            from PIL import Image
+            size = (w, h)
+            image = Image.open(station.epg_picture.filename if station.epg_picture else 'media/uploads/radioepg/default.png')
+            image.thumbnail(size, Image.ANTIALIAS)
+            background = Image.new('RGBA' if station.epg_picture else 'RGB', size, (255, 255, 255, 0))
+            background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
+
+            background.save(dest_file)
+
+
+            print "Gen"
+
+        return send_from_directory(".", dest_file)
+
 
     @app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
     def epg_sch_xml(path, date):

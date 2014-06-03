@@ -479,6 +479,10 @@ def radioep_gallery_edit(request, id):
 
             if not object.id:
                 db.session.add(object)
+            else:
+                import glob
+                for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
+                    os.unlink(f)
 
             db.session.commit()
 
@@ -499,6 +503,10 @@ def radioep_gallery_delete(request, id):
     object = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
 
     os.unlink(object.filename)
+
+    import glob
+    for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
+        os.unlink(f)
 
     db.session.delete(object)
     db.session.commit()
