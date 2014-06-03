@@ -19,6 +19,7 @@ import imghdr
 
 import config
 
+
 @action(route="/radiovis/gallery/", template="radiovis/gallery/home.html")
 @only_orga_member_user()
 def radiovis_gallery_home(request):
@@ -31,7 +32,7 @@ def radiovis_gallery_home(request):
 
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
-    
+
     return {'list': list, 'saved': saved, 'deleted': deleted}
 
 
@@ -44,7 +45,7 @@ def radiovis_gallery_edit(request, id):
     errors = []
 
     if id != '-':
-        object =  Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+        object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
 
     if request.method == 'POST':
 
@@ -84,8 +85,6 @@ def radiovis_gallery_edit(request, id):
                     pass
             object.filename = full_path
 
-
-
         # Check errors
         if object.name == '':
             errors.append("Please set a name")
@@ -114,13 +113,12 @@ def radiovis_gallery_edit(request, id):
 
         pieces = urlparse.urlparse(object.radiolink)
 
-        if not pieces.scheme in ['http', 'https', 'ftp']:
+        if pieces.scheme not in ['http', 'https', 'ftp']:
             errors.append("The link is not valid")
-
 
         # If no errors, save
         if not errors:
-            
+
             if not object.id:
                 db.session.add(object)
 
@@ -130,8 +128,9 @@ def radiovis_gallery_edit(request, id):
 
     if object:
         object = object.json
-       
+
     return {'object': object, 'errors': errors}
+
 
 @action(route="/radiovis/gallery/delete/<id>")
 @json_only()
@@ -140,13 +139,14 @@ def radiovis_gallery_delete(request, id):
     """Delete a picture."""
 
     object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
-    
+
     os.unlink(object.filename)
-    
+
     db.session.delete(object)
     db.session.commit()
 
     return PlugItRedirect('radiovis/gallery/?deleted=yes')
+
 
 @action(route="/radiovis/channels/", template="radiovis/channels/home.html")
 @only_orga_member_user()
@@ -163,8 +163,8 @@ def radiovis_channels_home(request):
     for elem in Picture.query.filter_by(orga = int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
         pictures.append(elem.json)
 
-
     return {'list': list, 'pictures': pictures}
+
 
 @action(route="/radiovis/channels/set/<id>/<pictureid>")
 @only_orga_admin_user()
@@ -172,11 +172,10 @@ def radiovis_channels_home(request):
 def radiovis_channels_set(request, id, pictureid):
     """Set a default value for a channel"""
 
-   
     object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
-    
+
     picture = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(pictureid)).first()
-    
+
     if picture:
         object.default_picture_id = picture.id
     else:
@@ -192,7 +191,6 @@ def radiovis_channels_set(request, id, pictureid):
 def radiovis_channels_logs(request, id):
     """Show logs for a channel"""
 
-   
     object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
 
     if not object:
@@ -215,7 +213,7 @@ def radiovis_api_check_auth(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     user = request.form.get('username')
     password = request.form.get('password')
@@ -248,6 +246,7 @@ def radiovis_api_check_auth(request, secret):
 
     return {'result': True}
 
+
 @action(route="/radiovis/api/<secret>/get_channels")
 @only_orga_admin_user()  # To prevent call from IO
 @json_only()
@@ -256,7 +255,7 @@ def radiovis_api_get_channels(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     list = []
 
@@ -267,6 +266,7 @@ def radiovis_api_get_channels(request, secret):
 
     return {'list': list}
 
+
 @action(route="/radiovis/api/<secret>/get_gcc")
 @only_orga_admin_user()  # To prevent call from IO
 @json_only()
@@ -275,7 +275,7 @@ def radiovis_api_get_gcc(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     object = Ecc.query.filter_by(iso=request.form.get('cc').upper()).first()
 
@@ -290,7 +290,7 @@ def radiovis_api_get_all_channels(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     list = []
 
@@ -298,6 +298,7 @@ def radiovis_api_get_all_channels(request, secret):
         list.append((channel.topic, channel.id))
 
     return {'list': list}
+
 
 @action(route="/radiovis/api/<secret>/get_channel_default")
 @only_orga_admin_user()  # To prevent call from IO
@@ -307,7 +308,7 @@ def radiovis_api_get_channel_default(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     channel = Channel.query.filter_by(id=request.form.get('id')).first()
 
@@ -319,7 +320,6 @@ def radiovis_api_get_channel_default(request, secret):
         return {'info': None}
 
 
-
 @action(route="/radiovis/api/<secret>/cleanup_logs")
 @only_orga_admin_user()  # To prevent call from IO
 @json_only()
@@ -328,14 +328,15 @@ def radiovis_api_cleanup_logs(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     for object in LogEntry.query.filter(LogEntry.reception_timestamp < (time.time() - int(request.form.get('max_age')))).all():
         db.session.delete(object)
-    
+
     db.session.commit()
 
     return {}
+
 
 @action(route="/radiovis/api/<secret>/add_log")
 @only_orga_admin_user()  # To prevent call from IO
@@ -345,7 +346,7 @@ def radiovis_api_add_log(request, secret):
 
     if secret != config.API_SECRET:
         abort(404)
-        return 
+        return
 
     object = LogEntry()
 
@@ -355,9 +356,7 @@ def radiovis_api_add_log(request, secret):
     object.reception_timestamp = int(request.form.get('timestamp'))
 
     db.session.add(object)
-    
+
     db.session.commit()
 
     return {}
-
-

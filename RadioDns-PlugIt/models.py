@@ -118,6 +118,7 @@ class Channel(db.Model):
     serviceIdentifier = db.Column(db.String(16))
 
     default_picture_id = db.Column(db.Integer, db.ForeignKey('picture.id'))
+    epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
 
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='channel', lazy='dynamic')
 
@@ -194,8 +195,15 @@ class Channel(db.Model):
             return None
 
     @property
+    def epg_picture_data(self):
+        if self.epg_picture:
+            return self.epg_picture.json
+        else:
+            return None
+
+    @property
     def json(self):
-        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
+        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash', 'epg_picture_data'])
 
     @property
     def dns_values(self):
@@ -406,3 +414,29 @@ class GenericServiceFollowingEntry(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['channel_name', 'uri', 'type', 'channel_type'])
+
+
+class PictureForEPG(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    orga = db.Column(db.Integer)
+    name = db.Column(db.String(80))
+    filename = db.Column(db.String(255))
+
+    channels = db.relationship('Channel', backref='epg_picture', lazy='dynamic')
+
+    def __init__(self, orga):
+        self.orga = orga
+
+    def __repr__(self):
+        return '<PictureForEPG %r[%s]>' % (self.name, self.orga)
+
+    @property
+    def clean_filename(self):
+        if not self.filename:
+            return ''
+
+        return self.filename.split('/')[-1]
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['clean_filename'])
