@@ -29,6 +29,12 @@
         <mediaDescription>
             <epg:shortDescription xml:lang="en">{{station.0.short_description}}</epg:shortDescription>
         </mediaDescription>
+
+        {% for genre in station.0.genres_list %}
+            <epg:genre href="{{genre.href}}">
+                <epg:name>{{genre.name}}</epg:name>
+            </epg:genre>
+        {% endfor %}
       </service>
     {% endfor %}
 

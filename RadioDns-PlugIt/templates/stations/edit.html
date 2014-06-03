@@ -37,12 +37,34 @@
 			A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
 		</small>
 
+		<label>Genres</label>
+
+		<table class="table table-condensed" id="genre_list">
+			<tr><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>
+
+		{% for g in object.genres_list %}
+			 <tr><td><input type="text" name="genrehref[]" value="{{g.href}}"></td><td><input type="text" name="genrename[]" value="{{g.name}}"></td><td><a href="#" onclick="return del_genre(this);">Remove</a></td></tr>
+		{% endfor %}
+
+		</table>
+		<a class="btn btn-xs btn-default" onclick="$('#genre_list').append('<tr><td><input type=\'text\' name=\'genrehref[]\'></td><td><input type=\'text\' name=\'genrename[]\'></td><td><a href=\'#\' onclick=\'return del_genre(this);\'>Remove</a></td></tr>');">New genre</a>
+
 		<span style="float: right;">
 			<a href="{{ebuio_baseUrl}}stations/" class="btn btn-default">Cancel</a>
 			<input type="submit" class="btn btn-primary" value="Save">
 		</span>
 
 	</form>
+
+	<script type="text/javascript">
+
+		function del_genre(elem) {
+			$(elem).parent().parent().remove();
+			return false;
+		}
+
+
+	</script>
 
 	<hr style="visibility: hidden; clear: both;">
 

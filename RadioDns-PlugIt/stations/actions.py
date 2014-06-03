@@ -5,6 +5,8 @@ from plugit.utils import action, only_orga_member_user, only_orga_admin_user, Pl
 
 from models import db, Station
 
+import json
+
 
 @action(route="/stations/", template="stations/home.html")
 @only_orga_member_user()
@@ -43,6 +45,16 @@ def stations_edit(request, id):
         object.short_name = request.form.get('short_name')
         object.short_description = request.form.get('short_description')
         object.ip_allowed = request.form.get('ip_allowed')
+
+        genres = []
+
+        genre_href = request.form.getlist('genrehref[]')
+        genre_name = request.form.getlist('genrename[]')
+
+        for h in genre_href:
+            genres.append({'href': h, 'name': genre_name.pop(0)})
+
+        object.genres = json.dumps(genres)
 
         # Check errors
         if object.name == '':

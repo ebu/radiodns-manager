@@ -3,6 +3,7 @@ import dns.resolver
 import string
 import random
 import datetime
+import json
 
 
 def to_json(inst, cls, bonusProps=[]):
@@ -43,12 +44,21 @@ class Station(db.Model):
 
     short_description = db.Column(db.String(180))
 
+    genres = db.Column(db.Text())
+
     channels = db.relationship('Channel', backref='station', lazy='dynamic')
     shows = db.relationship('Show', backref='station', lazy='dynamic')
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
     epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+
+    @property
+    def genres_list(self):
+        try:
+            return json.loads(self.genres)
+        except:
+            return []
 
     @property
     def epg_picture_data(self):
@@ -77,7 +87,7 @@ class Station(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'epg_picture_data'])
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'epg_picture_data', 'genres_list'])
 
 
 class Ecc(db.Model):
