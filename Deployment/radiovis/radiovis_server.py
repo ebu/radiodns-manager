@@ -4,18 +4,19 @@ import utils
 
 from fabric.contrib.files import upload_template, append
 
-
 #list of dependencies to install
 DEPENDENCIES = ['python-gevent', 'python-setuptools', 'supervisor', 'git']
 
 conf = utils.conf_path_builder(__file__)
-    
-@task 
+
+
+@task
 def upgrade():
     """Upgrde the package database and the server packag
     """
     sudo("apt-get update")
     sudo("apt-get upgrade -y")
+
 
 @task
 def create_logs():
@@ -24,12 +25,14 @@ def create_logs():
         sudo('mkdir /home/ubuntu/logs')
         sudo('chmod 777 /home/ubuntu/logs')
 
+
 @task
 def install_dependencies():
     """Install the DEPENDENCIES for the project
     """
     sudo("apt-get install -y " + " ".join(DEPENDENCIES))
     sudo('easy_install pip')
+
 
 @task
 def install_pip_dependencies():
@@ -38,6 +41,7 @@ def install_pip_dependencies():
     put(conf('pip_requirements.txt'), 'pip_requirements.txt')
     sudo('pip install -r pip_requirements.txt')
     run('rm pip_requirements.txt')
+
 
 @task
 def git_init():
@@ -66,12 +70,12 @@ def pull_code():
         run('git pull origin ' + config.GIT_BRANCH)
 
 
-
 @task
 def start_fallback():
     """Start the fallback server (using supervisord)"""
     with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
         run('supervisord -c supervisord-fallback.conf')
+
 
 @task
 def stop_fallback():
@@ -80,12 +84,12 @@ def stop_fallback():
         run('supervisorctl -c supervisord-fallback.conf stop fallbackserver')
         run('supervisorctl -c supervisord-fallback.conf shutdown')
 
+
 @task
 def restart_fallback():
     """Restart the fallback server (using supervisord)"""
     with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
         run('supervisorctl -c supervisord-fallback.conf restart fallbackserver')
-
 
 
 @task
@@ -94,6 +98,7 @@ def start_radiovis():
     with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
         run('supervisord -c supervisord-radiovis.conf')
 
+
 @task
 def stop_radiovis():
     """Stop the radiovis server (using supervisord)"""
@@ -101,36 +106,37 @@ def stop_radiovis():
         run('supervisorctl -c supervisord-radiovis.conf stop radiovisserver')
         run('supervisorctl -c supervisord-radiovis.conf shutdown')
 
+
 @task
 def restart_radiovis():
     """Restart the radiovis server (using supervisord)"""
     with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
         run('supervisorctl -c supervisord-radiovis.conf restart radiovisserver')
 
+
 @task
 def configure():
     """Configure radiovisserver and supervisord"""
 
-
     # Just upload the template with our settings
-    upload_template(conf('config.py'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'config.py',  {
-           'RADIOVIS_LOG_LEVEL': config.RADIOVIS_LOG_LEVEL,
-           'RADIOVIS_RABBITMQ_HOST': config.RADIOVIS_RABBITMQ_HOST,
-           'RABBITMQ_USER': config.RABBITMQ_USER,
-           'RABBITMQ_PASS': config.RABBITMQ_PASS,
-           'RADIOVIS_RABBITMQ_QUEUE': config.RADIOVIS_RABBITMQ_QUEUE,
-           'RADIOVIS_API_URL': config.RADIOVIS_API_URL,
-           'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
+    upload_template(conf('config.py'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'config.py', {
+        'RADIOVIS_LOG_LEVEL': config.RADIOVIS_LOG_LEVEL,
+        'RADIOVIS_RABBITMQ_HOST': config.RADIOVIS_RABBITMQ_HOST,
+        'RABBITMQ_USER': config.RABBITMQ_USER,
+        'RABBITMQ_PASS': config.RABBITMQ_PASS,
+        'RADIOVIS_RABBITMQ_QUEUE': config.RADIOVIS_RABBITMQ_QUEUE,
+        'RADIOVIS_API_URL': config.RADIOVIS_API_URL,
+        'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
 
-        })
+    })
 
     upload_template(conf('supervisord-radiovis.conf'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'supervisord-radiovis.conf', {
 
-        })
+    })
 
     upload_template(conf('supervisord-fallback.conf'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'supervisord-fallback.conf', {
 
-        })
+    })
 
 
 @task
@@ -144,6 +150,21 @@ def deploy():
     git_init()
     configure()
     start_radiovis()
+    setup_startup_cronjobs()
+
+
+@task
+def setup_startup_cronjobs():
+    """Setup statup cronjobs to start radiovis server and fallback automaticaly"""
+    run('touch /tmp/crondump')
+    with settings(warn_only=True):
+        run('crontab -l > /tmp/crondump')
+
+    append('/tmp/crondump', '@reboot cd ~/gitrepo-radiovis/'+ config.GIT_RADIOVISDIR + ' && supervisord -c supervisord-radiovis.conf')
+    append('/tmp/crondump', '@reboot cd ~/gitrepo-radiovis/'+ config.GIT_RADIOVISDIR + ' && supervisord -c supervisord-fallback.conf')
+
+    run('crontab /tmp/crondump')
+
 
 @task
 def deploy_withfallback():
@@ -152,11 +173,13 @@ def deploy_withfallback():
     deploy()
     start_fallback()
 
+
 @task
 def update():
     """Upgrade code to the latest version"""
     pull_code()
     restart_radiovis()
+
 
 @task
 def update_withfallback():
