@@ -88,11 +88,7 @@ def load_routes(app, actions):
 
             background.save(dest_file)
 
-
-            print "Gen"
-
         return send_from_directory(".", dest_file)
-
 
     @app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
     def epg_sch_xml(path, date):
