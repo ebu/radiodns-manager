@@ -109,7 +109,7 @@ def configure():
     })
 
     # Disable default site
-    sudo('a2dissite default', pty=True)
+    sudo('a2dissite 000-default', pty=True)
 
     # Put our config and enable it
     put(conf('apache.conf'), 'apache.conf')
