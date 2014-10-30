@@ -37,3 +37,6 @@ nosetests.xml
 RadioDns-PlugIt/config.py
 
 .ropeproject
+
+# IDEA Pycharm and IntelliJ ignore
+.idea
