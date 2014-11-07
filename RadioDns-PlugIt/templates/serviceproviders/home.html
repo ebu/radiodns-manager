@@ -1,0 +1,83 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Stations :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Service Provider Configuration
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+	{% if saved %}
+		<div class="alert">
+			Service Provider configuration has been saved
+		</div>
+	{% endif %}
+
+	{% if deleted %}
+		<div class="alert">
+			Service Provider configuration has been deleted
+		</div>
+	{% endif %}
+
+        Service Provider CODOP :
+
+	<table class="table table-striped table-hover table-condensed">
+		<thead>
+			<tr>
+				<th>Name</th>
+				{% if ebuio_u.ebuio_orga_admin %}
+					<th>Stomp username</th>
+					<th>Stomp password</th>
+					<th>Allowed IPs</th>
+				{% endif %}
+				<th style="width: 200px;"></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for s in list %}
+				<tr>
+					<td>{{s.name}}</td>
+					{% if ebuio_u.ebuio_orga_admin %}
+						<td>{{s.stomp_username}}</td>
+						<td>{{s.random_password}}</td>
+						<td>{{s.ip_allowed}}</td>
+					{% endif %}
+					<td>
+						{% if ebuio_u.ebuio_orga_admin %}
+							<a href="{{ebuio_baseUrl}}stations/newpassword/{{s.id}}" class="btn btn-mini btn-warning" onclick="return confirm('Are you sure ?');">New password</a>
+							<a href="{{ebuio_baseUrl}}stations/delete/{{s.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}stations/edit/{{s.id}}" class="btn btn-mini btn-default">Edit</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% if ebuio_u.ebuio_orga_admin %}
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}stations/edit/-" class="btn btn-primary">Add a new station</a>
+		</span>
+	{% endif %}
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

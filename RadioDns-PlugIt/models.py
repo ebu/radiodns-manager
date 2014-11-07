@@ -32,6 +32,43 @@ def to_json(inst, cls, bonusProps=[]):
         d[p] = getattr(inst, p)
     return d
 
+class ServiceProvider(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    codops = db.Column(db.String(255))
+
+    short_name = db.Column(db.String(8))
+    medium_name = db.Column(db.String(16))
+    long_name = db.Column(db.String(128))
+    short_description = db.Column(db.String(180))
+    long_description = db.Column(db.String(1200))
+    url_default = db.Column(db.String(255))
+
+    default_language = db.Column(db.String(5))
+
+    location_country = db.Column(db.String(5))
+
+    default_logo_image_id = db.Column(db.Integer, db.ForeignKey('logo_image.id', use_alter=True, name='fk_default_logo_id'))
+    default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
+
+    stations = db.relationship('Station', backref='service_provider', lazy='dynamic')
+
+    @property
+    def logoimage_data(self):
+        if self.default_logo_image:
+            return self.default_logo_image.json
+        else:
+            return None
+
+    def __init__(self, codops):
+        self.codops = codops
+
+    def __repr__(self):
+        return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['codops', 'short_name', 'medium_name', 'logoimage_data'])
+
 
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,6 +76,8 @@ class Station(db.Model):
     name = db.Column(db.String(80))
     short_name = db.Column(db.String(8))
     random_password = db.Column(db.String(32))
+
+    service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
 
     ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
 
@@ -442,6 +481,38 @@ class PictureForEPG(db.Model):
 
     def __repr__(self):
         return '<PictureForEPG %r[%s]>' % (self.name, self.orga)
+
+    @property
+    def clean_filename(self):
+        if not self.filename:
+            return ''
+
+        return self.filename.split('/')[-1]
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__, ['clean_filename'])
+
+
+class LogoImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    orga = db.Column(db.Integer)
+    filename = db.Column(db.String(255))
+
+    url32x32 = db.Column(db.String(255))
+    url112x32 = db.Column(db.String(255))
+    url128x128 = db.Column(db.String(255))
+    url320x240 = db.Column(db.String(255))
+    url600x600 = db.Column(db.String(255))
+
+    service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
+    service_provider = db.relationship("ServiceProvider", backref='logo_images', uselist=False, foreign_keys=[service_provider_id])
+
+    def __init__(self, orga):
+        self.orga = orga
+
+    def __repr__(self):
+        return '<LogoImage %r[%s]>' % (self.filename, self.orga)
 
     @property
     def clean_filename(self):
