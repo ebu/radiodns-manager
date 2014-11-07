@@ -330,10 +330,14 @@ def radiovis_api_cleanup_logs(request, secret):
         abort(404)
         return
 
-    for object in LogEntry.query.filter(LogEntry.reception_timestamp < (time.time() - int(request.form.get('max_age')))).all():
-        db.session.delete(object)
-
-    db.session.commit()
+    # The following was not optimal thus replaced by RAW SQL
+    # for object in LogEntry.query.filter(LogEntry.reception_timestamp < (time.time() - int(request.form.get('max_age')))).all():
+    #     db.session.delete(object)
+    #
+    # db.session.commit()
+    from sqlalchemy.sql import text
+    db.engine.execute(text('DELETE FROM log_entry WHERE reception_timestamp <  :t'),
+                      t = (time.time() - int(request.form.get('max_age'))))
 
     return {}
 
