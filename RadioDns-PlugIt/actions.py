@@ -3,6 +3,9 @@
 # Include main methods
 from main.actions import *
 
+# Include serviceproviders methods
+from serviceproviders.actions import *
+
 # Include stations methods
 from stations.actions import *
 
