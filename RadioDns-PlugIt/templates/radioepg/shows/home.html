@@ -3,9 +3,25 @@
 
 {% block title %}Shows :: RadioEPG :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            RadioEPG: Shows
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
 
 	{% if nostations %}
 		No stations !
@@ -16,8 +32,6 @@
 				<option value="{{station.id}}" {% if station.id == current_station.id %}selected{% endif %}>{{station.name}}</option>
 			{% endfor %}
 		</select>
-
-		<h3>RadioEPG: Shows</h3>
 
 		{% if saved %}
 			<div class="alert">

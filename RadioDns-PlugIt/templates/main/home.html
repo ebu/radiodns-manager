@@ -3,16 +3,32 @@
 
 {% block title %}Home :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Home
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
 
-	<h3>Home</h3>
 
 	<p class="well well-small">
 		Welcome !
 	</p>
 
-	<p>You're currently working with the organization <i>{{ebuio_orga.name}}</i>. use the top-right combo to change at any time !</p>
+	<p>You're currently working with the organization <i>{{ebuio_orga.name}}</i>. use the lower-left combo in the menu to change any time.</p>
+
 {% endblock %}
 
