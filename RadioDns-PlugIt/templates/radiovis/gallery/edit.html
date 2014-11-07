@@ -3,11 +3,25 @@
 
 {% block title %}Gallery :: RadioVIS :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
-
-	<h3>Edit a picture</h3>
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Edit a picture
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
 
 	{% if errors %}
 		<div class="alert alert-error">

@@ -3,11 +3,25 @@
 
 {% block title %}Channels :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
-
-	<h3>Channels</h3>
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Channels
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
 
 	{% if saved %}
 		<div class="alert">
