@@ -52,22 +52,15 @@ class ServiceProvider(db.Model):
 
     stations = db.relationship('Station', backref='service_provider', lazy='dynamic')
 
-    @property
-    def logoimage_data(self):
-        if self.default_logo_image:
-            return self.default_logo_image.json
-        else:
-            return None
-
     def __init__(self, codops):
         self.codops = codops
 
-    def __repr__(self):
-        return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+    # def __repr__(self):
+    #     return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['codops', 'short_name', 'medium_name', 'logoimage_data'])
+        return to_json(self, self.__class__, [])
 
 
 class Station(db.Model):

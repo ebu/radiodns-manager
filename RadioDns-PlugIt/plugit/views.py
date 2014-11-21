@@ -1,8 +1,8 @@
-from flask       import jsonify, request, make_response, send_from_directory, send_file
+from flask import jsonify, request, make_response, send_from_directory, send_file
 from flask.views import View
-from datetime    import datetime, timedelta
+from datetime import datetime, timedelta
 
-from utils import check_ip, md5Checksum, PlugItRedirect, PlugItSendFile
+from utils import check_ip, md5Checksum, PlugItRedirect, PlugItSendFile, PlugItSetSession
 
 from params import PI_META_CACHE
 
@@ -73,16 +73,34 @@ class ActionView(View):
         # Call the action
         result = self.action(request, *args, **kwargs)
 
+        headers = {}
+
+        if isinstance(result, PlugItSetSession):
+            headers = result.things_to_set
+            result = result.base
+
+        def update_headers():
+            for (key, value) in headers.items():
+                response.headers['EbuIo-PlugIt-SetSession-' + key] = value
+
         # Is it a redirect ?
         if isinstance(result, PlugItRedirect):
             response = make_response("")
             response.headers['EbuIo-PlugIt-Redirect'] = result.url
             if result.no_prefix:
                 response.headers['EbuIo-PlugIt-Redirect-NoPrefix'] = 'True'
+            update_headers()
+
             return response
         elif isinstance(result, PlugItSendFile):
             response = send_file(result.filename, mimetype=result.mimetype, as_attachment=result.as_attachment, attachment_filename=result.attachment_filename)
             response.headers['EbuIo-PlugIt-ItAFile'] = 'True'
+            update_headers()
+
             return response
 
-        return jsonify(result)
+        response = jsonify(result)
+
+        update_headers()
+
+        return response

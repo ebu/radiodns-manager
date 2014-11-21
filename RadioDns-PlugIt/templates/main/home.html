@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            Home
+            Home :: {{ebuio_orga.name}}
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -28,7 +28,7 @@
 		Welcome !
 	</p>
 
-	<p>You're currently working with the organization <i>{{ebuio_orga.name}}</i>. use the lower-left combo in the menu to change any time.</p>
+	<p>You're currently working with the organization <strong>{{ebuio_orga.name}}</strong>. use the lower-left combo in the menu to change any time.</p>
 
 {% endblock %}
 

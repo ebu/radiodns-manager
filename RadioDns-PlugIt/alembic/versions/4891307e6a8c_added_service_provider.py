@@ -1,13 +1,13 @@
-"""Added service providers
+"""Added Service Provider
 
-Revision ID: 31dfff44820a
+Revision ID: 4891307e6a8c
 Revises: e4619239aac
-Create Date: 2014-10-31 14:20:45.636358
+Create Date: 2014-11-21 17:33:21.610477
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '31dfff44820a'
+revision = '4891307e6a8c'
 down_revision = 'e4619239aac'
 
 from alembic import op

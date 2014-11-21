@@ -6,7 +6,9 @@
 <div class="menu-section">
     <h3>RadioDNS</h3>
     <ul>
-        <li><a href="{{ebuio_baseUrl}}serviceproviders/">Service Provider</a></li>
+        <!-- Add icon ion in front of text -->
+        <!-- Add span around text to make it dissaprear when reduced size -->
+        <li><a href="{{ebuio_baseUrl}}serviceprovider/">Service Provider</a></li>
         <li><a href="{{ebuio_baseUrl}}stations/">My Stations</a></li>
         <li><a href="{{ebuio_baseUrl}}channels/">My Channels</a></li>
     </ul>
@@ -24,6 +26,12 @@
         <li><a href="{{ebuio_baseUrl}}radioepg/shows/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Shows</a></li>
         <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Schedule</a></li>
         <li><a href="{{ebuio_baseUrl}}radioepg/servicefollowing/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Service following</a></li>
+    </ul>
+</div>
+<div class="menu-section">
+    <h3>Media</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}serviceprovider/images/">Provider Images</a></li>
         <li><a href="{{ebuio_baseUrl}}radioepg/gallery/">Gallery</a></li>
         <li><a href="{{ebuio_baseUrl}}radioepg/logos/">Logos</a></li>
     </ul>

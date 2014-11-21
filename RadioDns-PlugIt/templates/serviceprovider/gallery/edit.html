@@ -1,0 +1,56 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Gallery :: RadioEPF :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Edit a picture
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+
+		<label>Name</label>
+		<input type="text" name="name" value="{{object.name}}">
+
+		<label>Photo</label>
+		<input type="file" name="file"> {% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
+		<br /><small>PNG or JPEG. Please upload a logo of minimum size 600x600. Logo will be resized to 32x32, 112x32, 128x128, 320x240 and 600x600.</small>
+
+		<span style="float: right;">
+			<a href="{{ebuio_baseUrl}}radioepg/gallery/" class="btn btn-default">Cancel</a>
+			<input type="submit" class="btn btn-primary" value="Save">
+		</span>
+
+	</form>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

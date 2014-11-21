@@ -1,0 +1,115 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Service Provider :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Service Provider Configuration :: {{ebuio_orga.name}}
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST" class="form-horizontal">
+		{% csrf_token %}
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Short Name (8 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="short_name" class="form-control" value="{{object.short_name}}" maxlength="128">
+            </div>
+        </div>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Medium Name (16 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
+            </div>
+        </div>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Long Name (128 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
+            </div>
+        </div>
+
+        <hr />
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
+            </div>
+        </div>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="long_description" class="form-control" value="{{object.long_description}}" maxlength="1200">
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Url</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Language</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="default_language" class="form-control" value="{{object.default_language}}" maxlength="255">
+            </div>
+        </div>
+
+
+        <hr />
+        <input type="submit" class="btn btn-primary" value="Save">
+        <a href="{{ebuio_baseUrl}}serviceprovider/" class="btn btn-default">Cancel</a>
+
+
+	</form>
+
+	<script type="text/javascript">
+
+		function del_genre(elem) {
+			$(elem).parent().parent().remove();
+			return false;
+		}
+
+
+	</script>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+
