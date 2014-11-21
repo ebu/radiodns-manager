@@ -1,0 +1,119 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Service Provider :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Service Provider Configuration :: {{ebuio_orga.name}}
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">
+            {% block pagefunctions %}
+            {% if ebuio_u.ebuio_orga_admin %}
+            <span style="float: right;">
+                <a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a>
+            </span>
+            {% endif %}
+            {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+
+	{% if saved %}
+		<div class="alert">
+			Service Provider configuration has been saved
+		</div>
+	{% endif %}
+
+
+	{% if deleted %}
+		<div class="alert">
+			Service Provider configuration has been deleted
+		</div>
+	{% endif %}
+
+
+    {% if not ebu_codops %}
+        <div class="alert alert-danger">
+			<strong>No CODOPS has been defined for your organisation yet.</strong> <br />
+            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) to get started.
+		</div>
+    {% else %}
+
+        {% if not serviceprovider %}
+             <div class="alert alert-warning">
+                <p><strong>No configuration for your organisation exists yet.</strong> <br />
+                Start by creating the initial service provider configuration.
+                 </p>
+                <p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a></p>
+            </div>
+        {% else %}
+
+            {% if not serviceprovider.default_logo_image %}
+                <div class="alert alert-danger">
+                    <p><strong>No Default Provider Image has been defined.</strong> <br />
+                    User the provider image section to add your default image.</p>
+                    <p><a href="{{ebuio_baseUrl}}serviceprovider/images/edit/-" class="btn btn-primary">Add a new image</a></p>
+                </div>
+            {% endif %}
+
+            Current configuration:
+
+            <table class="table table-striped table-hover table-condensed">
+                <tbody>
+                    <tr>
+                        <th>CODOPS</th>
+                        <td><i>{{ebu_codops}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Short Name</th>
+                        <td>{{serviceprovider.short_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Medium Name</th>
+                        <td>{{serviceprovider.medium_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Long Name</th>
+                        <td>{{serviceprovider.long_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Short Description</th>
+                        <td>{{serviceprovider.short_description}}</td>
+                    </tr>
+                    <tr>
+                        <th>Long Description</th>
+                        <td>{{serviceprovider.long_description}}</td>
+                    </tr>
+                    <tr>
+                        <th>Default Url</th>
+                        <td><a href="{{serviceprovider.url_default}}" target="_blank">{{serviceprovider.url_default}}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Default Language</th>
+                        <td>{{serviceprovider.default_language}}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{serviceprovider.location_country}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        {% endif %}
+	{% endif %}
+
+{% endblock %}
+
