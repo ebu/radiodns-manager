@@ -60,7 +60,7 @@
 
 			<tbody>
 				{% for s in list %}
-					<tr class="{% if s.active %}text-success{% else %}text-error{% endif %}">
+					<tr class="{% if s.active %}text-success{% else %}text-danger{% endif %}">
 						<td>{{s.channel_name}}</td>
 						<td>{{s.uri}}</td>
 						<td>{{s.cost}}</td>

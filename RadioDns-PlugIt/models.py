@@ -1,5 +1,7 @@
 from plugit import db
+from aws import awsutils
 import dns.resolver
+import config
 import string
 import random
 import datetime
@@ -55,12 +57,32 @@ class ServiceProvider(db.Model):
     def __init__(self, codops):
         self.codops = codops
 
-    # def __repr__(self):
-    #     return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+    def __repr__(self):
+         return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+
+    def check_aws(self):
+        return awsutils.check_serviceprovider(self)
+
+    @property
+    def default_logo_image_data(self):
+        if self.default_logo_image:
+            return self.default_logo_image.json
+        else:
+            return None
+
+    @property
+    def fqdn(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.DOMAIN)
+        return None
+
+    @property
+    def image_url_prefix(self):
+        return awsutils.get_public_urlprefix(self)
 
     @property
     def json(self):
-        return to_json(self, self.__class__, [])
+        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix'])
 
 
 class Station(db.Model):
@@ -84,6 +106,13 @@ class Station(db.Model):
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
     epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+
+    @property
+    def service_provider_data(self):
+        if self.service_provider:
+            return self.service_provider.json
+        else:
+            return None
 
     @property
     def genres_list(self):
@@ -114,12 +143,22 @@ class Station(db.Model):
         return (self.short_name or self.name)[:8]
 
     @property
+    def fqdn_prefix(self):
+        return filter(lambda x: x in string.ascii_letters + string.digits, self.name.lower())
+
+    @property
+    def fqdn(self):
+        if self.service_provider:
+            return "%s.%s" % (self.fqdn_prefix, self.service_provider.fqdn)
+        return None
+
+    @property
     def stomp_username(self):
-        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters, self.name.lower())
+        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters , self.name.lower()) # + string.digits
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'epg_picture_data', 'genres_list'])
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'epg_picture_data', 'genres_list'])
 
 
 class Ecc(db.Model):
@@ -490,6 +529,9 @@ class PictureForEPG(db.Model):
 class LogoImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer)
+    codops = db.Column(db.String(255))
+
+    name = db.Column(db.String(255))
     filename = db.Column(db.String(255))
 
     url32x32 = db.Column(db.String(255))
@@ -515,5 +557,12 @@ class LogoImage(db.Model):
         return self.filename.split('/')[-1]
 
     @property
+    def public_url(self):
+        if self.service_provider:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.filename)
+        else:
+            return None
+
+    @property
     def json(self):
-        return to_json(self, self.__class__, ['clean_filename'])
+        return to_json(self, self.__class__, ['clean_filename', 'public_url'])

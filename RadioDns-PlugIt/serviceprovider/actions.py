@@ -6,6 +6,16 @@ from plugit.utils import action, only_orga_member_user, only_orga_admin_user, Pl
 from models import db, ServiceProvider, LogoImage
 from plugit.api import PlugItAPI, Orga
 import config
+from aws import awsutils
+
+import os
+import sys
+import time
+
+from werkzeug import secure_filename
+from PIL import Image
+import imghdr
+import uuid
 
 import json
 
@@ -24,12 +34,34 @@ def serviceprovider_home(request):
 
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
-    passworded = request.args.get('passworded') == 'yes'
+
+    # Default Image
+    image_url_prefix = None
+    default_logo = None
 
     if sp:
         sp = sp.json
 
     return {'serviceprovider': sp, 'ebu_codops': orga.codops, 'saved': saved, 'deleted': deleted}
+
+
+@action(route="/serviceprovider/check")
+@json_only()
+@only_orga_member_user()
+def serviceprovider_check(request):
+    """Check AWS State for Service Provider."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
+    if sp:
+        return sp.check_aws()
+
+    return {'isvalid': False}
 
 
 @action(route="/serviceprovider/edit/<id>", template="serviceprovider/edit.html", methods=['POST', 'GET'])
@@ -96,7 +128,7 @@ def serviceprovider_delete(request, id):
     return PlugItRedirect('serviceprovider/?deleted=yes')
 
 
-@action(route="/serviceprovider/images/", template="serviceprovider/gallery/home.html")
+@action(route="/serviceprovider/images/", template="serviceprovider/images/home.html")
 @only_orga_member_user()
 def serviceprovider_gallery_home(request):
     """Show the list of images for a service provider."""
@@ -117,13 +149,15 @@ def serviceprovider_gallery_home(request):
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
 
-    return {'list': list, 'saved': saved, 'deleted': deleted}
+    image_url_prefix = awsutils.get_public_urlprefix(sp)
+
+    return {'list': list, 'image_url_prefix':image_url_prefix, 'saved': saved, 'deleted': deleted}
 
 
-@action(route="/serviceprovider/images/edit/<id>", template="serviceprovider/gallery/edit.html", methods=['POST', 'GET'])
+@action(route="/serviceprovider/images/edit/<id>", template="serviceprovider/images/edit.html", methods=['POST', 'GET'])
 @only_orga_admin_user()
 def serviceprovider_gallery_edit(request, id):
-    """Edit a channel."""
+    """Edit an Image."""
 
     object = None
     errors = []
@@ -144,6 +178,9 @@ def serviceprovider_gallery_edit(request, id):
             object = LogoImage(int(request.form.get('ebuio_orgapk')))
 
         object.name = request.form.get('name')
+        if sp:
+            object.service_provider = sp
+        object.codops = orga.codops
 
         def add_unique_postfix(fn):
             """__source__ = 'http://code.activestate.com/recipes/577200-make-unique-file-name/'"""
@@ -162,17 +199,37 @@ def serviceprovider_gallery_edit(request, id):
 
             return None
 
+        def unique_filename(fn):
+
+            path, name = os.path.split(fn)
+            name, ext = os.path.splitext(name)
+
+            make_fn = lambda i: os.path.join(path, '%s%s' % (str(uuid.uuid4()), ext))
+
+            for i in xrange(2, sys.maxint):
+                uni_fn = make_fn(i)
+                if not os.path.exists(uni_fn):
+                    return uni_fn
+
+            return None
+
         file = request.files['file']
         if file:
             filename = secure_filename(file.filename)
-            full_path = add_unique_postfix('media/uploads/radioepg/gallery/' + filename)
+            full_path = unique_filename('media/uploads/serviceprovider/images/' + filename)
+            path, name = os.path.split(full_path)
             file.save(full_path)
             if object.filename:
                 try:
                     os.unlink(object.filename)
                 except:
                     pass
-            object.filename = full_path
+            object.filename = name
+            # Upload to s3
+            try:
+                awsutils.upload_public_image(sp, name, full_path)
+            except:
+                pass
 
         # Check errors
         if object.name == '':
@@ -182,9 +239,9 @@ def serviceprovider_gallery_edit(request, id):
             errors.append("Please upload an image")
         else:
 
-            if imghdr.what(object.filename) not in ['jpeg', 'png']:
+            if imghdr.what(full_path) not in ['jpeg', 'png']:
                 errors.append("Image is not an png or jpeg image")
-                os.unlink(object.filename)
+                os.unlink(full_path)
                 object.filename = None
 
         # If no errors, save
@@ -194,15 +251,91 @@ def serviceprovider_gallery_edit(request, id):
                 db.session.add(object)
             else:
                 import glob
-                for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
+                for f in glob.glob('media/uploads/serviceprovider/cache/*_L%s.png' % (object.id,)):
                     os.unlink(f)
 
             db.session.commit()
 
-            return PlugItRedirect('radioepg/gallery/?saved=yes')
+            try:
+                # Remove local copy
+                os.unlink(full_path)
+            except:
+                pass
+
+            return PlugItRedirect('serviceprovider/images/?saved=yes')
+
+        try:
+            # Remove local copy
+            os.unlink(full_path)
+        except:
+            pass
 
     if object:
         object = object.json
 
     return {'object': object, 'errors': errors}
 
+
+@action(route="/serviceprovider/images/default/<id>")
+@json_only()
+@only_orga_admin_user()
+def serviceprovider_gallery_setdefault(request, id):
+    """Delete an Image."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
+
+    print '1'
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
+    if sp:
+        print '2'
+        object = LogoImage.query.filter_by(codops=orga.codops, id=int(id)).first()
+
+        if object:
+            print '3'
+            sp.default_logo_image = object
+
+            db.session.commit()
+
+
+    return PlugItRedirect('serviceprovider/?saved=yes')
+
+
+@action(route="/serviceprovider/images/delete/<id>")
+@json_only()
+@only_orga_admin_user()
+def serviceprovider_gallery_delete(request, id):
+    """Delete an Image."""
+
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
+    object = LogoImage.query.filter_by(codops=orga.codops, id=int(id)).first()
+
+    # Remove File
+    try:
+        os.unlink(object.filename)
+    except:
+        pass
+    # Remove from S3
+    try:
+        awsutils.delete_public_image(sp, object.filename)
+    except:
+        pass
+
+    import glob
+    for f in glob.glob('media/uploads/serviceprovider/cache/*_L%s.png' % (object.id,)):
+        os.unlink(f)
+
+    db.session.delete(object)
+    db.session.commit()
+
+    return PlugItRedirect('serviceprovider/images/?deleted=yes')

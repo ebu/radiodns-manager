@@ -15,26 +15,34 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            Channels
+            {{ebuio_orga.name}} :: Channels
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
-        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-functions" class="pull-right">
+			{% block pagefunctions %}
+				{% if ebuio_u.ebuio_orga_admin %}
+					<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-default">Export to zone file</a>
+					<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
+				{% endif %}
+			{% endblock %}
+		</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
 
 	{% if saved %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Channel has been saved
 		</div>
 	{% endif %}
 
 	{% if deleted %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Channel has been deleted
 		</div>
 	{% endif %}
 
+	<div class="table-responsive">
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
@@ -54,26 +62,20 @@
 					<td>{{c.station_name}}</td>
 					<td>{{c.name}}</td>
 					<td>{{c.radiodns_entry}}</td>
-					<td id="fqdn-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
-					<td id="vis-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
-					<td id="epg-{{c.id}}"><i class="icon-spinner icon-spin"></i></td>
+					<td id="fqdn-{{c.id}}"><i class="ion-loading-c"></i></td>
+					<td id="vis-{{c.id}}"><i class="ion-loading-c"></i></td>
+					<td id="epg-{{c.id}}"><i class="ion-loading-c"></i></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-mini btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-xs btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-
-	{% if ebuio_u.ebuio_orga_admin %}
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-default">Export to zone file</a>
-			<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
-		</span>
-	{% endif %}
+	</div>
 
 	<script type="text/javascript">
 		function checkChannel(id) {
@@ -83,10 +85,15 @@
 				success: function(data) {
 					if (data.fqdn) {
 						$('#fqdn-' + id).html(data.fqdn);
-						$('#fqdn-' + id).addClass('text-success');
+						if(data.fqdn == '{{expected_fqdn}}') {
+							$('#fqdn-' + id).addClass('text-success');
+						} else {
+							$('#fqdn-' + id).addClass('text-warning');
+							$('#fqdn-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected FQDN is {{expected_fqdn}}"><i class="ion-alert-circled"></i></span>');
+						}
 					} else {
 						$('#fqdn-' + id).html('no radiodns entry');
-						$('#fqdn-' + id).addClass('text-error');
+						$('#fqdn-' + id).addClass('text-danger');
 					}
 
 					if (data.vis) {
@@ -96,7 +103,7 @@
 						$('#vis-' + id).addClass('text-success');
 					} else {
 						$('#vis-' + id).html('no service');
-						$('#vis-' + id).addClass('text-error');
+						$('#vis-' + id).addClass('text-danger');
 					}
 
 					if (data.epg) {
@@ -106,18 +113,21 @@
 						$('#epg-' + id).addClass('text-success');
 					} else {
 						$('#epg-' + id).html('no service');
-						$('#epg-' + id).addClass('text-error');
+						$('#epg-' + id).addClass('text-danger');
 					}
 				}
 			});
+
+			// Tool Tips
+			$('[data-toggle="tooltip"]').tooltip({html: true});
 		}
 
 		{% for c in list %}
 			checkChannel({{c.id}});
 		{% endfor %}
+
 	</script>
 
-	<hr style="visibility: hidden; clear: both;">
 
 {% endblock %}
 

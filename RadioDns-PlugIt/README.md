@@ -44,7 +44,10 @@ Sqlalchemy is used for database access. Models are defined inside the `models.py
 
 ## Database migrations
 
-For easy model upgrade, alembic is used. When a model is modified it's possible to run the command `alembic revision --autogenerate -m 'message'` to create a new revision of the database. `alembic upgrade head` is used to apply changes, upgrading the database to the latest version. Details are available in the official documentation of alembic.
+For easy model upgrade, alembic is used. When a model is modified it's possible to run the command
+`alembic revision --autogenerate -m 'message'` to create a new revision of the database.
+`alembic upgrade head` is used to apply changes, upgrading the database to the latest version.
+Details are available in the official documentation of alembic.
 
 # Config
 
