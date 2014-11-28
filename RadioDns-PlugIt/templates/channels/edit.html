@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            Edit a channel
+            {{ebuio_orga.name}} :: Edit a channel
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -33,108 +33,146 @@
 		</div>
 	{% endif %}
 
-	<form action="" method="POST">
+	<form action="" method="POST" class="form-horizontal">
 		{% csrf_token %}
 
-		<label>Station</label>
-		<select name="station">
-			{% for s in stations %}
-				<option value="{{s.id}}" {% if object.station_id == s.id %}selected{% endif %}>{{s.name}}</option>
-			{% endfor %}
-		</select>
-
-		<label>Name</label>
-		<input type="text" name="name" value="{{object.name}}">
-
-		<label>Transmitter type</label>
-		<select name="type_id" id="type" onchange="update_display();">
-			{% for t in types_id %}
-				<option value="{{t.0}}" {% if object.type_id == t.0 %}selected{% endif %}>{{t.1}}</option>
-			{% endfor %}
-		</select>
-
-		<div class="opblk opblk_ecc_id">
-			<label>ECC</label>
-			<select name="ecc_id" id="ecc" cval="{{object.ecc_id}}">
-			</select>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Station:</label>
+			<div class="col-sm-9 col-md-7">
+				<select name="station">
+					{% for s in stations %}
+						<option value="{{s.id}}" {% if object.station_id == s.id %}selected{% endif %}>{{s.name}}</option>
+					{% endfor %}
+				</select>
+			</div>
 		</div>
 
-		<div class="opblk opblk_pi">
-			<label>PI</label>
-			<input type="text" name="pi" value="{{object.pi}}">
-			<small>Programme Identfcaton</small>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Name:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="name" value="{{object.name}}">
+			</div>
 		</div>
 
-		<div class="opblk opblk_frequency">
-			<label>Frequency</label>
-			<input type="text" name="frequency" value="{{object.frequency}}">
-			<small>wildcard * possible</small>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Transmitter type:</label>
+			<div class="col-sm-9 col-md-7">
+				<select name="type_id" id="type" onchange="update_display();">
+					{% for t in types_id %}
+						<option value="{{t.0}}" {% if object.type_id == t.0 %}selected{% endif %}>{{t.1}}</option>
+					{% endfor %}
+				</select>
+			</div>
 		</div>
 
-		<div class="opblk opblk_eid">
-			<label>EID</label>
-			<input type="text" name="eid" value="{{object.eid}}">
-			<small>Ensemble ID</small>
+		<div class="form-group opblk opblk_ecc_id">
+			<label class="col-sm-3 col-md-3 control-label">ECC:</label>
+			<div class="col-sm-9 col-md-7">
+				<select name="ecc_id" id="ecc" cval="{{object.ecc_id}}">
+				</select>
+			</div>
 		</div>
 
-		<div class="opblk opblk_sid">
-			<label>SID</label>
-			<input type="text" name="sid" value="{{object.sid}}">
-			<small>Service ID</small>
+		<div class="form-group opblk opblk_pi">
+			<label class="col-sm-3 col-md-3 control-label">PI:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="pi" value="{{object.pi}}">
+				<small>Programme Identfcaton</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_scids">
-			<label>SCIDS</label>
-			<input type="text" name="scids" value="{{object.scids}}">
-			<small>Service Component Identifier</small>
+		<div class="form-group opblk opblk_frequency">
+			<label class="col-sm-3 col-md-3 control-label">Frequency:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="frequency" value="{{object.frequency}}">
+				<small>wildcard * possible</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_appty_uatype">
-			<label>appty-uatype</label>
-			<input type="text" name="appty_uatype" value="{{object.appty_uatype}}">
-			<small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
+		<div class="form-group opblk opblk_eid">
+			<label class="col-sm-3 col-md-3 control-label">EID:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="eid" value="{{object.eid}}">
+				<small>Ensemble ID</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_pa">
-			<label>PA</label>
-			<input type="text" name="pa" value="{{object.pa}}">
-			<small>Packet Address</small>
+		<div class="form-group opblk opblk_sid">
+			<label class="col-sm-3 col-md-3 control-label">SID:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="sid" value="{{object.sid}}">
+				<small>Service ID</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_tx">
-			<label>TX</label>
-			<input type="text" name="tx" value="{{object.tx}}">
-			<small>Transmiter Identifier</small>
+		<div class="form-group opblk opblk_scids">
+			<label class="col-sm-3 col-md-3 control-label">SCIDS:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="scids" value="{{object.scids}}">
+				<small>Service Component Identifier</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_cc">
-			<label>CC</label>
-			<select name="cc" id="cc" cval="{{object.cc}}">
-
-			</select>
-			<small>Country Code</small>
+		<div class="form-group opblk opblk_appty_uatype">
+			<label class="col-sm-3 col-md-3 control-label">appty-uatype:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="appty_uatype" value="{{object.appty_uatype}}">
+				<small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_fqdn">
-			<label>FQDN</label>
-			<input type="text" name="fqdn" value="{{object.fqdn}}">
-			<small>Authoritative FQDN</small>
+		<div class="form-group opblk opblk_pa">
+			<label class="col-sm-3 col-md-3 control-label">PA:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="pa" value="{{object.pa}}">
+				<small>Packet Address</small>
+			</div>
 		</div>
 
-		<div class="opblk opblk_serviceIdentifier">
-			<label>serviceIdentifier</label>
-			<input type="text" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
-			<small>Service Identifier</small>
+		<div class="form-group opblk opblk_tx">
+			<label class="col-sm-3 col-md-3 control-label">TX:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="tx" value="{{object.tx}}">
+				<small>Transmiter Identifier</small>
+			</div>
 		</div>
 
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Cancel</a>
-			<input type="submit" class="btn btn-primary" value="Save">
-		</span>
+		<div class="form-group opblk opblk_cc">
+			<label class="col-sm-3 col-md-3 control-label">CC:</label>
+			<div class="col-sm-9 col-md-7">
+				<select name="cc" id="cc" cval="{{object.cc}}">
+				</select>
+				<small>Country Code</small>
+			</div>
+		</div>
+
+		<div class="form-group opblk opblk_fqdn">
+			<label class="col-sm-3 col-md-3 control-label">FQDN:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="fqdn" value="{{object.fqdn}}">
+				<small>Authoritative FQDN</small>
+			</div>
+		</div>
+
+		<div class="form-group opblk opblk_serviceIdentifier">
+			<label class="col-sm-3 col-md-3 control-label">serviceIdentifier:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
+				<small>Service Identifier</small>
+			</div>
+		</div>
+
+		<hr />
+
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+				<input type="submit" class="btn btn-primary" value="Save">
+				<a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Cancel</a>
+			</div>
+		</div>
+
 
 	</form>
-
-	<hr style="visibility: hidden; clear: both;">
 
 	<script type="text/javascript">
 

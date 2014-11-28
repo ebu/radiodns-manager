@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            Service Provider Configuration :: {{ebuio_orga.name}}
+            {{ebuio_orga.name}} :: Service Provider Configuration
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -93,8 +93,12 @@
 
 
         <hr />
-        <input type="submit" class="btn btn-primary" value="Save">
-        <a href="{{ebuio_baseUrl}}serviceprovider/" class="btn btn-default">Cancel</a>
+        <div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+                <a href="{{ebuio_baseUrl}}serviceprovider/" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
 
 
 	</form>

@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            Edit a station
+            {{ebuio_orga.name}} :: Edit a station
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -33,40 +33,70 @@
 		</div>
 	{% endif %}
 
-	<form action="" method="POST">
+	<form action="" method="POST" class="form-horizontal">
 		{% csrf_token %}
 
-		<label>Name</label>
-		<input type="text" name="name" value="{{object.name}}">
 
-		<label>Short name</label>
-		<input type="text" name="short_name" value="{{object.short_name}}" maxlength="8">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Name:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="name" class="form-control" value="{{object.name}}">
+			</div>
+		</div>
 
-		<label>Short description</label>
-		<input type="text" name="short_description" value="{{object.short_description}}" maxlength="180">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Short name:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
+			</div>
+		</div>
 
-		<label>IPs allowed to connect to the radiovis server</label>
-		<input type="text" name="ip_allowed" value="{{object.ip_allowed}}">
-		<small>
-			A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
-		</small>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Short description:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
+			</div>
+		</div>
 
-		<label>Genres</label>
+		<hr />
 
-		<table class="table table-condensed" id="genre_list">
-			<tr><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br /> to the radiovis server:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="ip_allowed" class="form-control" value="{{object.ip_allowed}}"><br />
+				<small>
+					A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
+				</small>
+			</div>
+		</div>
 
-		{% for g in object.genres_list %}
-			 <tr><td><input type="text" name="genrehref[]" value="{{g.href}}"></td><td><input type="text" name="genrename[]" value="{{g.name}}"></td><td><a href="#" onclick="return del_genre(this);">Remove</a></td></tr>
-		{% endfor %}
+		<hr />
 
-		</table>
-		<a class="btn btn-xs btn-default" onclick="$('#genre_list').append('<tr><td><input type=\'text\' name=\'genrehref[]\'></td><td><input type=\'text\' name=\'genrename[]\'></td><td><a href=\'#\' onclick=\'return del_genre(this);\'>Remove</a></td></tr>');">New genre</a>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Genres:</label>
+			<div class="col-sm-9 col-md-7">
+				<table class="table table-condensed" id="genre_list">
+					<tr><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>
 
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}stations/" class="btn btn-default">Cancel</a>
-			<input type="submit" class="btn btn-primary" value="Save">
-		</span>
+				{% for g in object.genres_list %}
+					 <tr><td><input type="text" name="genrehref[]" value="{{g.href}}"></td><td><input type="text" name="genrename[]" value="{{g.name}}"></td><td><a href="#" onclick="return del_genre(this);">Remove</a></td></tr>
+				{% endfor %}
+
+				</table>
+				<a class="btn btn-xs btn-default" onclick="$('#genre_list').append('<tr><td><input type=\'text\' class=\'form-control\' name=\'genrehref[]\'></td><td><input type=\'text\' class=\'form-control\' name=\'genrename[]\'></td><td><a href=\'#\' onclick=\'return del_genre(this);\'>Remove</a></td></tr>');">New genre</a>
+			</div>
+		</div>
+		<label></label>
+
+		<hr />
+
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+				<input type="submit" class="btn btn-primary" value="Save">
+				<a href="{{ebuio_baseUrl}}stations/" class="btn btn-default">Cancel</a>
+			</div>
+		</div>
+
 
 	</form>
 

@@ -1,0 +1,99 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}System :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            System Overview & Status
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">
+            {% block pagefunctions %}
+            {% if ebuio_u.ebuio_orga_admin %}
+
+            {% endif %}
+            {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+
+        <table class="table table-striped table-hover table-condensed">
+            <tbody>
+                <tr>
+                    <th style="width:200px;">Status</th>
+                    <td><span id="radiodns-system-status" class="label label-default">Querying</span></td>
+                </tr>
+                <tr>
+                    <th>Main Zone</th>
+                    <td><span id="radiodns-system-mainzone" ><i class="ion-loading-c"></i></span></td>
+                </tr>
+                 <tr>
+                    <th>&nbsp;</th>
+                    <td><span id="radiodns-system-mainzonens" ><i class="ion-loading-c"></i></span></td>
+                </tr>
+                 <tr>
+                    <th>Parent NS Entry</th>
+                    <td><span id="radiodns-system-parent" ><i class="ion-loading-c"></i></span></td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td><span id="radiodns-system-parentns" ><i class="ion-loading-c"></i></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    <script type="text/javascript">
+		function checkSystem() {
+			$.ajax({
+				url: '{{ebuio_baseUrl}}system/check',
+				dataType: 'json',
+				success: function(data) {
+					if (data.isvalid) {
+						$('#radiodns-system-status').html('Success');
+						$('#radiodns-system-status').removeClass('label-default');
+						$('#radiodns-system-status').addClass('label-success');
+					} else {
+					    $('#radiodns-system-status').html('Failed');
+					    $('#radiodns-system-status').removeClass('label-default');
+						$('#radiodns-system-status').addClass('label-danger');
+					}
+
+					if (data.mainzone) {
+					    $('#radiodns-system-mainzone').html(data.mainzone.zone);
+					    $('#radiodns-system-mainzone').addClass('text-success');
+					    $('#radiodns-system-mainzonens').html(data.mainzone.ns);
+					} else {
+					    $('#radiodns-system-mainzone').html('Missing');
+					    $('#radiodns-system-mainzone').addClass('text-danger');
+					}
+
+					if (data.parentns) {
+					    $('#radiodns-system-parent').html(data.parentns.entry);
+					    $('#radiodns-system-parent').addClass('text-success');
+					    $('#radiodns-system-parentns').html(data.parentns.value);
+					} else {
+					    $('#radiodns-system-parent').html('Missing');
+					    $('#radiodns-system-parent').addClass('text-danger');
+					}
+
+				}
+			});
+		}
+
+		checkSystem();
+	</script>
+
+{% endblock %}
+

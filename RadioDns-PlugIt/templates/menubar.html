@@ -3,11 +3,17 @@
         <li><a href="{{ebuio_baseUrl}}">Home</a></li>
     </ul>
 </div>
+{% if ebuio_u.ebuio_orga_admin %}
+<div class="menu-section">
+    <h3>System</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}system/">System Status</a></li>
+    </ul>
+</div>
+{% endif %}
 <div class="menu-section">
     <h3>RadioDNS</h3>
     <ul>
-        <!-- Add icon ion in front of text -->
-        <!-- Add span around text to make it dissaprear when reduced size -->
         <li><a href="{{ebuio_baseUrl}}serviceprovider/">Service Provider</a></li>
         <li><a href="{{ebuio_baseUrl}}stations/">My Stations</a></li>
         <li><a href="{{ebuio_baseUrl}}channels/">My Channels</a></li>

@@ -28,13 +28,13 @@
     {% endblock %}
 
 	{% if saved %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Picture has been saved
 		</div>
 	{% endif %}
 
 	{% if deleted %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Picture has been deleted
 		</div>
 	{% endif %}
@@ -52,11 +52,12 @@
 			{% for s in list %}
 				<tr>
 					<td>{{s.name}}</td>
-					<td><img class="tooltipme" src="{{ebuio_baseUrl}}{{s.filename}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{ebuio_baseUrl}}{{s.filename}}' width='320' height='240'>"></td>
-					<td>
+					<td><img class="tooltipme" src="{{image_url_prefix}}{{s.filename}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{image_url_prefix}}{{s.filename}}' width='240' height='240'>"></td>
+					<td nowrap="nowrap">
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}serviceprovider/images/delete/{{s.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}serviceprovider/images/edit/{{s.id}}" class="btn btn-mini btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}serviceprovider/images/default/{{s.id}}" class="btn btn-xs btn-info">Set as Provider Default</a>
+							<a href="{{ebuio_baseUrl}}serviceprovider/images/edit/{{s.id}}" class="btn btn-xs btn-primary">Edit</a>
+							<a href="{{ebuio_baseUrl}}serviceprovider/images/delete/{{s.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
 						{% endif %}
 					</td>
 				</tr>
