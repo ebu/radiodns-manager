@@ -82,7 +82,7 @@ class ServiceProvider(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix'])
+        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix', 'fqdn'])
 
 
 class Station(db.Model):
@@ -91,6 +91,14 @@ class Station(db.Model):
     name = db.Column(db.String(80))
     short_name = db.Column(db.String(8))
     random_password = db.Column(db.String(32))
+
+    # Services
+    radiovis_enabled = db.Column(db.Boolean)
+    radiovis_service = db.Column(db.String(255))
+    radioepg_enabled = db.Column(db.Boolean)
+    radioepg_service = db.Column(db.String(255))
+    radiotag_enabled = db.Column(db.Boolean)
+    radiotag_service = db.Column(db.String(255))
 
     service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
 
@@ -128,6 +136,16 @@ class Station(db.Model):
         else:
             return None
 
+    @property
+    def fqdn(self):
+        if self.service_provider:
+            if self.service_provider.codops:
+                return "%s.%s.%s" % (filter(lambda x: x in string.ascii_letters + string.digits, self.name.lower()),
+                                     self.service_provider.codops.lower(), config.DOMAIN)
+        return None
+
+
+
     def __init__(self, orga):
         self.orga = orga
 
@@ -136,6 +154,9 @@ class Station(db.Model):
 
     def gen_random_password(self):
         self.random_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
+
+    def check_aws(self):
+        return awsutils.check_station(self)
 
     @property
     def short_name_to_use(self):
@@ -330,7 +351,12 @@ class Channel(db.Model):
             except:
                 pass
 
-        return (fqdn, vis, epg)
+            try:
+                tag = str(resolver.query('_radiotag._tcp.' + fqdn, 'SRV')[0])
+            except:
+                pass
+
+        return (fqdn, vis, epg, tag)
 
     @property
     def epg_uri(self):

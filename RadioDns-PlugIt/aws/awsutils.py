@@ -93,7 +93,7 @@ def get_or_create_mainzone():
     return zone
 
 
-def get_or_create_zone(service_provider):
+def get_or_create_zone_forprovider(service_provider):
     """Returns the zone or creates a new one according to service_provider"""
     route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
 
@@ -110,7 +110,7 @@ def get_or_create_zone(service_provider):
 
 def update_or_create_cname(prefix, service_provider, endpoint):
     """Creates a new CNAME entry or updates it"""
-    zone = get_or_create_zone(service_provider)
+    zone = get_or_create_zone_forprovider(service_provider)
 
     name = "%s.%s" % (prefix.lower(), service_provider.fqdn.lower())
     cname = zone.get_cname(name)
@@ -129,6 +129,74 @@ def get_cname(prefix, service_provider, zone):
     cname = zone.get_cname(name)
 
     return cname
+
+def update_or_create_vissrv_station(station):
+    """Creates a new CNAME entry or updates it"""
+    if station.radiovis_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radiovis._tcp'
+
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+
+        regex = re.compile('(?P<host>.+?):(?P<port>\d+)$')
+        r = regex.search(station.radiovis_service)
+        if r:
+            host = r.groupdict()['host']
+            port = r.groupdict()['port']
+            value = service_string(host, port)
+            return update_or_create_srv(zone, name, value)
+    return None
+
+def update_or_create_epgsrv_station(station):
+    """Creates a new CNAME entry or updates it"""
+
+    if station.radioepg_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radioepg._tcp'
+
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+
+        regex = re.compile('(?P<host>.+?):(?P<port>\d+)$')
+        r = regex.search(station.radioepg_service)
+        if r:
+            host = r.groupdict()['host']
+            port = r.groupdict()['port']
+            value = service_string(host, port)
+            return update_or_create_srv(zone, name, value)
+    return None
+
+def update_or_create_tagsrv_station(station):
+    """Creates a new CNAME entry or updates it"""
+
+    if station.radiotag_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radiotag._tcp'
+
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+
+        regex = re.compile('(?P<host>.+?):(?P<port>\d+)$')
+        r = regex.search(station.radiotag_service)
+        if r:
+            host = r.groupdict()['host']
+            port = r.groupdict()['port']
+            value = service_string(host, port)
+            return update_or_create_srv(zone, name, value)
+    return None
+
+def update_or_create_srv(zone, name, value):
+    """Creates a new CNAME entry or updates it"""
+    srv = zone.find_records(name, 'SRV', desired=1)
+    if srv:
+        if not srv.resource_records[0] == value:
+            srv = zone.update_record(srv, value)
+    else:
+        srv = zone.add_record('SRV', name, value)
+    srv = zone.find_records(name, 'SRV', desired=1)
+    return srv.resource_records[0]
+
+def service_string(server, port):
+    srv = "%d %d %d %s" % (0, 100, int(port), server)
+    return srv
 
 def get_parent_ns(zone):
     """Creates a new CNAME entry or updates it"""
@@ -164,6 +232,7 @@ def update_or_create_parent_ns(zone):
 
 
 ### CHECKS
+
 def check_mainzone():
 
     mainzone = get_or_create_mainzone()
@@ -179,7 +248,7 @@ def check_serviceprovider(sp):
 
     if sp:
         # NS
-        zone = get_or_create_zone(sp)
+        zone = get_or_create_zone_forprovider(sp)
         zonens = zone.get_nameservers()
         parent = get_parent_ns(zone)
         parentns = parent.resource_records
@@ -199,5 +268,35 @@ def check_serviceprovider(sp):
                 'parentns': {'entry': parent.name, 'value': parentns},
                 'bucket': {'isvalid': bucketisvalid, 'name': bucket.name, 'publicendpoint': bucketendpoint,
                            'cname':{'name': staticcnamename, 'record': staticnamerecord}}}
+
+    return {'isvalid': False}
+
+def check_station(st):
+
+    if st:
+        # _radiovis._tcp
+        vis = update_or_create_vissrv_station(st)
+        # _radioepg._tcp
+        epg = update_or_create_epgsrv_station(st)
+        # _radiotag._tcp
+        tag = update_or_create_tagsrv_station(st)
+
+        visisvalid = not st.radiovis_enabled
+        epgisvalid = not st.radioepg_enabled
+        tagisvalid = not st.radiotag_enabled
+
+        if vis:
+            visisvalid = True
+        if epg:
+            epgisvalid = True
+        if tag:
+            tagisvalid = True
+
+        isvalid = visisvalid and epgisvalid and tagisvalid
+
+        return {'isvalid': isvalid, 'name': st.fqdn,
+                'radiovis': {'isvalid': visisvalid, 'enabled':st.radiovis_enabled, 'fqdn': vis},
+                'radioepg': {'isvalid': epgisvalid, 'enabled':st.radioepg_enabled, 'fqdn': epg},
+                'radiotag': {'isvalid': tagisvalid, 'enabled':st.radiotag_enabled, 'fqdn': tag}}
 
     return {'isvalid': False}

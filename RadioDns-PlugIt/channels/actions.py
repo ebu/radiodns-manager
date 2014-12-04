@@ -192,9 +192,9 @@ def channels_check(request, id):
 
     object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
 
-    (fqdn, vis, epg) = object.dns_values
+    (fqdn, vis, epg, tag) = object.dns_values
 
-    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'vis': vis, 'epg': epg}
+    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'vis': vis, 'epg': epg, 'tag': tag}
 
 
 @action(route="/channels/export/", template="channels/export.html")
@@ -210,8 +210,6 @@ def channels_export(request):
     sp = None
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
-        if sp and sp.codops:
-            zoneName = awsutils.get_zone_name(sp.codops)
 
     retour = ''
 
@@ -228,7 +226,7 @@ def channels_export(request):
             retour += '\n;;; Station: ' + elem.station_name + '\n'
             oldStationName = elem.station_name
 
-        retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + zoneName + '\n'
+        retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':
         retour_str = StringIO.StringIO()
