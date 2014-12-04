@@ -147,6 +147,15 @@ def update_or_create_vissrv_station(station):
             return update_or_create_srv(zone, name, value)
     return None
 
+def remove_vissrv_station(station):
+    """Removes the VIS entry of a station"""
+    if station.radiovis_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radiovis._tcp'
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+        remove_srv(zone, name)
+
+
 def update_or_create_epgsrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
@@ -164,6 +173,14 @@ def update_or_create_epgsrv_station(station):
             value = service_string(host, port)
             return update_or_create_srv(zone, name, value)
     return None
+
+def remove_epgsrv_station(station):
+    """Removes the EPG entry of a station"""
+    if station.radioepg_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radioepg._tcp'
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+        remove_srv(zone, name)
 
 def update_or_create_tagsrv_station(station):
     """Creates a new CNAME entry or updates it"""
@@ -183,6 +200,14 @@ def update_or_create_tagsrv_station(station):
             return update_or_create_srv(zone, name, value)
     return None
 
+def remove_tagsrv_station(station):
+    """Removes the TAG entry of a station"""
+    if station.radioepg_enabled and station.service_provider:
+        zone = get_or_create_zone_forprovider(station.service_provider)
+        prefix = '_radiotag._tcp'
+        name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
+        remove_srv(zone, name)
+
 def update_or_create_srv(zone, name, value):
     """Creates a new CNAME entry or updates it"""
     srv = zone.find_records(name, 'SRV', desired=1)
@@ -193,6 +218,13 @@ def update_or_create_srv(zone, name, value):
         srv = zone.add_record('SRV', name, value)
     srv = zone.find_records(name, 'SRV', desired=1)
     return srv.resource_records[0]
+
+def remove_srv(zone, name):
+    """Removes a SRV entry"""
+    srv = zone.find_records(name, 'SRV', desired=1)
+    if srv:
+        srv = zone.delete_record(srv, 'Removed by RadioDNS Manager')
+
 
 def service_string(server, port):
     srv = "%d %d %d %s" % (0, 100, int(port), server)
@@ -229,6 +261,17 @@ def update_or_create_parent_ns(zone):
 
     return zone
 
+### REMOVAL
+
+def remove_station(st):
+
+    if st:
+        # _radiovis._tcp
+        remove_vissrv_station(st)
+        # _radioepg._tcp
+        remove_epgsrv_station(st)
+        # _radiotag._tcp
+        remove_tagsrv_station(st)
 
 
 ### CHECKS

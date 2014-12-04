@@ -194,7 +194,10 @@ def channels_check(request, id):
 
     (fqdn, vis, epg, tag) = object.dns_values
 
-    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'vis': vis, 'epg': epg, 'tag': tag}
+    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'expected_fqdn':object.station.fqdn,
+            'radiovis': {'service': vis, 'exptected_service': object.station.radiovis_service},
+            'radioepg': {'service': epg, 'exptected_service': object.station.radioepg_service},
+            'radiotag': {'service': tag, 'exptected_service': object.station.radiotag_service}}
 
 
 @action(route="/channels/export/", template="channels/export.html")

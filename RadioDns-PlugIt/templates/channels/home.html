@@ -52,6 +52,7 @@
 				<th>DNS Authoritative FQDN</th>
 				<th>VIS server</th>
 				<th>EPG server</th>
+				<th>TAG server</th>
 				<th style="width: 100px;"></th>
 			</tr>
 		</thead>
@@ -65,6 +66,7 @@
 					<td id="fqdn-{{c.id}}"><i class="ion-loading-c"></i></td>
 					<td id="vis-{{c.id}}"><i class="ion-loading-c"></i></td>
 					<td id="epg-{{c.id}}"><i class="ion-loading-c"></i></td>
+					<td id="tag-{{c.id}}"><i class="ion-loading-c"></i></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
 							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
@@ -85,35 +87,63 @@
 				success: function(data) {
 					if (data.fqdn) {
 						$('#fqdn-' + id).html(data.fqdn);
-						if(data.fqdn == '{{expected_fqdn}}') {
+						if(data.fqdn == data.expected_fqdn) {
 							$('#fqdn-' + id).addClass('text-success');
 						} else {
 							$('#fqdn-' + id).addClass('text-warning');
-							$('#fqdn-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected FQDN is {{expected_fqdn}}"><i class="ion-alert-circled"></i></span>');
+							$('#fqdn-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected FQDN is '+data.expected_fqdn+'"><i class="ion-alert-circled"></i></span>');
 						}
 					} else {
 						$('#fqdn-' + id).html('no radiodns entry');
 						$('#fqdn-' + id).addClass('text-danger');
 					}
 
-					if (data.vis) {
-						vis = data.vis.split(' ');
+					if (data.radiovis.service) {
+						vis = data.radiovis.service.split(' ');
 
-						$('#vis-' + id).html(vis[3] + ':' + vis[2]);
-						$('#vis-' + id).addClass('text-success');
+						var visvalue = vis[3] + ':' + vis[2];
+						$('#vis-' + id).html(visvalue);
+						if(visvalue == data.radiovis.exptected_service) {
+							$('#vis-' + id).addClass('text-success');
+						} else {
+							$('#vis-' + id).addClass('text-warning');
+							$('#vis-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioVIS is '+data.radiovis.exptected_service+'"><i class="ion-alert-circled"></i></span>');
+						}
 					} else {
 						$('#vis-' + id).html('no service');
 						$('#vis-' + id).addClass('text-danger');
 					}
 
-					if (data.epg) {
-						epg = data.epg.split(' ');
+					if (data.radioepg.service) {
+						epg = data.radioepg.service.split(' ');
 
-						$('#epg-' + id).html(epg[3] + ':' + epg[2]);
-						$('#epg-' + id).addClass('text-success');
+						var epgvalue = epg[3] + ':' + epg[2];
+						$('#epg-' + id).html(epgvalue);
+						if(epgvalue == data.radioepg.exptected_service) {
+							$('#epg-' + id).addClass('text-success');
+						} else {
+							$('#epg-' + id).addClass('text-warning');
+							$('#epg-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioEPG is '+data.radioepg.exptected_service+'"><i class="ion-alert-circled"></i></span>');
+						}
 					} else {
 						$('#epg-' + id).html('no service');
 						$('#epg-' + id).addClass('text-danger');
+					}
+
+					if (data.radiotag.service) {
+						tag = data.radiotag.service.split(' ');
+
+						var tagvalue = tag[3] + ':' + tag[2];
+						$('#tag-' + id).html(tagvalue);
+						if(tagvalue == data.radiotag.exptected_service) {
+							$('#tag-' + id).addClass('text-success');
+						} else {
+							$('#tag-' + id).addClass('text-warning');
+							$('#tag-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioTAG is '+data.radiotag.exptected_service+'"><i class="ion-alert-circled"></i></span>');
+						}
+					} else {
+						$('#tag-' + id).html('no service');
+						$('#tag-' + id).addClass('text-danger');
 					}
 				}
 			});
