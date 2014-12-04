@@ -33,30 +33,50 @@
 		</div>
 	{% endif %}
 
-	<form action="" method="POST" enctype="multipart/form-data">
+	<form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
 		{% csrf_token %}
 
-		<label>Name</label>
-		<input type="text" name="name" value="{{object.name}}">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Name:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" class="form-control" name="name" value="{{object.name}}">
+			</div>
+		</div>
 
-		<label>Radio text</label>
-		<input type="text" name="radiotext" value="{{object.radiotext}}">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Radio text:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" class="form-control" name="radiotext" value="{{object.radiotext}}">
+			</div>
+		</div>
 
-		<label>Associated Weblink</label>
-		<input type="text" name="radiolink" value="{{object.radiolink}}">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Associated Weblink:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" class="form-control" name="radiolink" value="{{object.radiolink}}">
+			</div>
+		</div>
 
-		<label>Photo</label>
-		<input type="file" name="file"> {% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
-		<br /><small>PNG or JPEG, 320x240</small>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Photo:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="file" class="form-control" name="file">
+				{% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
+				<br /><small>PNG or JPEG. Please upload an image of size 320x240.</small>
+			</div>
+		</div>
 
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}radiovis/gallery/" class="btn btn-default">Cancel</a>
-			<input type="submit" class="btn btn-primary" value="Save">
-		</span>
+		<hr />
+
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+				<input type="submit" class="btn btn-primary" value="Save">
+				<a href="{{ebuio_baseUrl}}radiovis/gallery/" class="btn btn-default">Cancel</a>
+			</div>
+		</div>
 
 	</form>
 
-	<hr style="visibility: hidden; clear: both;">
 
 {% endblock %}
 

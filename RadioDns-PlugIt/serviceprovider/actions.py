@@ -225,11 +225,6 @@ def serviceprovider_gallery_edit(request, id):
                 except:
                     pass
             object.filename = name
-            # Upload to s3
-            try:
-                awsutils.upload_public_image(sp, name, full_path)
-            except:
-                pass
 
         # Check errors
         if object.name == '':
@@ -246,6 +241,12 @@ def serviceprovider_gallery_edit(request, id):
 
         # If no errors, save
         if not errors:
+
+            # Upload to s3
+            try:
+                awsutils.upload_public_image(sp, name, full_path)
+            except:
+                pass
 
             if not object.id:
                 db.session.add(object)
@@ -285,17 +286,14 @@ def serviceprovider_gallery_setdefault(request, id):
     plugitapi = PlugItAPI(config.API_URL)
     orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
 
-    print '1'
     sp = None
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
 
     if sp:
-        print '2'
         object = LogoImage.query.filter_by(codops=orga.codops, id=int(id)).first()
 
         if object:
-            print '3'
             sp.default_logo_image = object
 
             db.session.commit()

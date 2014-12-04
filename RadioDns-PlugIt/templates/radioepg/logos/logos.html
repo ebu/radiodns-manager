@@ -38,9 +38,9 @@
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
 							<select style="margin-bottom: 0px;" onchange="switch_default({{c.id}}, $(this).val(), $(this));">
-								<option value="0" {% if not c.epg_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
+								<option value="0" {% if not c.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
 								{% for p in pictures %}
-									<option value="{{p.id}}" {% if c.epg_picture_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
+									<option value="{{p.id}}" {% if c.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
 								{% endfor %}
 							</select>
 						{% else %}

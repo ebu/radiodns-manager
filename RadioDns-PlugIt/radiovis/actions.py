@@ -3,13 +3,15 @@
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
 
-from models import db, Station, Channel, Picture, Ecc, LogEntry
-
+from models import db, Station, Channel, Picture, Ecc, LogEntry, ServiceProvider
+from plugit.api import PlugItAPI, Orga
 import urlparse
+from aws import awsutils
 
 import os
 import sys
 import time
+import uuid
 
 from werkzeug import secure_filename
 from flask import abort
@@ -44,6 +46,14 @@ def radiovis_gallery_edit(request, id):
     object = None
     errors = []
 
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
+
     if id != '-':
         object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
 
@@ -51,6 +61,9 @@ def radiovis_gallery_edit(request, id):
 
         if not object:
             object = Picture(int(request.form.get('ebuio_orgapk')))
+
+        if sp:
+            object.image_url_prefix = sp.image_url_prefix
 
         object.name = request.form.get('name')
         object.radiotext = request.form.get('radiotext')
@@ -73,17 +86,32 @@ def radiovis_gallery_edit(request, id):
 
             return None
 
+        def unique_filename(fn):
+
+            path, name = os.path.split(fn)
+            name, ext = os.path.splitext(name)
+
+            make_fn = lambda i: os.path.join(path, '%s%s' % (str(uuid.uuid4()), ext))
+
+            for i in xrange(2, sys.maxint):
+                uni_fn = make_fn(i)
+                if not os.path.exists(uni_fn):
+                    return uni_fn
+
+            return None
+
         file = request.files['file']
         if file:
             filename = secure_filename(file.filename)
-            full_path = add_unique_postfix('media/uploads/radiovis/gallery/' + filename)
+            full_path = unique_filename('media/uploads/radiovis/gallery/' + filename)
+            path, name = os.path.split(full_path)
             file.save(full_path)
             if object.filename:
                 try:
                     os.unlink(object.filename)
                 except:
                     pass
-            object.filename = full_path
+            object.filename = name
 
         # Check errors
         if object.name == '':
@@ -99,16 +127,16 @@ def radiovis_gallery_edit(request, id):
             errors.append("Please upload an image")
         else:
 
-            if imghdr.what(object.filename) not in ['jpeg', 'png']:
+            if imghdr.what(full_path) not in ['jpeg', 'png']:
                 errors.append("Image is not an png or jpeg image")
-                os.unlink(object.filename)
+                os.unlink(full_path)
                 object.filename = None
             else:
-                im = Image.open(object.filename)
+                im = Image.open(full_path)
                 if im.size != (320, 240):
                     errors.append("Image must be 320x240")
                     del im
-                    os.unlink(object.filename)
+                    os.unlink(full_path)
                     object.filename = None
 
         pieces = urlparse.urlparse(object.radiolink)
@@ -119,12 +147,30 @@ def radiovis_gallery_edit(request, id):
         # If no errors, save
         if not errors:
 
+            # Upload to s3
+            try:
+                awsutils.upload_public_image(sp, name, full_path)
+            except:
+                pass
+
             if not object.id:
                 db.session.add(object)
 
             db.session.commit()
 
+            try:
+                # Remove local copy
+                os.unlink(full_path)
+            except:
+                pass
+
             return PlugItRedirect('radiovis/gallery/?saved=yes')
+
+        try:
+            # Remove local copy
+            os.unlink(full_path)
+        except:
+            pass
 
     if object:
         object = object.json
@@ -138,9 +184,25 @@ def radiovis_gallery_edit(request, id):
 def radiovis_gallery_delete(request, id):
     """Delete a picture."""
 
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
     object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
 
-    os.unlink(object.filename)
+    # Remove File
+    try:
+        os.unlink(object.filename)
+    except:
+        pass
+    # Remove from S3
+    try:
+        awsutils.delete_public_image(sp, object.filename)
+    except:
+        pass
 
     db.session.delete(object)
     db.session.commit()
