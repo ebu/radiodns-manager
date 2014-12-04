@@ -55,6 +55,7 @@
 				<th>Name</th>
 				<th>Service Provider</th>
 				<th>FQDN</th>
+				<th>Services</th>
 				{% if ebuio_u.ebuio_orga_admin %}
 					<th>Stomp</th>
 					<th></th>
@@ -68,11 +69,28 @@
 			{% for s in list %}
 				<tr>
 					<td><strong>{{s.name}}</strong></td>
-					<td>{% if s.service_provider_data %}{{s.service_provider_data.name}}{% endif %}</td>
-					<td></td>
+					<td>{% if s.service_provider_data %}
+						{{s.service_provider_data.short_name}}
+						{% else %}
+						<span class="text-danger">
+							<i class="ion-alert-circled"></i>
+							No Service Provider linked<br />
+							<a href="{{ebuio_baseUrl}}stations/linkserviceprovider/{{s.id}}" class="btn btn-xs btn-primary">Link now</a>
+						</span>
+						{% endif %}</td>
+					<td>{% if s.service_provider_data %}{{s.service_provider_data.fqdn}}{% endif %}</td>
+					<td>
+						<span id="vis-{{s.id}}"><i class="ion-loading-c"></i></span><br />
+						<span id="epg-{{s.id}}"><i class="ion-loading-c"></i></span><br />
+						{% if RADIOTAG_ENABLED %}<span id="tag-{{s.id}}"><i class="ion-loading-c"></i></span>{% endif %}
+					</td>
 					{% if ebuio_u.ebuio_orga_admin %}
 					<td>Username: <br />Password:<br />Allowed IPs</td>
-					<td>{{s.stomp_username}}<br />{{s.random_password}}<br />{{s.ip_allowed}}</td>
+					<td>{{s.stomp_username}}<br />
+						<span id="pwd-{{s.id}}" style="display:none;">{{s.random_password}}</span>
+						<a href="#" id="pwd-btn-{{s.id}}" onclick="$('#pwd-{{s.id}}').toggle();$('#pwd-btn-{{s.id}}').toggle();return false;" class="btn btn-xs btn-default">Show password</a>
+						<br />
+						{{s.ip_allowed}}</td>
 					<td></td>
 					{% endif %}
 					<td>
@@ -88,6 +106,67 @@
 	</table>
 	</div>
 
+	<script type="text/javascript">
+		function checkStation(id) {
+			$.ajax({
+				url: '{{ebuio_baseUrl}}stations/check/' + id,
+				dataType: 'json',
+				success: function(data) {
+					if (data.radiovis) {
+						if(data.radiovis.enabled) {
+							$('#vis-' + id).html(data.radiovis.fqdn);
+							if(data.radiovis.isvalid) {
+								$('#vis-' + id).addClass('text-success');
+							}
+						} else {
+							$('#vis-' + id).addClass('text-muted');
+							$('#vis-' + id).html('vis disabled');
+						}
+					} else {
+						$('#vis-' + id).addClass('text-danger');
+						$('#vis-' + id).html('missing vis information');
+					}
+					if (data.radioepg) {
+						if(data.radioepg.enabled) {
+							$('#epg-' + id).html(data.radioepg.fqdn);
+							if(data.radioepg.isvalid) {
+								$('#epg-' + id).addClass('text-success');
+							}
+						} else {
+							$('#epg-' + id).addClass('text-muted');
+							$('#epg-' + id).html('epg disabled');
+						}
+					} else {
+						$('#epg-' + id).addClass('text-danger');
+						$('#epg-' + id).html('missing epg information');
+					}
+					if (data.radiotag) {
+						if(data.radiotag.enabled) {
+							$('#tag-' + id).html(data.radiotag.fqdn);
+							if(data.radiotag.isvalid) {
+								$('#tag-' + id).addClass('text-success');
+							}
+						} else {
+							$('#tag-' + id).addClass('text-muted');
+							$('#tag-' + id).html('tag disabled');
+						}
+					} else {
+						$('#tag-' + id).addClass('text-danger');
+						$('#tag-' + id).html('missing tag information');
+					}
+
+				}
+			});
+
+			// Tool Tips
+			$('[data-toggle="tooltip"]').tooltip({html: true});
+		}
+
+		{% for c in list %}
+			checkStation({{c.id}});
+		{% endfor %}
+
+	</script>
 
 {% endblock %}
 

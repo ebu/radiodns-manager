@@ -88,6 +88,48 @@
 		</div>
 		<label></label>
 
+
+		<hr />
+
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Enable RadioVIS:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="checkbox" name="radiovis_enabled" id="radiovis_enabled" class="form-control" value="radiovis_enabled" {% if object.radiovis_enabled %} checked="checked" {% endif %} />
+			</div>
+		</div>
+		<div class="form-group" id="radiovis_enabled_options" {% if not object.radiovis_enabled %} style="display:none;" {% endif %}>
+			<label class="col-sm-3 col-md-3 control-label">RadioVIS Service Uri:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="radiovis_service" id="radiovis_service" class="form-control" value="{{object.radiovis_service}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Enable RadioEPG:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="checkbox" name="radioepg_enabled" id="radioepg_enabled" class="form-control" value="radioepg_enabled" {% if object.radioepg_enabled %} checked="checked" {% endif %} />
+			</div>
+		</div>
+		<div class="form-group" id="radioepg_enabled_options" {% if not object.radioepg_enabled %} style="display:none;" {% endif %}>
+			<label class="col-sm-3 col-md-3 control-label">RadioEPG Service Uri:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="radioepg_service" id="radioepg_service" class="form-control" value="{{object.radioepg_service}}" />
+			</div>
+		</div>
+		{% if RADIOTAG_ENABLED %}
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Enable RadioTAG:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="checkbox" name="radiotag_enabled" id="radiotag_enabled" class="form-control" value="radiotag_enabled" {% if object.radiotag_enabled %} checked="checked" {% endif %} />
+			</div>
+		</div>
+		<div class="form-group" id="radiotag_enabled_options" {% if not object.radiotag_enabled %} style="display:none;" {% endif %}>
+			<label class="col-sm-3 col-md-3 control-label">RadioTAG Service Uri:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="radiotag_service" id="radiotag_service" class="form-control" value="{{object.radiotag_service}}" />
+			</div>
+		</div>
+		{% endif %}
+
 		<hr />
 
 		<div class="form-group">
@@ -107,10 +149,33 @@
 			return false;
 		}
 
+		$('#radiovis_enabled').click(function () {
+			$("#radiovis_enabled_options").toggle(this.checked);
+			if(this.checked && $("#radiovis_service").val() == "") {
+				$("#radiovis_service").val('{{default_radiovis_service}}');
+			} else {
+				$("#radiovis_service").val('');
+			}
+		});
+		$('#radioepg_enabled').click(function () {
+			$("#radioepg_enabled_options").toggle(this.checked);
+			if(this.checked && $("#radioepg_service").val() == "") {
+				$("#radioepg_service").val('{{default_radioepg_service}}')
+			} else {
+				$("#radioepg_service").val('');
+			}
+		});
+		$('#radiotag_enabled').click(function () {
+			$("#radiotag_enabled_options").toggle(this.checked);
+			if(this.checked && $("#radiotag_service").val() == "") {
+				$("#radiotag_service").val('{{default_radiotag_service}}')
+			} else {
+				$("#radiotag_service").val('');
+			}
+		});
 
 	</script>
 
-	<hr style="visibility: hidden; clear: both;">
 
 {% endblock %}
 

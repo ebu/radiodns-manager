@@ -2,8 +2,9 @@
 
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
-
-from models import db, Station
+from plugit.api import PlugItAPI, Orga
+import config
+from models import db, Station, ServiceProvider
 
 import json
 
@@ -22,7 +23,7 @@ def stations_home(request):
     deleted = request.args.get('deleted') == 'yes'
     passworded = request.args.get('passworded') == 'yes'
 
-    return {'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded}
+    return {'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded, 'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
 @action(route="/stations/edit/<id>", template="stations/edit.html", methods=['POST', 'GET'])
@@ -51,6 +52,23 @@ def stations_edit(request, id):
         genre_href = request.form.getlist('genrehref[]')
         genre_name = request.form.getlist('genrename[]')
 
+        # Services
+        radiovis_enabled = False
+        if 'radiovis_enabled' in request.form:
+            radiovis_enabled = True
+        object.radiovis_enabled = radiovis_enabled
+        object.radiovis_service = request.form.get('radiovis_service')
+        radioepg_enabled = False
+        if 'radioepg_enabled' in request.form:
+            radioepg_enabled = True
+        object.radioepg_enabled = radioepg_enabled
+        object.radioepg_service = request.form.get('radioepg_service')
+        radiotag_enabled = False
+        if 'radiotag_enabled' in request.form:
+            radiotag_enabled = True
+        object.radiotag_enabled = radiotag_enabled
+        object.radiotag_service = request.form.get('radiotag_service')
+
         for h in genre_href:
             genres.append({'href': h, 'name': genre_name.pop(0)})
 
@@ -74,7 +92,11 @@ def stations_edit(request, id):
     if object:
         object = object.json
 
-    return {'object': object, 'errors': errors}
+    return {'object': object, 'errors': errors,
+            'default_radiovis_service':config.RADIOVIS_SERVICE_DEFAULT,
+            'default_radioepg_service':config.RADIOEPG_SERVICE_DEFAULT,
+            'default_radiotag_service':config.RADIOTAG_SERVICE_DEFAULT,
+            'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
 @action(route="/stations/delete/<id>")
@@ -101,3 +123,38 @@ def stations_newpassword(request, id):
     db.session.commit()
 
     return PlugItRedirect('stations/?passworded=yes')
+
+@action(route="/stations/linkserviceprovider/<id>")
+@json_only()
+@only_orga_admin_user()
+def stations_linkserviceprovider(request, id):
+    """Link station to its service provider."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+        if sp:
+            object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+            object.service_provider = sp;
+
+            db.session.commit()
+
+    return PlugItRedirect('stations/?serviceprovider=yes')
+
+@action(route="/stations/check/<id>")
+@json_only()
+@only_orga_member_user()
+def station_check(request, id):
+    """Check AWS State for Station."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    station = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+
+    if station:
+        return station.check_aws()
+
+    return {'isvalid': False}
