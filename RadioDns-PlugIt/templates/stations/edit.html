@@ -40,9 +40,17 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="name" class="form-control" value="{{object.name}}">
+				<input type="text" name="name" id="station-name" class="form-control" value="{{object.name}}">
 			</div>
 		</div>
+		{% if object.id %}
+		<div class="form-group" id="station-name-change-warning" style="display:none;">
+			<div class="col-sm-9 col-md-7 col-sm-offset-3 alert alert-danger" role="alert">
+				<p><strong>Changing the Station's name is not recommended as this will require manual DNS changes.</strong> <br />
+				Please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) for further information</p>
+			</div>
+		</div>
+		{% endif %}
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Short name:</label>
@@ -55,18 +63,6 @@
 			<label class="col-sm-3 col-md-3 control-label">Short description:</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
-			</div>
-		</div>
-
-		<hr />
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br /> to the radiovis server:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="ip_allowed" class="form-control" value="{{object.ip_allowed}}"><br />
-				<small>
-					A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
-				</small>
 			</div>
 		</div>
 
@@ -97,10 +93,21 @@
 				<input type="checkbox" name="radiovis_enabled" id="radiovis_enabled" class="form-control" value="radiovis_enabled" {% if object.radiovis_enabled %} checked="checked" {% endif %} />
 			</div>
 		</div>
-		<div class="form-group" id="radiovis_enabled_options" {% if not object.radiovis_enabled %} style="display:none;" {% endif %}>
-			<label class="col-sm-3 col-md-3 control-label">RadioVIS Service Uri:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="radiovis_service" id="radiovis_service" class="form-control" value="{{object.radiovis_service}}" />
+		<div id="radiovis_enabled_options" {% if not object.radiovis_enabled %} style="display:none;" {% endif %}>
+			<div class="form-group" >
+				<label class="col-sm-3 col-md-3 control-label">RadioVIS Service Uri:</label>
+				<div class="col-sm-9 col-md-7">
+					<input type="text" name="radiovis_service" id="radiovis_service" class="form-control" value="{{object.radiovis_service}}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br /> to the radiovis server:</label>
+				<div class="col-sm-9 col-md-7">
+					<input type="text" name="ip_allowed" class="form-control" value="{{object.ip_allowed}}"><br />
+					<small>
+						A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
+					</small>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
@@ -148,6 +155,26 @@
 			$(elem).parent().parent().remove();
 			return false;
 		}
+
+		{% if object.id %}
+		var initialName = $('#station-name').val();
+		$('#station-name').keypress(function( event ) {
+			var newName = $('#station-name').val();
+			if(initialName != newName) {
+				$('#station-name-change-warning').show();
+			} else {
+				$('#station-name-change-warning').hide();
+			}
+		});
+		$('#station-name').change(function( event ) {
+			var newName = $('#station-name').val();
+			if(initialName != newName) {
+				$('#station-name-change-warning').show();
+			} else {
+				$('#station-name-change-warning').hide();
+			}
+		});
+		{% endif %}
 
 		$('#radiovis_enabled').click(function () {
 			$("#radiovis_enabled_options").toggle(this.checked);

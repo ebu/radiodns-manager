@@ -57,9 +57,7 @@
 				<th>FQDN</th>
 				<th>Services</th>
 				{% if ebuio_u.ebuio_orga_admin %}
-					<th>Stomp</th>
-					<th></th>
-					<th></th>
+					<th colspan="2">RadioVIS Stomp</th>
 				{% endif %}
 				<th style="width: 200px;"></th>
 			</tr>
@@ -78,12 +76,13 @@
 							<a href="{{ebuio_baseUrl}}stations/linkserviceprovider/{{s.id}}" class="btn btn-xs btn-primary">Link now</a>
 						</span>
 						{% endif %}</td>
-					<td>{% if s.service_provider_data %}{{s.service_provider_data.fqdn}}{% endif %}</td>
+					<td>{% if s.service_provider_data %}{{s.fqdn}}{% endif %}</td>
 					<td>
 						<span id="vis-{{s.id}}"><i class="ion-loading-c"></i></span><br />
 						<span id="epg-{{s.id}}"><i class="ion-loading-c"></i></span><br />
 						{% if RADIOTAG_ENABLED %}<span id="tag-{{s.id}}"><i class="ion-loading-c"></i></span>{% endif %}
 					</td>
+					{% if s.radiovis_enabled %}
 					{% if ebuio_u.ebuio_orga_admin %}
 					<td>Username: <br />Password:<br />Allowed IPs</td>
 					<td>{{s.stomp_username}}<br />
@@ -91,6 +90,9 @@
 						<a href="#" id="pwd-btn-{{s.id}}" onclick="$('#pwd-{{s.id}}').toggle();$('#pwd-btn-{{s.id}}').toggle();return false;" class="btn btn-xs btn-default">Show password</a>
 						<br />
 						{{s.ip_allowed}}</td>
+					{% endif %}
+					{% else %}
+					<td></td>
 					<td></td>
 					{% endif %}
 					<td>

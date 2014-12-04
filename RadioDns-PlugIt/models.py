@@ -179,7 +179,8 @@ class Station(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'epg_picture_data', 'genres_list'])
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'epg_picture_data', 'genres_list',
+                                              'fqdn'])
 
 
 class Ecc(db.Model):
@@ -315,6 +316,7 @@ class Channel(db.Model):
         fqdn = ''
         vis = ''
         epg = ''
+        tag = ''
 
         dns_entry = self.radiodns_entry
 

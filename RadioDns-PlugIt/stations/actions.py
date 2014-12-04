@@ -5,7 +5,7 @@ from plugit.utils import action, only_orga_member_user, only_orga_admin_user, Pl
 from plugit.api import PlugItAPI, Orga
 import config
 from models import db, Station, ServiceProvider
-
+from aws import awsutils
 import json
 
 
@@ -41,6 +41,13 @@ def stations_edit(request, id):
 
         if not object:
             object = Station(int(request.form.get('ebuio_orgapk')))
+            plugitapi = PlugItAPI(config.API_URL)
+            orga = plugitapi.get_orga(request.form.get('ebuio_orgapk'))
+
+            if orga.codops:
+                sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+                if sp:
+                    object.service_provider = sp;
 
         object.name = request.form.get('name')
         object.short_name = request.form.get('short_name')
@@ -53,21 +60,38 @@ def stations_edit(request, id):
         genre_name = request.form.getlist('genrename[]')
 
         # Services
+        object.radiovis_service = request.form.get('radiovis_service')
         radiovis_enabled = False
         if 'radiovis_enabled' in request.form:
             radiovis_enabled = True
+            awsutils.update_or_create_vissrv_station(object)
+        else:
+            if object.radiovis_enabled:
+                # Previously enabled
+                awsutils.remove_vissrv_station(object)
         object.radiovis_enabled = radiovis_enabled
-        object.radiovis_service = request.form.get('radiovis_service')
+
+        object.radioepg_service = request.form.get('radioepg_service')
         radioepg_enabled = False
         if 'radioepg_enabled' in request.form:
             radioepg_enabled = True
+            awsutils.update_or_create_epgsrv_station(object)
+        else:
+            if object.radioepg_enabled:
+                # Previously enabled
+                awsutils.remove_epgsrv_station(object)
         object.radioepg_enabled = radioepg_enabled
-        object.radioepg_service = request.form.get('radioepg_service')
+
+        object.radiotag_service = request.form.get('radiotag_service')
         radiotag_enabled = False
         if 'radiotag_enabled' in request.form:
             radiotag_enabled = True
+            awsutils.update_or_create_tagsrv_station(object)
+        else:
+            if object.radiotag_enabled:
+                # Previously enabled
+                awsutils.remove_tagsrv_station(object)
         object.radiotag_enabled = radiotag_enabled
-        object.radiotag_service = request.form.get('radiotag_service')
 
         for h in genre_href:
             genres.append({'href': h, 'name': genre_name.pop(0)})
@@ -106,6 +130,7 @@ def stations_delete(request, id):
     """Delete a station."""
 
     object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+    awsutils.remove_station(object)
     db.session.delete(object)
     db.session.commit()
 
