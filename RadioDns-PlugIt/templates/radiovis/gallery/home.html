@@ -9,28 +9,32 @@
 
 {% block content %}
 
-    {% block pageheader %}
+	{% block pageheader %}
     <div class="menubar">
         <div class="sidebar-toggler visible-xs">
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            RadioVIS: Gallery
+            RadioVIS :: Gallery
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
-        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %}
+            {% if ebuio_u.ebuio_orga_admin %}
+                    <a href="{{ebuio_baseUrl}}radiovis/gallery/edit/-" class="btn btn-primary">Add a new image</a>
+            {% endif %}
+            {% endblock %}</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
 
 	{% if saved %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Picture has been saved
 		</div>
 	{% endif %}
 
 	{% if deleted %}
-		<div class="alert">
+		<div class="alert alert-success" role="alert">
 			Picture has been deleted
 		</div>
 	{% endif %}
@@ -52,11 +56,11 @@
 					<td>{{s.name}}</td>
 					<td>{{s.radiotext}}</td>
 					<td>{{s.radiolink}}</td>
-					<td><img class="tooltipme" src="{{ebuio_baseUrl}}{{s.filename}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{ebuio_baseUrl}}{{s.filename}}' width='320' height='240'>"></td>
+					<td><img class="tooltipme" src="{{s.public_url}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{s.public_url}}' width='320' height='240'>"></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/delete/{{s.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/{{s.id}}" class="btn btn-mini btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}radiovis/gallery/delete/{{s.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/{{s.id}}" class="btn btn-xs btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>
@@ -68,13 +72,6 @@
 		$('.tooltipme').tooltip({html: true});
 	</script>
 
-	{% if ebuio_u.ebuio_orga_admin %}
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/-" class="btn btn-primary">Add a new picture</a>
-		</span>
-	{% endif %}
-
-	<hr style="visibility: hidden; clear: both;">
 
 {% endblock %}
 

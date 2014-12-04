@@ -52,7 +52,7 @@
 			{% for s in list %}
 				<tr>
 					<td>{{s.name}}</td>
-					<td><img class="tooltipme" src="{{image_url_prefix}}{{s.filename}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{image_url_prefix}}{{s.filename}}' width='240' height='240'>"></td>
+					<td><img class="tooltipme" src="{{s.public_url}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{s.public_url}}' width='240' height='240'>"></td>
 					<td nowrap="nowrap">
 						{% if ebuio_u.ebuio_orga_admin %}
 							<a href="{{ebuio_baseUrl}}serviceprovider/images/default/{{s.id}}" class="btn btn-xs btn-info">Set as Provider Default</a>

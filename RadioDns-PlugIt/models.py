@@ -113,7 +113,9 @@ class Station(db.Model):
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
-    epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+    #epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+    default_logo_image_id = db.Column(db.Integer, db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
+    default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
 
     @property
     def service_provider_data(self):
@@ -130,9 +132,9 @@ class Station(db.Model):
             return []
 
     @property
-    def epg_picture_data(self):
-        if self.epg_picture:
-            return self.epg_picture.json
+    def default_logo_image_data(self):
+        if self.default_logo_image:
+            return self.default_logo_image.json
         else:
             return None
 
@@ -179,7 +181,7 @@ class Station(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'epg_picture_data', 'genres_list',
+        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data', 'genres_list',
                                               'fqdn'])
 
 
@@ -373,6 +375,7 @@ class Picture(db.Model):
     filename = db.Column(db.String(255))
     radiotext = db.Column(db.String(255))
     radiolink = db.Column(db.String(255))
+    image_url_prefix = db.Column(db.String(255))
 
     channels = db.relationship('Channel', backref='default_picture', lazy='dynamic')
 
@@ -390,8 +393,12 @@ class Picture(db.Model):
         return self.filename.split('/')[-1]
 
     @property
+    def public_url(self):
+        return "%s%s" % (self.image_url_prefix, self.filename)
+
+    @property
     def json(self):
-        return to_json(self, self.__class__, ['clean_filename'])
+        return to_json(self, self.__class__, ['clean_filename', 'public_url'])
 
 
 class LogEntry(db.Model):
@@ -534,7 +541,7 @@ class PictureForEPG(db.Model):
     name = db.Column(db.String(80))
     filename = db.Column(db.String(255))
 
-    stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
+    #stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
 
     def __init__(self, orga):
         self.orga = orga
@@ -570,6 +577,8 @@ class LogoImage(db.Model):
 
     service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
     service_provider = db.relationship("ServiceProvider", backref='logo_images', uselist=False, foreign_keys=[service_provider_id])
+
+    stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
 
     def __init__(self, orga):
         self.orga = orga
