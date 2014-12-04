@@ -372,7 +372,7 @@ def radioepg_servicefollowing_delete(request, id):
 @action(route="/radioepg/servicefollowing/turn/<mode>/<id>")
 @json_only()
 @only_orga_admin_user()
-def radioepg_servicefollowing_trun(request, mode, id):
+def radioepg_servicefollowing_turn(request, mode, id):
     """Turn on or off a servicefollowing entry."""
 
     object = GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()

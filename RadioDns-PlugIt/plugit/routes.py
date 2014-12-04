@@ -9,6 +9,8 @@ def load_routes(app, actions):
     @app.route('/radiodns/epg/XSI.xml')
     def epg_xml():
         """Special call for EPG xml"""
+        # Specified by 3.1.1 /radiodns/epg/XSI.xml
+        # http://radiodns.org/wp-content/uploads/2013/10/REPG01-v1.1.pdf
 
         from models import Station, Channel, GenericServiceFollowingEntry, Ecc
         from flask import render_template, Response
