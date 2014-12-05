@@ -242,11 +242,40 @@ def serviceprovider_gallery_edit(request, id):
         # If no errors, save
         if not errors:
 
-            # Upload to s3
+            # Upload MAIN Image to s3
             try:
                 awsutils.upload_public_image(sp, name, full_path)
             except:
                 pass
+
+            # Create Required Image Sizes
+            from PIL import Image
+            for size in config.RADIODNS_REQUIRED_IMAGESIZES:
+                filename_prefix = '%dx%d/' % (size[0], size[1])
+                image = Image.open(full_path)
+                image.thumbnail(size, Image.ANTIALIAS)
+                background = Image.new('RGBA' if full_path else 'RGB', size, (255, 255, 255, 0))
+                background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
+                unique_path = unique_filename(full_path)
+                background.save(unique_path)
+                # Upload to s3
+                try:
+                    s3filename = filename_prefix + name
+                    awsutils.upload_public_image(sp, s3filename, unique_path)
+                    if size == (32, 32):
+                        object.url32x32 = s3filename
+                    if size == (112, 32):
+                        object.url112x32 = s3filename
+                    if size == (128, 128):
+                        object.url128x128 = s3filename
+                    if size == (320, 240):
+                        object.url320x240 = s3filename
+                    if size == (600, 600):
+                        object.url600x600 = s3filename
+                except:
+                    pass
+                # Delete Temporary file
+                os.unlink(unique_path)
 
             if not object.id:
                 db.session.add(object)
@@ -328,6 +357,14 @@ def serviceprovider_gallery_delete(request, id):
         awsutils.delete_public_image(sp, object.filename)
     except:
         pass
+
+    # Remove from S3 other sizes
+    for size in config.RADIODNS_REQUIRED_IMAGESIZES:
+        filename_prefix = '%dx%d/' % (size[0], size[1])
+        try:
+            awsutils.delete_public_image(sp, filename_prefix + object.filename)
+        except:
+            pass
 
     import glob
     for f in glob.glob('media/uploads/serviceprovider/cache/*_L%s.png' % (object.id,)):

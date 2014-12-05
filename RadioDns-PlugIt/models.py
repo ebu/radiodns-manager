@@ -605,7 +605,39 @@ class LogoImage(db.Model):
             return "%s%s" % (self.service_provider.image_url_prefix, self.filename)
         else:
             return None
+    @property
+    def public_32x32_url(self):
+        if self.url32x32:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url32x32)
+        else:
+            return self.public_url
+    @property
+    def public_112x32_url(self):
+        if self.url112x32:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url112x32)
+        else:
+            return self.public_url
+    @property
+    def public_128x128_url(self):
+        if self.url128x128:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url128x128)
+        else:
+            return self.public_url
+    @property
+    def public_320x240_url(self):
+        if self.url320x240:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url320x240)
+        else:
+            return self.public_url
+    @property
+    def public_600x600_url(self):
+        if self.url600x600:
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url600x600)
+        else:
+            return self.public_url
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['clean_filename', 'public_url'])
+        return to_json(self, self.__class__, ['clean_filename', 'public_url',
+                                              'public_32x32_url', 'public_112x32_url', 'public_128x128_url',
+                                              'public_320x240_url', 'public_600x600_url'])

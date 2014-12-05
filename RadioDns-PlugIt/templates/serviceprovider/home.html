@@ -117,7 +117,7 @@
             </div>
             {% if serviceprovider.default_logo_image_data %}
             <div class="col-md-3 col-md-offset-1">
-                <img style="width: 100%;" src="{{serviceprovider.default_logo_image_data.public_url}}">
+                <img style="width: 100%; max-width:600px;" src="{{serviceprovider.default_logo_image_data.public_600x600_url}}">
             </div>
             {% endif %}
         </div>
