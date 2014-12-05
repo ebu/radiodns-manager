@@ -90,9 +90,15 @@ class Station(db.Model):
     orga = db.Column(db.Integer)
     name = db.Column(db.String(80))
     short_name = db.Column(db.String(8))
+    medium_name = db.Column(db.String(16))
+    long_name = db.Column(db.String(128))
+    short_description = db.Column(db.String(180))
+    long_description = db.Column(db.String(1200))
+    url_default = db.Column(db.String(255))
     random_password = db.Column(db.String(32))
 
     # Services
+    #fqdn_station_prefix = db.Column(db.String(255)) maybe to add due to filtering issue in Alchemy
     radiovis_enabled = db.Column(db.Boolean)
     radiovis_service = db.Column(db.String(255))
     radioepg_enabled = db.Column(db.Boolean)
@@ -182,7 +188,7 @@ class Station(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data', 'genres_list',
-                                              'fqdn'])
+                                              'fqdn', 'fqdn_prefix'])
 
 
 class Ecc(db.Model):

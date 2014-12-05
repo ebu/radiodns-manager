@@ -1,8 +1,8 @@
 from params import PI_BASE_URL
 from views import *
-
-from flask import abort, send_from_directory
-
+import config
+from flask import abort, send_from_directory, request
+import re
 
 def load_routes(app, actions):
 
@@ -10,60 +10,90 @@ def load_routes(app, actions):
     def epg_xml():
         """Special call for EPG xml"""
         # Specified by 3.1.1 /radiodns/epg/XSI.xml
+        # http://<host>:<port>/radiodns/epg/XSI.xml
         # http://radiodns.org/wp-content/uploads/2013/10/REPG01-v1.1.pdf
 
-        from models import Station, Channel, GenericServiceFollowingEntry, Ecc
-        from flask import render_template, Response
+        #        chrts.epg.radio.ebu.io >> XSI for all CHRTS Channels
+        # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
 
-        stations = Station.query.all()
+        if config.XSISERVING_ENABLED:
 
-        import datetime
+            from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
+            from flask import render_template, Response
+            import datetime
+            time_format = '%Y-%m-%dT%H:%M:%S%z'
 
-        time_format = '%Y-%m-%dT%H:%M:%S%z'
+            sp = None
+            stations = None
 
-        list = []
+            # Find out what stations to serve if by codops or station
+            regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.'+config.XSISERVING_DOMAIN)
+            r = regex.search(request.host)
+            if r:
+                station = r.groupdict()['station']
+                provider = r.groupdict()['provider']
 
-        for elem in stations:
+                if provider:
+                    # We have a station based query
+                    sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
+                    stations = Station.query.filter_by(service_provider_id=sp.id, radioepg_enabled=True) #, fqdn_prefix=station)
 
-            entries = []
+                if station:
+                    # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
+                    stations = filter(lambda x: x.fqdn_prefix == station, stations)
+            else:
+                stations = Station.query.filter_by(radioepg_enabled=True)
 
-            # Channels
-            for elem2 in elem.channels.order_by(Channel.name).all():
-                if elem2.servicefollowingentry.active:
-                    entries.append(elem2.servicefollowingentry.json)
+            if not sp:
+                sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
 
-                    if elem2.type_id == 'fm':  # For FM, also add with the country code
-                        try:
-                            data2 = elem2.servicefollowingentry.json
+            list = []
 
-                            # Split the URI
-                            uri_dp = data2['uri'].split(':', 2)
-                            uri_p = uri_dp[1].split('.')
+            for elem in stations:
 
-                            pi_code = uri_p[0]
+                entries = []
 
-                            # Get the ISO code form the picode
-                            ecc = Ecc.query.filter_by(pi=pi_code[0].upper(), ecc=pi_code[1:].upper()).first()
+                # Channels
+                for elem2 in elem.channels.order_by(Channel.name).all():
+                    if elem2.servicefollowingentry.active:
+                        entries.append(elem2.servicefollowingentry.json)
 
-                            uri_p[0] = ecc.iso.lower()
+                        if elem2.type_id == 'fm':  # For FM, also add with the country code
+                            try:
+                                data2 = elem2.servicefollowingentry.json
 
-                            # Update the new URL
-                            data2['uri'] = uri_dp[0] + ':' + '.'.join(uri_p)
+                                # Split the URI
+                                uri_dp = data2['uri'].split(':', 2)
+                                uri_p = uri_dp[1].split('.')
 
-                            # Add the service
-                            entries.append(data2)
+                                pi_code = uri_p[0]
 
-                        except:
-                            pass
+                                # Get the ISO code form the picode
+                                ecc = Ecc.query.filter_by(pi=pi_code[0].upper(), ecc=pi_code[1:].upper()).first()
 
-            # Custom entries
-            for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
-                if elem2.active:
-                    entries.append(elem2.json)
+                                uri_p[0] = ecc.iso.lower()
 
-            if entries:
-                list.append([elem.json, entries])
-        return Response(render_template('radioepg/servicefollowing/xml.html', stations=list, creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+                                # Update the new URL
+                                data2['uri'] = uri_dp[0] + ':' + '.'.join(uri_p)
+
+                                # Add the service
+                                entries.append(data2)
+
+                            except:
+                                pass
+
+                # Custom entries
+                for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+                    if elem2.active:
+                        entries.append(elem2.json)
+
+                if entries:
+                    list.append([elem.json, entries])
+            return Response(render_template('radioepg/servicefollowing/xml.html', stations=list, service_provider=sp,
+                                            creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+
+        # Else
+        abort(404)
 
     @app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
     def logo(id, w, h):
