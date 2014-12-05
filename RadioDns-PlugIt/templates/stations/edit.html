@@ -40,7 +40,8 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="name" id="station-name" class="form-control" value="{{object.name}}">
+				<input type="text" name="name" id="station-name" class="form-control" value="{{object.name}}"><br />
+				<small>Technical Description for usernames and RadioDNS Naming.</small>
 			</div>
 		</div>
 		{% if object.id %}
@@ -52,20 +53,52 @@
 		</div>
 		{% endif %}
 
+		<hr />
+
 		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Short name:</label>
+			<label class="col-sm-3 col-md-3 control-label">Short name (8 chars)</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="text" name="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Medium name (16 chars)</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Long name (128 chars)</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
+			</div>
+		</div>
+
+		<hr />
 
 		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Short description:</label>
+			<label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
 			</div>
 		</div>
 
+		{% comment %}
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="long_description" class="form-control" value="{{object.long_description}}" maxlength="180">
+			</div>
+		</div>
+		{% endcomment %}
+
+		<hr />
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Default Url:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
+			</div>
+		</div>
 		<hr />
 
 		<div class="form-group">

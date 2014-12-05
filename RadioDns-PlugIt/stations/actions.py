@@ -51,7 +51,11 @@ def stations_edit(request, id):
 
         object.name = request.form.get('name')
         object.short_name = request.form.get('short_name')
+        object.medium_name = request.form.get('medium_name')
+        object.long_name = request.form.get('long_name')
         object.short_description = request.form.get('short_description')
+        object.long_description = request.form.get('long_description')
+        object.url_default = request.form.get('url_default')
         object.ip_allowed = request.form.get('ip_allowed')
 
         genres = []

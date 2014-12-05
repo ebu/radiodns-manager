@@ -66,7 +66,8 @@ def delete_public_image(service_provider, filename):
 
 def get_public_urlprefix(service_provider):
     """Public Url to filename"""
-    return "//%s.%s/" % ('static', service_provider.fqdn.lower().rstrip('.'))
+    # TODO Handle https depending on AWS
+    return "http://%s.%s/" % ('static', service_provider.fqdn.lower().rstrip('.'))
 
 def get_public_image_url(service_provider, filename):
     """Public Url to filename"""

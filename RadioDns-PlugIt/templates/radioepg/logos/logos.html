@@ -48,6 +48,19 @@
 						{% endif %}
 					</td>
 				</tr>
+				{% if c.radioepg_enabled %}
+				<tr>
+					<td></td>
+					<td>
+						For Directory Service Discovery on you Webpage, include the following in the head section of your webpages:
+						<pre>
+<code class="language-html" data-lang="html">&lt;head&gt;
+	&lt;link rel="radioepg"￼href="http://{{c.radioepg_service}}/radiodns/epg/XSI.xml"&gt;
+&lt;/head&gt;</code></pre>
+					</td>
+				</tr>
+				{% endif %}
+
 			{% endfor %}
 		</tbody>
 	</table>
