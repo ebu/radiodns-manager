@@ -8,3 +8,5 @@ requests
 beaker
 blinker
 raven
+Pillow
+boto
