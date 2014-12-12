@@ -1,8 +1,8 @@
-from fabric.api import sudo, run, task, env, settings, put, cd
+from fabric.api import *
+from fabric.contrib.files import upload_template, append, sed
 import config
 import utils
 
-from fabric.contrib.files import upload_template, append
 
 # list of dependencies to install
 DEPENDENCIES = ['python-gevent', 'python-setuptools', 'debconf-utils', 'python-mysqldb',  'apache2', 'libapache2-mod-wsgi', 'git', 'python-imaging']
@@ -54,21 +54,22 @@ def install_dependencies():
 @task
 def create_database():
     """Create the mysql database"""
-    mysql_execute("CREATE DATABASE %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" % (config.MYSQL_DATABSE,), "root", config.MYSQL_PASSWORD)
+    mysql_execute("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" % (config.MYSQL_DATABASE,), "root", config.MYSQL_PASSWORD)
 
 
 @task
 def create_user():
     """Create the mysql suer"""
-    mysql_execute("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (config.MYSQL_USER, config.MYSQL_PASSWORD), "root", config.MYSQL_PASSWORD)
-    mysql_execute("GRANT ALL ON %s.* TO '%s'@'localhost'; FLUSH PRIVILEGES;" % (config.MYSQL_DATABSE, config.MYSQL_USER), "root", config.MYSQL_PASSWORD)
+    with settings(warn_only=True):
+        mysql_execute("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (config.MYSQL_USER, config.MYSQL_PASSWORD), "root", config.MYSQL_PASSWORD)
+        mysql_execute("GRANT ALL ON %s.* TO '%s'@'localhost'; FLUSH PRIVILEGES;" % (config.MYSQL_DATABASE, config.MYSQL_USER), "root", config.MYSQL_PASSWORD)
 
 
 @task
 def install_pip_dependencies():
     """Install the PIP_DEPENDENCIES for the project
     """
-    put(conf('pip_requirements.txt'), 'pip_requirements.txt')
+    put(conf('configFiles/pip_requirements.txt'), 'pip_requirements.txt')
     sudo('pip install -r pip_requirements.txt')
     run('rm pip_requirements.txt')
 
@@ -78,47 +79,57 @@ def git_init():
     """Init the git repository"""
 
     # Copy the deploy key
-    put(config.GIT_PRIV_KEY, '~/.ssh/id_rsa')
+    put(config.RADIODNS_GIT_KEY, '~/.ssh/id_rsa')
     run('chmod 600 ~/.ssh/id_rsa')
 
     # To avoid testing of the server key (who ask a question)
     append('~/.ssh/config', "Host github.com\n\tStrictHostKeyChecking no\n")
 
-    # Init the repo in ~/gitrepo and pull the folder with the django application
+    # Init the repo in ~/gitrepo-plugit and pull the folder with the flask application
+    run('rm -rf ~/gitrepo-plugit')
     run('git init ~/gitrepo-plugit')
     with cd('~/gitrepo-plugit'):
-        run('git remote add -m ' + config.GIT_BRANCH + ' origin ' + config.GIT_REPO)
+        run('git remote add -m ' + config.RADIODNS_BRANCH + ' origin ' + config.RADIODNS_REPO)
         run('git config core.sparsecheckout true')
-        append(".git/info/sparse-checkout", config.GIT_PLUGITDIR)
-        run('git pull origin ' + config.GIT_BRANCH)
+        append(".git/info/sparse-checkout", config.RADIODNS_FOLDER)
+        run('git pull origin ' + config.RADIODNS_BRANCH)
 
 
 @task
 def pull_code():
     """Pull the latest version from the git repository"""
     with cd('~/gitrepo-plugit'):
-        run('git pull origin ' + config.GIT_BRANCH)
+        run('git pull origin ' + config.RADIODNS_BRANCH)
 
 
 @task
 def configure():
     """Configure apache and the flask server"""
 
-    upload_template(conf('config.py'), '~/gitrepo-plugit/' + config.GIT_PLUGITDIR + 'config.py', {
-        'PLUGIT_API_URL': config.PLUGIT_API_URL,
-        'SQLALCHEMY_URL': config.SQLALCHEMY_URL,
-        'API_SECRET': config.API_SECRET,
-        'API_BASE_URL': config.API_BASE_URL,
-        'API_ALLOWD_IPS': config.API_ALLOWD_IPS
-    })
+    upload_template('plugit/configFiles/config.py',
+                    '~/gitrepo-plugit/' + config.RADIODNS_FOLDER + '/config.py',
+                    context={'PLUGIT_API_URL': config.RADIODNS_PLUGIT_API_URL,
+                             'SQLALCHEMY_URL': config.RADIODNS_SQLALCHEMY_URL,
+                             'API_SECRET': config.RADIODNS_API_SECRET,
+                             'PI_BASE_URL': config.RADIODNS_API_BASE_URL,
+                             'PI_ALLOWED_NETWORKS': config.RADIODNS_API_ALLOWED_IPS,
+                             'SENTRY_DSN': config.RADIODNS_SENTRY_DSN,
+                             'AWS_ACCESS_KEY': config.RADIODNS_AWS_ACCESS_KEY,
+                             'AWS_SECRET_KEY': config.RADIODNS_AWS_SECRET_KEY,
+                            }, use_jinja=True)
 
     # Disable default site
-    sudo('a2dissite default', pty=True)
+    sudo('a2dissite 000-default.conf', pty=True)
 
     # Put our config and enable it
-    put(conf('apache.conf'), 'apache.conf')
+    put(conf('configFiles/apache.conf'), 'apache.conf')
     sudo('mv apache.conf /etc/apache2/sites-available/')
     sudo('a2ensite apache.conf', pty=True)
+
+    # Set rights on upload folder
+    folder = '~/gitrepo-plugit/%s' % config.RADIODNS_FOLDER
+    with cd(folder):
+        sudo('chmod -R 777 media/uploads')
 
 
 @task
@@ -130,7 +141,7 @@ def restart_apache():
 @task
 def update_database():
     """Update database to the lastest version"""
-    with cd('~/gitrepo-plugit/' + config.GIT_PLUGITDIR):
+    with cd('~/gitrepo-plugit/' + config.RADIODNS_FOLDER):
         run('alembic upgrade head')
 
 
@@ -163,7 +174,7 @@ def deploy():
     create_user()
     update_database()
     restart_apache()
-    install_logstash()
+    # install_logstash()
 
 
 @task

@@ -73,7 +73,7 @@ The folder with configuration files
 #### MYSQL_USER 
 The MYSQL user
 
-#### MYSQL_DATABSE 
+#### MYSQL_DATABASE
 The MYSQL database
 
 #### MYSQL_PASSWORD
