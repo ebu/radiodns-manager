@@ -28,7 +28,7 @@ def get_or_create_bucket(service_provider):
         bucket = s3.create_bucket(bucketName, location='eu-west-1')
         set_right_bucket(bucket)
         endpoint = get_website_endpoint(bucket)
-        update_or_create_cname("static", service_provider, endpoint)
+        update_or_create_provider_cname("static", service_provider, endpoint)
         return bucket
 
 
@@ -109,23 +109,31 @@ def get_or_create_zone_forprovider(service_provider):
 
     return zone
 
-def update_or_create_cname(prefix, service_provider, endpoint):
+def update_or_create_provider_cname(prefix, service_provider, endpoint):
     """Creates a new CNAME entry or updates it"""
     zone = get_or_create_zone_forprovider(service_provider)
 
     name = "%s.%s" % (prefix.lower(), service_provider.fqdn.lower())
-    cname = zone.get_cname(name)
-    if cname:
-        if not cname.resource_records == endpoint:
-            cname = zone.update_cname(name, endpoint)
-    else:
-        cname = zone.add_cname(name, endpoint)
-
-    cname = zone.get_cname(name)
+    cname = update_or_create_cname(zone, name, endpoint)
 
     return cname
 
-def get_cname(prefix, service_provider, zone):
+def update_or_create_cname(zone, name, value):
+    """Creates a new CNAME entry or updates it"""
+
+    cname = zone.get_cname(name)
+    if cname:
+        if not cname.resource_records[0].rstrip('.') == value.rstrip('.'):
+            cname = zone.update_cname(name, value)
+    else:
+        cname = zone.add_cname(name, value)
+
+    cname = zone.get_cname(name)
+
+
+    return cname.resource_records[0]
+
+def get_provider_cname(prefix, service_provider, zone):
     """Gets CNAME entry"""
 
     name = "%s.%s" % (prefix.lower(), service_provider.fqdn.lower())
@@ -222,6 +230,18 @@ def update_or_create_srv(zone, name, value):
     srv = zone.find_records(name, 'SRV', desired=1)
     return srv.resource_records[0]
 
+def update_or_create_a(zone, name, value):
+    """Creates a new CNAME entry or updates it"""
+    a = zone.find_records(name, 'A', desired=1)
+    if a:
+        if not a.resource_records[0] == value:
+            a = zone.update_record(a, value)
+    else:
+        a = zone.add_record('A', name, value)
+    a = zone.find_records(name, 'A', desired=1)
+    return a.resource_records[0]
+
+
 def remove_srv(zone, name):
     """Removes a SRV entry"""
     srv = zone.find_records(name, 'SRV', desired=1)
@@ -285,10 +305,20 @@ def check_mainzone():
     mainns = mainzone.get_nameservers()
     parent = get_parent_ns(mainzone)
     parentns = parent.resource_records
-    isvalid = set(parentns) == set(mainns)
+    visserver = update_or_create_a(mainzone, config.RADIOVIS_DNS, config.RADIOVIS_A)
+    epgserver = update_or_create_a(mainzone, config.RADIOEPG_DNS, config.RADIOEPG_A)
+    tagserver = update_or_create_a(mainzone, config.RADIOTAG_DNS, config.RADIOTAG_A)
+    # WILDCARD Not Working in BOTO at this time : #1216 https://github.com/boto/boto/pull/1216
+    # viswildcard = update_or_create_cname(mainzone, '*.'+config.RADIOVIS_DNS, config.RADIOVIS_DNS)
+    # epgwildcard = update_or_create_cname(mainzone, '*.'+config.RADIOEPG_DNS, config.RADIOEPG_DNS)
+    # tagwildcard = update_or_create_cname(mainzone, '*.'+config.RADIOTAG_DNS, config.RADIOTAG_DNS)
+    isvalid = set(parentns) == set(mainns) and visserver and epgserver and tagserver
 
     return {'isvalid': isvalid, 'name': mainzone.name, 'mainzone': {'zone': mainzone.name, 'ns': mainns},
-            'parentns': {'entry': parent.name, 'value': parentns}}
+            'parentns': {'entry': parent.name, 'value': parentns},
+            'services': {'vis': {'name': config.RADIOVIS_DNS, 'ip': visserver}, #'wildcard': viswildcard},
+                         'epg': {'name': config.RADIOEPG_DNS, 'ip': epgserver}, #'wildcard': epgwildcard},
+                         'tag': {'name': config.RADIOTAG_DNS, 'ip': tagserver}}} #'wildcard': tagwildcard}}}
 
 def check_serviceprovider(sp):
 
@@ -302,18 +332,26 @@ def check_serviceprovider(sp):
 
         # Bucket
         bucket = get_or_create_bucket(sp)
-        staticcname = get_cname('static', sp, zone)
+        staticcname = get_provider_cname('static', sp, zone)
         staticcnamename = staticcname.name
         staticnamerecord = staticcname.resource_records[0].rstrip('.')
         bucketendpoint = get_website_endpoint(bucket)
         bucketisvalid = bucketendpoint == staticnamerecord
 
-        isvalid = nsisvalid and bucketisvalid
+        mainzone = get_or_create_mainzone()
+        visservice = update_or_create_cname(mainzone, sp.vis_fqdn, config.RADIOVIS_DNS)
+        epgservice = update_or_create_cname(mainzone, sp.epg_fqdn, config.RADIOEPG_DNS)
+        tagservice = update_or_create_cname(mainzone, sp.tag_fqdn, config.RADIOTAG_DNS)
+
+        isvalid = nsisvalid and bucketisvalid and visservice and epgservice and tagservice
 
         return {'isvalid': isvalid, 'name': zone.name, 'zone': {'isvalid': nsisvalid,'zone': zone.name, 'ns': zonens},
                 'parentns': {'entry': parent.name, 'value': parentns},
                 'bucket': {'isvalid': bucketisvalid, 'name': bucket.name, 'publicendpoint': bucketendpoint,
-                           'cname':{'name': staticcnamename, 'record': staticnamerecord}}}
+                           'cname':{'name': staticcnamename, 'record': staticnamerecord}},
+                'services':{'vis': {'name': sp.vis_fqdn, 'value': visservice},
+                            'epg': {'name': sp.epg_fqdn, 'value': epgservice},
+                            'tag': {'name': sp.tag_fqdn, 'value': tagservice}}}
 
     return {'isvalid': False}
 

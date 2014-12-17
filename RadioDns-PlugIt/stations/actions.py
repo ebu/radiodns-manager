@@ -14,6 +14,13 @@ import json
 def stations_home(request):
     """Show the list of stations."""
 
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
     list = []
 
     for elem in Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(Station.name).all():
@@ -23,7 +30,11 @@ def stations_home(request):
     deleted = request.args.get('deleted') == 'yes'
     passworded = request.args.get('passworded') == 'yes'
 
-    return {'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded, 'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
+    if sp:
+        sp = sp.json
+
+    return {'serviceprovider': sp, 'ebu_codops': orga.codops,
+            'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded, 'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
 @action(route="/stations/edit/<id>", template="stations/edit.html", methods=['POST', 'GET'])
@@ -36,6 +47,7 @@ def stations_edit(request, id):
 
     if id != '-':
         object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+
 
     if request.method == 'POST':
 
@@ -117,13 +129,27 @@ def stations_edit(request, id):
 
             return PlugItRedirect('stations/?saved=yes')
 
+    default_radiovis = ""
+    default_radioepg = ""
+    default_radiotag = ""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+        if sp:
+            default_radiovis = sp.vis_service
+            default_radioepg = sp.epg_service
+            default_radiotag = sp.tag_service
+
     if object:
         object = object.json
 
     return {'object': object, 'errors': errors,
-            'default_radiovis_service':config.RADIOVIS_SERVICE_DEFAULT,
-            'default_radioepg_service':config.RADIOEPG_SERVICE_DEFAULT,
-            'default_radiotag_service':config.RADIOTAG_SERVICE_DEFAULT,
+            'default_radiovis_service':default_radiovis,
+            'default_radioepg_service':default_radioepg,
+            'default_radiotag_service':default_radiotag,
             'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
