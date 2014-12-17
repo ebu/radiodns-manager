@@ -20,7 +20,7 @@
         </div>
         <div id="page-functions" class="pull-right">
 			{% block pagefunctions %}
-				{% if ebuio_u.ebuio_orga_admin %}
+				{% if ebuio_u.ebuio_orga_admin and serviceprovider %}
 					<a href="{{ebuio_baseUrl}}stations/edit/-" class="btn btn-primary">Add a new station</a>
 				{% endif %}
 			{% endblock %}
@@ -47,7 +47,20 @@
 		</div>
 	{% endif %}
 
-	
+	{% if not ebu_codops %}
+        <div class="alert alert-danger" role="alert">
+			<strong>No CODOPS has been defined for your organisation yet.</strong> <br />
+            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) to get started.
+		</div>
+    {% elif not serviceprovider %}
+		 <div class="alert alert-warning" role="alert">
+			<p><strong>No configuration for your organisation exists yet.</strong> <br />
+			Start by creating the initial service provider configuration.
+			 </p>
+			<p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a></p>
+		</div>
+	{% else %}
+
 	<div class="table-responsive">
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
@@ -175,6 +188,8 @@
 		{% endfor %}
 
 	</script>
+
+	{% endif %}
 
 {% endblock %}
 

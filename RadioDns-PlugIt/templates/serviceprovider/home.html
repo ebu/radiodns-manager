@@ -169,6 +169,18 @@
                         <th>&nbsp;</th>
                         <td><span id="radiodns-serviceprovider-parentns" ><i class="ion-loading-c"></i></span></td>
                     </tr>
+                    <tr>
+                        <th>VIS Service</th>
+                        <td><span id="radiovis-service" ><i class="ion-loading-c"></i></span></td>
+                    </tr>
+                    <tr>
+                        <th>EPG Service</th>
+                        <td><span id="radioepg-service" ><i class="ion-loading-c"></i></span></td>
+                    </tr>
+                    <tr>
+                        <th>TAG Service</th>
+                        <td><span id="radiotag-service" ><i class="ion-loading-c"></i></span></td>
+                    </tr>
                 </tbody>
             </table>
             </div>
@@ -223,7 +235,21 @@
                             $('#radiodns-serviceprovider-parent').html('Missing');
                             $('#radiodns-serviceprovider-parent').addClass('text-danger');
                         }
-
+                    if (data.services) {
+					    $('#radiovis-service').html(data.services.vis.name + " >> " + data.services.vis.value);
+					    $('#radiovis-service').addClass('text-success');
+					    $('#radioepg-service').html(data.services.epg.name + " >> " + data.services.epg.value);
+					    $('#radioepg-service').addClass('text-success');
+					    $('#radiotag-service').html(data.services.tag.name + " >> " + data.services.tag.value);
+					    $('#radiotag-service').addClass('text-success');
+					} else {
+					    $('#radiovis-service').html('Error');
+					    $('#radiovis-service').addClass('text-danger');
+					    $('#radioepg-service').html('Error');
+					    $('#radioepg-service').addClass('text-danger');
+					    $('#radiotag-service').html('Error');
+					    $('#radiotag-service').addClass('text-danger');
+					}
                     }
                 });
             }

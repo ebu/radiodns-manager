@@ -77,12 +77,50 @@ class ServiceProvider(db.Model):
         return None
 
     @property
+    def vis_fqdn(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOVIS_DNS)
+        return None
+
+    @property
+    def epg_fqdn(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOEPG_DNS)
+        return None
+
+    @property
+    def tag_fqdn(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOTAG_DNS)
+        return None
+
+    @property
+    def vis_service(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOVIS_SERVICE_DEFAULT)
+        return None
+
+    @property
+    def epg_service(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOEPG_SERVICE_DEFAULT)
+        return None
+
+    @property
+    def tag_service(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOTAG_SERVICE_DEFAULT)
+        return None
+
+    @property
     def image_url_prefix(self):
         return awsutils.get_public_urlprefix(self)
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix', 'fqdn'])
+        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix', 'fqdn',
+                                              'vis_fqdn', 'epg_fqdn', 'tag_fqdn',
+                                              'vis_service', 'epg_service', 'tag_service'])
 
 
 class Station(db.Model):
