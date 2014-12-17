@@ -121,6 +121,8 @@ def update_or_create_cname(prefix, service_provider, endpoint):
     else:
         cname = zone.add_cname(name, endpoint)
 
+    cname = zone.get_cname(name)
+
     return cname
 
 def get_cname(prefix, service_provider, zone):
