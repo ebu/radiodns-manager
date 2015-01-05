@@ -91,6 +91,48 @@ def restart_fallback():
     with cd('~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR):
         run('supervisorctl -c supervisord-fallback.conf restart fallbackserver')
 
+@task
+def start_simpleserver():
+    """Start the fallback server (using supervisord)"""
+    with cd('~/radiovis-html5player/website'):
+        run('supervisord -c supervisord-simpleserver.conf')
+
+
+@task
+def stop_simpleserver():
+    """Stop the simpleserver server (using supervisord)"""
+    with cd('~/radiovis-html5player/website'):
+        run('supervisorctl -c supervisord-simpleserver.conf stop simpleserver')
+        run('supervisorctl -c supervisord-simpleserver.conf shutdown')
+
+
+@task
+def restart_simpleserver():
+    """Restart the simpleserver server (using supervisord)"""
+    with cd('~/radiovis-html5player/website'):
+        run('supervisorctl -c supervisord-simpleserver.conf restart simpleserver')
+
+
+@task
+def start_websocketserver():
+    """Start the websocketserver server (using supervisord)"""
+    with cd('~/radiovis-html5player/websocketserver'):
+        run('supervisord -c supervisord-websocketserver.conf')
+
+
+@task
+def stop_websocketserver():
+    """Stop the websocketserver server (using supervisord)"""
+    with cd('~/radiovis-html5player/websocketserver'):
+        run('supervisorctl -c supervisord-websocketserver.conf stop websocketserver')
+        run('supervisorctl -c supervisord-websocketserver.conf shutdown')
+
+@task
+def restart_websocketserver():
+    """Restart the websocketserver server (using supervisord)"""
+    with cd('~/radiovis-html5player/websocketserver'):
+        run('supervisorctl -c supervisord-websocketserver.conf restart websocketserver')
+
 
 @task
 def start_radiovis():
