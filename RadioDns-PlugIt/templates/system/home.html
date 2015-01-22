@@ -37,31 +37,31 @@
                 </tr>
                 <tr>
                     <th>Main Zone</th>
-                    <td><span id="radiodns-system-mainzone" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiodns-system-mainzone" ><i class="ion-load-c"></i></span></td>
                 </tr>
                  <tr>
                     <th>&nbsp;</th>
-                    <td><span id="radiodns-system-mainzonens" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiodns-system-mainzonens" ><i class="ion-load-c"></i></span></td>
                 </tr>
                  <tr>
                     <th>Parent NS Entry</th>
-                    <td><span id="radiodns-system-parent" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiodns-system-parent" ><i class="ion-load-c"></i></span></td>
                 </tr>
                 <tr>
                     <th>&nbsp;</th>
-                    <td><span id="radiodns-system-parentns" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiodns-system-parentns" ><i class="ion-load-c"></i></span></td>
                 </tr>
                 <tr>
                     <th>VIS Service</th>
-                    <td><span id="radiovis-service" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiovis-service" ><i class="ion-load-c"></i></span></td>
                 </tr>
                 <tr>
                     <th>EPG Service</th>
-                    <td><span id="radioepg-service" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radioepg-service" ><i class="ion-load-c"></i></span></td>
                 </tr>
                 <tr>
                     <th>TAG Service</th>
-                    <td><span id="radiotag-service" ><i class="ion-loading-c"></i></span></td>
+                    <td><span id="radiotag-service" ><i class="ion-load-c"></i></span></td>
                 </tr>
             </tbody>
         </table>
@@ -101,11 +101,11 @@
 					}
 
 					if (data.services) {
-					    $('#radiovis-service').html(data.services.vis.name + " >> " + data.services.vis.ip);
+					    $('#radiovis-service').html(data.services.vis.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.vis.ip);
 					    $('#radiovis-service').addClass('text-success');
-					    $('#radioepg-service').html(data.services.epg.name + " >> " + data.services.epg.ip);
+					    $('#radioepg-service').html(data.services.epg.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.epg.ip);
 					    $('#radioepg-service').addClass('text-success');
-					    $('#radiotag-service').html(data.services.tag.name + " >> " + data.services.tag.ip);
+					    $('#radiotag-service').html(data.services.tag.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.tag.ip);
 					    $('#radiotag-service').addClass('text-success');
 					} else {
 					    $('#radiovis-service').html('Error');

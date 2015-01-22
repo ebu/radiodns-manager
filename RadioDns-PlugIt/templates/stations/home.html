@@ -97,9 +97,9 @@
 						{% endif %}</td>
 					<td>{% if s.service_provider_data %}{{s.fqdn}}{% endif %}</td>
 					<td>
-						<span id="vis-{{s.id}}"><i class="ion-loading-c"></i></span><br />
-						<span id="epg-{{s.id}}"><i class="ion-loading-c"></i></span><br />
-						{% if RADIOTAG_ENABLED %}<span id="tag-{{s.id}}"><i class="ion-loading-c"></i></span>{% endif %}
+						<span id="vis-{{s.id}}"><i class="ion-load-c"></i></span><br />
+						<span id="epg-{{s.id}}"><i class="ion-load-c"></i></span><br />
+						{% if RADIOTAG_ENABLED %}<span id="tag-{{s.id}}"><i class="ion-load-c"></i></span>{% endif %}
 					</td>
 					{% if s.radiovis_enabled %}
 					{% if ebuio_u.ebuio_orga_admin %}
