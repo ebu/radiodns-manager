@@ -102,6 +102,7 @@
 						vis = data.radiovis.service.split(' ');
 
 						var visvalue = vis[3] + ':' + vis[2];
+						visvalue = visvalue.replace(/\.:/, ":");
 						$('#vis-' + id).html(visvalue);
 						if(visvalue == data.radiovis.exptected_service) {
 							$('#vis-' + id).addClass('text-success');
@@ -118,6 +119,7 @@
 						epg = data.radioepg.service.split(' ');
 
 						var epgvalue = epg[3] + ':' + epg[2];
+						epgvalue = epgvalue.replace(/\.:/, ":");
 						$('#epg-' + id).html(epgvalue);
 						if(epgvalue == data.radioepg.exptected_service) {
 							$('#epg-' + id).addClass('text-success');
@@ -134,6 +136,7 @@
 						tag = data.radiotag.service.split(' ');
 
 						var tagvalue = tag[3] + ':' + tag[2];
+						tagvalue = tagvalue.replace(/\.:/, ":");
 						$('#tag-' + id).html(tagvalue);
 						if(tagvalue == data.radiotag.exptected_service) {
 							$('#tag-' + id).addClass('text-success');
