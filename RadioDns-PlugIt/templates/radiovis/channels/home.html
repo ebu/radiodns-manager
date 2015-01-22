@@ -30,7 +30,7 @@
 				<th>Name</th>
 				<th>Topic</th>
 				<th>Default value</th>
-				<th></th>
+				<th style="width: 180px;"></th>
 			</tr>
 		</thead>
 
@@ -43,6 +43,7 @@
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
                             <div class="form-inline">
+                                <input type="hidden" id="currentvalue-{{c.id}}" value="{{c.default_picture_data.id}}" />
 							<select class="form-control" style="margin-bottom: 0px;" id="select-{{c.id}}" onchange="toggle_button({{c.id}});">
 								<option value="0" {% if not c.default_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
 								{% for p in pictures %}
@@ -66,7 +67,13 @@
 
 	<script type="text/javascript">
         function toggle_button(id) {
-            $('#button-'+id).toggle();
+            var nval = $('#select-'+id).val();
+            var cval = $('#currentvalue-'+id).val();
+            if(nval != cval) {
+                $('#button-'+id).show();
+            } else {
+                $('#button-'+id).hide();
+            }
         }
 		function switch_default(id) {
 		    var val = $('#select-'+id).val();
@@ -74,6 +81,7 @@
 				url: '{{ebuio_baseUrl}}radiovis/channels/set/' + id + '/' + val,
 				success: function() {
 				    elemToBlink = $('#select-'+id)
+				    $('#currentvalue-'+id).val(val);
 					elemToBlink.css('backgroundColor', 'green');
 					elemToBlink.css('opacity', '0.25');
 					elemToBlink.animate({ opacity: 1 }, 500, function() {
