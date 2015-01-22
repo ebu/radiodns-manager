@@ -30,7 +30,7 @@
 				<th>Name</th>
 				<th>Topic</th>
 				<th>Default value</th>
-				<th style="width: 100px;"></th>
+				<th></th>
 			</tr>
 		</thead>
 
@@ -42,19 +42,22 @@
 					<td>{{c.topic}}</td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<select style="margin-bottom: 0px;" onchange="switch_default({{c.id}}, $(this).val(), $(this));">
+                            <div class="form-inline">
+							<select class="form-control" style="margin-bottom: 0px;" id="select-{{c.id}}" onchange="toggle_button({{c.id}});">
 								<option value="0" {% if not c.default_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
 								{% for p in pictures %}
 									<option value="{{p.id}}" {% if c.default_picture_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
 								{% endfor %}
 							</select>
+                            <button class="btn btn-primary" style="display:none;" id="button-{{c.id}}" onclick="switch_default({{c.id}});">Save</button>
+                            </div>
 						{% else %}
 							{{c.default_picture_data.name|default:"<i>Disabled</i>"}}
 						{% endif %}
 					</td>
 					<td>
-						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class=" icon-list-alt" title="Logs"></a>
-						<a href="http://www.ebulabs.org/tools/radiovis-ajaxplayer/player.php?topic={{c.topic_no_slash}}" target="_blank" class="icon-eye-open" title="Ajax player"></a>
+						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class="btn btn-default" title="Logs"><i class="ion-ios-list"></i> Logs</a>
+						<a href="http://www.ebulabs.org/tools/radiovis-ajaxplayer/player.php?topic={{c.topic_no_slash}}" class="btn btn-default" target="_blank" title="Ajax player"><i class="ion-play"></i>  Player</a>
 					</td>
 				</tr>
 			{% endfor %}
@@ -62,15 +65,21 @@
 	</table>
 
 	<script type="text/javascript">
-		function switch_default(id, val, elemToBlink) {
+        function toggle_button(id) {
+            $('#button-'+id).toggle();
+        }
+		function switch_default(id) {
+		    var val = $('#select-'+id).val();
 			$.ajax({
 				url: '{{ebuio_baseUrl}}radiovis/channels/set/' + id + '/' + val,
 				success: function() {
+				    elemToBlink = $('#select-'+id)
 					elemToBlink.css('backgroundColor', 'green');
 					elemToBlink.css('opacity', '0.25');
 					elemToBlink.animate({ opacity: 1 }, 500, function() {
 						elemToBlink.css('backgroundColor', '#ffffff');
 					} );
+					toggle_button(id);
 				}
 			})
 		}
