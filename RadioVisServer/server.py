@@ -14,6 +14,8 @@ from gevent.server import StreamServer
 
 import logging
 
+from monitoring import Monitoring
+
 import config
 
 from stomp import StompServer
@@ -31,8 +33,12 @@ logger = logging.getLogger('radiovisserver')
 # Last message by TOPIC
 LAST_MESSAGES = {}
 
+
+monitoring = Monitoring()
+monitoring.count("radiovis.global.servers")
+
 # Create the class to manage the rabbit connexion
-rabbitcox = RabbitConnexion(LAST_MESSAGES)
+rabbitcox = RabbitConnexion(LAST_MESSAGES, monitoring)
 
 
 # Handeler for new stomp clients
@@ -40,7 +46,8 @@ def stomp_client(socket, address):
     logger.info('%s:%s: New stomp connection from' % address)
 
     # Create a new stomp server
-    s = StompServer(socket, LAST_MESSAGES, rabbitcox)
+    s = StompServer(socket, LAST_MESSAGES, rabbitcox, monitoring)
+    monitoring.count("radiovis.global.servers")
 
     # Let rabbitmq send messages to the stomp server
     rabbitcox.add_stomp_server(s)
@@ -66,6 +73,7 @@ def stomp_client(socket, address):
 if __name__ == '__main__':
     # Start rabbit mq client
     logger.debug("Starting RabbitMQ connection")
+    spawn(monitoring.run)
     spawn(rabbitcox.run)
 
     # Start stomp server
