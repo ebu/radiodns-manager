@@ -96,7 +96,7 @@ class Fallback():
     def connect_to_rabbitmq(self):
         """Initialize the rabbitmq class"""
         self.logger.debug("Initializing the rabbitmq connection")
-        self.rabbitmq = RabbitConnexion({}, self)
+        self.rabbitmq = RabbitConnexion({}, None, self)
         joinall([spawn(self.rabbitmq.run)])
 
     def cleanup_logs(self):
@@ -158,7 +158,7 @@ class Fallback():
 
 # The logger
 logging.basicConfig(level=config.LOG_LEVEL)
-logger = logging.getLogger('radiovisserver')
+logger = logging.getLogger('radiovisserver.watchdog')
 
 if __name__ == '__main__':
     # Start rabbit mq client

@@ -144,10 +144,6 @@ class RabbitConnexion():
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
-        if self.watchdog:
-            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['topic'].split('/'))).increment()
-        else:
-            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG + '.'.join(headers['topic'].split('/'))).increment()
 
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")
@@ -174,4 +170,5 @@ class RabbitConnexion():
 
     def update_stats(self):
         """Update stats"""
-        self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))
+        # self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))
+        pass

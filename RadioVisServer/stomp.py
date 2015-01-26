@@ -18,7 +18,7 @@ logger = logging.getLogger('radiovisserver.stompserver')
 class StompServer():
     """A basic stomp server"""
 
-    def __init__(self, socket, LAST_MESSAGES, rabbitcox):
+    def __init__(self, socket, LAST_MESSAGES, rabbitcox, monitoring):
         (self.info_ip, self.info_port) = socket.getpeername()
 
         # logger = %s:%s logging.getLogger('radiovisserver.%s:%s stompserver.' + ip + '.' + str(port))
@@ -45,6 +45,9 @@ class StompServer():
 
         # RabbitCox
         self.rabbitcox = rabbitcox
+
+        # Monitoring
+        self.monitoring = monitoring
 
         # Station id, if authenticated
         self.station_id = None
@@ -172,7 +175,7 @@ class StompServer():
                     topic, message, bonusHeaders = result
                     logger.debug("%s:%s Got a message on topic %s: %s (headers: %s)" % (self.info_ip, self.info_port, topic, message, bonusHeaders))
 
-                    # Is the user subscribled ?
+                    # Is the user subscribed ?
                     if topic in self.topics:
                         topicMatching = topic
                     else:  # Is the user subscribled because of a special case ?
@@ -190,6 +193,7 @@ class StompServer():
                             headers.append(('subscription', self.idsByChannels[topicMatching]))
 
                         self.send_frame("MESSAGE", headers, message)
+                        self.monitoring.log("radiovis:"+'.'.join(topic.split('/')[1:]), str(message), client="%s;%i" % (self.info_ip, self.info_port))
 
                     time.sleep(0)  # Switch context
 
@@ -219,6 +223,8 @@ class StompServer():
                 logger.error("%s:%s Unexcepted command, %s instead of CONNECT" % (self.info_ip, self.info_port, command))
                 self.send_frame('ERROR', [('message', 'Excepted CONNECT')], '')
                 return
+
+            self.monitoring.count("radiovis.global.new_connection;%s;%i" % (self.info_ip, self.info_port))
 
             # Check username and password, if any
             user = get_header_value(headers, 'login')
@@ -271,6 +277,7 @@ class StompServer():
 
             # Now we just wait for a command
             while not self.sucide:
+
                 logger.debug("%s:%s Waiting for a command" % (self.info_ip, self.info_port))
                 (command, headers, body) = self.get_frame()
 
@@ -307,7 +314,9 @@ class StompServer():
                             self.idsByChannels[channel] = id
 
                         self.topics.append(channel)
-                        logger.debug("%s:%s Client is now subscribled to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                        logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+
+                        self.monitoring.count("radiovis.global.subscription;%s;%i;%s;%s" % (self.info_ip, self.info_port, channel, id))
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
