@@ -10,3 +10,4 @@ blinker
 raven
 Pillow
 boto
+Flask-Cache
