@@ -66,9 +66,10 @@
             </tbody>
         </table>
 
+    <script src='{{ebuio_baseUrl}}media/js/ajaxq.js'></script>
     <script type="text/javascript">
 		function checkSystem() {
-			$.ajax({
+			$.ajaxq("rdns-systemq", {
 				url: '{{ebuio_baseUrl}}system/check',
 				dataType: 'json',
 				success: function(data) {

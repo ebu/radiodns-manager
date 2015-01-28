@@ -79,9 +79,10 @@
 	</table>
 	</div>
 
+    <script src='{{ebuio_baseUrl}}media/js/ajaxq.js'></script>
 	<script type="text/javascript">
 		function checkChannel(id) {
-			$.ajax({
+			$.ajaxq("rdns-channelq", {
 				url: '{{ebuio_baseUrl}}channels/check/' + id,
 				dataType: 'json',
 				success: function(data) {

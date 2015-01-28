@@ -186,9 +186,10 @@
             </div>
         </div>
 
+        <script src='{{ebuio_baseUrl}}media/js/ajaxq.js'></script>
         <script type="text/javascript">
             function checkProvider() {
-                $.ajax({
+                $.ajaxq("rdns-serviceproviderq", {
                     url: '{{ebuio_baseUrl}}serviceprovider/check',
                     dataType: 'json',
                     success: function(data) {
