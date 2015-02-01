@@ -52,10 +52,6 @@ class RabbitConnexion():
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
 
-                if self.monitoring:
-                    self.monitoring.log('radiovis.server.log', 'dispatching to %s: %s (headers: %s)' % (topic, body, bonusHeaders))
-                    self.monitoring.gauge('radiovis.stats.global', len(self.stompservers))
-
 
                 # Save the message as the last one
                 converted_topic = radioDns.convert_fm_topic_to_gcc(topic)

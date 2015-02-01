@@ -49,11 +49,28 @@ class StompServer():
         # Monitoring
         self.monitoring = monitoring
 
+        # Create a session id
+        self.session_id = str(uuid.uuid4())
+
         # Station id, if authenticated
         self.station_id = None
 
         # True if threads should be stopped
         self.sucide = False
+
+
+    def close(self):
+
+        if not self.sucide:
+            self.sucide = True
+
+            while len(self.topics) > 0:
+                self.monitoring.count("radiovis.global.unsubscriptions", {
+                    "topic": self.topics.pop(),
+                    "session_id": self.session_id,
+                    "ip": self.info_ip + ':' + str(self.info_port)
+                })
+            self.socket.close()
 
     def get_frame(self):
         """Get one stomp frame"""
@@ -156,8 +173,7 @@ class StompServer():
         # Last try
         if not put_in_queue():
             logger.error("%s:%s Queue is full: Destroying the stom server" % (self.info_ip, self.info_port))
-            self.sucide = True
-            self.socket.close()
+            self.close()
 
     def consume_queue(self):
         """A thread who read topics from the queue of message and send them to the client, if requested"""
@@ -192,16 +208,21 @@ class StompServer():
                         if topicMatching in self.idsByChannels:
                             headers.append(('subscription', self.idsByChannels[topicMatching]))
 
+                        self.monitoring.count("radiovis.global.messages", {
+                            "topic": topicMatching,
+                            "session_id": self.session_id,
+                            "body": str(message),
+                            "ip": self.info_ip + ':' + str(self.info_port)
+                        })
+
                         self.send_frame("MESSAGE", headers, message)
-                        self.monitoring.log("radiovis:"+'.'.join(topic.split('/')[1:]), str(message), client="%s;%i" % (self.info_ip, self.info_port))
 
                     time.sleep(0)  # Switch context
 
         except Exception as e:
             logger.error("%s:%s Error in consume_queue: %s" % (self.info_ip, self.info_port, e))
         finally:
-            self.sucide = True
-            self.socket.close()
+            self.close()
 
     def run(self):
         """Main function to run the stompserver"""
@@ -224,7 +245,6 @@ class StompServer():
                 self.send_frame('ERROR', [('message', 'Excepted CONNECT')], '')
                 return
 
-            self.monitoring.count("radiovis.global.new_connection;%s;%i" % (self.info_ip, self.info_port))
 
             # Check username and password, if any
             user = get_header_value(headers, 'login')
@@ -249,9 +269,6 @@ class StompServer():
 
             else:
                 logger.info("%s:%s Anonymous user" % (self.info_ip, self.info_port))
-
-            # Create a session id
-            self.session_id = str(uuid.uuid4())
 
             logger.debug("%s:%s Session ID is %s" % (self.info_ip, self.info_port, self.session_id))
 
@@ -293,7 +310,7 @@ class StompServer():
                 if command == 'DISCONNECT':
                     # Close and finish
                     logger.info("%s:%s Client send a DISCONNECT" % (self.info_ip, self.info_port))
-                    self.socket.close()
+                    self.close()
                     return
 
                 elif command == 'SUBSCRIBE':
@@ -316,7 +333,11 @@ class StompServer():
                         self.topics.append(channel)
                         logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
 
-                        self.monitoring.count("radiovis.global.subscription;%s;%i;%s;%s" % (self.info_ip, self.info_port, channel, id))
+                        self.monitoring.count("radiovis.global.subscriptions", {
+                            "topic": channel,
+                            "session_id": self.session_id,
+                            "ip": self.info_ip + ':' + str(self.info_port)
+                        })
 
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
@@ -433,5 +454,4 @@ class StompServer():
         except Exception as e:
             logger.error("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
         finally:
-            self.sucide = True
-            self.socket.close()
+            self.close()

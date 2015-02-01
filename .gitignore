@@ -37,3 +37,5 @@ nosetests.xml
 RadioDns-PlugIt/config.py
 
 .ropeproject
+
+*.log

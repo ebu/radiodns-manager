@@ -32,7 +32,7 @@ class Monitoring():
     """ Log a single event """
     if timestamp == None:
       timestamp = time.time()
-    self.buffer.put({ 'type': 'log', 'label': label, 'content': content, 'client': client, 'metadata': metadata, 'timestamp': timestamp, 'server': self.server_id })
+    #self.buffer.put({ 'type': 'log', 'label': label, 'content': content, 'client': client, 'metadata': metadata, 'timestamp': timestamp, 'server': self.server_id })
 
 
   @skipIfDisabled
@@ -41,7 +41,7 @@ class Monitoring():
     if timestamp == None:
       timestamp = time.time()
 
-    self.buffer.put({ 'type': 'count', 'label': label, 'timestamp': timestamp, 'server': self.server_id })
+    self.buffer.put({ 'type': 'log', 'label': label, 'timestamp': timestamp, 'server': self.server_id, 'metadata': metadata })
 
 
   @skipIfDisabled

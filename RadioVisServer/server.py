@@ -13,6 +13,7 @@ from gevent import spawn
 from gevent.server import StreamServer
 
 import logging
+from logging import *
 
 from monitoring import Monitoring
 
@@ -22,12 +23,15 @@ from stomp import StompServer
 
 from rabbitmq import RabbitConnexion
 
+import signal
 import sys
 
-
 # The logger
-logging.basicConfig(level=config.LOG_LEVEL)
+logging.basicConfig(format="[%(levelname)s] %(asctime)-15s - %(message)s", level=config.LOG_LEVEL)
 logger = logging.getLogger('radiovisserver')
+fh = FileHandler(filename='radiovis-server.log', mode='a')
+fh.setFormatter(Formatter(fmt="[%(levelname)s] %(asctime)-15s - %(message)s"))
+logger.addHandler(fh)
 
 
 # Last message by TOPIC
@@ -47,17 +51,19 @@ def stomp_client(socket, address):
 
     # Create a new stomp server
     s = StompServer(socket, LAST_MESSAGES, rabbitcox, monitoring)
-    monitoring.count("radiovis.global.servers")
+    monitoring.count("radiovis.global.connections", {"session_id": s.session_id, "ip": s.info_ip + ':' + str(s.info_port) })
 
     # Let rabbitmq send messages to the stomp server
     rabbitcox.add_stomp_server(s)
 
-    # Run the stom server
-    logger.debug('%s:%s: Starting StrompServer' % address)
+    # Run the stomp server
+    logger.debug('%s:%s: Starting StompServer' % address)
     s.run()
 
+    monitoring.count("radiovis.global.disconnections", {"session_id": s.session_id, "ip": s.info_ip + ':' + str(s.info_port) })
+
     # Connexion is now closed ! But let's do it again just in case
-    logger.debug('%s:%s: StrompServer is now dead' % address)
+    logger.debug('%s:%s: StompServer is now dead' % address)
     socket.close()
 
     # Stop managing the stom server
@@ -84,6 +90,8 @@ if __name__ == '__main__':
     else:
         server = StreamServer((config.STOMP_IP, config.STOMP_PORT), stomp_client)
         logger.debug('Starting stomp server on %s:%s' % (config.STOMP_IP, config.STOMP_PORT))
+
     logger.info('RadioVis server started !')
 
     server.serve_forever()
+
