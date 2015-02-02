@@ -102,7 +102,7 @@ class Monitoring():
         self.logger.debug("Ready, waiting for monitoring data")
         while True:
           data = json.dumps(self.buffer.get(block=True, timeout=None))
-          self.logger.debug("Publishing: ", data)
+
           headers = {}
           headers['when'] = str(int(time.time()))
           self.ch.basic.publish(Message(data, application_headers=headers), config.monitoring['exchange'], '')
