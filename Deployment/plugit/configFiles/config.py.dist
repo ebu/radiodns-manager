@@ -1,0 +1,29 @@
+DEBUG = True
+
+# the URL to call the PlugIt client ("https://github.com/ebu/PlugIt/tree/master/Simple Django client"):
+# e.g. Django client: 'http://127.0.0.1:8000/plugIt/ebuio_api/'
+API_URL = '{{PLUGIT_API_URL}}'
+
+# the connection string to MySQL for SqlAlchemy
+# e.g.: 'mysql://plugit_user:plugit_password@localhost/plugit_db'
+SQLALCHEMY_URL = '{{SQLALCHEMY_URL}}'
+
+# a secret, shared with the RadioVisServer to access special calls:
+# e.g.: 'my_api_secret'
+API_SECRET = '{{API_SECRET}}'
+
+# the base url for the PlugIt API:
+# e.g.: '/toto_base/'
+# e.g.: '/'
+PI_BASE_URL = '{{PI_BASE_URL}}'
+# clients allowed to use the PlugIt API
+# e.g.: ['0.0.0.0/0']
+PI_ALLOWED_NETWORKS = {{PI_ALLOWED_NETWORKS}}
+
+# Flask Log
+FLASK_LOG_PATH = '/home/ubuntu/logs/flask.log'
+FLASK_LOG_SIZE = 1024 * 1024 # 1MB
+
+# Sentry
+# e.g.: 'http://public:secret@example.com/1'
+SENTRY_DSN = '{{SENTRY_DSN}}'
