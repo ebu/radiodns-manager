@@ -119,16 +119,16 @@ def configure():
     """Configure radiovisserver and supervisord"""
 
     # Just upload the template with our settings
-    upload_template(conf('config.py'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'config.py', {
+    upload_template('radiovis/configFiles/config.py', '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'config.py', {
         'RADIOVIS_LOG_LEVEL': config.RADIOVIS_LOG_LEVEL,
         'RADIOVIS_RABBITMQ_HOST': config.RADIOVIS_RABBITMQ_HOST,
         'RABBITMQ_USER': config.RABBITMQ_USER,
         'RABBITMQ_PASS': config.RABBITMQ_PASS,
         'RADIOVIS_RABBITMQ_QUEUE': config.RADIOVIS_RABBITMQ_QUEUE,
         'RADIOVIS_API_URL': config.RADIOVIS_API_URL,
-        'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
+        #'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
 
-    })
+    }, use_jinja=True)
 
     upload_template(conf('supervisord-radiovis.conf'), '~/gitrepo-radiovis/' + config.GIT_RADIOVISDIR + 'supervisord-radiovis.conf', {
 

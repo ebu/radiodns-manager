@@ -104,16 +104,17 @@ def pull_code():
 def configure():
     """Configure apache and the flask server"""
 
-    upload_template(conf('config.py'), '~/gitrepo-plugit/' + config.GIT_PLUGITDIR + 'config.py', {
+    upload_template('plugit/configFiles/config.py', '~/gitrepo-plugit/' + config.GIT_PLUGITDIR + 'config.py', context={
         'PLUGIT_API_URL': config.PLUGIT_API_URL,
         'SQLALCHEMY_URL': config.SQLALCHEMY_URL,
         'API_SECRET': config.API_SECRET,
-        'API_BASE_URL': config.API_BASE_URL,
-        'API_ALLOWD_IPS': config.API_ALLOWD_IPS
-    })
+        'PI_BASE_URL': config.API_BASE_URL,
+        'API_ALLOWD_IPS': config.API_ALLOWD_IPS,
+        'PI_ALLOWED_NETWORKS': config.PI_ALLOWED_NETWORKS,
+    }, use_jinja=True)
 
     # Disable default site
-    sudo('a2dissite default', pty=True)
+    sudo('a2dissite 000-default', pty=True)
 
     # Put our config and enable it
     put(conf('apache.conf'), 'apache.conf')
