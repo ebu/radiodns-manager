@@ -79,7 +79,7 @@ class StompServer():
             time.sleep(0)  # Switch context
             data = self.socket.recv(1024)
             if not data:
-                logger.warning("%s:%s Socket seem closed" % (self.info_ip, self.info_port))
+                logger.info("%s:%s Socket seem closed" % (self.info_ip, self.info_port))
                 raise Exception("Socket seem closed.")
             else:
                 self.incomingData += data
@@ -452,6 +452,6 @@ class StompServer():
                     logger.warning("%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         except Exception as e:
-            logger.error("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
+            logger.warn("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
         finally:
             self.close()
