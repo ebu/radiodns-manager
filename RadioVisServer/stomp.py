@@ -173,8 +173,19 @@ class StompServer():
                     logger.debug("%s:%s Got a message on topic %s: %s (headers: %s)" % (self.info_ip, self.info_port, topic, message, bonusHeaders))
 
                     # Is the user subscribled ?
-                    if topic in self.topics:
-                        topicMatching = topic
+                    #   self.topics:  a list of the topics this user is subscribed to
+                    #   topic: the topic of the received message
+                    import re
+                    # when publishing to a * frequency, send message to all frequencies
+                    topic_regex = re.sub('[*]', '.*', topic)
+                    logger.debug("comparing --%s-- to --%s--..................." % (topic_regex, self.topics) )
+                    matches = [string for string in self.topics if re.match(topic_regex, string)]
+                    
+#                     if topic in self.topics:
+#                         topicMatching = topic
+                    if matches:
+                        logger.debug("   found matches: %s" % matches)
+                        topicMatching = matches[0]
                     else:  # Is the user subscribled because of a special case ?
                         topicMatching = radioDns.check_special_matchs(topic, self.topics)
 
