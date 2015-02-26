@@ -411,14 +411,31 @@ class StompServer():
                                 # Message id
                                 message_id = get_header_value(headers, 'message-id')
                                 if not message_id:
-                                    message_id = str(uuid.uuid4())
+                                    message_id = str(uuid.uuid4().int)
                                 msg_headers['message-id'] = message_id
+                                
+                                # Copy expires
+                                expires = get_header_value(headers, 'expires')
+                                if expires:
+                                    msg_headers['expires'] = expires
+                                    
+                                # Copy priority
+                                priority = get_header_value(headers, 'priority')
+                                if priority:
+                                    msg_headers['priority'] = priority
+
+
+                                timestamp = str(int(time.time() * 1000))
+                                msg_headers['timestamp'] = timestamp
 
                                 def send_to_dest(destination):
                                     # Destination
                                     msg_headers['topic'] = destination
-
-                                    logger.debug("%s:%s Sending message %s to %s (headers: %s)" % (self.info_ip, self.info_port, body, destination, msg_headers))
+                                    
+                                    # workaround to avoid problems with non-ascii body
+                                    #  (but only when sent to /topic/*/) (why?)
+                                    #logger.debug("%s:%s Sending message %s to %s (headers: %s)" % (self.info_ip, self.info_port, body, destination, msg_headers))
+                                    logger.debug("%s:%s Sending message to %s (headers: %s)" % (self.info_ip, self.info_port, destination, msg_headers))
 
                                     self.rabbitcox.send_message(msg_headers, body)
 
