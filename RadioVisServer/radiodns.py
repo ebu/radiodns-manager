@@ -62,7 +62,8 @@ class RadioDns_():
                 self.logger.error("No reply when get_channels ?")
                 return []
 
-            return result['list']
+            # return a list with unique values
+            return list( set(result['list']) )
 
         return self.cache.get(key="get_channels-" + station_id, createfunc=get_channels)
 

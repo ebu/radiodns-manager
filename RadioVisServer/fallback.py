@@ -81,9 +81,10 @@ class Fallback():
             new_id_by_channel[channel] = id
 
         with self.channels_lock:
-            self.channels = new_channels
+            # list with unique values
+            self.channels = list(set(new_channels))
             self.id_by_channel = new_id_by_channel
-            self.logger.debug("Got new list of channels ! %s; %s" % (self.channels, self.id_by_channel))
+            self.logger.debug("Got new list of channels ! %s --%d--;\n %s --%d--" % (self.channels, len(self.channels), self.id_by_channel, len(self.id_by_channel) ))
 
     def get_channels_threads(self):
         """Thread to get the list of channels each config.FB_CHANNEL_CACHE"""
