@@ -91,6 +91,7 @@ def serviceprovider_edit(request, id):
         object.long_description = request.form.get('long_description')
         object.url_default = request.form.get('url_default')
         object.default_language = request.form.get('default_language')
+        object.location_country = request.form.get('location_country')
 
         # Check errors
         if object.medium_name == '':

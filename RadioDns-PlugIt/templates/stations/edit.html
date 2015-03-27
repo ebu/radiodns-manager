@@ -105,14 +105,128 @@
 			<label class="col-sm-3 col-md-3 control-label">Genres:</label>
 			<div class="col-sm-9 col-md-7">
 				<table class="table table-condensed" id="genre_list">
-					<tr><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>
 
+					{#<tr><th></th><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>#}
+                    <tr id="genre_row_template" class="genre_row" style="display:none;" >
+                        <td>
+                            <select id="genre-select-" class="genre-select form-control">
+                                <option value="">--</option>
+                                <option value="3.1.1">News</option>
+                                <option value="3.1.1.11">Local/Regional</option>
+                                <option value="">--</option>
+                                <option value="3.6.1">Classical music</option>
+                                <option value="3.6.2">Jazz</option>
+                                <option value="3.6.3">Background music</option>
+                                <option value="3.6.4">Pop-rock</option>
+                                <option value="3.6.4.1">Pop</option>
+                                <option value="3.6.4.11">Seasonal/Holiday</option>
+                                <option value="3.6.4.14">Rock</option>
+                                <option value="3.6.4.14.2">Metal</option>
+                                <option value="3.6.4.17">Singer/Songwriter</option>
+                                <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
+                                <option value="3.6.6">Country and Western</option>
+                                <option value="3.6.7">Rap/Hip Hop/Reggae</option>
+                                <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
+                                <option value="3.6.8.3">Techno/Industrial</option>
+                                <option value="3.6.8.4">House/Techno House</option>
+                                <option value="3.6.9">World/Traditional</option>
+                                <option value="3.6.10">Hit-Chart/Song Requests</option>
+                                <option value="">--</option>
+                                <option value="3.1.1.6">National/Politics</option>
+                                <option value="3.1.1.9">Sports</option>
+                                <option value="3.1.1.12">Traffic</option>
+                                <option value="3.1.1.14">Service information</option>
+                                <option value="3.6.13">Spoken</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="genrehref[]" id="genre-href-" class="genre-href form-control" value="{{g.href}}">
+                        </td>
+                        <td>
+                            <input type="text" name="genrename[]" id="genre-name-" class="genre-name form-control" value="{{g.name}}">
+                        </td>
+                        <td>
+                            <a href="#" onclick="return del_genre(this);">Remove</a>
+                        </td>
+                    </tr>
 				{% for g in object.genres_list %}
-					 <tr><td><input type="text" name="genrehref[]" value="{{g.href}}"></td><td><input type="text" name="genrename[]" value="{{g.name}}"></td><td><a href="#" onclick="return del_genre(this);">Remove</a></td></tr>
+
+                    <tr class="genre_row" >
+                        <td>
+                            <select class="genre-select form-control">
+                                <option value="">--</option>
+                                <option value="3.1.1">News</option>
+                                <option value="3.1.1.11">Local/Regional</option>
+                                <option value="">--</option>
+                                <option value="3.6.1">Classical music</option>
+                                <option value="3.6.2">Jazz</option>
+                                <option value="3.6.3">Background music</option>
+                                <option value="3.6.4">Pop-rock</option>
+                                <option value="3.6.4.1">Pop</option>
+                                <option value="3.6.4.11">Seasonal/Holiday</option>
+                                <option value="3.6.4.14">Rock</option>
+                                <option value="3.6.4.14.2">Metal</option>
+                                <option value="3.6.4.17">Singer/Songwriter</option>
+                                <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
+                                <option value="3.6.6">Country and Western</option>
+                                <option value="3.6.7">Rap/Hip Hop/Reggae</option>
+                                <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
+                                <option value="3.6.8.3">Techno/Industrial</option>
+                                <option value="3.6.8.4">House/Techno House</option>
+                                <option value="3.6.9">World/Traditional</option>
+                                <option value="3.6.10">Hit-Chart/Song Requests</option>
+                                <option value="">--</option>
+                                <option value="3.1.1.6">National/Politics</option>
+                                <option value="3.1.1.9">Sports</option>
+                                <option value="3.1.1.12">Traffic</option>
+                                <option value="3.1.1.14">Service information</option>
+                                <option value="3.6.13">Spoken</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="genrehref[]" class="genre-href form-control" value="{{g.href}}">
+                        </td>
+                        <td>
+                            <input type="text" name="genrename[]" class="genre-name form-control" value="{{g.name}}">
+                        </td>
+                        <td>
+                            <a href="#" onclick="return del_genre(this);">Remove</a>
+                        </td>
+                    </tr>
+
 				{% endfor %}
 
 				</table>
-				<a class="btn btn-xs btn-default" onclick="$('#genre_list').append('<tr><td><input type=\'text\' class=\'form-control\' name=\'genrehref[]\'></td><td><input type=\'text\' class=\'form-control\' name=\'genrename[]\'></td><td><a href=\'#\' onclick=\'return del_genre(this);\'>Remove</a></td></tr>');">New genre</a>
+                <script type="text/javascript">
+
+                    function changeGenreSelection(row) {
+                      var genreUrn = "urn:tva:metadata:cs:ContentCS:2011:";
+                      row.parents('.genre_row').find('.genre-href').val(genreUrn + row.parents('.genre_row').find('.genre-select').val());
+                      row.parents('.genre_row').find('.genre-name').val(row.parents('.genre_row').find( ".genre-select option:selected" ).text());
+                    }
+
+
+                    $('.genre-select').on('change', function() { changeGenreSelection($( this )); });
+
+                    var number = 0;
+                    function append_genre_select() {
+                        var temp = $('#genre_row_template').clone();
+                        temp = temp.show();
+                        temp = temp.html(function(index,html){
+                            var a = html.replace(/genre-select-/g,'genre-select-'+number);
+                            a = a.replace(/genre-href-/g,'genre-href-'+number);
+                            a = a.replace(/genre-name-/g,'genre-name-'+number);
+                            return a;
+                        });
+                        temp = temp.attr("id",temp.attr("id")+'-'+number);
+                        temp.find('.genre-select').on('change', function() { changeGenreSelection($( this )); });
+
+                        $('#genre_row_template').parent().append(temp);
+
+                        number++;
+                    }
+                </script>
+                <a class="btn btn-xs btn-default" onclick="append_genre_select();">New genre</a>
 			</div>
 		</div>
 		<label></label>
