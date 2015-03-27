@@ -58,12 +58,26 @@
 					</td>
 					<td>
 						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class="btn btn-default" title="Logs"><i class="ion-ios-list"></i> Logs</a>
-						<a href="http://www.ebulabs.org/tools/radiovis-ajaxplayer/player.php?topic={{c.topic_no_slash}}" class="btn btn-default" target="_blank" title="Ajax player"><i class="ion-play"></i>  Player</a>
+                        <a href="#" onclick="play_topic('{{c.topic_no_slash}}', '{{c.station_name}}', '{{c.name}}' );" class="btn btn-default" title="Ajax player"><i class="ion-play"></i>  Player</a>
+
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+
+    <div id="player_modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">RadioVIS player</h4>
+          </div>
+          <div id="player_modal_body" class="modal-body">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 	<script type="text/javascript">
         function toggle_button(id) {
@@ -91,6 +105,21 @@
 				}
 			})
 		}
+
+        function play_topic(topic, stationname, channel) {
+            var modalUrl = "{{ebuio_baseUrl}}radiovis/channels/playermodal/?topic="+topic+"&stationname="+stationname+"&name="+channel;
+            $.ajax({
+                url: modalUrl
+            }).success(function (data) {
+                $('#player_modal').html(data);
+                $('#player_modal').modal('show');
+            });
+        }
+
+        function closetopic(data) {
+            $('#player_modal').modal('hide');
+        }
+
 	</script>
 
 	<hr style="visibility: hidden; clear: both;">

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork, no_template
 
 from models import db, Station, Channel, Picture, Ecc, LogEntry, ServiceProvider
 from plugit.api import PlugItAPI, Orga
@@ -226,6 +226,28 @@ def radiovis_channels_home(request):
         pictures.append(elem.json)
 
     return {'list': list, 'pictures': pictures}
+
+@action(route="/radiovis/channels/player/", template="radiovis/channels/player.html")
+@no_template()
+def radiovis_channels_player(request):
+    """Show a simple Player."""
+
+    topic = request.args.get('topic')
+    stationname = request.args.get('stationname')
+    name = request.args.get('name')
+
+    return {'stationname': stationname, 'name': name, 'topic': topic}
+
+@action(route="/radiovis/channels/playermodal/", template="radiovis/channels/playermodal.html")
+@no_template()
+def radiovis_channels_playermodal(request):
+    """Show a simple Player."""
+
+    topic = request.args.get('topic')
+    stationname = request.args.get('stationname')
+    name = request.args.get('name')
+
+    return {'stationname': stationname, 'name': name, 'topic': topic}
 
 
 @action(route="/radiovis/channels/set/<id>/<pictureid>")
