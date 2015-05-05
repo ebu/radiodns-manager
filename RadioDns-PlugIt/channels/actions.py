@@ -230,6 +230,7 @@ def channels_export(request):
             oldStationName = elem.station_name
 
         retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+        retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':
         retour_str = StringIO.StringIO()
