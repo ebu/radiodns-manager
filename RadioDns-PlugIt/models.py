@@ -336,6 +336,22 @@ class Channel(db.Model):
         return val
 
     @property
+    def dns_entry_iso(self):
+        val = self.type_id
+        for (t, _, props) in Channel.TYPE_ID_CHOICES:
+            if t == self.type_id:
+                for v in props:
+                    if getattr(self, v) is not None:
+                        value = str(getattr(self, v)).lower()
+
+                        if v == 'ecc_id':  # Special case
+                            cc_obj = Ecc.query.filter_by(id=value).first()
+                            value = (cc_obj.iso).lower()
+
+                        val = value + '.' + val
+        return val
+
+    @property
     def radiodns_entry(self):
         return self.dns_entry + '.radiodns.org.'
 
