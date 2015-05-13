@@ -371,7 +371,11 @@ class Channel(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['topic', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
+        return to_json(self, self.__class__, ['topic', 'station_json', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
+
+    @property
+    def station_json(self):
+        return self.station.json
 
     @property
     def dns_values(self):
