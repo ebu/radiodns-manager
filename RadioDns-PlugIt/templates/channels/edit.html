@@ -198,7 +198,10 @@
 					})
 
 					$('#cc').val(cc_id);
-					$('#ecc').val($('#ecc').attr('cval'));
+					var default_country = $('#ecc').attr('cval')
+					if(!default_country)
+					    default_country = "{{default_country}}";
+					$('#ecc').val(default_country);
 				}
 			})
 		}

@@ -20,8 +20,12 @@
         </div>
         <div id="page-functions" class="pull-right">
 			{% block pagefunctions %}
-				{% if ebuio_u.ebuio_orga_admin %}
+                {% if ebuio_u.ebuio_orga_admin %}
+                    <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
+                      Check Stations
+                    </button>
 					<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-default">Export to zone file</a>
+                    <a href="{{ebuio_baseUrl}}channels/import" class="btn btn-primary">Import channels</a>
 					<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
 				{% endif %}
 			{% endblock %}
@@ -32,13 +36,17 @@
 
 	{% if saved %}
 		<div class="alert alert-success" role="alert">
-			Channel has been saved
+            {% if newchannelscount %}
+                {{newchannelscount}} new channels have been added.
+            {% else %}
+			    The channel has been saved.
+            {% endif %}
 		</div>
 	{% endif %}
 
 	{% if deleted %}
 		<div class="alert alert-success" role="alert">
-			Channel has been deleted
+			The channel has been deleted.
 		</div>
 	{% endif %}
 
@@ -47,6 +55,7 @@
 		<thead>
 			<tr>
 				<th>Station</th>
+                <th>Type</th>
 				<th>Name</th>
 				<th>RadioDNS entry</th>
 				<th>DNS Authoritative FQDN</th>
@@ -60,16 +69,17 @@
 		<tbody>
 			{% for c in list %}
 				<tr>
-					<td>{{c.station_name}}</td>
+					<td><strong>{{c.station_name}}</strong></td>
+                    <td>{{c.type_id}}</td>
 					<td>{{c.name}}</td>
 					<td>{{c.radiodns_entry}}</td>
-					<td id="fqdn-{{c.id}}"><i class="ion-load-c"></i></td>
-					<td id="vis-{{c.id}}"><i class="ion-load-c"></i></td>
-					<td id="epg-{{c.id}}"><i class="ion-load-c"></i></td>
-					<td id="tag-{{c.id}}"><i class="ion-load-c"></i></td>
+					<td id="fqdn-{{c.id}}">{{c.station_json.fqdn}}</td>
+					<td id="vis-{{c.id}}">{{c.station_json.radiovis_service}}</td>
+					<td id="epg-{{c.id}}">{{c.station_json.radioepg_service}}</td>
+					<td id="tag-{{c.id}}">{{c.station_json.radiotag_service}}</td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete {{c.name}} / {{c.radiodns_entry}} ?');">Delete</a>
 							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-xs btn-default">Edit</a>
 						{% endif %}
 					</td>
@@ -156,9 +166,18 @@
 			$('[data-toggle="tooltip"]').tooltip({html: true});
 		}
 
-		{% for c in list %}
+        // Link Check to Button
+        $('#checkButton').on('click', function () {
+            var $btn = $(this).button('loading')
+
+		    {% for c in list %}
 			checkChannel({{c.id}});
-		{% endfor %}
+		    {% endfor %}
+
+            // Reset Button
+            $btn.button('reset')
+          })
+
 
 	</script>
 
