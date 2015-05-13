@@ -95,10 +95,12 @@
                             <th>Short Description</th>
                             <td>{{serviceprovider.short_description}}</td>
                         </tr>
+                        {% comment %}
                         <tr>
                             <th>Long Description</th>
                             <td>{{serviceprovider.long_description}}</td>
                         </tr>
+                        {% endcomment %}
                         <tr>
                             <th>Default Url</th>
                             <td><a href="{{serviceprovider.url_default}}" target="_blank">{{serviceprovider.url_default}}</a></td>
