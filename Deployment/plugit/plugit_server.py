@@ -116,6 +116,8 @@ def configure():
                              'SENTRY_DSN': config.RADIODNS_SENTRY_DSN,
                              'AWS_ACCESS_KEY': config.RADIODNS_AWS_ACCESS_KEY,
                              'AWS_SECRET_KEY': config.RADIODNS_AWS_SECRET_KEY,
+                             'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
+                             'RADIOVIS_RABBITMQ_FALLBACKQUEUE': config.RADIOVIS_RABBITMQ_FALLBACKQUEUE
                             }, use_jinja=True)
 
     # Disable default site
