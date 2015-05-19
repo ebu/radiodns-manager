@@ -39,7 +39,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Station:</label>
 			<div class="col-sm-9 col-md-7">
-				<select name="station">
+				<select name="station" class="form-control" >
 					{% for s in stations %}
 						<option value="{{s.id}}" {% if object.station_id == s.id %}selected{% endif %}>{{s.name}}</option>
 					{% endfor %}
@@ -48,16 +48,18 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Name:</label>
+			<label class="col-sm-3 col-md-3 control-label">Channel Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="name" value="{{object.name}}">
+				<input type="text" class="form-control" name="name" value="{{object.name}}">
 			</div>
 		</div>
+
+        <hr />
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Transmitter type:</label>
 			<div class="col-sm-9 col-md-7">
-				<select name="type_id" id="type" onchange="update_display();">
+				<select name="type_id" id="type" class="form-control" onchange="update_display();">
 					{% for t in types_id %}
 						<option value="{{t.0}}" {% if object.type_id == t.0 %}selected{% endif %}>{{t.1}}</option>
 					{% endfor %}
@@ -65,10 +67,12 @@
 			</div>
 		</div>
 
+        <hr />
+
 		<div class="form-group opblk opblk_ecc_id">
 			<label class="col-sm-3 col-md-3 control-label">ECC:</label>
 			<div class="col-sm-9 col-md-7">
-				<select name="ecc_id" id="ecc" cval="{{object.ecc_id}}">
+				<select name="ecc_id" class="form-control" id="ecc" cval="{{object.ecc_id}}">
 				</select>
 			</div>
 		</div>
@@ -76,7 +80,7 @@
 		<div class="form-group opblk opblk_pi">
 			<label class="col-sm-3 col-md-3 control-label">PI:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="pi" value="{{object.pi}}">
+				<input type="text" class="form-control" name="pi" value="{{object.pi}}">
 				<small>Programme Identificaton</small>
 			</div>
 		</div>
@@ -84,7 +88,7 @@
 		<div class="form-group opblk opblk_frequency">
 			<label class="col-sm-3 col-md-3 control-label">Frequency:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="frequency" value="{{object.frequency}}">
+				<input type="text" class="form-control" name="frequency" value="{{object.frequency}}">
 				<small>wildcard * possible</small>
 			</div>
 		</div>
@@ -92,7 +96,7 @@
 		<div class="form-group opblk opblk_eid">
 			<label class="col-sm-3 col-md-3 control-label">EID:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="eid" value="{{object.eid}}">
+				<input type="text" class="form-control" name="eid" value="{{object.eid}}">
 				<small>Ensemble ID</small>
 			</div>
 		</div>
@@ -100,7 +104,7 @@
 		<div class="form-group opblk opblk_sid">
 			<label class="col-sm-3 col-md-3 control-label">SID:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="sid" value="{{object.sid}}">
+				<input type="text" class="form-control" name="sid" value="{{object.sid}}">
 				<small>Service ID</small>
 			</div>
 		</div>
@@ -108,7 +112,7 @@
 		<div class="form-group opblk opblk_scids">
 			<label class="col-sm-3 col-md-3 control-label">SCIDS:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="scids" value="{{object.scids}}">
+				<input type="text" class="form-control" name="scids" value="{{object.scids}}">
 				<small>Service Component Identifier</small>
 			</div>
 		</div>
@@ -116,7 +120,7 @@
 		<div class="form-group opblk opblk_appty_uatype">
 			<label class="col-sm-3 col-md-3 control-label">appty-uatype:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="appty_uatype" value="{{object.appty_uatype}}">
+				<input type="text" class="form-control" name="appty_uatype" value="{{object.appty_uatype}}">
 				<small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
 			</div>
 		</div>
@@ -124,7 +128,7 @@
 		<div class="form-group opblk opblk_pa">
 			<label class="col-sm-3 col-md-3 control-label">PA:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="pa" value="{{object.pa}}">
+				<input type="text" class="form-control" name="pa" value="{{object.pa}}">
 				<small>Packet Address</small>
 			</div>
 		</div>
@@ -132,7 +136,7 @@
 		<div class="form-group opblk opblk_tx">
 			<label class="col-sm-3 col-md-3 control-label">TX:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="tx" value="{{object.tx}}">
+				<input type="text" class="form-control" name="tx" value="{{object.tx}}">
 				<small>Transmiter Identifier</small>
 			</div>
 		</div>
@@ -140,7 +144,7 @@
 		<div class="form-group opblk opblk_cc">
 			<label class="col-sm-3 col-md-3 control-label">CC:</label>
 			<div class="col-sm-9 col-md-7">
-				<select name="cc" id="cc" cval="{{object.cc}}">
+				<select class="form-control" name="cc" id="cc" cval="{{object.cc}}">
 				</select>
 				<small>Country Code</small>
 			</div>
@@ -149,7 +153,7 @@
 		<div class="form-group opblk opblk_fqdn">
 			<label class="col-sm-3 col-md-3 control-label">FQDN:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="fqdn" value="{{object.fqdn}}">
+				<input type="text" class="form-control" name="fqdn" value="{{object.fqdn}}">
 				<small>Authoritative FQDN</small>
 			</div>
 		</div>
@@ -157,7 +161,7 @@
 		<div class="form-group opblk opblk_serviceIdentifier">
 			<label class="col-sm-3 col-md-3 control-label">serviceIdentifier:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
+				<input type="text" class="form-control" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
 				<small>Service Identifier</small>
 			</div>
 		</div>
