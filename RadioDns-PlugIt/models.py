@@ -7,6 +7,8 @@ import random
 import datetime
 import json
 
+import unicodedata
+
 
 def to_json(inst, cls, bonusProps=[]):
     """
@@ -34,6 +36,7 @@ def to_json(inst, cls, bonusProps=[]):
         d[p] = getattr(inst, p)
     return d
 
+
 class ServiceProvider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     codops = db.Column(db.String(255))
@@ -49,7 +52,8 @@ class ServiceProvider(db.Model):
 
     location_country = db.Column(db.String(5))
 
-    default_logo_image_id = db.Column(db.Integer, db.ForeignKey('logo_image.id', use_alter=True, name='fk_default_logo_id'))
+    default_logo_image_id = db.Column(db.Integer,
+                                      db.ForeignKey('logo_image.id', use_alter=True, name='fk_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
 
     stations = db.relationship('Station', backref='service_provider', lazy='dynamic')
@@ -58,7 +62,7 @@ class ServiceProvider(db.Model):
         self.codops = codops
 
     def __repr__(self):
-         return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+        return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
 
     def check_aws(self):
         return awsutils.check_serviceprovider(self)
@@ -136,7 +140,7 @@ class Station(db.Model):
     random_password = db.Column(db.String(32))
 
     # Services
-    #fqdn_station_prefix = db.Column(db.String(255)) maybe to add due to filtering issue in Alchemy
+    # fqdn_station_prefix = db.Column(db.String(255)) maybe to add due to filtering issue in Alchemy
     radiovis_enabled = db.Column(db.Boolean)
     radiovis_service = db.Column(db.String(255))
     radioepg_enabled = db.Column(db.Boolean)
@@ -158,7 +162,8 @@ class Station(db.Model):
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
     #epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
-    default_logo_image_id = db.Column(db.Integer, db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
+    default_logo_image_id = db.Column(db.Integer,
+                                      db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
 
     @property
@@ -186,10 +191,11 @@ class Station(db.Model):
     def fqdn(self):
         if self.service_provider:
             if self.service_provider.codops:
-                return "%s.%s.%s" % (filter(lambda x: x in string.ascii_letters + string.digits, self.name.lower()),
-                                     self.service_provider.codops.lower(), config.DOMAIN)
+                return "%s.%s.%s" % (
+                    filter(lambda x: x in string.ascii_letters + string.digits,
+                           unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore')),
+                    self.service_provider.codops.lower(), config.DOMAIN)
         return None
-
 
 
     def __init__(self, orga):
@@ -211,7 +217,8 @@ class Station(db.Model):
 
     @property
     def fqdn_prefix(self):
-        return filter(lambda x: x in string.ascii_letters + string.digits, self.name.lower())
+        return filter(lambda x: x in string.ascii_letters + string.digits,
+                      unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore'))
 
     @property
     def fqdn(self):
@@ -221,12 +228,15 @@ class Station(db.Model):
 
     @property
     def stomp_username(self):
-        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters , self.name.lower()) # + string.digits
+        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters + string.digits,
+                                           unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore'))
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data', 'genres_list',
-                                              'fqdn', 'fqdn_prefix'])
+        return to_json(self, self.__class__,
+                       ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data',
+                        'genres_list',
+                        'fqdn', 'fqdn_prefix'])
 
 
 class Ecc(db.Model):
@@ -249,13 +259,13 @@ class Channel(db.Model):
     station_id = db.Column(db.Integer, db.ForeignKey('station.id'))
     name = db.Column(db.String(255))
 
-    TYPE_ID_CHOICES = [ ('fm',   'VHF/FM',    ['ecc_id', 'pi', 'frequency']),
-                        ('dab',  'DAB',       ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']),
-                        ('drm',  'DRM',       ['sid']),
-                        ('amss', 'AMSS',      ['sid']),
-                        ('hd',   'HD Radio',  ['cc', 'tx']),
-                        ('id',   'IP',        ['fqdn', 'serviceIdentifier'])
-                        ]
+    TYPE_ID_CHOICES = [('fm', 'VHF/FM', ['ecc_id', 'pi', 'frequency']),
+                       ('dab', 'DAB', ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']),
+                       ('drm', 'DRM', ['sid']),
+                       ('amss', 'AMSS', ['sid']),
+                       ('hd', 'HD Radio', ['cc', 'tx']),
+                       ('id', 'IP', ['fqdn', 'serviceIdentifier'])
+    ]
 
     type_id = db.Column(db.String(5))
 
@@ -371,7 +381,9 @@ class Channel(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['topic', 'station_json', 'radiodns_entry', 'station_name', 'default_picture_data', 'topic_no_slash'])
+        return to_json(self, self.__class__,
+                       ['topic', 'station_json', 'radiodns_entry', 'station_name', 'default_picture_data',
+                        'topic_no_slash'])
 
     @property
     def station_json(self):
@@ -521,13 +533,13 @@ class Schedule(db.Model):
 
     @property
     def duration(self):
-
         return 'PT' + str(int(self.length / 60)) + 'H' + str(self.length % 60) + 'M'
 
     @property
     def date_of_start_time(self):
         """Return the start time as a date, assuming start_date has been set as a reference"""
         import datetime
+
         return (self.start_date + datetime.timedelta(days=self.day, hours=self.start_hour, minutes=self.start_minute))
 
     @property
@@ -605,7 +617,7 @@ class PictureForEPG(db.Model):
     name = db.Column(db.String(80))
     filename = db.Column(db.String(255))
 
-    #stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
+    # stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
 
     def __init__(self, orga):
         self.orga = orga
@@ -640,7 +652,8 @@ class LogoImage(db.Model):
     url600x600 = db.Column(db.String(255))
 
     service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
-    service_provider = db.relationship("ServiceProvider", backref='logo_images', uselist=False, foreign_keys=[service_provider_id])
+    service_provider = db.relationship("ServiceProvider", backref='logo_images', uselist=False,
+                                       foreign_keys=[service_provider_id])
 
     stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
 
@@ -663,30 +676,35 @@ class LogoImage(db.Model):
             return "%s%s" % (self.service_provider.image_url_prefix, self.filename)
         else:
             return None
+
     @property
     def public_32x32_url(self):
         if self.url32x32:
             return "%s%s" % (self.service_provider.image_url_prefix, self.url32x32)
         else:
             return self.public_url
+
     @property
     def public_112x32_url(self):
         if self.url112x32:
             return "%s%s" % (self.service_provider.image_url_prefix, self.url112x32)
         else:
             return self.public_url
+
     @property
     def public_128x128_url(self):
         if self.url128x128:
             return "%s%s" % (self.service_provider.image_url_prefix, self.url128x128)
         else:
             return self.public_url
+
     @property
     def public_320x240_url(self):
         if self.url320x240:
             return "%s%s" % (self.service_provider.image_url_prefix, self.url320x240)
         else:
             return self.public_url
+
     @property
     def public_600x600_url(self):
         if self.url600x600:
