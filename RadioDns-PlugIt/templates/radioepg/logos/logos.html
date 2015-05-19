@@ -1,7 +1,7 @@
 {% extends "plugIt/base.html" %}
 {% load plugit_tags %}
 
-{% block title %}Logos :: RadioEPG{% endblock %}
+{% block title %}Station Logos :: RadioEPG{% endblock %}
 
 {% block menubar %}
     {% plugitInclude "menubar" %}
@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            RadioEPG: Logos
+            RadioEPG: Station Logos
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -23,42 +23,62 @@
     </div>
     {% endblock %}
 
+    <style>
+        /* TODO Temporarily Add due to https://github.com/twbs/bootstrap/issues/12593 */
+        tbody.collapse.in {
+            display: table-row-group;
+        }
+    </style>
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
+                <th></th>
 				<th>Station</th>
                 <th>Logo</th>
+                <th></th>
 			</tr>
 		</thead>
 
 		<tbody>
 			{% for c in list %}
 				<tr>
-					<td>{{c.name}}</td>
+                    <td><img id="station-img-{{c.id}}" style="height: 32px;width: 32px; {% if not c.default_logo_image_data %}display:none;{% endif %}"
+                             src="{{c.default_logo_image_data.public_url}}">
+                    </td>
+					<td><h4>{{c.name}}</h4></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<select style="margin-bottom: 0px;" onchange="switch_default({{c.id}}, $(this).val(), $(this));">
+							<select style="margin-bottom: 0px;" class="form-control"
+                                    onchange="switch_default({{c.id}}, $(this).val(), $(this));">
 								<option value="0" {% if not c.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
 								{% for p in pictures %}
-									<option value="{{p.id}}" {% if c.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
+									<option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
 								{% endfor %}
 							</select>
 						{% else %}
 							{{c.epg_picture_data.name|default:"<i>Disabled</i>"}}
 						{% endif %}
 					</td>
+                    <td><button class="btn btn-default pull-right" type="button" data-toggle="collapse" data-target="#station-details-{{c.id}}" aria-expanded="false" aria-controls="collapseExample">
+                          <i class="ion-chevron-down"></i>
+                        </button>
+                    </td>
 				</tr>
 				{% if c.radioepg_enabled %}
-				<tr>
-					<td></td>
-					<td>
-						For Directory Service Discovery on you Webpage, include the following in the head section of your webpages:
-						<pre>
-<code class="language-html" data-lang="html">&lt;head&gt;
-	&lt;link rel="radioepg"￼href="http://{{c.radioepg_service}}/radiodns/epg/XSI.xml"&gt;
-&lt;/head&gt;</code></pre>
-					</td>
-				</tr>
+                <tbody class="collapse" id="station-details-{{c.id}}">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            For Directory Service Discovery on you Webpage, include the following in the head section of your webpages:
+                            <pre>
+    <code class="language-html" data-lang="html">&lt;head&gt;
+        &lt;link rel="radioepg" href="http://{{c.radioepg_service}}/radiodns/epg/XSI.xml"&gt;
+    &lt;/head&gt;</code></pre>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
 				{% endif %}
 
 			{% endfor %}
@@ -75,6 +95,15 @@
 					elemToBlink.animate({ opacity: 1 }, 500, function() {
 						elemToBlink.css('backgroundColor', '#ffffff');
 					} );
+					// Update inline image
+					if(val == 0) {
+                        $('#station-img-'+id).hide();
+					} else {
+					    $('#station-img-'+id).show();
+                        var selected = elemToBlink.find('option:selected');
+                        var new_public_url = selected.data('public_url');
+                        $('#station-img-'+id).attr("src", new_public_url);
+                    }
 				}
 			})
 		}
