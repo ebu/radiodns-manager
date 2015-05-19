@@ -24,7 +24,7 @@
                     <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
                       Check Stations
                     </button>
-					<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-default">Export to zone file</a>
+					<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-info">Export to zone file</a>
                     <a href="{{ebuio_baseUrl}}channels/import" class="btn btn-primary">Import channels</a>
 					<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
 				{% endif %}
@@ -184,7 +184,9 @@
             $('#radiodns-channel-table').DataTable( {
                     "paging":   false,
                     "ordering": true,
-                    "info":     true
+                    "info":     true,
+                    columnDefs: [ { orderable: false, targets: [5,6] },
+                                    { "bSearchable": false, "aTargets": [5,6] }]
                 } );
         } );
 

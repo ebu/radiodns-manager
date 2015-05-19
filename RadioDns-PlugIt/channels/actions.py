@@ -476,15 +476,22 @@ def channels_export(request):
     retour += '; EBU Codops        : ' + sp.codops + '\n'
     retour += '; Organization      : ' + orga.name + '\n'
 
-    oldStationName = ''
+    old_station_name = ''
 
-    for elem in Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name, Channel.name).all():
-        if elem.station_name != oldStationName:
-            retour += '\n;;; Station: ' + elem.station_name + '\n'
-            oldStationName = elem.station_name
+    channel_elements = Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name, Channel.name).all()
+    dns_elements =[e.dns_entry for e in channel_elements]
+    for elem in channel_elements:
+        if elem.station_ascii_name != old_station_name:
+            # If Channel Name changes output a new Station header
+            retour += '\n;;; Station: ' + elem.station_ascii_name + '\n'
+            old_station_name = elem.station_ascii_name
 
-        retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
-        retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+        # Add Entries for all channels in ns and iso format
+        wildcard_elem = '*' + elem.dns_entry[elem.dns_entry.find('.'):]
+        wildcards = Channel.query.join(Station).filter(Channel.dns_entry==wildcard_elem).all()
+        if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
+            retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+            retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':
         retour_str = StringIO.StringIO()

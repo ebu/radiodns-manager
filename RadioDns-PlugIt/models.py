@@ -161,7 +161,7 @@ class Station(db.Model):
     schedules = db.relationship('Schedule', backref='station', lazy='dynamic')
     servicefollowingentries = db.relationship('GenericServiceFollowingEntry', backref='station', lazy='dynamic')
 
-    #epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
+    # epg_picture_id = db.Column(db.Integer, db.ForeignKey('picture_forEPG.id'))
     default_logo_image_id = db.Column(db.Integer,
                                       db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
@@ -192,8 +192,7 @@ class Station(db.Model):
         if self.service_provider:
             if self.service_provider.codops:
                 return "%s.%s.%s" % (
-                    filter(lambda x: x in string.ascii_letters + string.digits,
-                           unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore')),
+                    filter(lambda x: x in string.ascii_letters + string.digits, self.ascii_name.lower()),
                     self.service_provider.codops.lower(), config.DOMAIN)
         return None
 
@@ -203,6 +202,10 @@ class Station(db.Model):
 
     def __repr__(self):
         return '<Station %r[%s]>' % (self.name, self.orga)
+
+    @property
+    def ascii_name(self):
+        return unicodedata.normalize('NFKD', self.name).encode('ascii', 'ignore')
 
     def gen_random_password(self):
         self.random_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
@@ -217,8 +220,7 @@ class Station(db.Model):
 
     @property
     def fqdn_prefix(self):
-        return filter(lambda x: x in string.ascii_letters + string.digits,
-                      unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore'))
+        return filter(lambda x: x in string.ascii_letters + string.digits, self.ascii_name.lower())
 
     @property
     def fqdn(self):
@@ -228,15 +230,14 @@ class Station(db.Model):
 
     @property
     def stomp_username(self):
-        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters + string.digits,
-                                           unicodedata.normalize('NFKD', self.name.lower()).encode('ascii', 'ignore'))
+        return str(self.id) + '.' + filter(lambda x: x in string.ascii_letters + string.digits, self.ascii_name.lower())
 
     @property
     def json(self):
         return to_json(self, self.__class__,
                        ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data',
-                        'genres_list',
-                        'fqdn', 'fqdn_prefix'])
+                        'genres_list', 'ascii_name'
+                                       'fqdn', 'fqdn_prefix'])
 
 
 class Ecc(db.Model):
@@ -373,6 +374,13 @@ class Channel(db.Model):
             return ''
 
     @property
+    def station_ascii_name(self):
+        if self.station:
+            return self.station.ascii_name
+        else:
+            return ''
+
+    @property
     def default_picture_data(self):
         if self.default_picture:
             return self.default_picture.json
@@ -382,8 +390,8 @@ class Channel(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__,
-                       ['topic', 'station_json', 'radiodns_entry', 'station_name', 'default_picture_data',
-                        'topic_no_slash'])
+                       ['topic', 'station_json', 'radiodns_entry', 'station_name', 'station_ascii_name',
+                        'default_picture_data', 'topic_no_slash'])
 
     @property
     def station_json(self):
