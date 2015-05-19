@@ -236,8 +236,7 @@ class Station(db.Model):
     def json(self):
         return to_json(self, self.__class__,
                        ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data',
-                        'genres_list', 'ascii_name'
-                                       'fqdn', 'fqdn_prefix'])
+                        'genres_list', 'ascii_name', 'fqdn', 'fqdn_prefix'])
 
 
 class Ecc(db.Model):
