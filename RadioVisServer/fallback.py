@@ -144,7 +144,10 @@ class Fallback():
                         else:
                             text = details['radiotext']
                             link = details['radiolink']
-                            image = config.FB_IMAGE_LOCATIONS + details['filename']
+                            if config.FB_IMAGE_LOCATIONS:
+                                image = config.FB_IMAGE_LOCATIONS + details['filename']
+                            else:
+                                image = details['public_url']
 
                             self.logger.info("Sending image %s with link %s and text %s on channel %s" % (image, link, text, c))
 
