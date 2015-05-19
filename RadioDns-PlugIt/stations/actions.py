@@ -73,7 +73,9 @@ def stations_edit(request, id):
         genres = []
 
         genre_href = request.form.getlist('genrehref[]')
+        genre_href = filter(None, genre_href)
         genre_name = request.form.getlist('genrename[]')
+        genre_name = filter(None, genre_name)
 
         # Services
         object.radiovis_service = request.form.get('radiovis_service')
