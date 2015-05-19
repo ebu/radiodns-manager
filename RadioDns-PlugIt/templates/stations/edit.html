@@ -111,32 +111,53 @@
                         <td>
                             <select id="genre-select-" class="genre-select form-control">
                                 <option value="">--</option>
-                                <option value="3.1.1">News</option>
+                                <option value="3.1.1">News (PTy 1 - News)</option>
                                 <option value="3.1.1.11">Local/Regional</option>
                                 <option value="">--</option>
+                                <option value="3.6">Other Music (PTy 15 - Other Music)</option>
                                 <option value="3.6.1">Classical music</option>
-                                <option value="3.6.2">Jazz</option>
+                                <option value="3.6.1.5">Light Classical music (PTy 13 - Light Classical)</option>
+                                <option value="3.6.1.2">Serious Classical (PTy 14 - Serious Classical)</option>
+                                <option value="3.6.2">Jazz (PTy 24 - Jazz Music)</option>
                                 <option value="3.6.3">Background music</option>
-                                <option value="3.6.4">Pop-rock</option>
-                                <option value="3.6.4.1">Pop</option>
+                                <option value="3.6.3.2">Easy Listening (PTy 12 - EL)</option>
+                                <option value="3.6.3.5">Oldies (PTy 27 - Oldies)</option>
+                                <option value="3.6.4">Pop-rock (PTy 11 - Rock)</option>
+                                <option value="3.6.4.1">Pop (PTy 10 - Pop)</option>
                                 <option value="3.6.4.11">Seasonal/Holiday</option>
                                 <option value="3.6.4.14">Rock</option>
                                 <option value="3.6.4.14.2">Metal</option>
                                 <option value="3.6.4.17">Singer/Songwriter</option>
                                 <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
-                                <option value="3.6.6">Country and Western</option>
+                                <option value="3.6.6">Country and Western (PTy 25 - Country Music)</option>
                                 <option value="3.6.7">Rap/Hip Hop/Reggae</option>
                                 <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
                                 <option value="3.6.8.3">Techno/Industrial</option>
                                 <option value="3.6.8.4">House/Techno House</option>
-                                <option value="3.6.9">World/Traditional</option>
+                                <option value="3.6.9">World/Traditional/Folk (PTy 26/28 - National/Folk Music)</option>
                                 <option value="3.6.10">Hit-Chart/Song Requests</option>
                                 <option value="">--</option>
+                                <option value="1.2">Information (PTy 3 - Information)</option>
+                                <option value="2.1.4">Documentary (PTy 29 - Documentary)</option>
+                                <option value="2.1.8">Phone-In (PTy 21 - PhoneIn)</option>
+                                <option value="3.1">Non-fiction (PTy 9 - Varied)</option>
                                 <option value="3.1.1.6">National/Politics</option>
-                                <option value="3.1.1.9">Sports</option>
                                 <option value="3.1.1.12">Traffic</option>
+                                <option value="3.1.1.13">Weather forecasts (PTy 16 - Weather)</option>
                                 <option value="3.1.1.14">Service information</option>
+                                <option value="3.1.1.16">Current Affairs (PTy 2 - Current Affairs)</option>
+                                <option value="3.1.2.1">Religious/Philisophies (PTy 20 - Religion)</option>
+                                <option value="3.1.3.2">Social (PTy 19 - Social Affairs)</option>
+                                <option value="3.1.3.5">Finance (PTy 17 - Finance)</option>
+                                <option value="3.1.3.6">Education (PTy 5 - Education)</option>
+                                <option value="3.1.4">Arts and Media (PTy 7 - Culture)</option>
+                                <option value="3.1.6">Sciences (PTy 8 - Science)</option>
+                                <option value="3.2">Sports (PTy 4 - Sport)</option>
+                                <option value="3.3">Leisure (PTy 23 - Leisure)</option>
+                                <option value="3.3.5">Travel (PTy 22 - Travel)</option>
+                                <option value="3.4">Fiction (PTy 6 - Drama)</option>
                                 <option value="3.6.13">Spoken</option>
+                                <option value="4.2.1">Children (PTy 18 - Childrens Programmes)</option>
                             </select>
                         </td>
                         <td>
@@ -146,41 +167,63 @@
                             <input type="text" name="genrename[]" id="genre-name-" class="genre-name form-control" value="{{g.name}}">
                         </td>
                         <td>
-                            <a href="#" onclick="return del_genre(this);">Remove</a>
+                            <a href="#" class="btn btn-xs btn-danger" onclick="return del_genre(this);">Remove</a>
                         </td>
                     </tr>
+
 				{% for g in object.genres_list %}
 
-                    <tr class="genre_row" >
+                    <tr class="genre_row hello" >
                         <td>
                             <select class="genre-select form-control">
                                 <option value="">--</option>
-                                <option value="3.1.1">News</option>
+                                <option value="3.1.1">News (PTy 1 - News)</option>
                                 <option value="3.1.1.11">Local/Regional</option>
                                 <option value="">--</option>
+                                <option value="3.6">Other Music (PTy 15 - Other Music)</option>
                                 <option value="3.6.1">Classical music</option>
-                                <option value="3.6.2">Jazz</option>
+                                <option value="3.6.1.5">Light Classical music (PTy 13 - Light Classical)</option>
+                                <option value="3.6.1.2">Serious Classical (PTy 14 - Serious Classical)</option>
+                                <option value="3.6.2">Jazz (PTy 24 - Jazz Music)</option>
                                 <option value="3.6.3">Background music</option>
-                                <option value="3.6.4">Pop-rock</option>
-                                <option value="3.6.4.1">Pop</option>
+                                <option value="3.6.3.2">Easy Listening (PTy 12 - EL)</option>
+                                <option value="3.6.3.5">Oldies (PTy 27 - Oldies)</option>
+                                <option value="3.6.4">Pop-rock (PTy 11 - Rock)</option>
+                                <option value="3.6.4.1">Pop (PTy 10 - Pop)</option>
                                 <option value="3.6.4.11">Seasonal/Holiday</option>
                                 <option value="3.6.4.14">Rock</option>
                                 <option value="3.6.4.14.2">Metal</option>
                                 <option value="3.6.4.17">Singer/Songwriter</option>
                                 <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
-                                <option value="3.6.6">Country and Western</option>
+                                <option value="3.6.6">Country and Western (PTy 25 - Country Music)</option>
                                 <option value="3.6.7">Rap/Hip Hop/Reggae</option>
                                 <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
                                 <option value="3.6.8.3">Techno/Industrial</option>
                                 <option value="3.6.8.4">House/Techno House</option>
-                                <option value="3.6.9">World/Traditional</option>
+                                <option value="3.6.9">World/Traditional/Folk (PTy 26/28 - National/Folk Music)</option>
                                 <option value="3.6.10">Hit-Chart/Song Requests</option>
                                 <option value="">--</option>
+                                <option value="1.2">Information (PTy 3 - Information)</option>
+                                <option value="2.1.4">Documentary (PTy 29 - Documentary)</option>
+                                <option value="2.1.8">Phone-In (PTy 21 - PhoneIn)</option>
+                                <option value="3.1">Non-fiction (PTy 9 - Varied)</option>
                                 <option value="3.1.1.6">National/Politics</option>
-                                <option value="3.1.1.9">Sports</option>
                                 <option value="3.1.1.12">Traffic</option>
+                                <option value="3.1.1.13">Weather forecasts (PTy 16 - Weather)</option>
                                 <option value="3.1.1.14">Service information</option>
+                                <option value="3.1.1.16">Current Affairs (PTy 2 - Current Affairs)</option>
+                                <option value="3.1.2.1">Religious/Philisophies (PTy 20 - Religion)</option>
+                                <option value="3.1.3.2">Social (PTy 19 - Social Affairs)</option>
+                                <option value="3.1.3.5">Finance (PTy 17 - Finance)</option>
+                                <option value="3.1.3.6">Education (PTy 5 - Education)</option>
+                                <option value="3.1.4">Arts and Media (PTy 7 - Culture)</option>
+                                <option value="3.1.6">Sciences (PTy 8 - Science)</option>
+                                <option value="3.2">Sports (PTy 4 - Sport)</option>
+                                <option value="3.3">Leisure (PTy 23 - Leisure)</option>
+                                <option value="3.3.5">Travel (PTy 22 - Travel)</option>
+                                <option value="3.4">Fiction (PTy 6 - Drama)</option>
                                 <option value="3.6.13">Spoken</option>
+                                <option value="4.2.1">Children (PTy 18 - Childrens Programmes)</option>
                             </select>
                         </td>
                         <td>
@@ -190,7 +233,7 @@
                             <input type="text" name="genrename[]" class="genre-name form-control" value="{{g.name}}">
                         </td>
                         <td>
-                            <a href="#" onclick="return del_genre(this);">Remove</a>
+                            <a href="#" class="btn btn-xs btn-danger"  onclick="return del_genre(this);">Remove</a>
                         </td>
                     </tr>
 
