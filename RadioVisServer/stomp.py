@@ -173,7 +173,7 @@ class StompServer():
 
         # Last try
         if not put_in_queue():
-            logger.error("%s:%s Queue is full: Destroying the stom server" % (self.info_ip, self.info_port))
+            logger.error("%s:%s Queue is full: Destroying the stomp server" % (self.info_ip, self.info_port))
             self.close()
 
     def consume_queue(self):
@@ -196,6 +196,7 @@ class StompServer():
                     if topic in self.topics:
                         topicMatching = topic
                     else:  # Is the user subscribled because of a special case ?
+                        # TODO Check if this inserts additinal wait time or if necessary at all
                         topicMatching = radioDns.check_special_matchs(topic, self.topics)
 
                     if topicMatching is not None:
@@ -348,13 +349,14 @@ class StompServer():
                                     logger.debug("%s:%s Client is now subscribed to Regular FM GCC %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
                                 else:
                                     # Does not exists thus convert to wildcard
-                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/\w+')
+                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/(?P<type>\w+)')
                                     fm_r = fm_regex.search(channel)
                                     if fm_r:
                                         fm_ecc = fm_r.groupdict()['ecc']
                                         fm_pi = fm_r.groupdict()['pi']
+                                        fm_type = fm_r.groupdict()['type']
 
-                                        wild_channel = '/topic/fm/%s/%s/*/' % (fm_ecc, fm_pi)
+                                        wild_channel = '/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type)
                                         self.topics.append(wild_channel)
                                         logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, wild_channel, id))
                                     else:
