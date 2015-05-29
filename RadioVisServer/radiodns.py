@@ -79,7 +79,7 @@ class RadioDns_():
 
             self.logger.debug(
                 "Setting radiovis_channels_topics channel topic list with %s elements." % (len(new_topics)))
-            self.durablecache.set('radiovis_channels_topics', new_topics)
+            self.durablecache.set('radiovis_channels_topics', new_topics, time=600)
         except:
             e = sys.exc_info()[0]
             self.logger.error("Error trying to update channel topics in durable cache. %s" % (e))
@@ -127,7 +127,7 @@ class RadioDns_():
             gcc_topic = '/'.join(splited_topic)
 
             self.logger.debug("Setting radiovis_isoecc_ to durable cache topic list with %s." % (gcc_topic))
-            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic)
+            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic, time=600)
             return gcc_topic
 
         return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)

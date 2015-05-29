@@ -129,6 +129,10 @@ class Fallback():
         while True:
             time.sleep(config.FB_FALLBACK_CHECK)
 
+            self.logger.debug("Updating channel list in memcached...")
+            radioDns.update_channel_topics()
+            self.logger.debug("Updating channel list in memcached completed.")
+
             self.logger.debug("Checking for timeouts...")
 
             with self.channels_lock:
