@@ -321,7 +321,7 @@ class StompServer():
                     if channel is None:
 
                         logger.warning("%s:%s SUBSCRIBE without a destination" % (self.info_ip, self.info_port))
-                        self.send_frame('ERROR', [('message', 'I need a destination')], '')
+                        self.send_frame('ERROR', [('message', 'You need a destination to subscribe.')], '')
                     else:
                         channel = channel.strip()
 
@@ -348,7 +348,7 @@ class StompServer():
                                     logger.debug("%s:%s Client is now subscribed to Regular FM GCC %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
                                 else:
                                     # Does not exists thus convert to wildcard
-                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/')
+                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/\w+')
                                     fm_r = fm_regex.search(channel)
                                     if fm_r:
                                         fm_ecc = fm_r.groupdict()['ecc']
@@ -357,6 +357,9 @@ class StompServer():
                                         wild_channel = '/topic/fm/%s/%s/*/' % (fm_ecc, fm_pi)
                                         self.topics.append(wild_channel)
                                         logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, wild_channel, id))
+                                    else:
+                                        logger.warning("%s:%s SUBSCRIBE with incorrect destination: %s" % (self.info_ip, self.info_port, channel))
+                                        self.send_frame('ERROR', [('message', 'Your destination does not matcht required format.')], '')
 
                         else:
                             self.topics.append(channel)
