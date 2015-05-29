@@ -342,7 +342,7 @@ class StompServer():
                                 logger.debug("%s:%s Client is now subscribed to Regular FM %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
                             else:
                                 # Convert to ECC
-                                channel = radioDns.convert_fm_topic_to_gcc(channel)
+                                channel = str(radioDns.convert_fm_topic_to_gcc(channel))
 
                                 if radioDns.contains_channel_topic(channel):
                                     self.topics.append(channel)
@@ -356,7 +356,7 @@ class StompServer():
                                         fm_pi = fm_r.groupdict()['pi']
                                         fm_type = fm_r.groupdict()['type']
 
-                                        channel = '/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type)
+                                        channel = str('/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type))
                                         self.topics.append(channel)
                                         logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
                                     else:
@@ -379,7 +379,7 @@ class StompServer():
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
 
                             logger.debug("%s:%s Fast sending of previous message for topic %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
-                            #converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
+                            converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
 
                             if channel in self.LAST_MESSAGES:
                                 body, headers = self.LAST_MESSAGES[channel]
