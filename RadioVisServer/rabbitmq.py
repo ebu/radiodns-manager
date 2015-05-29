@@ -8,7 +8,6 @@ import sys
 
 from haigha.message import Message
 
-import statsd
 
 from radiodns import RadioDns
 radioDns = RadioDns()
@@ -17,7 +16,7 @@ radioDns = RadioDns()
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
-    def __init__(self, LAST_MESSAGES, watchdog=None):
+    def __init__(self, LAST_MESSAGES, monitoring=None, watchdog=None):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
 
         # List of stompservers
@@ -26,11 +25,12 @@ class RabbitConnexion():
         # Save LAST_MESSAGES
         self.LAST_MESSAGES = LAST_MESSAGES
 
+        self.monitoring = monitoring
+
         # Save the watchdog
         self.watchdog = watchdog
 
         # The global gauge
-        self.gauge = statsd.Gauge(config.STATS_GAUGE_APPNAME)
 
     def consumer(self, msg):
         """Called when a rabbitmq message arrive"""
@@ -52,8 +52,6 @@ class RabbitConnexion():
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
 
-                if self.watchdog:  # If we are the watchdog, send stats
-                    statsd.Counter(config.STATS_COUNTER_NBMESSAGE_RECV + '.'.join(topic.split('/'))).increment()
 
                 # Save the message as the last one
                 converted_topic = radioDns.convert_fm_topic_to_gcc(topic)
@@ -144,10 +142,6 @@ class RabbitConnexion():
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
 
-        if self.watchdog:
-            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND + '.'.join(headers['topic'].split('/'))).increment()
-        else:
-            statsd.Counter(config.STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG + '.'.join(headers['topic'].split('/'))).increment()
 
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")
@@ -174,4 +168,5 @@ class RabbitConnexion():
 
     def update_stats(self):
         """Update stats"""
-        self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))
+        # self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))
+        pass

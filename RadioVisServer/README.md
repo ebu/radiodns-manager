@@ -17,7 +17,6 @@ The python dependencies are:
 * beaker (BSD license)
 * nose (for tests, LGPL license)
 * psutil (for tests, BSD license)
-* python-statsd (BSD license)
 
 You can install them using `pip install _package_`. On Windows, gevent can be found [here](https://pypi.python.org/pypi/gevent#downloads), greentlet [here](http://www.lfd.uci.edu/%7Egohlke/pythonlibs/#greenlet) and psutils [here](https://code.google.com/p/psutil/downloads/detail?name=psutil-1.0.1.win32-py2.7.exe&can=2&q=)
 

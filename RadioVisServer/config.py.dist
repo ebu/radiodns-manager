@@ -11,6 +11,17 @@ RABBITMQ_VHOST = '/'
 RABBITMQ_DEBUG = True
 RABBITMQ_EXCHANGE = 'amq.fanout'
 
+monitoring = {
+    'type':     'rabbitmq',
+    'host':     '127.0.0.1',
+    'port':     5672,
+    'user':     'guest',
+    'password': 'guest',
+    'vhost':    '/',
+    'debug':    True,
+    'exchange': 'amq.fanout'
+}
+
 
 STOMP_IP = '0.0.0.0'
 STOMP_PORT = 61613
