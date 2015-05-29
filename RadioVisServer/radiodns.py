@@ -5,6 +5,7 @@ import logging
 import requests
 
 from beaker.cache import CacheManager
+import pylibmc
 from beaker.util import parse_cache_config_options
 
 import json
@@ -20,6 +21,10 @@ class RadioDns_():
     def __init__(self):
         self.logger = logging.getLogger('radiovisserver.radiodns')
         self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
+        self.durablecache = pylibmc.Client(["127.0.0.1"], binary=True,
+                                           behaviors={"tcp_nodelay": True,
+                                                      "verify_keys": True,
+                                                      "ketama": True})  # CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodnsdurable')
 
     def do_query(self, url, params):
         try:
@@ -53,7 +58,6 @@ class RadioDns_():
         self.logger.debug("Getting channels of %s" % (station_id,))
 
         def get_channels():
-
             self.logger.debug("Query channels of %s, nothing in cache !" % (station_id,))
 
             result = self.do_query('get_channels', {'station_id': station_id})
@@ -66,6 +70,34 @@ class RadioDns_():
 
         return self.cache.get(key="get_channels-" + station_id, createfunc=get_channels)
 
+    def update_channel_topics(self):
+        """Update the channel cache from database"""
+        try:
+            self.logger.debug("Updating channel topic list for durable cache.")
+            new_topics = []
+            for (channel, id) in self.get_all_channels():
+                new_topics.append(channel)
+
+            self.logger.debug(
+                "Setting radiovis_channels_topics channel topic list with %s elements." % (len(new_topics)))
+            self.durablecache.set('radiovis_channels_topics', new_topics)
+        except:
+            e = sys.exc_info()[0]
+            self.logger.error("Error trying to update channel topics in durable cache. %s" % (e))
+            return
+
+
+    def contains_channel_topic(self, topic):
+        """Checks if cache contains a particular channel"""
+        try:
+            # Normalize to ignore /image and /text
+            topic = topic.rstrip('image').rstrip('text')
+            channel_topics = self.durablecache.get('radiovis_channels_topics')
+            return topic in channel_topics
+        except:
+            self.logger.error("Error trying to check channel topic %s in cache." % (topic))
+            return None
+
     def convert_fm_topic_to_gcc(self, topic):
         """Convert a fm topic using gcc instead of country code"""
         # /topic/fm/gcc/  <=> /topic/fm/cc/ . If it's a gcc, topic[13] = '/'
@@ -73,6 +105,10 @@ class RadioDns_():
             return topic
 
         self.logger.debug("Converting %s to use gcc" % (topic,))
+
+        cachevalue = self.durablecache.get('radiovis_isoecc_' + topic)
+        if cachevalue:
+            return cachevalue
 
         def convert_topic():
 
@@ -89,7 +125,11 @@ class RadioDns_():
 
             splited_topic[3] = result['gcc']
 
-            return '/'.join(splited_topic)
+            gcc_topic = '/'.join(splited_topic)
+
+            self.logger.debug("Setting radiovis_isoecc_ to durable cache topic list with %s." % (gcc_topic))
+            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic)
+            return gcc_topic
 
         return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)
 
@@ -140,7 +180,8 @@ class RadioDns_():
     def add_log(self, topic, message, headers, timestamp):
         """Add a log entry"""
 
-        result = self.do_query('add_log', {'topic': topic, 'message': str(message), 'headers': json.dumps(headers), 'timestamp': timestamp})
+        result = self.do_query('add_log', {'topic': topic, 'message': str(message), 'headers': json.dumps(headers),
+                                           'timestamp': timestamp})
 
         if result is None:
             self.logger.error("No reply when add_log %s %s %s %s ?" % (topic, message, headers, timestamp, ))

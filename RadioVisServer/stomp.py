@@ -2,6 +2,7 @@
 import uuid
 import logging
 import time
+import re
 
 from gevent.coros import RLock
 
@@ -161,7 +162,7 @@ class StompServer():
                 return False
 
 
-        # If queue is not full, put it directry
+        # If queue is not full, put it directory
         if not self.queue.full():
             if put_in_queue():  # Another thread can fill the queue
                 return True
@@ -330,8 +331,38 @@ class StompServer():
                             self.channelsByIds[id] = channel
                             self.idsByChannels[channel] = id
 
-                        self.topics.append(channel)
-                        logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+
+                        # If FM Subscribe to Wildcard channel as well
+                        if channel[:10] == "/topic/fm/":
+
+                            # Check if channel exsists as is
+                            if radioDns.contains_channel_topic(channel):
+                                self.topics.append(channel)
+                                logger.debug("%s:%s Client is now subscribed to Regular FM %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                            else:
+                                # Convert to ECC
+                                channel = radioDns.convert_fm_topic_to_gcc(channel)
+
+                                if radioDns.contains_channel_topic(channel):
+                                    self.topics.append(channel)
+                                    logger.debug("%s:%s Client is now subscribed to Regular FM GCC %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                                else:
+                                    # Does not exists thus convert to wildcard
+                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/')
+                                    fm_r = fm_regex.search(channel)
+                                    if fm_r:
+                                        fm_ecc = fm_r.groupdict()['ecc']
+                                        fm_pi = fm_r.groupdict()['pi']
+
+                                        wild_channel = '/topic/fm/%s/%s/*/' % (fm_ecc, fm_pi)
+                                        self.topics.append(wild_channel)
+                                        logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, wild_channel, id))
+
+                        else:
+                            self.topics.append(channel)
+                            logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+
+
 
                         self.monitoring.count("radiovis.global.subscriptions", {
                             "topic": channel,
@@ -376,7 +407,7 @@ class StompServer():
                             del self.channelsByIds[id]
                             del self.idsByChannels[channel]
 
-                        logger.debug("%s:%s Client unsubscribled from %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                        logger.debug("%s:%s Client unsubscribed from %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
 
                 elif command == 'SEND':
 

@@ -112,6 +112,14 @@ def deploy_radiovis():
     radiovis_server.deploy()
 
 @task
+@roles('radiovis')
+def update_radiovis():
+    """Update RadioVIS Servers (plugit)"""
+    print '\n\nUpdating RadioVIS Server Deployment.\n'
+
+    radiovis_server.update_withfallback()
+
+@task
 @roles('rabbitmq')
 def deploy_rabbtimq():
     """Deploy RabbitMQ Servers (plugit)"""

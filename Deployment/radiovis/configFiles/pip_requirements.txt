@@ -7,3 +7,5 @@ haigha
 requests
 beaker
 python-statsd
+gevent
+pylibmc

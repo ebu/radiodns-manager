@@ -181,7 +181,14 @@ def configure():
                         'RADIOVIS_RABBITMQ_FALLBACKQUEUE': config.RADIOVIS_RABBITMQ_FALLBACKQUEUE,
                         'RADIOVIS_API_URL': config.RADIOVIS_API_URL,
                         'PLUGIT_IMAGE_LOCATIONS': config.PLUGIT_IMAGE_LOCATIONS,
-                        'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS
+                        'PLUGIT_PUBLIC_ACCESS': config.PLUGIT_PUBLIC_ACCESS,
+                        'STATS_GAUGE_APPNAME': config.STATS_GAUGE_APPNAME,
+                        'STATS_GAUGE_NB_CLIENTS': config.STATS_GAUGE_NB_CLIENTS,
+                        'STATS_GAUGE_NB_SUBSCRIPTIONS': config.STATS_GAUGE_NB_SUBSCRIPTIONS,
+                        'STATS_COUNTER_NBMESSAGE_SEND': config.STATS_COUNTER_NBMESSAGE_SEND,
+                        'STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG': config.STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG,
+                        'STATS_COUNTER_NBMESSAGE_RECV': config.STATS_COUNTER_NBMESSAGE_RECV,
+                        'RADIOVIS_monitoring': config.RADIOVIS_monitoring
                     }, use_jinja=True)
 
 
@@ -200,11 +207,11 @@ def configure():
 def deploy():
     """Deploy a radiovis server on the current host
     """
-    # upgrade()
-    # install_dependencies()
-    # install_pip_dependencies()
-    # create_logs()
-    # git_init()
+    upgrade()
+    install_dependencies()
+    install_pip_dependencies()
+    create_logs()
+    git_init()
     configure()
     restart_radiovis()
     setup_startup_cronjobs()

@@ -24,6 +24,13 @@ The RadioDNS manager is based on PlugIt, so you will need to :
 
 Instruction to deploy each parts of the project are available in the [Deployment folder](https://github.com/ebu/radiodns-plugit/tree/develop/Deployment)
 
+## RadioDNS Services
+
+## RadioVIS Server
+
+### Processes
+
+![Image](architecture-radiovis-processes.png?raw=true)
 
 ## Contact
 

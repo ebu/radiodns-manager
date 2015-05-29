@@ -13,6 +13,25 @@ RADIOVIS_API_URL = ''
 
 RADIOVIS_LOG_LEVEL = ''
 
+STATS_GAUGE_APPNAME = ''
+STATS_GAUGE_NB_CLIENTS = 'nb_tcp_clients'
+STATS_GAUGE_NB_SUBSCRIPTIONS = 'subscriptions'
+STATS_COUNTER_NBMESSAGE_SEND = 'msg_send'
+STATS_COUNTER_NBMESSAGE_SEND_BY_WATCHDOG = 'msg_send_watchdog'
+STATS_COUNTER_NBMESSAGE_RECV = 'msg_recv'
+
+RADIOVIS_monitoring = {
+    'enabled':  True,
+    'host':     'log.ebu.io',
+    'port':     5672,
+    'user':     'radiovis',
+    'password': 'PZNi77GDmkER73qCmmGOnoJiu9s=',
+    'vhost':    '/',
+    'debug':    True,
+    'exchange': 'monitoring.buffer',
+    'queue':    'radiovis',
+    'server_id': 'b502408f-94c2-4cdf-aa1b-5243a7314cf2'
+}
 
 GIT_REPO = ''
 GIT_BRANCH = ''

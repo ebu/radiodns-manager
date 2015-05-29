@@ -10,7 +10,7 @@ from haigha.message import Message
 
 
 from radiodns import RadioDns
-radioDns = RadioDns()
+
 
 
 class RabbitConnexion():
@@ -18,6 +18,9 @@ class RabbitConnexion():
 
     def __init__(self, LAST_MESSAGES, monitoring=None, watchdog=None):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
+
+        # RadioDNS
+        self.radioDns = RadioDns()
 
         # List of stompservers
         self.stompservers = []
@@ -32,8 +35,11 @@ class RabbitConnexion():
 
         # The global gauge
 
+        # Initialize RadioDNS Caches
+        self.radioDns.update_channel_topics()
+
     def consumer(self, msg):
-        """Called when a rabbitmq message arrive"""
+        """Called when a rabbitmq message arrives"""
 
         try:
             headers = msg.properties['application_headers']
@@ -54,7 +60,7 @@ class RabbitConnexion():
 
 
                 # Save the message as the last one
-                converted_topic = radioDns.convert_fm_topic_to_gcc(topic)
+                converted_topic = self.radioDns.convert_fm_topic_to_gcc(topic)
                 self.LAST_MESSAGES[converted_topic] = (body, bonusHeaders)
 
                 # Broadcast message to all clients
