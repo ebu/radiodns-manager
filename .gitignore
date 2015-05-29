@@ -38,4 +38,8 @@ RadioDns-PlugIt/config.py
 
 .ropeproject
 
+# Logfiles for VIS
 *.log
+
+# IDEA Pycharm and IntelliJ ignore
+.idea
