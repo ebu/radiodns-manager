@@ -6,7 +6,8 @@ import utils
 
 
 # list of dependencies to install
-DEPENDENCIES = ['python-gevent', 'python-setuptools', 'supervisor', 'git']
+DEPENDENCIES = ['python-gevent', 'python-setuptools', 'supervisor', 'git', 'build-essential', 'libz-dev',
+                'gcc', 'python-dev', 'libmemcached-dev', 'memcached']
 
 conf = utils.conf_path_builder(__file__)
 
@@ -191,7 +192,6 @@ def configure():
                         'RADIOVIS_monitoring': config.RADIOVIS_monitoring
                     }, use_jinja=True)
 
-
     upload_template(conf('configFiles/supervisord-radiovis.conf'),
                     '~/gitrepo-radiovis/' + config.RADIOVIS_FOLDER + '/supervisord-radiovis.conf', {
 
@@ -244,6 +244,8 @@ def deploy_withfallback():
 @roles('radiovis')
 def update():
     """Upgrade code to the latest version"""
+    install_dependencies()
+    install_pip_dependencies()
     pull_code()
     restart_radiovis()
 

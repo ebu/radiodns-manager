@@ -23,7 +23,6 @@ class RadioDns_():
         self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
         self.durablecache = pylibmc.Client(["127.0.0.1"], binary=True,
                                            behaviors={"tcp_nodelay": True,
-                                                      "verify_keys": True,
                                                       "ketama": True})  # CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodnsdurable')
 
     def do_query(self, url, params):
