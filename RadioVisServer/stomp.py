@@ -356,9 +356,9 @@ class StompServer():
                                         fm_pi = fm_r.groupdict()['pi']
                                         fm_type = fm_r.groupdict()['type']
 
-                                        wild_channel = '/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type)
-                                        self.topics.append(wild_channel)
-                                        logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, wild_channel, id))
+                                        channel = '/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type)
+                                        self.topics.append(channel)
+                                        logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
                                     else:
                                         logger.warning("%s:%s SUBSCRIBE with incorrect destination: %s" % (self.info_ip, self.info_port, channel))
                                         self.send_frame('ERROR', [('message', 'Your destination does not matcht required format.')], '')
@@ -378,10 +378,8 @@ class StompServer():
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
 
-                            converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
-
-                            if converted_channel in self.LAST_MESSAGES:
-                                body, headers = self.LAST_MESSAGES[converted_channel]
+                            if channel in self.LAST_MESSAGES:
+                                body, headers = self.LAST_MESSAGES[channel]
                                 logger.debug("%s:%s Quick sending the previous message %s (headers: %s)" % (self.info_ip, self.info_port, body, headers))
                                 self.new_message(channel, body, headers)
 
