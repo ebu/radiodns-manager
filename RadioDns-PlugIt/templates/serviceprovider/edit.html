@@ -36,6 +36,8 @@
 	<form action="" method="POST" class="form-horizontal">
 		{% csrf_token %}
 
+        <h2>Names</h2>
+
 		<div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">Short Name (8 chars)</label>
             <div class="col-sm-9 col-md-7">
@@ -77,14 +79,7 @@
 
         <hr />
 
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Default Url</label>
-            <div class="col-sm-9 col-md-7">
-		        <input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
-            </div>
-        </div>
-
-        <hr />
+        <h2>Language</h2>
 
         <div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">Default Language</label>
@@ -95,6 +90,48 @@
             </div>
         </div>
 
+        <hr />
+
+        <h2>Links</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Url</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
+            </div>
+        </div>
+
+
+
+        <hr />
+
+        <h2>Address</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="postal_name" id="postal_name" value="{{object.postal_name}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Street</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="street" id="street" value="{{object.street}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
+            <div class="col-sm-9 col-md-7">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{{object.zipcode}}"/>
+                    </div>
+                    <div class="col-lg-8">
+                    <input type="text" class="form-control" name="city" id="city" value="{{object.city}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">Country</label>
             <div class="col-sm-9 col-md-7">
@@ -102,9 +139,17 @@
 				</select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{object.phone_number}}"/>
+                <small>Format: +41-22-7172745</small>
+            </div>
+        </div>
 
 
         <hr />
+
         <div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
                 <input type="submit" class="btn btn-primary" value="Save">
@@ -116,11 +161,6 @@
 	</form>
 
 	<script type="text/javascript">
-
-		function del_genre(elem) {
-			$(elem).parent().parent().remove();
-			return false;
-		}
 
 		function load_countries() {
 			$.ajax({

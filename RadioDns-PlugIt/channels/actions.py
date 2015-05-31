@@ -30,22 +30,22 @@ def channels_home(request):
         if sp:
             expected_fqdn = sp.fqdn
 
-
     list = []
 
-    for elem in Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name,Channel.type_id,Channel.name).all():
+    for elem in Channel.query.join(Station).filter(Station.orga == int(request.args.get('ebuio_orgapk'))).order_by(
+            Station.name, Channel.type_id, Channel.name).all():
         list.append(elem.json)
 
     stations = []
 
-    for station in Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
+    for station in Station.query.filter_by(
+            orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
         stations.append(station.json)
-
 
     saved = request.args.get('saved') == 'yes'
     newchannelscount = request.args.get('newchannelscount')
     deleted = request.args.get('deleted') == 'yes'
-    
+
     return {'list': list, 'stations': stations, 'expected_fqdn': expected_fqdn,
             'saved': saved, 'deleted': deleted, 'newchannelscount': newchannelscount}
 
@@ -60,27 +60,28 @@ def channels_edit(request, id):
 
     if id != '-':
         object = Channel.query.join(Station).filter(Channel.id == int(id),
-                                                    Station.orga==int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).first()
+                                                    Station.orga == int(
+                                                        request.args.get('ebuio_orgapk') or request.form.get(
+                                                            'ebuio_orgapk'))).first()
 
     if request.method == 'POST':
 
         if not object:
             object = Channel()
 
-
         object.station_id = int(request.form.get('station'))
 
         # Get values
-        for x in ['name', 'type_id', 'ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'fqdn', 'serviceIdentifier']:
+        for x in ['name', 'type_id', 'ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx',
+                  'cc', 'fqdn', 'stream_url', 'mime_type', 'bitrate', 'serviceIdentifier']:
             val = request.form.get(x)
             if val == '':
                 val = None
 
             # Secial case : CC
             if x == 'cc' and val is not None:
-                cc_obj = Ecc.query.filter_by(id = val).first()
+                cc_obj = Ecc.query.filter_by(id=val).first()
                 val = cc_obj.pi + cc_obj.ecc
-
 
             setattr(object, x, val)
 
@@ -99,7 +100,8 @@ def channels_edit(request, id):
 
         if list_props:
 
-            for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'fqdn', 'serviceIdentifier']:
+            for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'fqdn',
+                      'mime_type', 'stream_url', 'bitrate', 'serviceIdentifier']:
                 if x in list_props:  # Want it ? Keep it !
                     if x != 'appty_uatype' and x != 'pa':  # Exception
                         if getattr(object, x) is None or getattr(object, x) == '':
@@ -152,6 +154,13 @@ def channels_edit(request, id):
             if not re.match(r"^[a-f0-9]{,16}$", object.serviceIdentifier):
                 errors.append("serviceIdentifier must be up to 16 characters in hexadecimal, lowercase")
 
+        if object.mime_type is not None:
+            if not re.match(r"^\w+\/\w+$", object.mime_type):
+                errors.append("mime_type must be of format string/string ")
+
+        if object.bitrate is not None:
+            if not re.match(r"^[0-9]+$", object.bitrate):
+                errors.append("bitrate must be digits")
 
 
         # Check station
@@ -161,7 +170,7 @@ def channels_edit(request, id):
 
         # If no errors, save
         if not errors:
-            
+
             if not object.id:
                 db.session.add(object)
 
@@ -179,17 +188,18 @@ def channels_edit(request, id):
             cc_obj = Ecc.query.filter_by(iso=sp.location_country).first()
             default_country = cc_obj.id
 
-
-    if object :
+    if object:
         object = object.json
 
     stations = []
 
-    for station in Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
+    for station in Station.query.filter_by(
+            orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
         stations.append(station.json)
-       
+
     return {'object': object, 'errors': errors, 'stations': stations, 'types_id': Channel.TYPE_ID_CHOICES,
             'default_country': default_country}
+
 
 @action(route="/channels/import", template="channels/import.html", methods=['POST', 'GET'])
 @only_orga_admin_user()
@@ -218,7 +228,7 @@ def channels_import(request):
 
                 # Check errors
                 if object is None:
-                    errors.append("Could not convert text line to channel for line "+line)
+                    errors.append("Could not convert text line to channel for line " + line)
                 else:
                     if object.name == '' or object.name is None:
                         errors.append("Please set a name")
@@ -234,7 +244,8 @@ def channels_import(request):
 
                     if list_props:
 
-                        for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'fqdn', 'serviceIdentifier']:
+                        for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc',
+                                  'fqdn', 'stream_url', 'mime_type', 'bitrate', 'serviceIdentifier']:
                             if x in list_props:  # Want it ? Keep it !
                                 if x != 'appty_uatype' and x != 'pa':  # Exception
                                     if getattr(object, x) is None or getattr(object, x) == '':
@@ -245,7 +256,7 @@ def channels_import(request):
                     # Check each prop
                     if object.pi is not None:
                         if not re.match(r"^[a-fA-F0-9]{4}$", object.pi):
-                            errors.append("pi must be 4 characters in hexadecimal for line "+line)
+                            errors.append("pi must be 4 characters in hexadecimal for line " + line)
 
                     if object.frequency is not None:
                         if not re.match(r"^[0-9]{5}$", object.frequency) and object.frequency != '*':
@@ -253,39 +264,49 @@ def channels_import(request):
 
                     if object.eid is not None:
                         if not re.match(r"^[a-fA-F0-9]{4}$", object.eid):
-                            errors.append("eid must be 4 characters in hexadecimal for line "+line)
+                            errors.append("eid must be 4 characters in hexadecimal for line " + line)
 
                     if object.sid is not None:
                         if not re.match(r"^[a-fA-F0-9]{4}([a-fA-F0-9]{4})?$", object.sid):
-                            errors.append("sid must be 4 or 8 characters in hexadecimal for line "+line)
+                            errors.append("sid must be 4 or 8 characters in hexadecimal for line " + line)
 
                     if object.scids is not None:
                         if not re.match(r"^[a-fA-F0-9]([a-fA-F0-9]{2})?$", object.scids):
-                            errors.append("scids must be 1 or 3 characters in hexadecimal for line "+line)
+                            errors.append("scids must be 1 or 3 characters in hexadecimal for line " + line)
 
                     if object.appty_uatype is not None:
                         if not re.match(r"^[a-fA-F0-9]{2}\-[a-fA-F0-9]{3}$", object.appty_uatype):
-                            errors.append("appty_uatype must be 2 char hexadecimal, hyphen, 3 char hexadecimal for line "+line)
+                            errors.append(
+                                "appty_uatype must be 2 char hexadecimal, hyphen, 3 char hexadecimal for line " + line)
 
                     if object.pa is not None:
                         if object.pa < 1 or object.pa > 1023:
-                            errors.append("pa must be between 1 and 1023 for line "+line)
+                            errors.append("pa must be between 1 and 1023 for line " + line)
 
                     if object.tx is not None:
                         if not re.match(r"^[a-fA-F0-9]{5}$", object.tx):
-                            errors.append("tx must be 5 characters in hexadecimal for line "+line)
+                            errors.append("tx must be 5 characters in hexadecimal for line " + line)
 
                     if object.cc is not None:
                         if not re.match(r"^[a-fA-F0-9]{3}$", object.cc):
-                            errors.append("cc must be 3 characters in hexadecimal for line "+line)
+                            errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
                     if object.fqdn is not None:
                         if not re.match(r"^[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63}).$", object.fqdn):
-                            errors.append("fqdn must be a domain name for line "+line)
+                            errors.append("fqdn must be a domain name for line " + line)
 
                     if object.serviceIdentifier is not None:
                         if not re.match(r"^[a-f0-9]{,16}$", object.serviceIdentifier):
-                            errors.append("serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line "+line)
+                            errors.append(
+                                "serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
+
+                    if object.mime_type is not None:
+                        if not re.match(r"^\w+\/\w+$", object.mime_type):
+                            errors.append("mime_type must be of format string/string " + line)
+
+                    if object.bitrate is not None:
+                        if not re.match(r"^[0-9]+$", object.bitrate):
+                            errors.append("bitrate must be digits")
 
                     # Check station
                     sta = Station.query.filter_by(id=object.station_id).first()
@@ -305,13 +326,12 @@ def channels_import(request):
                     global_errors = global_errors + errors
                     error_lines.append(line)
 
-
         if not global_errors and new_channels_count > 0:
-            return PlugItRedirect('channels/?saved=yes&newchannelscount='+str(new_channels_count))
+            return PlugItRedirect('channels/?saved=yes&newchannelscount=' + str(new_channels_count))
         if new_channels_count == 0:
             global_errors.insert(0, "No new channel added.")
         else:
-            global_errors.insert(0, str(new_channels_count)+" new channel were already added.")
+            global_errors.insert(0, str(new_channels_count) + " new channel were already added.")
 
     default_country = None
 
@@ -325,12 +345,13 @@ def channels_import(request):
 
     stations = []
 
-    for station in Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
+    for station in Station.query.filter_by(
+            orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
         stations.append(station.json)
 
-    return {'importdata': data, 'errors': global_errors, 'error_lines': error_lines, 'stations': stations, 'types_id': Channel.TYPE_ID_CHOICES,
+    return {'importdata': data, 'errors': global_errors, 'error_lines': error_lines, 'stations': stations,
+            'types_id': Channel.TYPE_ID_CHOICES,
             'default_country': default_country}
-
 
 
 def string_to_channel(linedata, station):
@@ -358,7 +379,7 @@ def string_to_channel(linedata, station):
         if not cc_obj:
             ecc_pi = data[2][:1].upper()
             ecc_ecc = data[2][1:].upper()
-            cc_obj = Ecc.query.filter_by(pi=ecc_pi,ecc=ecc_ecc).first()
+            cc_obj = Ecc.query.filter_by(pi=ecc_pi, ecc=ecc_ecc).first()
         if cc_obj:
             object.ecc_id = cc_obj.id
         # PI
@@ -414,7 +435,7 @@ def string_to_channel(linedata, station):
 
     # IP
     # name	ip	fqdn	service id
-    elif object.type_id == 'hd':
+    elif object.type_id == 'ip':
         if len(data) < 4:
             return None
         # cc
@@ -433,12 +454,14 @@ def string_to_channel(linedata, station):
 def channels_delete(request, id):
     """Delete a channel."""
 
-    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Channel.query.join(Station).filter(Channel.id == int(id),
+                                                Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
     db.session.delete(object)
     db.session.commit()
 
     return PlugItRedirect('channels/?deleted=yes')
+
 
 @action(route="/channels/check/<id>")
 @json_only()
@@ -446,11 +469,12 @@ def channels_delete(request, id):
 def channels_check(request, id):
     """Check (and return DNS info) about a channel."""
 
-    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Channel.query.join(Station).filter(Channel.id == int(id),
+                                                Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
     (fqdn, vis, epg, tag) = object.dns_values
 
-    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'expected_fqdn':object.station.fqdn,
+    return {'dns': object.radiodns_entry, 'fqdn': fqdn, 'expected_fqdn': object.station.fqdn,
             'radiovis': {'service': vis, 'exptected_service': object.station.radiovis_service},
             'radioepg': {'service': epg, 'exptected_service': object.station.radioepg_service},
             'radiotag': {'service': tag, 'exptected_service': object.station.radiotag_service}}
@@ -478,8 +502,9 @@ def channels_export(request):
 
     old_station_name = ''
 
-    channel_elements = Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name, Channel.name).all()
-    dns_elements =[e.dns_entry for e in channel_elements]
+    channel_elements = Channel.query.join(Station).filter(
+        Station.orga == int(request.args.get('ebuio_orgapk'))).order_by(Station.name, Channel.name).all()
+    dns_elements = [e.dns_entry for e in channel_elements]
     for elem in channel_elements:
         if elem.station_ascii_name != old_station_name:
             # If Channel Name changes output a new Station header
@@ -488,15 +513,16 @@ def channels_export(request):
 
         # Add Entries for all channels in ns and iso format
         wildcard_elem = '*' + elem.dns_entry[elem.dns_entry.find('.'):]
-        wildcards = Channel.query.join(Station).filter(Channel.dns_entry==wildcard_elem).all()
+        wildcards = Channel.query.join(Station).filter(Channel.dns_entry == wildcard_elem).all()
         if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
             retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
-            retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+            if elem.ecc_id: # Output ISO version if element has ECC
+                retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':
         retour_str = StringIO.StringIO()
         retour_str.write(str(retour))
         retour_str.seek(0)
-        return PlugItSendFile(retour_str, 'text/plain', True, sp.codops.lower()+'-radio-ebu-io-zone')
+        return PlugItSendFile(retour_str, 'text/plain', True, sp.codops.lower() + '-radio-ebu-io-zone')
 
     return {'retour': retour}

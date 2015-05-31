@@ -48,13 +48,13 @@
 					<td><h4>{{c.name}}</h4></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<select style="margin-bottom: 0px;" class="form-control"
-                                    onchange="switch_default({{c.id}}, $(this).val(), $(this));">
-								<option value="0" {% if not c.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
-								{% for p in pictures %}
-									<option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
-								{% endfor %}
-							</select>
+                                <select style="margin-bottom: 0px;" class="form-control"
+                                        onchange="switch_default({{c.id}}, $(this).val(), $(this));">
+                                    <option value="0" {% if not c.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
+                                    {% for p in pictures %}
+                                        <option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
+                                    {% endfor %}
+                                </select>
 						{% else %}
 							{{c.epg_picture_data.name|default:"<i>Disabled</i>"}}
 						{% endif %}
@@ -73,7 +73,7 @@
                             For Directory Service Discovery on you Webpage, include the following in the head section of your webpages:
                             <pre>
     <code class="language-html" data-lang="html">&lt;head&gt;
-        &lt;link rel="radioepg" href="http://{{c.radioepg_service}}/radiodns/epg/XSI.xml"&gt;
+        &lt;link rel="radioepg" href="http://{{c.radioepg_service}}/radiodns/spi/3.1/SI.xml"&gt;
     &lt;/head&gt;</code></pre>
                         </td>
                         <td></td>

@@ -93,6 +93,13 @@ def serviceprovider_edit(request, id):
         object.default_language = request.form.get('default_language')
         object.location_country = request.form.get('location_country')
 
+        object.postal_name = request.form.get('postal_name')
+        object.street = request.form.get('street')
+        object.city = request.form.get('city')
+        object.zipcode = request.form.get('zipcode')
+        object.phone_number = request.form.get('phone_number')
+        object.keywords = request.form.get('keywords')
+
         # Check errors
         if object.medium_name == '':
             errors.append("Please set a medium name")

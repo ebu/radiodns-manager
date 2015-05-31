@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {{ebuio_orga.name}} :: Edit a station
+            {{ebuio_orga.name}} :: <a href="{{ebuio_baseUrl}}stations">Stations</a> :: Edit a station
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -36,6 +36,7 @@
 	<form action="" method="POST" class="form-horizontal">
 		{% csrf_token %}
 
+        <h2>Names</h2>
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
@@ -58,19 +59,19 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Short name (8 chars)</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
+				<input type="text" name="short_name" id="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Medium name (16 chars)</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
+				<input type="text" name="medium_name" id="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Long name (128 chars)</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
+				<input type="text" name="long_name" id="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
 			</div>
 		</div>
 
@@ -79,7 +80,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
+				<input type="text" name="short_description" id="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
 			</div>
 		</div>
 
@@ -93,14 +94,130 @@
 		{% endcomment %}
 
 		<hr />
+
+        <h2>Language</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label"></label>
+            <div class="col-sm-9 col-md-7">
+                <button type="button" id="copyLanguageButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
+                      Same as Service Provider
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Language</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="default_language" class="form-control" id="default_language" cval="{{object.default_language}}">
+                    <option value=""></option><option value="af">Afrikaans</option><option value="ak">Akan</option><option value="an">aragonés</option><option value="ar">عربي</option><option value="as">অসমীয়া</option><option value="ast">Asturianu</option><option value="az">Azərbaycanca</option><option value="be">Беларуская</option><option value="bg">Български</option><option value="br">Brezhoneg</option><option value="ca">Català</option><option value="cs">Čeština</option><option value="csb">Kaszëbsczi</option><option value="cy">Cymraeg</option><option value="da">Dansk</option><option value="de">Deutsch</option><option value="dsb">Dolnoserbšćina</option><option value="el">Ελληνικά</option><option value="en-GB">English (British)</option><option value="en-US">English (US)</option><option value="eo">Esperanto</option><option value="es-AR">Español (de Argentina)</option><option value="es-CL">Español (de Chile)</option><option value="es-ES">Español (de España)</option><option value="es-MX">Español (de México)</option><option value="et">Eesti keel</option><option value="eu">Euskara</option><option value="fa">فارسی</option><option value="ff">Pulaar-Fulfulde</option><option value="fi">suomi</option><option value="fr">Français</option><option value="fy-NL">Frysk</option><option value="ga-IE">Gaeilge</option><option value="gd">Gàidhlig</option><option value="gl">Galego</option><option value="he">עברית</option><option value="hi-IN">हिन्दी (भारत)</option><option value="hr">Hrvatski</option><option value="hsb">Hornjoserbsce</option><option value="hu">magyar</option><option value="hy-AM">Հայերեն</option><option value="id">Bahasa Indonesia</option><option value="is">íslenska</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ka">ქართული</option><option value="kk">Қазақ</option><option value="km">ខ្មែរ</option><option value="ko">한국어</option><option value="ku">Kurdî</option><option value="lg">Luganda</option><option value="lij">Ligure</option><option value="lt">lietuvių kalba</option><option value="lv">Latviešu</option><option value="mk">Македонски</option><option value="ml">മലയാളം</option><option value="mr">मराठी</option><option value="ms">Melayu</option><option value="my">မြန်မာဘာသာ</option><option value="nb-NO">Norsk bokmål</option><option value="nl">Nederlands</option><option value="nso">Sepedi</option><option value="oc">occitan (lengadocian)</option><option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option><option value="pl">Polski</option><option value="pt-BR">Português (do Brasil)</option><option value="pt-PT">Português (Europeu)</option><option value="rm">rumantsch</option><option value="ro">română</option><option value="ru">Русский</option><option value="sk">slovenčina</option><option value="sl">Slovenščina</option><option value="son">Soŋay</option><option value="sq">Shqip</option><option value="sr">Српски</option><option value="sv-SE">Svenska</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="ur">اُردو</option><option value="vi">Tiếng Việt</option><option value="xh">isiXhosa</option><option value="zh-CN">中文 (简体)</option><option value="zh-TW">正體中文 (繁體)</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h2>Links</h2>
+
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Default Url:</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
 			</div>
 		</div>
+        <hr />
+
+
+        <h2>Address</h2>
+
+
+         <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label"></label>
+            <div class="col-sm-9 col-md-7">
+                <button type="button" id="copyAddressButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
+                      Same as Service Provider
+                </button>
+                <button type="button" id="keepNameButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
+                      Keep Channel Name
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="postal_name" id="postal_name" value="{{object.postal_name}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Street</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="street" id="street" value="{{object.street}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
+            <div class="col-sm-9 col-md-7">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{{object.zipcode}}"/>
+                    </div>
+                    <div class="col-lg-8">
+                    <input type="text" class="form-control" name="city" id="city" value="{{object.city}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Country</label>
+            <div class="col-sm-9 col-md-7">
+                <select class="form-control" name="location_country" id="location_country" cval="{{object.location_country}}">
+				</select>
+            </div>
+        </div>
+        <hr />
+        <h2>Contact</h2>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{object.phone_number}}"/>
+                <small>Format: +41-22-7172745</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">SMS</label>
+            <div class="col-sm-9 col-md-7">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-sms-number">Number</span>
+                    <input type="text" class="form-control" name="sms_number" id="sms_number" value="{{object.sms_number}}" aria-describedby="basic-addon-sms-number"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-sms-body">Body</span>
+                <input type="text" class="form-control" name="sms_body" id="sms_body" value="{{object.sms_body}}" aria-describedby="basic-addon-sms-body"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-sms-descr">Description</span>
+                <input type="text" class="form-control" name="sms_description" id="sms_description" value="{{object.sms_description}}" aria-describedby="basic-addon-sms-descr"/>
+                </div>
+                <small>Example: "Send 'STATION_A ' to 406" where 406 is the number, 'STATION_A' is the body. As description use something like "Contact the Studio".</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">E-Mail</label>
+            <div class="col-sm-9 col-md-7">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-email-address">E-Mail</span>
+                    <input type="text" class="form-control" name="email_address" id="email_address" value="{{object.email_address}}" aria-describedby="basic-addon-email-address"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-email-descr">Description</span>
+                <input type="text" class="form-control" name="email_description" id="email_description" value="{{object.email_description}}" aria-describedby="basic-addon-email-descr"/>
+                </div>
+            </div>
+        </div>
 		<hr />
 
+        <h2>Genres</h2>
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Genres:</label>
 			<div class="col-sm-9 col-md-7">
@@ -244,8 +361,10 @@
 
                     function changeGenreSelection(row) {
                       var genreUrn = "urn:tva:metadata:cs:ContentCS:2011:";
+                      var genre_txt = row.parents('.genre_row').find( ".genre-select option:selected" ).text();
+                      genre_txt = genre_txt.replace(/\(.*\)/, '');
                       row.parents('.genre_row').find('.genre-href').val(genreUrn + row.parents('.genre_row').find('.genre-select').val());
-                      row.parents('.genre_row').find('.genre-name').val(row.parents('.genre_row').find( ".genre-select option:selected" ).text());
+                      row.parents('.genre_row').find('.genre-name').val(genre_txt);
                     }
 
 
@@ -268,14 +387,38 @@
 
                         number++;
                     }
+
+                    function load_countries() {
+                        $.ajax({
+                            url: '{{ebuio_baseUrl}}ecc_list',
+                            dataType: 'json',
+                            success: function(data) {
+
+                                $(data.list).each(function(_, el) {
+                                    opt = '<option value="' + el.iso.toLowerCase() + '">' + el.name + ' (' + el.iso + ')</option>';
+
+                                    $('#location_country').append(opt);
+                                })
+
+                                $('#location_country').val($('#location_country').attr('cval'));
+                            }
+                        })
+                    }
+                    load_countries();
+
+                    $('#default_language').val($('#default_language').attr('cval'));
+
+
                 </script>
-                <a class="btn btn-xs btn-default" onclick="append_genre_select();">New genre</a>
+                <a class="btn btn-xs btn-default" onclick="append_genre_select();">Add genre</a>
 			</div>
 		</div>
 		<label></label>
 
 
 		<hr />
+
+        <h2>Services</h2>
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Enable RadioVIS:</label>
@@ -332,7 +475,7 @@
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
 				<input type="submit" class="btn btn-primary" value="Save">
-				<a href="{{ebuio_baseUrl}}stations/" class="btn btn-default">Cancel</a>
+				<a href="{{ebuio_baseUrl}}stations/{{object.id}}" class="btn btn-default">Cancel</a>
 			</div>
 		</div>
 
@@ -345,6 +488,37 @@
 			$(elem).parent().parent().remove();
 			return false;
 		}
+
+        // Link Copy Address to Button
+        $('#copyAddressButton').on('click', function () {
+            var $btn = $(this).button('loading')
+
+		    $('#postal_name').val('{{sp.postal_name}}');
+		    $('#street').val('{{sp.street}}');
+		    $('#zipcode').val('{{sp.zipcode}}');
+		    $('#city').val('{{sp.city}}');
+		    $('#location_country').val('{{sp.location_country}}');
+
+            // Reset Button
+            $btn.button('reset')
+          })
+          $('#keepNameButton').on('click', function () {
+            var $btn = $(this).button('loading')
+
+		    $('#postal_name').val($('#medium_name').val());
+
+            // Reset Button
+            $btn.button('reset')
+          })
+        // Link Language to Button
+        $('#copyLanguageButton').on('click', function () {
+            var $btn = $(this).button('loading')
+
+		    $('#default_language').val('{{sp.default_language}}');
+
+            // Reset Button
+            $btn.button('reset')
+          })
 
 		{% if object.id %}
 		var initialName = $('#station-name').val();
@@ -366,6 +540,69 @@
 		});
 		{% endif %}
 
+        // Automatic naming
+        var short_name_edited = {% if object.short_name %} true {% else %} false {% endif %};
+        var medium_name_edited = {% if object.medium_name %} true {% else %} false {% endif %};
+        var long_name_edited = {% if object.long_name %} true {% else %} false {% endif %};
+        var short_description_edited = {% if object.short_description %} true {% else %} false {% endif %};
+
+        $('#station-name').on('focusout', function() {
+            if($(this).val() != ""){
+                if(!short_name_edited) {
+                    $('#short_name').val($(this).val());
+                }
+                if(!medium_name_edited) {
+                    $('#medium_name').val($(this).val());
+                }
+                if(!long_name_edited) {
+                    $('#long_name').val($(this).val());
+                }
+                if(!short_description_edited) {
+                    $('#short_description').val($(this).val());
+                }
+            }
+		});
+        $('#short_name').on('focusout', function() {
+            if($(this).val() != ""){
+                short_name_edited = true;
+                if(!medium_name_edited) {
+                    $('#medium_name').val($(this).val());
+                }
+                if(!long_name_edited) {
+                    $('#long_name').val($(this).val());
+                }
+                if(!short_description_edited) {
+                    $('#short_description').val($(this).val());
+                }
+            }
+		});
+        $('#medium_name').on('focusout', function() {
+            if($(this).val() != ""){
+                medium_name_edited = true;
+                if(!long_name_edited) {
+                    $('#long_name').val($(this).val());
+                }
+                if(!short_description_edited) {
+                    $('#short_description').val($(this).val());
+                }
+            }
+		});
+        $('#long_name').on('focusout', function() {
+            if($(this).val() != ""){
+                long_name_edited = true;
+                if(!short_description_edited) {
+                    $('#short_description').val($(this).val());
+                }
+            }
+		});
+		$('#short_description').on('focusout', function() {
+            if($(this).val() != ""){
+                short_description_edited = true;
+            }
+		});
+
+
+        // Services
 		$('#radiovis_enabled').click(function () {
 			$("#radiovis_enabled_options").toggle(this.checked);
 			if(this.checked && $("#radiovis_service").val() == "") {

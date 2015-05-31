@@ -6,6 +6,7 @@ import string
 import random
 import datetime
 import json
+import urllib
 
 import unicodedata
 
@@ -48,6 +49,14 @@ class ServiceProvider(db.Model):
     long_description = db.Column(db.String(1200))
     url_default = db.Column(db.String(255))
 
+    postal_name = db.Column(db.String(255))
+    street = db.Column(db.String(255))
+    city = db.Column(db.String(255))
+    zipcode = db.Column(db.String(25))
+    phone_number = db.Column(db.String(128))
+
+    keywords = db.Column(db.String(255))
+
     default_language = db.Column(db.String(5))
 
     location_country = db.Column(db.String(5))
@@ -67,12 +76,38 @@ class ServiceProvider(db.Model):
     def check_aws(self):
         return awsutils.check_serviceprovider(self)
 
+    def escape_slash_rfc3986(self, value):
+        return value.replace('/', '%2F')
+
     @property
     def default_logo_image_data(self):
         if self.default_logo_image:
             return self.default_logo_image.json
         else:
             return None
+
+    @property
+    def epg_country(self):
+        if self.location_country:
+            ecc = Ecc.query.filter_by(iso=self.location_country).first()
+            if ecc:
+                return ecc.name
+        return None
+
+    @property
+    def epg_postal(self):
+        if self.postal_name:
+            return "postal:%s/%s/%s/%s/%s" % (
+                self.escape_slash_rfc3986(self.postal_name), self.escape_slash_rfc3986(self.street),
+                self.escape_slash_rfc3986(self.city), self.escape_slash_rfc3986(self.zipcode),
+                self.escape_slash_rfc3986(self.epg_country))
+        return None
+
+    @property
+    def epg_phone_number(self):
+        if self.phone_number:
+            return "tel:%s" % (self.phone_number)
+        return None
 
     @property
     def fqdn(self):
@@ -122,7 +157,8 @@ class ServiceProvider(db.Model):
 
     @property
     def json(self):
-        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix', 'fqdn',
+        return to_json(self, self.__class__, ['default_logo_image_data', 'image_url_prefix',
+                                              'epg_postal', 'epg_phone_number', 'epg_country', 'fqdn',
                                               'vis_fqdn', 'epg_fqdn', 'tag_fqdn',
                                               'vis_service', 'epg_service', 'tag_service'])
 
@@ -138,6 +174,23 @@ class Station(db.Model):
     long_description = db.Column(db.String(1200))
     url_default = db.Column(db.String(255))
     random_password = db.Column(db.String(32))
+
+    postal_name = db.Column(db.String(255))
+    street = db.Column(db.String(255))
+    city = db.Column(db.String(255))
+    zipcode = db.Column(db.String(25))
+    phone_number = db.Column(db.String(128))
+    sms_number = db.Column(db.String(128))
+    sms_body = db.Column(db.String(255))
+    sms_description = db.Column(db.String(255))
+    email_address = db.Column(db.String(255))
+    email_description = db.Column(db.String(255))
+
+    keywords = db.Column(db.String(255))
+
+    default_language = db.Column(db.String(5))
+
+    location_country = db.Column(db.String(5))
 
     # Services
     # fqdn_station_prefix = db.Column(db.String(255)) maybe to add due to filtering issue in Alchemy
@@ -166,12 +219,53 @@ class Station(db.Model):
                                       db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
 
+    def escape_slash_rfc3986(self, value):
+        return value.replace('/', '%2F')
+
     @property
     def service_provider_data(self):
         if self.service_provider:
             return self.service_provider.json
         else:
             return None
+
+    @property
+    def epg_country(self):
+        if self.location_country:
+            ecc = Ecc.query.filter_by(iso=self.location_country).first()
+            if ecc:
+                return ecc.name
+        return None
+
+    @property
+    def epg_postal(self):
+        if self.postal_name:
+            return "postal:%s/%s/%s/%s/%s" % (
+                self.escape_slash_rfc3986(self.postal_name), self.escape_slash_rfc3986(self.street),
+                self.escape_slash_rfc3986(self.city), self.escape_slash_rfc3986(self.zipcode),
+                self.escape_slash_rfc3986(self.epg_country))
+        return None
+
+    @property
+    def epg_phone_number(self):
+        if self.phone_number:
+            return "tel:%s" % (self.phone_number)
+        return None
+
+    @property
+    def epg_email(self):
+        if self.email_address:
+            return "mailto:%s" % (self.email_address)
+        return None
+
+    @property
+    def epg_sms(self):
+        if self.sms_body:
+            if self.sms_body:
+                return "sms:%s?%s" % (self.sms_number, urllib.urlencode({'body':self.sms_body}))
+            else:
+                return "sms:%s" % (self.sms_number)
+        return None
 
     @property
     def genres_list(self):
@@ -236,6 +330,7 @@ class Station(db.Model):
     def json(self):
         return to_json(self, self.__class__,
                        ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data',
+                        'epg_country', 'epg_postal', 'epg_phone_number', 'epg_sms', 'epg_email',
                         'genres_list', 'ascii_name', 'fqdn', 'fqdn_prefix'])
 
 
@@ -264,8 +359,9 @@ class Channel(db.Model):
                        ('drm', 'DRM', ['sid']),
                        ('amss', 'AMSS', ['sid']),
                        ('hd', 'HD Radio', ['cc', 'tx']),
-                       ('id', 'IP', ['fqdn', 'serviceIdentifier'])
+                       ('id', 'IP', ['fqdn', 'serviceIdentifier', 'stream_url', 'mime_type', 'bitrate'])
     ]
+    TO_IGNORE_IN_DNS = ['stream_url', 'mime_type', 'bitrate']
 
     type_id = db.Column(db.String(5))
 
@@ -280,6 +376,10 @@ class Channel(db.Model):
 
     appty_uatype = db.Column(db.String(6))
     pa = db.Column(db.Integer)
+
+    stream_url = db.Column(db.String(255))
+    bitrate = db.Column(db.Integer)
+    mime_type = db.Column(db.String(64))
 
     tx = db.Column(db.String(5))
     cc = db.Column(db.String(3))
@@ -311,10 +411,10 @@ class Channel(db.Model):
         object.cost = 100
         object.offset = 0
 
-        if self.type_id == 'dab':
+        if self.type_id == 'dab' and not self.mime_type:
             object.mime_type = 'audio/mpeg'
         else:
-            object.mime_type = ''
+            object.mime_type = self.mime_type
 
         db.session.add(object)
         db.session.commit()
@@ -329,8 +429,7 @@ class Channel(db.Model):
     def topic_no_slash(self):
         return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1])
 
-    @property
-    def dns_entry(self):
+    def generate_dns_entry(self, return_iso):
         val = self.type_id
         for (t, _, props) in Channel.TYPE_ID_CHOICES:
             if t == self.type_id:
@@ -340,26 +439,22 @@ class Channel(db.Model):
 
                         if v == 'ecc_id':  # Special case
                             cc_obj = Ecc.query.filter_by(id=value).first()
-                            value = (cc_obj.pi + cc_obj.ecc).lower()
+                            if return_iso:
+                                value = (cc_obj.iso).lower()
+                            else:
+                                value = (cc_obj.pi + cc_obj.ecc).lower()
 
-                        val = value + '.' + val
+                        if v not in Channel.TO_IGNORE_IN_DNS:  # Ignore certain values
+                            val = value + '.' + val
         return val
+
+    @property
+    def dns_entry(self):
+        return self.generate_dns_entry(False)
 
     @property
     def dns_entry_iso(self):
-        val = self.type_id
-        for (t, _, props) in Channel.TYPE_ID_CHOICES:
-            if t == self.type_id:
-                for v in props:
-                    if getattr(self, v) is not None:
-                        value = str(getattr(self, v)).lower()
-
-                        if v == 'ecc_id':  # Special case
-                            cc_obj = Ecc.query.filter_by(id=value).first()
-                            value = (cc_obj.iso).lower()
-
-                        val = value + '.' + val
-        return val
+        return self.generate_dns_entry(True)
 
     @property
     def radiodns_entry(self):

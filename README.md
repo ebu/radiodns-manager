@@ -42,10 +42,11 @@ Contact the EBU (Mathias Coinchon, coinchon@ebu.ch) if you need more information
 * Maximilien Cuony [@the-glu](https://github.com/the-glu)
 * Malik Bougacha [@gcmalloc](https://github.com/gcmalloc)
 * Michael Barroco [@barroco](https://github.com/barroco)
+* Mathieu Habegger [@mhabegger](https://github.com/mhabegger)
 
 
 ## Copyright & License
 
-Copyright (c) 2013-2014, EBU-UER Technology & Innovation
+Copyright (c) 2013-2015, EBU-UER Technology & Innovation
 
 The code is under BSD (3-Clause) License. (see LICENSE.txt)

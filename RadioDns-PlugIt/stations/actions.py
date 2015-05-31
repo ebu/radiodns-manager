@@ -4,7 +4,7 @@
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
 from plugit.api import PlugItAPI, Orga
 import config
-from models import db, Station, ServiceProvider
+from models import db, Station, ServiceProvider, LogoImage
 from aws import awsutils
 import json
 
@@ -34,7 +34,40 @@ def stations_home(request):
         sp = sp.json
 
     return {'serviceprovider': sp, 'ebu_codops': orga.codops,
-            'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded, 'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
+            'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded,
+            'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
+
+
+@action(route="/stations/<id>", template="stations/details.html")
+@only_orga_member_user()
+def station_details(request, id):
+    """Show the station."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    sp = None
+    if orga.codops:
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+
+    saved = request.args.get('saved') == 'yes'
+    deleted = request.args.get('deleted') == 'yes'
+
+    station = None
+    if id != '-':
+        station = Station.query.filter_by(
+            orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+
+    if sp:
+        sp = sp.json
+
+    pictures = []
+
+    for elem in LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(LogoImage.name).all():
+        pictures.append(elem.json)
+
+    return {'station': station.json, 'pictures': pictures, 'serviceprovider': sp, 'ebu_codops': orga.codops,
+            'saved': saved, 'deleted': deleted}
 
 
 @action(route="/stations/edit/<id>", template="stations/edit.html", methods=['POST', 'GET'])
@@ -46,8 +79,8 @@ def stations_edit(request, id):
     errors = []
 
     if id != '-':
-        object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
-
+        object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')),
+                                         id=int(id)).first()
 
     if request.method == 'POST':
 
@@ -69,6 +102,21 @@ def stations_edit(request, id):
         object.long_description = request.form.get('long_description')
         object.url_default = request.form.get('url_default')
         object.ip_allowed = request.form.get('ip_allowed')
+
+        object.postal_name = request.form.get('postal_name')
+        object.street = request.form.get('street')
+        object.city = request.form.get('city')
+        object.zipcode = request.form.get('zipcode')
+        object.phone_number = request.form.get('phone_number')
+        object.sms_number = request.form.get('sms_number')
+        object.sms_body = request.form.get('sms_body')
+        object.sms_description = request.form.get('sms_description')
+        object.keywords = request.form.get('keywords')
+        object.email_address = request.form.get('email_address')
+        object.email_description = request.form.get('email_description')
+
+        object.default_language = request.form.get('default_language')
+        object.location_country = request.form.get('location_country')
 
         genres = []
 
@@ -129,7 +177,7 @@ def stations_edit(request, id):
 
             db.session.commit()
 
-            return PlugItRedirect('stations/?saved=yes')
+            return PlugItRedirect('stations/' + str(object.id) + '?saved=yes')
 
     default_radiovis = ""
     default_radioepg = ""
@@ -138,6 +186,7 @@ def stations_edit(request, id):
     plugitapi = PlugItAPI(config.API_URL)
     orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
 
+    sp = None
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
         if sp:
@@ -145,13 +194,17 @@ def stations_edit(request, id):
             default_radioepg = sp.epg_service
             default_radiotag = sp.tag_service
 
+    if sp:
+        sp = sp.json
+
     if object:
         object = object.json
 
     return {'object': object, 'errors': errors,
-            'default_radiovis_service':default_radiovis,
-            'default_radioepg_service':default_radioepg,
-            'default_radiotag_service':default_radiotag,
+            'sp': sp,
+            'default_radiovis_service': default_radiovis,
+            'default_radioepg_service': default_radioepg,
+            'default_radiotag_service': default_radiotag,
             'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
@@ -181,6 +234,7 @@ def stations_newpassword(request, id):
 
     return PlugItRedirect('stations/?passworded=yes')
 
+
 @action(route="/stations/linkserviceprovider/<id>")
 @json_only()
 @only_orga_admin_user()
@@ -199,6 +253,7 @@ def stations_linkserviceprovider(request, id):
             db.session.commit()
 
     return PlugItRedirect('stations/?serviceprovider=yes')
+
 
 @action(route="/stations/check/<id>")
 @json_only()

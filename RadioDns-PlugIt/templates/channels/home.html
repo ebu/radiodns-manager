@@ -22,7 +22,7 @@
 			{% block pagefunctions %}
                 {% if ebuio_u.ebuio_orga_admin %}
                     <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
-                      Check Stations
+                      Check Channels
                     </button>
 					<a href="{{ebuio_baseUrl}}channels/export/" class="btn btn-info">Export to zone file</a>
                     <a href="{{ebuio_baseUrl}}channels/import" class="btn btn-primary">Import channels</a>
@@ -116,7 +116,7 @@
 
 						var visvalue = vis[3] + ':' + vis[2];
 						visvalue = visvalue.replace(/\.:/, ":");
-						$('#vis-' + id).html(visvalue);
+						$('#vis-' + id).html('<small>VIS</small> '+visvalue);
 						if(visvalue == data.radiovis.exptected_service) {
 							$('#vis-' + id).addClass('text-success');
 						} else {
@@ -124,7 +124,7 @@
 							$('#vis-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioVIS is '+data.radiovis.exptected_service+'"><i class="ion-alert-circled"></i></span>');
 						}
 					} else {
-						$('#vis-' + id).html('no service');
+						$('#vis-' + id).html('<small>VIS</small> no service');
 						$('#vis-' + id).addClass('text-danger');
 					}
 
@@ -133,7 +133,7 @@
 
 						var epgvalue = epg[3] + ':' + epg[2];
 						epgvalue = epgvalue.replace(/\.:/, ":");
-						$('#epg-' + id).html(epgvalue);
+						$('#epg-' + id).html('<small>EPG</small> '+epgvalue);
 						if(epgvalue == data.radioepg.exptected_service) {
 							$('#epg-' + id).addClass('text-success');
 						} else {
@@ -141,7 +141,7 @@
 							$('#epg-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioEPG is '+data.radioepg.exptected_service+'"><i class="ion-alert-circled"></i></span>');
 						}
 					} else {
-						$('#epg-' + id).html('no service');
+						$('#epg-' + id).html('<small>EPG</small> no service');
 						$('#epg-' + id).addClass('text-danger');
 					}
 
@@ -150,7 +150,7 @@
 
 						var tagvalue = tag[3] + ':' + tag[2];
 						tagvalue = tagvalue.replace(/\.:/, ":");
-						$('#tag-' + id).html(tagvalue);
+						$('#tag-' + id).html('<small>TAG</small> '+tagvalue);
 						if(tagvalue == data.radiotag.exptected_service) {
 							$('#tag-' + id).addClass('text-success');
 						} else {
@@ -158,7 +158,7 @@
 							$('#tag-' + id).append('<span class="label label-warning" data-toggle="tooltip" data-placement="top" title="Expected RadioTAG is '+data.radiotag.exptected_service+'"><i class="ion-alert-circled"></i></span>');
 						}
 					} else {
-						$('#tag-' + id).html('no service');
+						$('#tag-' + id).html('<small>TAG</small> no service');
 						$('#tag-' + id).addClass('text-danger');
 					}
 				}
