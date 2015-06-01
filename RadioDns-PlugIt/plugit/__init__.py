@@ -37,8 +37,9 @@ def make_xsi1_hostname_cache_key(*args, **kwargs):
 def make_pi1_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
     hostname = request.host
+    path = request.path
     args = str(hash(frozenset(request.args.items())))
-    return (hostname + '_pi1_' +args).encode('utf-8')
+    return (hostname + '_pi1_' + path + '_' +args).encode('utf-8')
 
 def make_xsi3_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
@@ -296,29 +297,34 @@ def epg_sch_1_xml(path, date):
                 # We have a station based query
                 sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
                 if sp:
-                    channels = Channel.query.join(Station).filter(Station.service_provider_id==sp.id, Station.radioepg_enabled==True).all()
+                    channels = Channel.query.join(Station).filter(Station.service_provider_id == sp.id,
+                                                                  Station.radioepg_enabled).all()
 
             if station:
                 # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
                 channels = filter(lambda x: x.station.fqdn_prefix == station, channels)
 
         else:
-            channels = Channel.query.join(Station).filter(Station.radioepg_enabled==True).all()
+            channels = Channel.query.join(Station).filter(Station.radioepg_enabled).all()
 
         if not channels:
             abort(404)
 
-        base_type = path.split('/')[0]
-        topiced_path = '/topic/' + path
-
         station = None
-
+        topiced_path = '/topic/' + path
         station_channel = filter(lambda x: x.topic_no_slash == topiced_path, channels)
+        if not station_channel:
+            # Check for wildcard match
+            splitter = path.split('/')
+            splitter[3] = '*'
+            wild_path = '/topic/' + '/'.join(splitter)
+            station_channel = filter(lambda x: x.topic_no_slash == wild_path, channels)
+
         if station_channel:
+            # Found station
             station = station_channel[0].station
 
             import datetime
-
             time_format = '%Y-%m-%dT%H:%M:%S%z'
 
             today = datetime.date.today()
