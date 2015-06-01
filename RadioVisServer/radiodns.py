@@ -171,7 +171,7 @@ class RadioDns_():
         """Return the default image, link and message for a channel"""
 
         # Get out of cache if available
-        cachevalue = self.durablecache.get('get_channel_default_' + id)
+        cachevalue = self.durablecache.get('get_channel_default_' + str(id))
         if cachevalue:
             return cachevalue
 
@@ -182,7 +182,7 @@ class RadioDns_():
             return []
 
         # Save to cache
-        self.durablecache.set('get_channel_default_' + id, result['info'], time=RadioDns.CACHE_DURATION)
+        self.durablecache.set('get_channel_default_' + str(id), result['info'], time=RadioDns.CACHE_DURATION)
 
         return result['info']
 
