@@ -223,7 +223,9 @@ class Station(db.Model):
 
 
     def escape_slash_rfc3986(self, value):
-        return value.replace('/', '%2F')
+        if value:
+            return value.replace('/', '%2F')
+        return None
 
     @property
     def service_provider_data(self):

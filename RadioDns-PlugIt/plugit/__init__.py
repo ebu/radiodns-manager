@@ -314,11 +314,31 @@ def epg_sch_1_xml(path, date):
         topiced_path = '/topic/' + path
         station_channel = filter(lambda x: x.topic_no_slash == topiced_path, channels)
         if not station_channel:
-            # Check for wildcard match
-            splitter = path.split('/')
-            splitter[3] = '*'
-            wild_path = '/topic/' + '/'.join(splitter)
-            station_channel = filter(lambda x: x.topic_no_slash == wild_path, channels)
+            # Check for country code if FM
+            csplitter = path.split('/')
+            eccstr = ''
+            if csplitter[0] == 'fm':
+                # Find correct ECC
+                ecc = Ecc.query.filter_by(iso=csplitter[1].upper()).first()
+                if ecc:
+                    eccstr = ('%s%s' % (ecc.pi, ecc.ecc)).lower()
+                    csplitter[1] = eccstr
+                    topiced_ecc_path = '/'.join(csplitter)
+                    station_channel = filter(lambda x: x.topic_no_slash == topiced_ecc_path, channels)
+            if not station_channel:
+                # Check for wildcard match
+                splitter = path.split('/')
+                splitter[3] = '*'
+                wild_path = '/topic/' + '/'.join(splitter)
+                station_channel = filter(lambda x: x.topic_no_slash == wild_path, channels)
+
+            if not station_channel and eccstr:
+                # Still no station so check with wildcard as well
+                splitter = path.split('/')
+                splitter[1] = eccstr
+                splitter[3] = '*'
+                wild_ecc_path = '/topic/' + '/'.join(splitter)
+                station_channel = filter(lambda x: x.topic_no_slash == wild_ecc_path, channels)
 
         if station_channel:
             # Found station
