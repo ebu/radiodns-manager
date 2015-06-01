@@ -147,12 +147,12 @@ def channels_edit(request, id):
                 errors.append("cc must be 3 characters in hexadecimal")
 
         if object.fqdn is not None:
-            if not re.match(r"^[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63}).$", object.fqdn):
+            if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)", object.fqdn):
                 errors.append("fqdn must be a domain name")
 
         if object.serviceIdentifier is not None:
-            if not re.match(r"^[a-f0-9]{,16}$", object.serviceIdentifier):
-                errors.append("serviceIdentifier must be up to 16 characters in hexadecimal, lowercase")
+            if not re.match(r"^[a-z0-9]{,16}$", object.serviceIdentifier):
+                errors.append("serviceIdentifier must be up to 16 letters or number, lowercase")
 
         if object.mime_type is not None:
             if not re.match(r"^\w+\/\w+$", object.mime_type):
@@ -292,13 +292,12 @@ def channels_import(request):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
                     if object.fqdn is not None:
-                        if not re.match(r"^[a-zA-Z\d-]{,63}(\.[a-zA-Z\d-]{,63}).$", object.fqdn):
+                        if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)", object.fqdn):
                             errors.append("fqdn must be a domain name for line " + line)
 
                     if object.serviceIdentifier is not None:
-                        if not re.match(r"^[a-f0-9]{,16}$", object.serviceIdentifier):
-                            errors.append(
-                                "serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
+                        if not re.match(r"^[a-z0-9]{,16}$", object.serviceIdentifier):
+                            errors.append("serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
 
                     if object.mime_type is not None:
                         if not re.match(r"^\w+\/\w+$", object.mime_type):

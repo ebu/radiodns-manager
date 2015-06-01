@@ -266,11 +266,15 @@
 
         $('#stream_url').on('focusout', function() {
             if($(this).val() != ""){
-                if(!fqdn_edited) {
-                    $('#fqdn').val($(this).val());
-                }
-                if(!si_edited) {
-                    $('#serviceIdentifier').val($(this).val());
+                var re = /^\w+:\/\/([^\/]+)\/(.+)$/g;
+                var match = re.exec($(this).val());
+                if(match) {
+                    if(!fqdn_edited) {
+                        $('#fqdn').val(match[1].toLowerCase());
+                    }
+                    if(!si_edited) {
+                        $('#serviceIdentifier').val(match[2].replace(/[^0-9a-zA-Z]/g, '').substring(0,16).toLowerCase());
+                    }
                 }
             }
 		});
