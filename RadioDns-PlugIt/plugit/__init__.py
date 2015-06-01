@@ -34,6 +34,12 @@ def make_xsi1_hostname_cache_key(*args, **kwargs):
     args = str(hash(frozenset(request.args.items())))
     return (hostname + '_xsi1_' +args).encode('utf-8')
 
+def make_pi1_hostname_cache_key(*args, **kwargs):
+    """Generates a cachekey containing the hostname"""
+    hostname = request.host
+    args = str(hash(frozenset(request.args.items())))
+    return (hostname + '_pi1_' +args).encode('utf-8')
+
 def make_xsi3_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
     hostname = request.host
@@ -134,6 +140,7 @@ def epg_1_xml():
 
     # Else
     abort(404)
+# Override Cache Key for XSI 1
 epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 @app.route('/radiodns/spi/3.1/SI.xml')
@@ -230,6 +237,7 @@ def epg_3_xml():
 
     # Else
     abort(404)
+# Override Cache Key for XSI 3
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
 @app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
@@ -261,50 +269,85 @@ def logo(id, w, h):
     return send_from_directory(".", dest_file)
 
 @app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
-@app.cache.cached(timeout=300)
-def epg_sch_xml(path, date):
+@app.cache.cached(timeout=300, key_prefix='PI1_')
+def epg_sch_1_xml(path, date):
     """Special call for EPG scheduling xml"""
 
-    from models import Channel
-    from flask import render_template, Response
+    #        chrts.epg.radio.ebu.io >> XSI for all CHRTS Channels
+    # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
 
-    base_type = path.split('/')[0]
-    topiced_path = '/topic/' + path
-
-    station = None
-
-    for channel in Channel.query.filter(Channel.type_id == base_type).all():
-        if channel.topic_no_slash == topiced_path:
-            station = channel.station
-
-    if station:
-
+    if config.XSISERVING_ENABLED:
+        from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
+        from flask import render_template, Response
         import datetime
-
         time_format = '%Y-%m-%dT%H:%M:%S%z'
 
-        today = datetime.date.today()
-        start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
-        end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
+        channels = None
 
-        # Filter by date
-        date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
-        real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
-        real_end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
+        # Find out what stations to serve if by codops or station
+        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.'+config.XSISERVING_DOMAIN)
+        r = regex.search(request.host)
+        if r:
 
-        list = []
+            station = r.groupdict()['station']
+            provider = r.groupdict()['provider']
 
-        for elem in station.schedules.all():
-            elem.start_date = start_date
+            if provider:
+                # We have a station based query
+                sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
+                if sp:
+                    channels = Channel.query.join(Station).filter(Station.service_provider_id==sp.id, Station.radioepg_enabled==True).all()
 
-            if elem.date_of_start_time.date() == date_to_filter:
-                list.append(elem.json)
+            if station:
+                # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
+                channels = filter(lambda x: x.station.fqdn_prefix == station, channels)
 
-        return Response(render_template('radioepg/schedule/xml.html', schedules=list, start_time=real_start_date.strftime(time_format), end_time=real_end_date.strftime(time_format), creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+        else:
+            channels = Channel.query.join(Station).filter(Station.radioepg_enabled==True).all()
+
+        if not channels:
+            abort(404)
+
+        base_type = path.split('/')[0]
+        topiced_path = '/topic/' + path
+
+        station = None
+
+        station_channel = filter(lambda x: x.topic_no_slash == topiced_path, channels)
+        if station_channel:
+            station = station_channel[0].station
+
+            import datetime
+
+            time_format = '%Y-%m-%dT%H:%M:%S%z'
+
+            today = datetime.date.today()
+            start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
+            end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
+
+            # Filter by date
+            date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
+            real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
+            real_end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
+
+            list = []
+
+            for elem in station.schedules.all():
+                elem.start_date = start_date
+
+                if elem.date_of_start_time.date() == date_to_filter:
+                    list.append(elem.json)
+
+            return Response(render_template('radioepg/schedule/xml1.html', schedules=list,
+                                            start_time=real_start_date.strftime(time_format),
+                                            end_time=real_end_date.strftime(time_format),
+                                            creation_time=datetime.datetime.now().strftime(time_format)),
+                            mimetype='text/xml')
 
     abort(404)
-    # return 'Station not found'
-
+    # return 'Not enabled'
+# Override Cache Key for PI 1
+epg_sch_1_xml.make_cache_key = make_pi1_hostname_cache_key
 
 # Load remaining plug-it routes
 def load_actions(act_mod):
