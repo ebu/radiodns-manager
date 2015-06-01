@@ -18,6 +18,8 @@ import socket
 class RadioDns_():
     """Class to handle connection to the radioDns database: listing of topics and logins, special topic rules"""
 
+    CACHE_DURATION = 600
+
     def __init__(self):
         self.logger = logging.getLogger('radiovisserver.radiodns')
         self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
@@ -79,7 +81,7 @@ class RadioDns_():
 
             self.logger.debug(
                 "Setting radiovis_channels_topics channel topic list with %s elements." % (len(new_topics)))
-            self.durablecache.set('radiovis_channels_topics', new_topics, time=600)
+            self.durablecache.set('radiovis_channels_topics', new_topics, time=RadioDns.CACHE_DURATION)
         except:
             e = sys.exc_info()[0]
             self.logger.error("Error trying to update channel topics in durable cache. %s" % (e))
@@ -127,7 +129,7 @@ class RadioDns_():
             gcc_topic = '/'.join(splited_topic)
 
             self.logger.debug("Setting radiovis_isoecc_ to durable cache topic list with %s." % (gcc_topic))
-            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic, time=600)
+            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic, time=RadioDns.CACHE_DURATION)
             return gcc_topic
 
         return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)
@@ -168,11 +170,19 @@ class RadioDns_():
     def get_channel_default(self, id):
         """Return the default image, link and message for a channel"""
 
+        # Get out of cache if available
+        cachevalue = self.durablecache.get('get_channel_default_' + id)
+        if cachevalue:
+            return cachevalue
+
         result = self.do_query('get_channel_default', {'id': id})
 
         if result is None:
             self.logger.error("No reply when get_channel_default %s ?" % (id, ))
             return []
+
+        # Save to cache
+        self.durablecache.set('get_channel_default_' + id, result['info'], time=RadioDns.CACHE_DURATION)
 
         return result['info']
 

@@ -396,10 +396,8 @@ def radiovis_api_get_channel_default(request, secret):
 
     channel = Channel.query.filter_by(id=request.form.get('id')).first()
 
-    dp = channel.default_picture
-
-    if dp:
-        return {'info': dp.json}
+    if channel and channel.default_picture:
+        return {'info': channel.default_picture.json}
     else:
         return {'info': None}
 
