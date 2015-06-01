@@ -41,7 +41,7 @@ def make_xsi3_hostname_cache_key(*args, **kwargs):
     return (hostname + '_xsi3_' +args).encode('utf-8')
 
 @app.route('/radiodns/epg/XSI.xml')
-@app.cache.cached(timeout=120, key_prefix='XSI1_')
+@app.cache.cached(timeout=300, key_prefix='XSI1_')
 def epg_1_xml():
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
     # Specified by v1.1 2013.10 /radiodns/epg/XSI.xml
@@ -137,7 +137,7 @@ def epg_1_xml():
 epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 @app.route('/radiodns/spi/3.1/SI.xml')
-@app.cache.cached(timeout=120, key_prefix='XSI3_')
+@app.cache.cached(timeout=300, key_prefix='XSI3_')
 def epg_3_xml():
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
     # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
@@ -233,7 +233,7 @@ def epg_3_xml():
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
 @app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
-@app.cache.cached(timeout=120)
+@app.cache.cached(timeout=300)
 def logo(id, w, h):
     """Return a logo for a station"""
 
@@ -261,7 +261,7 @@ def logo(id, w, h):
     return send_from_directory(".", dest_file)
 
 @app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
-@app.cache.cached(timeout=120)
+@app.cache.cached(timeout=300)
 def epg_sch_xml(path, date):
     """Special call for EPG scheduling xml"""
 

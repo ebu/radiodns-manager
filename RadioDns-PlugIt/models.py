@@ -40,7 +40,7 @@ def to_json(inst, cls, bonusProps=[]):
 
 class ServiceProvider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    codops = db.Column(db.String(255))
+    codops = db.Column(db.String(255), index=True)
 
     short_name = db.Column(db.String(8))
     medium_name = db.Column(db.String(16))
@@ -165,7 +165,7 @@ class ServiceProvider(db.Model):
 
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    orga = db.Column(db.Integer)
+    orga = db.Column(db.Integer, index=True)
     name = db.Column(db.String(80))
     short_name = db.Column(db.String(8))
     medium_name = db.Column(db.String(16))
@@ -194,11 +194,11 @@ class Station(db.Model):
 
     # Services
     # fqdn_station_prefix = db.Column(db.String(255)) maybe to add due to filtering issue in Alchemy
-    radiovis_enabled = db.Column(db.Boolean)
+    radiovis_enabled = db.Column(db.Boolean, index=True)
     radiovis_service = db.Column(db.String(255))
-    radioepg_enabled = db.Column(db.Boolean)
+    radioepg_enabled = db.Column(db.Boolean, index=True)
     radioepg_service = db.Column(db.String(255))
-    radiotag_enabled = db.Column(db.Boolean)
+    radiotag_enabled = db.Column(db.Boolean, index=True)
     radiotag_service = db.Column(db.String(255))
 
     service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
@@ -218,6 +218,9 @@ class Station(db.Model):
     default_logo_image_id = db.Column(db.Integer,
                                       db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
+
+    __table_args__ = (db.Index('ix_station_spid_radioepg_enabled', "service_provider_id", "radioepg_enabled"), )
+
 
     def escape_slash_rfc3986(self, value):
         return value.replace('/', '%2F')
@@ -337,9 +340,10 @@ class Station(db.Model):
 class Ecc(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    iso = db.Column(db.String(2))
+    iso = db.Column(db.String(2), index=True)
     pi = db.Column(db.String(2))
     ecc = db.Column(db.String(3))
+    __table_args__ = (db.Index('ix_ecc_pi_ecc', "pi", "ecc"), )
 
     def __repr__(self):
         return '<Ecc %r>' % self.name
@@ -363,7 +367,7 @@ class Channel(db.Model):
     ]
     TO_IGNORE_IN_DNS = ['stream_url', 'mime_type', 'bitrate']
 
-    type_id = db.Column(db.String(5))
+    type_id = db.Column(db.String(5), index=True)
 
     ecc_id = db.Column(db.Integer, db.ForeignKey('ecc.id'))
 
