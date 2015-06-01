@@ -76,7 +76,7 @@ class RadioDns_():
         try:
             self.logger.debug("Updating channel topic list for durable cache.")
             new_topics = []
-            for (channel, id) in self.get_all_channels():
+            for (channel, id) in self.get_all_vis_channels():
                 new_topics.append(channel)
 
             self.logger.debug(
@@ -158,6 +158,22 @@ class RadioDns_():
 
         if result is None:
             self.logger.error("No reply when get_all_channels ?")
+            return []
+
+        retour = []
+
+        for (topic, id) in result['list']:
+            retour.append((self.convert_fm_topic_to_gcc(topic), id))
+
+        return retour
+
+    def get_all_vis_channels(self):
+        """Return the list of all VIS channel that have an image"""
+
+        result = self.do_query('get_all_vis_channels', {})
+
+        if result is None:
+            self.logger.error("No reply when get_all_vis_channels ?")
             return []
 
         retour = []

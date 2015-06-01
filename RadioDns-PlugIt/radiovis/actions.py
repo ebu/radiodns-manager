@@ -383,6 +383,22 @@ def radiovis_api_get_all_channels(request, secret):
 
     return {'list': list}
 
+@action(route="/radiovis/api/<secret>/get_all_vis_channels")
+@only_orga_admin_user()  # To prevent call from IO
+@json_only()
+def radiovis_api_get_all_vis_channels(request, secret):
+    """Retrun the list of all channels"""
+
+    if secret != config.API_SECRET:
+        abort(404)
+        return
+
+    list = []
+
+    for channel in Channel.query.filter(Channel.default_picture_id != None).all():
+        list.append((channel.topic, channel.id))
+
+    return {'list': list}
 
 @action(route="/radiovis/api/<secret>/get_channel_default")
 @only_orga_admin_user()  # To prevent call from IO

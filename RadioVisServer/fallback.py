@@ -76,7 +76,7 @@ class Fallback():
         new_channels = []
         new_id_by_channel = {}
 
-        for (channel, id) in radioDns.get_all_channels():
+        for (channel, id) in radioDns.get_all_vis_channels():
             new_channels.append(channel)
             new_id_by_channel[channel] = id
 
