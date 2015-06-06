@@ -94,7 +94,7 @@
             <link description="{{station.0.email_description}}" uri="{{station.0.epg_email}}"/>
             {% endif %}
 
-            <radiodns fqdn="{{station.0.fqdn}}"
+            <radiodns fqdn="{{station.0.fqdn.rstrip('.')}}"
                       serviceIdentifier="ebu{{station.0.id}}{{service_provider.codops.lower()}}"/>
 
             {% for entry in station.1 %}
