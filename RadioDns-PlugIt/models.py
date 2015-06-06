@@ -607,10 +607,10 @@ class Picture(db.Model):
 
 class LogEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    topic = db.Column(db.String(255))
+    topic = db.Column(db.String(255), index=True)
     body = db.Column(db.Text())
     headers = db.Column(db.Text())
-    reception_timestamp = db.Column(db.Integer())
+    reception_timestamp = db.Column(db.Integer(), index=True)
 
     @property
     def reception_date(self):
