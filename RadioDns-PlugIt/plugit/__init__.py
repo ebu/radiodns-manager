@@ -241,7 +241,8 @@ def epg_3_xml():
 # Override Cache Key for XSI 3
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
-@app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
+# Disabled temporarily due to performance issues
+@app.route('/disabled_radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
 @app.cache.cached(timeout=500)
 def logo(id, w, h):
     """Return a logo for a station"""
