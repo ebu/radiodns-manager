@@ -242,7 +242,7 @@ def epg_3_xml():
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
 # Disabled temporarily due to performance issues
-@app.route('/disabled_radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
+@app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
 @app.cache.cached(timeout=500)
 def logo(id, w, h):
     """Return a logo for a station"""
@@ -270,7 +270,7 @@ def logo(id, w, h):
 
     return send_from_directory(".", dest_file)
 
-@app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
+@app.route('/disabled_radiodns/epg/<path:path>/<int:date>_PI.xml')
 @app.cache.cached(timeout=500, key_prefix='PI1_')
 def epg_sch_1_xml(path, date):
     """Special call for EPG scheduling xml"""
