@@ -20,10 +20,10 @@
         </div>
         <div id="page-functions" class="pull-right">
 			{% block pagefunctions %}
-                <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
-                      Check Stations
-                </button>
-				{% if ebuio_u.ebuio_orga_admin and serviceprovider %}
+                {% if ebuio_u.ebuio_orga_admin and serviceprovider %}
+                    <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
+                          Check Stations
+                    </button>
 					<a href="{{ebuio_baseUrl}}stations/edit/-" class="btn btn-primary">Add a new station</a>
 				{% endif %}
 			{% endblock %}
@@ -121,14 +121,14 @@
 					<td></td>
 					{% endif %}
                     {% endif %}
-					<td>
+					<td style="text-align:right;">
 						{% if ebuio_u.ebuio_orga_admin %}
                             {% if False %}
-							<a href="{{ebuio_baseUrl}}stations/newpassword/{{s.id}}" class="btn btn-xs btn-warning" onclick="return confirm('Are you sure ?');">New password</a>
+							<a href="{{ebuio_baseUrl}}stations/newpassword/{{s.id}}" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure ?');">New password</a>
                             {% endif %}
-                            <a href="{{ebuio_baseUrl}}stations/{{s.id}}" class="btn btn-xs btn-default">Details</a>
-							<a href="{{ebuio_baseUrl}}stations/edit/{{s.id}}" class="btn btn-xs btn-primary">Edit</a>
-                            <a href="{{ebuio_baseUrl}}stations/delete/{{s.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+                            <a href="{{ebuio_baseUrl}}stations/{{s.id}}" class="btn btn-sm btn-default">Details</a>
+							<a href="{{ebuio_baseUrl}}stations/edit/{{s.id}}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ebuio_baseUrl}}stations/delete/{{s.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
                         {% endif %}
 					</td>
 				</tr>
@@ -213,7 +213,8 @@
                     "paging":   false,
                     "ordering": true,
                     "info":     true,
-                    columnDefs: [ { orderable: false, targets: [0,4,5] } ]
+                    columnDefs: [ { orderable: false, targets: [0,4,5] },
+                                { "bSearchable": false, "aTargets": [0,4,5] } ]
                 } );
         } );
 

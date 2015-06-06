@@ -15,7 +15,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {{ebuio_orga.name}} :: Edit a channel
+            {{ebuio_orga.name}} {% if station %}:: {{station.name}} {% endif %}:: {% if object.id %}Edit a channel{% else %}Add a channel {% endif %}
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -41,7 +41,7 @@
 			<div class="col-sm-9 col-md-7">
 				<select name="station" class="form-control" >
 					{% for s in stations %}
-						<option value="{{s.id}}" {% if object.station_id == s.id %}selected{% endif %}>{{s.name}}</option>
+						<option value="{{s.id}}" {% if object.id and object.station_id == s.id %}selected{% elif station and station.id == s.id %}selected{% endif %}>{{s.name}}</option>
 					{% endfor %}
 				</select>
 			</div>
@@ -195,7 +195,7 @@
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
 				<input type="submit" class="btn btn-primary" value="Save">
-				<a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Cancel</a>
+				<a href="{% if station %}{{ebuio_baseUrl}}stations/{{station.id}}/channels{% else %}{{ebuio_baseUrl}}channels/{% endif %}" class="btn btn-default">Cancel</a>
 			</div>
 		</div>
 

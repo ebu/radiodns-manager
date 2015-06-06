@@ -21,6 +21,7 @@
         <div id="page-functions" class="pull-right">
 			{% block pagefunctions %}
                 {% if ebuio_u.ebuio_orga_admin %}
+                {% if ebuio_u.ebuio_orga_admin and serviceprovider %}
                     <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
                       Check Channels
                     </button>
@@ -28,6 +29,7 @@
                     <a href="{{ebuio_baseUrl}}channels/import" class="btn btn-primary">Import channels</a>
 					<a href="{{ebuio_baseUrl}}channels/edit/-" class="btn btn-primary">Add a new channel</a>
 				{% endif %}
+                {% endif %}
 			{% endblock %}
 		</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
@@ -49,6 +51,20 @@
 			The channel has been deleted.
 		</div>
 	{% endif %}
+
+    {% if not ebu_codops %}
+        <div class="alert alert-danger" role="alert">
+			<strong>No CODOPS has been defined for your organisation yet.</strong> <br />
+            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) to get started.
+		</div>
+    {% elif not serviceprovider %}
+		 <div class="alert alert-warning" role="alert">
+			<p><strong>No configuration for your organisation exists yet.</strong> <br />
+			Start by creating the initial service provider configuration.
+			 </p>
+			<p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a></p>
+		</div>
+	{% else %}
 
 	<div class="table-responsive">
 	<table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
@@ -77,10 +93,10 @@
                         <div id="epg-{{c.id}}">{% if c.station_json.radioepg_service %}<small>EPG</small> {{c.station_json.radioepg_service}}{% endif %}</div>
                         <div id="tag-{{c.id}}">{% if c.station_json.radiotag_service %}<small>TAG</small> {{c.station_json.radiotag_service}}{% endif %}</div>
                     </td>
-					<td>
+					<td style="text-align:right;">
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete {{c.name}} / {{c.radiodns_entry}} ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-xs btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}channels/delete/{{c.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{c.name}} / {{c.radiodns_entry}} ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}channels/edit/{{c.id}}" class="btn btn-sm btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>
@@ -191,7 +207,7 @@
         } );
 
 	</script>
-
+    {% endif %}
 
 {% endblock %}
 

@@ -40,7 +40,7 @@
 			<tr>
 				<th>Name</th>
 				<th>Image</th>
-				<th style="width: 100px;"></th>
+				<th style="width: 200px;"></th>
 			</tr>
 		</thead>
 
@@ -51,8 +51,8 @@
 					<td><img class="tooltipme" src="{{ebuio_baseUrl}}{{s.filename}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{ebuio_baseUrl}}{{s.filename}}' width='320' height='240'>"></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}radioepg/gallery/delete/{{s.id}}" class="btn btn-mini btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}radioepg/gallery/edit/{{s.id}}" class="btn btn-mini btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}radioepg/gallery/delete/{{s.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}radioepg/gallery/edit/{{s.id}}" class="btn btn-sm btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>

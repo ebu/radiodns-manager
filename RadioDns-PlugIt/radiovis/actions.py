@@ -100,44 +100,47 @@ def radiovis_gallery_edit(request, id):
 
             return None
 
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            full_path = unique_filename('media/uploads/radiovis/gallery/' + filename)
-            path, name = os.path.split(full_path)
-            file.save(full_path)
-            if object.filename:
-                try:
-                    os.unlink(object.filename)
-                except:
-                    pass
-            object.filename = name
+        new_file = False
+        if request.files:
+            new_file = True
+            file = request.files['file']
+            if file:
+                filename = secure_filename(file.filename)
+                full_path = unique_filename('media/uploads/radiovis/gallery/' + filename)
+                path, name = os.path.split(full_path)
+                file.save(full_path)
+                if object.filename:
+                    try:
+                        os.unlink(object.filename)
+                    except:
+                        pass
+                object.filename = name
 
-        # Check errors
-        if object.name == '':
-            errors.append("Please set a name")
+            # Check errors
+            if object.name == '':
+                errors.append("Please set a name")
 
-        if object.radiotext == '':
-            errors.append("Please set a text")
+            if object.radiotext == '':
+                errors.append("Please set a text")
 
-        if object.radiolink == '':
-            errors.append("Please set a link")
+            if object.radiolink == '':
+                errors.append("Please set a link")
 
-        if object.filename == '' or object.filename is None:
-            errors.append("Please upload an image")
-        else:
-
-            if imghdr.what(full_path) not in ['jpeg', 'png']:
-                errors.append("Image is not an png or jpeg image")
-                os.unlink(full_path)
-                object.filename = None
+            if object.filename == '' or object.filename is None:
+                errors.append("Please upload an image")
             else:
-                im = Image.open(full_path)
-                if im.size != (320, 240):
-                    errors.append("Image must be 320x240")
-                    del im
+
+                if imghdr.what(full_path) not in ['jpeg', 'png']:
+                    errors.append("Image is not an png or jpeg image")
                     os.unlink(full_path)
                     object.filename = None
+                else:
+                    im = Image.open(full_path)
+                    if im.size != (320, 240):
+                        errors.append("Image must be 320x240")
+                        del im
+                        os.unlink(full_path)
+                        object.filename = None
 
         pieces = urlparse.urlparse(object.radiolink)
 
@@ -148,10 +151,12 @@ def radiovis_gallery_edit(request, id):
         if not errors:
 
             # Upload to s3
-            try:
-                awsutils.upload_public_image(sp, name, full_path)
-            except:
-                pass
+            if new_file:
+                try:
+                    awsutils.upload_public_image(sp, name, full_path)
+                except:
+                    pass
+            # TODO Clean up old images on S3
 
             if not object.id:
                 db.session.add(object)

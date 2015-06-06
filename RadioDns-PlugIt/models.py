@@ -400,6 +400,17 @@ class Channel(db.Model):
     def __repr__(self):
         return '<Channel %r[%s]>' % (self.name, self.station.__repr__)
 
+    def updateservicefollowingentry(self):
+        """Updates the existing service following entry linked to the channel if one"""
+        entries = self.servicefollowingentries.all()
+        for entry in entries:
+            if self.type_id == 'dab' and not self.mime_type:
+                entry.mime_type = 'audio/mpeg'
+            else:
+                entry.mime_type = self.mime_type
+
+        db.session.commit()
+
     @property
     def servicefollowingentry(self):
         """Return (or create) the associated service following entry"""
@@ -417,6 +428,7 @@ class Channel(db.Model):
         object.cost = 100
         object.offset = 0
 
+        # Mime Type
         if self.type_id == 'dab' and not self.mime_type:
             object.mime_type = 'audio/mpeg'
         else:
@@ -495,7 +507,10 @@ class Channel(db.Model):
 
     @property
     def station_json(self):
-        return self.station.json
+        if self.station:
+            return self.station.json
+        else:
+            return None
 
     @property
     def dns_values(self):
@@ -548,6 +563,11 @@ class Channel(db.Model):
 
     @property
     def epg_uri(self):
+
+        # Special Case Urls / Streaming / Ip / Ids
+        if self.type_id == 'id' and self.stream_url:
+            return self.stream_url
+
         splited = self.dns_entry.split('.')
         return splited[-1] + ':' + '.'.join(splited[::-1][1:])
 

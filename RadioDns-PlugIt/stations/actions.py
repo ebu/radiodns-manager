@@ -4,7 +4,7 @@
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
 from plugit.api import PlugItAPI, Orga
 import config
-from models import db, Station, ServiceProvider, LogoImage
+from models import db, Station, ServiceProvider, LogoImage, Channel, GenericServiceFollowingEntry, Picture
 from aws import awsutils
 import json
 
@@ -58,6 +58,9 @@ def station_details(request, id):
         station = Station.query.filter_by(
             orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
 
+    if not station:
+        return PlugItRedirect('')
+
     if sp:
         sp = sp.json
 
@@ -68,6 +71,95 @@ def station_details(request, id):
 
     return {'station': station.json, 'pictures': pictures, 'serviceprovider': sp, 'ebu_codops': orga.codops,
             'saved': saved, 'deleted': deleted}
+
+
+@action(route="/stations/<id>/channels", template="stations/channels.html")
+@only_orga_member_user()
+def station_channels(request, id):
+    """Show the list of channels."""
+
+    plugitapi = PlugItAPI(config.API_URL)
+    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+
+    saved = request.args.get('saved') == 'yes'
+    newchannelscount = request.args.get('newchannelscount')
+    deleted = request.args.get('deleted') == 'yes'
+
+    station = None
+    if id != '-':
+        station = Station.query.filter_by(id=int(id),
+                                          orga=int(request.args.get('ebuio_orgapk') or request.form.get(
+                                              'ebuio_orgapk'))).first()
+
+    if not station:
+        return PlugItRedirect('')
+
+    expected_fqdn = station.service_provider.fqdn
+
+    list = []
+
+    for elem in Channel.query.join(Station).filter(Station.id == int(id)).order_by(
+            Station.name, Channel.type_id, Channel.name).all():
+        list.append(elem.json)
+
+    return {'list': list, 'station': station.json, 'expected_fqdn': expected_fqdn,
+            'saved': saved, 'deleted': deleted, 'newchannelscount': newchannelscount}
+
+
+@action(route="/stations/<id>/radiovis/channels", template="stations/radiovis.html")
+@only_orga_member_user()
+def station_radiovis_channels(request, id):
+    """Show the list of channels to edit current picture."""
+
+    station = None
+    if id != '-':
+        station = Station.query.filter_by(id=int(id),
+                                          orga=int(request.args.get('ebuio_orgapk') or request.form.get(
+                                              'ebuio_orgapk'))).first()
+
+    if not station:
+        return PlugItRedirect('')
+
+    list = []
+
+    for elem in Channel.query.join(Station).filter(Station.id == station.id and Station.orga == int(
+            request.args.get('ebuio_orgapk'))).order_by(Channel.type_id, Channel.name).all():
+        list.append(elem.json)
+
+    pictures = []
+
+    for elem in Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
+        pictures.append(elem.json)
+
+    return {'list': list, 'pictures': pictures, 'station': station.json}
+
+
+@action(route="/stations/<id>/radioepg/servicefollowing", template="stations/servicefollowing.html")
+@only_orga_member_user()
+def station_epg_sf(request, id):
+    """Show the list to manage service following."""
+
+    station = None
+    if id != '-':
+        station = Station.query.filter_by(id=int(id),
+                                          orga=int(request.args.get('ebuio_orgapk') or request.form.get(
+                                              'ebuio_orgapk'))).first()
+
+    if not station:
+        return PlugItRedirect('')
+
+    # Build list of entries
+    list = []
+
+    # Channels
+    for elem in station.channels.order_by(Channel.name).all():
+        list.append(elem.servicefollowingentry.json)
+
+    # Custom entries
+    for elem in station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+        list.append(elem.json)
+
+    return {'list': list, 'current_station_id': station.id, 'station': station.json}
 
 
 @action(route="/stations/edit/<id>", template="stations/edit.html", methods=['POST', 'GET'])

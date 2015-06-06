@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, json_only, cache
+from plugit.utils import action, only_orga_member_user, json_only, cache, PlugItRedirect
 
 from models import Ecc
 
@@ -11,7 +11,7 @@ from models import Ecc
 def main_home(request):
     """Show the home page."""
     
-    return {}
+    return PlugItRedirect('stations')
 
 
 # Load the list of countries. Cached

@@ -9,6 +9,7 @@ function radiovisplayer_initsocket(topic, host, port) {
 	ws.radiovis_topic = topic;
 	ws.radiovis_host = host;
 	ws.radiovis_port = port;
+	var allow_wildcard = true;
 
 	var elem = $('.radiovis-main[radiovis-topic="' + topic + '"]');
 	elem.find('.radiovis-innertext').html('Connecting to ' + topic + '...');
@@ -67,7 +68,8 @@ function radiovisplayer_initsocket(topic, host, port) {
 			if (command == 'MESSAGE') {
 
 				//Is it for text ?
-				if (headers['destination']  == evt.target.radiovis_topic + '/text') {
+				if (allow_wildcard && headers['destination'].substr(-5) === "/text" ||
+				        headers['destination']  == evt.target.radiovis_topic + '/text') {
 					//Do we have to show text ?
 					if (body.substr(0, 5) == 'TEXT ') {
 						newText = body.substr(5);
@@ -77,7 +79,8 @@ function radiovisplayer_initsocket(topic, host, port) {
 				}
 
 				//Is it for images ?
-				if (headers['destination']  == evt.target.radiovis_topic + '/image') {
+				if (allow_wildcard && headers['destination'].substr(-6) === "/image" ||
+				        headers['destination']  == evt.target.radiovis_topic + '/image') {
 					//Do we have to show an image ?
 					if (body.substr(0, 5) == 'SHOW ') {
 

@@ -104,7 +104,7 @@ def epg_1_xml():
                     if elem2.servicefollowingentry.active:
                         entries.append(elem2.servicefollowingentry.json)
 
-                        if elem2.type_id == 'fm':  # For FM, also add with the country code
+                        if elem2.type_id == 'fm':  # For FM, also append with the country code
                             try:
                                 data2 = elem2.servicefollowingentry.json
 

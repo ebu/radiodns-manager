@@ -33,44 +33,71 @@
 		</div>
 	{% endif %}
 
-	<form action="" method="POST" enctype="multipart/form-data">
+	<form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
 		{% csrf_token %}
 
-		<label>Channel</label>
-		{% if object.type == 'channel' %}
-			<input type="text" value="{{object.uri}}" disabled>
-		{% else %}
-			<input type="text" name="channel_uri" value="{{object.channel_uri}}">
-		{% endif %}
+        <div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Channel:</label>
+			<div class="col-sm-9 col-md-7">
+                {% if object.type == 'channel' %}
+                    <input type="text" value="{{object.uri}}" disabled class="form-control">
+                {% else %}
+                    <input type="text" name="channel_uri" value="{{object.channel_uri}}" class="form-control">
+                {% endif %}
+			</div>
+		</div>
 
-		<label>Cost</label>
-		<input type="text" name="cost" value="{{object.cost|default:"100"}}">
 
-		{% if object.type == 'channel' %}
+        <div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Cost:</label>
+			<div class="col-sm-9 col-md-7">
+                <input type="text" name="cost" value="{{object.cost|default:"100"}}" class="form-control"   >
+			</div>
+		</div>
+
+        {% if object.type == 'channel' %}
 			{% if object.channel_type == 'dab' %}
-				<label>Mime/type</label>
-				<select name="mime_type">
-					{% for type in dab_mime_types %}
-						<option value="{{type.0}}" {% if object.mime_type == type.0 %}selected{% endif %}>{{type.1}}</option>
-					{% endfor %}
-				</select>
-			{% else %}
-				<input type="hidden" name="mime_type" value="">
-			{% endif %}
-		{% else %}
-			<label>Mime/type</label>
-			<input type="text" name="mime_type" value="{{object.mime_type}}">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">Mime/type:</label>
+                <div class="col-sm-9 col-md-7">
+                    <select name="mime_type" class="form-control">
+                        {% for type in dab_mime_types %}
+                            <option value="{{type.0}}" {% if object.mime_type == type.0 %}selected{% endif %}>{{type.1}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% else %}
+                <input type="hidden" name="mime_type" value="">
+            {% endif %}
+        {% else %}
+        <div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Mime/type:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="mime_type" value="{{object.mime_type}}" class="form-control">
+			</div>
+		</div>
 		{% endif %}
-		
 
-		<label>Offset (ms)</label>
-		<input type="text" name="offset" value="{{object.offset|default:"0"}}">
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Offset (ms):</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="text" name="offset" value="{{object.offset|default:"0"}}" class="form-control">
+			</div>
+		</div>
 
-		
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/" class="btn">Cancel</a>
-			<input type="submit" class="btn btn-primary" value="Save">
-		</span>
+        <hr />
+
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+                {% if backtostation %}
+                <a href="{{ebuio_baseUrl}}stations/{{current_station_id}}/radioepg/servicefollowing" class="btn btn-default">Cancel</a>
+                {% else %}
+                <a href="{{ebuio_baseUrl}}radioepg/servicefollowing/" class="btn">Cancel</a>
+                {% endif %}
+		    </div>
+		</div>
 
 	</form>
 

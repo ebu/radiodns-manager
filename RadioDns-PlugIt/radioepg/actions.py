@@ -336,14 +336,17 @@ def radioepg_servicefollowing_edit(request, id):
 
             db.session.commit()
 
+            if request.args.get('backtostation') == '1':
+                return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
             return PlugItRedirect('radioepg/servicefollowing/?saved=yes')
 
     if object:
         object = object.json
 
-    dab_mime_types = [('audio/mpeg', 'DAB'), ('audio/aacp', 'DAB+')]
+    dab_mime_types = [('audio/mpeg', 'DAB (audio/mpeg)'), ('audio/aacp', 'DAB+ (audio/aacp)')]
 
-    return {'object': object, 'dab_mime_types': dab_mime_types, 'errors': errors, 'current_station_id': station_id}
+    return {'object': object, 'dab_mime_types': dab_mime_types, 'errors': errors, 'current_station_id': station_id,
+            'backtostation': request.args.get('backtostation') == '1'}
 
 
 @action(route="/radioepg/servicefollowing/delete/<id>")
@@ -366,6 +369,9 @@ def radioepg_servicefollowing_delete(request, id):
                 db.session.delete(object)
                 db.session.commit()
 
+
+    if request.args.get('backtostation') == '1':
+        return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
     return PlugItRedirect('radioepg/servicefollowing/?deleted=yes&station_id=' + station_id)
 
 
@@ -393,6 +399,9 @@ def radioepg_servicefollowing_turn(request, mode, id):
             object.active = mode == 'on'
             db.session.commit()
 
+
+    if request.args.get('backtostation') == '1':
+        return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
     return PlugItRedirect('radioepg/servicefollowing/?turned=' + mode + '&station_id=' + station_id)
 
 

@@ -39,14 +39,15 @@
 		</div>
 	{% endif %}
 
-	<table class="table table-striped table-hover table-condensed">
+	<div class="table-responsive">
+	<table id="radiovis-img-table" class="display" cellspacing="0" width="100%">
 		<thead>
 			<tr>
 				<th>Name</th>
 				<th>Text</th>
 				<th>URL</th>
 				<th>Image</th>
-				<th style="width: 100px;"></th>
+				<th style="width: 150px;"></th>
 			</tr>
 		</thead>
 
@@ -57,10 +58,10 @@
 					<td>{{s.radiotext}}</td>
 					<td>{{s.radiolink}}</td>
 					<td><img class="tooltipme" src="{{s.public_url}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{s.public_url}}' width='320' height='240'>"></td>
-					<td>
+					<td style="text-align:right;">
 						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/delete/{{s.id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/{{s.id}}" class="btn btn-xs btn-default">Edit</a>
+							<a href="{{ebuio_baseUrl}}radiovis/gallery/delete/{{s.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/{{s.id}}" class="btn btn-sm btn-default">Edit</a>
 						{% endif %}
 					</td>
 				</tr>
@@ -68,8 +69,20 @@
 		</tbody>
 	</table>
 
+    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
 	<script type="text/javascript">
-		$('.tooltipme').tooltip({html: true});
+
+		$(document).ready(function() {
+		    $('.tooltipme').tooltip({html: true});
+            $('#radiovis-img-table').DataTable( {
+                    "paging":   false,
+                    "ordering": true,
+                    "info":     true,
+                    columnDefs: [ { orderable: false, targets: [3,4] },
+                                        { "bSearchable": false, "aTargets": [3,4] } ]
+                } );
+        } );
 	</script>
 
 

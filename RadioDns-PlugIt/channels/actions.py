@@ -46,7 +46,11 @@ def channels_home(request):
     newchannelscount = request.args.get('newchannelscount')
     deleted = request.args.get('deleted') == 'yes'
 
+    if sp:
+        sp = sp.json
+
     return {'list': list, 'stations': stations, 'expected_fqdn': expected_fqdn,
+            'serviceprovider': sp, 'ebu_codops': orga.codops,
             'saved': saved, 'deleted': deleted, 'newchannelscount': newchannelscount}
 
 
@@ -55,8 +59,14 @@ def channels_home(request):
 def channels_edit(request, id):
     """Edit a channel."""
 
+    station = None
     object = None
     errors = []
+
+    station_id = request.args.get('station_id')
+    if station_id:
+        station = Station.query.filter(Station.id == station_id,
+                                       Station.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).first()
 
     if id != '-':
         object = Channel.query.join(Station).filter(Channel.id == int(id),
@@ -176,7 +186,13 @@ def channels_edit(request, id):
 
             db.session.commit()
 
-            return PlugItRedirect('channels/?saved=yes')
+            # Update the service entries for the channel
+            object.updateservicefollowingentry()
+
+            if station:
+                return PlugItRedirect(('stations/%s/channels?saved=yes') % station.id)
+            else:
+                return PlugItRedirect('channels/?saved=yes')
 
     default_country = None
 
@@ -193,12 +209,15 @@ def channels_edit(request, id):
 
     stations = []
 
-    for station in Station.query.filter_by(
+    for s in Station.query.filter_by(
             orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).all():
-        stations.append(station.json)
+        stations.append(s.json)
 
-    return {'object': object, 'errors': errors, 'stations': stations, 'types_id': Channel.TYPE_ID_CHOICES,
-            'default_country': default_country}
+    if station:
+        station = station.json
+
+    return {'object': object, 'errors': errors, 'stations': stations, 'station': station,
+            'types_id': Channel.TYPE_ID_CHOICES, 'default_country': default_country}
 
 
 @action(route="/channels/import", template="channels/import.html", methods=['POST', 'GET'])
@@ -292,12 +311,14 @@ def channels_import(request):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
                     if object.fqdn is not None:
-                        if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)", object.fqdn):
+                        if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)",
+                                        object.fqdn):
                             errors.append("fqdn must be a domain name for line " + line)
 
                     if object.serviceIdentifier is not None:
                         if not re.match(r"^[a-z0-9]{,16}$", object.serviceIdentifier):
-                            errors.append("serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
+                            errors.append(
+                                "serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
 
                     if object.mime_type is not None:
                         if not re.match(r"^\w+\/\w+$", object.mime_type):
@@ -459,6 +480,8 @@ def channels_delete(request, id):
     db.session.delete(object)
     db.session.commit()
 
+    if request.args.get('station_id'):
+        return PlugItRedirect('stations/%s/channels?deleted=yes' % request.args.get('station_id'))
     return PlugItRedirect('channels/?deleted=yes')
 
 
@@ -515,7 +538,7 @@ def channels_export(request):
         wildcards = Channel.query.join(Station).filter(Channel.dns_entry == wildcard_elem).all()
         if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
             retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
-            if elem.ecc_id: # Output ISO version if element has ECC
+            if elem.ecc_id:  # Output ISO version if element has ECC
                 retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':

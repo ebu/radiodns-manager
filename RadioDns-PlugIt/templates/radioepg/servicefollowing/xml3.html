@@ -95,7 +95,7 @@
             {% endif %}
 
             <radiodns fqdn="{{station.0.fqdn}}"
-                      serviceIdentifier="{{station.0.fqdn_prefix}}_{{service_provider.codops}}_ebu_{{station.0.id}}"/>
+                      serviceIdentifier="ebu{{station.0.id}}{{service_provider.codops.lower()}}"/>
 
             {% for entry in station.1 %}
             <bearer id="{{entry.uri}}" {% if entry.cost %}cost="{{entry.cost}}" {% endif %} {% if entry.offset
@@ -125,9 +125,7 @@
             </mediaDescription>
 
             {% for genre in station.0.genres_list %}
-            <genre href="{{genre.href}}">
-                <name>{{genre.name}}</name>
-            </genre>
+            <genre href="{{genre.href}}">{{genre.name}}</genre>
             {% endfor %}
         </service>
         {% endfor %}
