@@ -362,7 +362,7 @@
                     function changeGenreSelection(row) {
                       var genreUrn = "urn:tva:metadata:cs:ContentCS:2011:";
                       var genre_txt = row.parents('.genre_row').find( ".genre-select option:selected" ).text();
-                      genre_txt = genre_txt.replace(/\(.*\)/, '');
+                      genre_txt = genre_txt.replace(/\(.*\)/, '').trim();
                       row.parents('.genre_row').find('.genre-href').val(genreUrn + row.parents('.genre_row').find('.genre-select').val());
                       row.parents('.genre_row').find('.genre-name').val(genre_txt);
                     }
