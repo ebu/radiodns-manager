@@ -434,11 +434,22 @@ class Channel(db.Model):
         object.cost = 100
         object.offset = 0
 
-        # Mime Type
-        if self.type_id == 'dab' and not self.mime_type:
-            object.mime_type = 'audio/mpeg'
-        else:
-            object.mime_type = self.mime_type
+        # Mime Type and default values
+        if self.type_id == 'id':
+            object.cost = 100
+            object.offset = 2000
+            if not self.mime_type:
+                object.mime_type = 'audio/mpeg'
+            else:
+                object.mime_type = self.mime_type
+        if self.type_id == 'fm':
+            object.cost = 50
+        if self.type_id == 'dab':
+            object.cost = 20
+            if not self.mime_type:
+                object.mime_type = 'audio/mpeg'
+            else:
+                object.mime_type = self.mime_type
 
         db.session.add(object)
         db.session.commit()
