@@ -35,7 +35,7 @@
           {% if station.0.long_name %}<epg:longName>{{station.0.long_name}}</epg:longName>{% endif %}
           {% if station.0.short_description %}<epg:shortDescription xml:lang="fr">{{station.0.short_description}}</epg:shortDescription>{% endif %}
           {% if station.0.url_default %}<epg:link url="{{station.0.url_default}}" mimeValue="text/html" xml:lang="{{service_provider.default_language}}"/>{% endif %}
-          <radiodns fqdn="{{station.0.fqdn}}" serviceIdentifier="{{station.0.fqdn_prefix}}_{{service_provider.codops}}_ebu_{{station.0.id}}"/>
+          <radiodns fqdn="{{station.0.fqdn}}" serviceIdentifier="{{station.0.service_identifier}}"/>
           {% for entry in station.1 %}
           <serviceID id="{{entry.uri}}"  {% if entry.cost %}cost="{{entry.cost}}"{% endif %} {% if entry.offset %}offset="{{entry.offset}}"{% endif %} {% if entry.mime_type %}mime="{{entry.mime_type}}"{% endif %}/>
           {% endfor %}

@@ -295,6 +295,12 @@ class Station(db.Model):
                     self.service_provider.codops.lower(), config.DOMAIN)
         return None
 
+    @property
+    def service_identifier(self):
+        if self.service_provider:
+            if self.service_provider.codops:
+                return "ebu%s%s" % (self.id, self.service_provider.codops.lower())
+        return None
 
     def __init__(self, orga):
         self.orga = orga
@@ -336,7 +342,7 @@ class Station(db.Model):
         return to_json(self, self.__class__,
                        ['stomp_username', 'short_name_to_use', 'service_provider_data', 'default_logo_image_data',
                         'epg_country', 'epg_postal', 'epg_phone_number', 'epg_sms', 'epg_email',
-                        'genres_list', 'ascii_name', 'fqdn', 'fqdn_prefix'])
+                        'genres_list', 'ascii_name', 'fqdn', 'fqdn_prefix', 'service_identifier'])
 
 
 class Ecc(db.Model):

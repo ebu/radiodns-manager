@@ -95,7 +95,7 @@
             {% endif %}
 
             <radiodns fqdn="{{station.0.fqdn.rstrip('.')}}"
-                      serviceIdentifier="ebu{{station.0.id}}{{service_provider.codops.lower()}}"/>
+                      serviceIdentifier="{{station.0.service_identifier}}"/>
 
             {% for entry in station.1 %}
             <bearer id="{{entry.uri}}" {% if entry.cost %}cost="{{entry.cost}}" {% endif %} {% if entry.offset

@@ -39,9 +39,9 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Station:</label>
 			<div class="col-sm-9 col-md-7">
-				<select name="station" class="form-control" >
+				<select name="station" id="station_select" class="form-control" >
 					{% for s in stations %}
-						<option value="{{s.id}}" {% if object.id and object.station_id == s.id %}selected{% elif station and station.id == s.id %}selected{% endif %}>{{s.name}}</option>
+						<option value="{{s.id}}" {% if object.id and object.station_id == s.id %}selected{% elif station and station.id == s.id %}selected{% endif %} data-stationserviceid="{{s.service_identifier}}" data-stationfqdn="{{s.fqdn}}">{{s.name}}</option>
 					{% endfor %}
 				</select>
 			</div>
@@ -241,9 +241,19 @@
 
 			{% for t in types_id %}
 				if (cVal == '{{t.0}}') {
-					{% for v in t.2 %}
-						$('.opblk_{{v}}').show();
+					{% for v in t.2 %} $('.opblk_{{v}}').show();
 					{% endfor %}
+					{% if t.0 == 'id' %}
+						$('.opblk_fqdn').find('input').prop('readOnly', true);
+						$('.opblk_fqdn').find('input').val($('#station_select option:selected').data('stationfqdn'));
+						$('.opblk_serviceIdentifier').find('input').prop('readOnly', true);
+						$('.opblk_serviceIdentifier').find('input').val($('#station_select option:selected').data('stationserviceid'));
+					{% else %}
+						$('.opblk_fqdn').find('input').prop('readOnly', false);
+						$('.opblk_fqdn').find('input').val('');
+						$('.opblk_serviceIdentifier').find('input').prop('readOnly', false);
+						$('.opblk_serviceIdentifier').find('input').val('');
+					{% endif %}
 				}
 			{% endfor %}
 

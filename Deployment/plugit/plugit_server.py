@@ -5,7 +5,8 @@ import utils
 
 
 # list of dependencies to install
-DEPENDENCIES = ['python-gevent', 'python-setuptools', 'debconf-utils', 'python-mysqldb',  'apache2', 'libapache2-mod-wsgi', 'git', 'python-imaging']
+DEPENDENCIES = ['python-gevent', 'python-setuptools', 'debconf-utils', 'python-mysqldb',  'apache2', 'libapache2-mod-wsgi', 'git', 'python-imaging',
+                'libjpeg-dev', 'libpng-dev']
 
 conf = utils.conf_path_builder(__file__)
 

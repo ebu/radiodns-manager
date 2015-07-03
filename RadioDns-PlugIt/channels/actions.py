@@ -157,6 +157,7 @@ def channels_edit(request, id):
                 errors.append("cc must be 3 characters in hexadecimal")
 
         if object.fqdn is not None:
+            object.fqdn = object.fqdn.rstrip('.')
             if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)", object.fqdn):
                 errors.append("fqdn must be a domain name")
 
@@ -202,7 +203,8 @@ def channels_edit(request, id):
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
         if sp:
             cc_obj = Ecc.query.filter_by(iso=sp.location_country).first()
-            default_country = cc_obj.id
+            if cc_obj:
+                default_country = cc_obj.id
 
     if object:
         object = object.json
@@ -533,13 +535,15 @@ def channels_export(request):
             retour += '\n;;; Station: ' + elem.station_ascii_name + '\n'
             old_station_name = elem.station_ascii_name
 
-        # Add Entries for all channels in ns and iso format
-        wildcard_elem = '*' + elem.dns_entry[elem.dns_entry.find('.'):]
-        wildcards = Channel.query.join(Station).filter(Channel.dns_entry == wildcard_elem).all()
-        if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
-            retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
-            if elem.ecc_id:  # Output ISO version if element has ECC
-                retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+        # Ignore IP Channels in Zone File
+        if elem.type_id != 'id':
+            # Add Entries for all channels in ns and iso format
+            wildcard_elem = '*' + elem.dns_entry[elem.dns_entry.find('.'):]
+            wildcards = Channel.query.join(Station).filter(Channel.dns_entry == wildcard_elem).all()
+            if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
+                retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
+                if elem.ecc_id:  # Output ISO version if element has ECC
+                    retour += elem.dns_entry_iso.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
 
     if request.args.get('to') == 'file':
         retour_str = StringIO.StringIO()
