@@ -145,7 +145,7 @@ def epg_1_xml():
 epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 @app.route('/radiodns/spi/3.1/SI.xml')
-# @app.cache.cached(timeout=500, key_prefix='XSI3_')
+@app.cache.cached(timeout=500, key_prefix='XSI3_')
 def epg_3_xml():
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
     # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
