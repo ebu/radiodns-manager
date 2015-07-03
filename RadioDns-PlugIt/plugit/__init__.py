@@ -145,7 +145,7 @@ def epg_1_xml():
 epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 @app.route('/radiodns/spi/3.1/SI.xml')
-@app.cache.cached(timeout=500, key_prefix='XSI3_')
+# @app.cache.cached(timeout=500, key_prefix='XSI3_')
 def epg_3_xml():
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
     # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
@@ -230,8 +230,8 @@ def epg_3_xml():
                     if elem2.active:
                         entries.append(elem2.json)
 
-                if entries:
-                    list.append([elem.json, entries])
+                # List station anyway
+                list.append([elem.json, entries])
 
         return Response(render_template('radioepg/servicefollowing/xml3.html', stations=list, service_provider=sp,
                                         creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
