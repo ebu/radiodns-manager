@@ -45,7 +45,11 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Image</th>
+				<th>32x32</th>
+				<th>112x32</th>
+				<th>128x128</th>
+				<th>320x240</th>
+				<th>600x600</th>
 				<th style="width: 200px;"></th>
 			</tr>
 		</thead>
@@ -54,7 +58,11 @@
 			{% for s in list %}
 				<tr>
 					<td>{{s.name}}</td>
-					<td><img class="tooltipme" src="{{s.public_128x128_url}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{s.public_600x600_url}}' width='240' height='240' />"></td>
+					<td><img class="tooltipme" src="{{s.public_32x32_url}}" width="32" heigh="32" /></td>
+					<td><img class="tooltipme" src="{{s.public_112x32_url}}" width="112" heigh="32" /></td>
+					<td><img class="tooltipme" src="{{s.public_128x128_url}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{s.public_128x128_url}}' width='128' height='128' />"></td>
+					<td><img class="tooltipme" src="{{s.public_320x240_url}}" width="85" heigh="64" data-placement="right" data-original-title="<img src='{{s.public_320x240_url}}' width='320' height='240' />"></td>
+					<td><img class="tooltipme" src="{{s.public_600x600_url}}" width="64" heigh="64" data-placement="right" data-original-title="<img src='{{s.public_600x600_url}}' width='400' height='400' />"></td>
 					<td nowrap="nowrap" style="text-align:right;">
 						{% if ebuio_u.ebuio_orga_admin %}
 							<a href="{{ebuio_baseUrl}}serviceprovider/images/default/{{s.id}}" class="btn btn-sm btn-info">Set as Provider Default</a>

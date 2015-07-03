@@ -221,69 +221,100 @@ def serviceprovider_gallery_edit(request, id):
 
             return None
 
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            full_path = unique_filename('media/uploads/serviceprovider/images/' + filename)
-            path, name = os.path.split(full_path)
-            file.save(full_path)
-            if object.filename:
-                try:
-                    os.unlink(object.filename)
-                except:
-                    pass
-            object.filename = name
+        new_file = False
+        if request.files:
+            new_file = True
 
-        # Check errors
-        if object.name == '':
-            errors.append("Please set a name")
+            file = request.files['file']
+            if file:
 
-        if object.filename == '' or object.filename is None:
-            errors.append("Please upload an image")
-        else:
+                filename = secure_filename(file.filename)
+                full_path = unique_filename('media/uploads/serviceprovider/images/' + filename)
+                path, name = os.path.split(full_path)
 
-            if imghdr.what(full_path) not in ['jpeg', 'png']:
-                errors.append("Image is not an png or jpeg image")
-                os.unlink(full_path)
-                object.filename = None
+                ## Delete existing one and only create a unique filename otherwise
+                if object.filename:
+                    try:
+                        os.unlink(object.filename)
+                    except:
+                        pass
+                    name = object.filename
+                    full_path = os.path.join(path, name)
+
+                file.save(full_path)
+                object.filename = name
+
+            # Check errors
+            if object.name == '':
+                errors.append("Please set a name")
+
+            if object.filename == '' or object.filename is None:
+                errors.append("Please upload an image")
+            else:
+
+                if imghdr.what(full_path) not in ['jpeg', 'png']:
+                    errors.append("Image is not an png or jpeg image")
+                    os.unlink(full_path)
+                    object.filename = None
 
         # If no errors, save
         if not errors:
 
             # Upload MAIN Image to s3
-            try:
-                awsutils.upload_public_image(sp, name, full_path)
-            except:
-                pass
+            if new_file:
 
-            # Create Required Image Sizes
-            from PIL import Image
-            for size in config.RADIODNS_REQUIRED_IMAGESIZES:
-                filename_prefix = '%dx%d/' % (size[0], size[1])
-                image = Image.open(full_path)
-                image.thumbnail(size, Image.ANTIALIAS)
-                background = Image.new('RGBA' if full_path else 'RGB', size, (255, 255, 255, 0))
-                background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
-                unique_path = unique_filename(full_path)
-                background.save(unique_path)
-                # Upload to s3
-                try:
-                    s3filename = filename_prefix + name
-                    awsutils.upload_public_image(sp, s3filename, unique_path)
-                    if size == (32, 32):
-                        object.url32x32 = s3filename
-                    if size == (112, 32):
-                        object.url112x32 = s3filename
-                    if size == (128, 128):
-                        object.url128x128 = s3filename
-                    if size == (320, 240):
-                        object.url320x240 = s3filename
-                    if size == (600, 600):
-                        object.url600x600 = s3filename
-                except:
-                    pass
-                # Delete Temporary file
-                os.unlink(unique_path)
+                # Based on what size to replace only upload the required ones
+                replace_size = request.form.get('replace_size')
+                if replace_size:
+                    print "Replace size is " + replace_size
+                else:
+                    print "No replace size set"
+
+                if not replace_size:
+                    try:
+                        print "-- Uploading general image"
+                        awsutils.upload_public_image(sp, name, full_path)
+                    except:
+                        pass
+
+                # Create Required Image Sizes
+                from PIL import Image
+                for size in config.RADIODNS_REQUIRED_IMAGESIZES:
+                    size_prefix = '%dx%d' % (size[0], size[1])
+                    if not replace_size or replace_size == size_prefix:
+                        print "-- Replacing size " + size_prefix
+                        image = Image.open(full_path)
+                        if image.size != (size[0], size[1]):
+                            print "-- Resizing to " + size_prefix
+                            image.thumbnail(size, Image.ANTIALIAS)
+                            background = Image.new('RGBA' if full_path else 'RGB', size, (255, 255, 255, 0))
+                            background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
+                            unique_path = unique_filename(full_path)
+                            background.save(unique_path)
+                        else:
+                            # Keep original since size Match !
+                            unique_path = full_path
+                            print "-- Already size match " + size_prefix
+                        # Upload to s3
+                        try:
+                            s3filename = size_prefix + '/' + name
+                            print "---- Uploading size " + size_prefix + " - " + s3filename
+                            awsutils.upload_public_image(sp, s3filename, unique_path)
+                            if size == (32, 32):
+                                object.url32x32 = s3filename
+                            if size == (112, 32):
+                                object.url112x32 = s3filename
+                            if size == (128, 128):
+                                object.url128x128 = s3filename
+                            if size == (320, 240):
+                                object.url320x240 = s3filename
+                            if size == (600, 600):
+                                object.url600x600 = s3filename
+                        except:
+                            pass
+
+                        # Delete Temporary file
+                        os.unlink(unique_path)
 
             if not object.id:
                 db.session.add(object)
@@ -311,7 +342,7 @@ def serviceprovider_gallery_edit(request, id):
     if object:
         object = object.json
 
-    return {'object': object, 'errors': errors}
+    return {'object': object, 'sizes': config.RADIODNS_REQUIRED_IMAGESIZES, 'errors': errors}
 
 
 @action(route="/serviceprovider/images/default/<id>")

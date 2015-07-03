@@ -48,10 +48,23 @@
 			<div class="col-sm-9 col-md-7">
 				<input type="file" class="form-control" name="file">
 				{% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
-				<br /><small>PNG or JPEG. Please upload a logo of minimum size 600x600. <br />
-				Logo will be resized to 32x32, 112x32, 128x128, 320x240 and 600x600.</small>
+				<br /><small>PNG or JPEG. Please upload an initial logo of minimum size 600x600. Logo will be resized to {% for w in sizes %} {{w.0}}x{{w.1}} {% endfor %}.<br />
+				You can upload different sizes later when editing the image.</small>
 			</div>
 		</div>
+		{% if object.id %}
+		<div class="form-group">
+			<label class="col-sm-3 col-md-3 control-label">Replace a particular size:</label>
+			<div class="col-sm-9 col-md-7">
+				<input type="radio" name="replace_size" value="" checked> All
+				<br />
+				{% for w in sizes %}
+					<input type="radio" name="replace_size" value="{{w.0}}x{{w.1}}"> {{w.0}}x{{w.1}}
+					<br />
+				{% endfor %}
+			</div>
+		</div>
+		{% endif %}
 
 		<hr />
 
