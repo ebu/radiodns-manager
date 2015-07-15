@@ -222,7 +222,7 @@ def radiovis_channels_home(request):
 
     list = []
 
-    for elem in Channel.query.join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name,Channel.type_id,Channel.name).all():
+    for elem in Channel.query.filter(Channel.type_id!='id').join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name,Channel.type_id,Channel.name).all():
         list.append(elem.json)
 
     pictures = []

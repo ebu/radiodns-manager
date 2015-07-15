@@ -122,7 +122,7 @@ def station_radiovis_channels(request, id):
 
     list = []
 
-    for elem in Channel.query.join(Station).filter(Station.id == station.id and Station.orga == int(
+    for elem in Channel.query.filter(Channel.type_id!='id').join(Station).filter(Station.id == station.id and Station.orga == int(
             request.args.get('ebuio_orgapk'))).order_by(Channel.type_id, Channel.name).all():
         list.append(elem.json)
 
