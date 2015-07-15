@@ -197,6 +197,7 @@ class Station(db.Model):
     radiovis_enabled = db.Column(db.Boolean, index=True)
     radiovis_service = db.Column(db.String(255))
     radioepg_enabled = db.Column(db.Boolean, index=True)
+    radioepgpi_enabled = db.Column(db.Boolean, default=False, index=True)
     radioepg_service = db.Column(db.String(255))
     radiotag_enabled = db.Column(db.Boolean, index=True)
     radiotag_service = db.Column(db.String(255))

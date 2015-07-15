@@ -22,7 +22,7 @@
 			{% block pagefunctions %}
 			{% if ebuio_u.ebuio_orga_admin %}
                     <label class="control-label">Select Station:</label>
-				    <select id="station-selector" class="form-control" onchange="window.location='?station_id=' + $(this).val();">
+				    <select id="station-selector" class="form-control23" onchange="window.location='?station_id=' + $(this).val();">
 					{% for station in stations %}
 						<option value="{{station.id}}" {% if station.id == current_station.id %}selected{% endif %}>{{station.name}}</option>
 					{% endfor %}

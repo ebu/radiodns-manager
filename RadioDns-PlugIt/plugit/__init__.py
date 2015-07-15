@@ -241,7 +241,6 @@ def epg_3_xml():
 # Override Cache Key for XSI 3
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
-# Disabled temporarily due to performance issues
 @app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
 @app.cache.cached(timeout=500)
 def logo(id, w, h):
@@ -270,7 +269,7 @@ def logo(id, w, h):
 
     return send_from_directory(".", dest_file)
 
-@app.route('/disabled_radiodns/epg/<path:path>/<int:date>_PI.xml')
+@app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
 @app.cache.cached(timeout=500, key_prefix='PI1_')
 def epg_sch_1_xml(path, date):
     """Special call for EPG scheduling xml"""
@@ -299,14 +298,14 @@ def epg_sch_1_xml(path, date):
                 sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
                 if sp:
                     channels = Channel.query.join(Station).filter(Station.service_provider_id == sp.id,
-                                                                  Station.radioepg_enabled).all()
+                                                                  Station.radioepgpi_enabled).all()
 
             if station:
                 # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
                 channels = filter(lambda x: x.station.fqdn_prefix == station, channels)
 
         else:
-            channels = Channel.query.join(Station).filter(Station.radioepg_enabled).all()
+            channels = Channel.query.join(Station).filter(Station.radioepgpi_enabled).all()
 
         if not channels:
             abort(404)

@@ -198,19 +198,19 @@
                 <table class="table table-striped table-hover table-condensed">
                     <tbody>
                     <tr>
-                        <th style="width:200px;">Status</th>
+                        <th style="width:250px;">Status:</th>
                         <td><span id="radiodns-station-status" class="label label-default">Loading</span></td>
                     </tr>
                     <tr>
-                        <th>FQDN</th>
+                        <th>FQDN:</th>
                         <td>{% if station.service_provider_data %}{{station.fqdn}}{% endif %}</td>
                     </tr>
                     <tr>
-                        <th>VIS Service</th>
+                        <th>RadioVIS SlideShow Service Uri:</th>
                         <td><span id="vis-{{station.id}}">{% if station.radiovis_service %}<small>VIS</small> {{station.radiovis_service}}{% endif %}</span></td>
                     </tr>
                     <tr>
-                        <th>VIS Credentials</th>
+                        <th>RadioVIS Credentials:</th>
                         <td>
                             {% if station.radiovis_enabled %}
                             <table>
@@ -232,8 +232,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>EPG Service</th>
+                        <th>SPI RadioEPG Service Uri:</th>
                         <td><span id="epg-{{station.id}}">{% if station.radioepg_service %}<small>EPG</small> {{station.radioepg_service}}{% endif %}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Program Information Enabled:</th>
+                        <td><span id="epgpi-{{station.id}}">{% if station.radioepgpi_enabled %}<small>ENABLED</small>{% else %}<small>DISABLED</small>{% endif %}</span></td>
                     </tr>
                     {% if RADIOTAG_ENABLED %}
                     <tr>

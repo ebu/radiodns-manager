@@ -240,6 +240,12 @@ def stations_edit(request, id):
                 awsutils.remove_epgsrv_station(object)
         object.radioepg_enabled = radioepg_enabled
 
+        # RadioEPG Program Information Service
+        radioepgpi_enabled = False
+        if 'radioepgpi_enabled' in request.form:
+            radioepgpi_enabled = True
+        object.radioepgpi_enabled = radioepgpi_enabled
+
         object.radiotag_service = request.form.get('radiotag_service')
         radiotag_enabled = False
         if 'radiotag_enabled' in request.form:

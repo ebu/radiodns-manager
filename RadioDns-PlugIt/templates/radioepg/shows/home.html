@@ -26,6 +26,7 @@
 				{% endfor %}
 			</select>
 			{% if ebuio_u.ebuio_orga_admin %}
+				<a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}" class="btn btn-default">Back to Schedule</a>
 				<a href="{{ebuio_baseUrl}}radioepg/shows/edit/-?station_id={{current_station_id}}" class="btn btn-primary">Add a new show</a>
 			{% endif %}
 			{% endblock %}
@@ -56,7 +57,7 @@
 					<th>Medium name</th>
 					<th>Long name</th>
 					<th>Color</th>
-					<th style="width: 100px;"></th>
+					<th style="width: 150px;"></th>
 				</tr>
 			</thead>
 
@@ -68,8 +69,8 @@
 						<td style="background-color: {{s.color}};">&nbsp;</td>
 						<td>
 							{% if ebuio_u.ebuio_orga_admin %}
-								<a href="{{ebuio_baseUrl}}radioepg/shows/delete/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-								<a href="{{ebuio_baseUrl}}radioepg/shows/edit/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-default">Edit</a>
+								<a href="{{ebuio_baseUrl}}radioepg/shows/delete/{{s.id}}?station_id={{current_station_id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+								<a href="{{ebuio_baseUrl}}radioepg/shows/edit/{{s.id}}?station_id={{current_station_id}}" class="btn btn-sm btn-default">Edit</a>
 							{% endif %}
 						</td>
 					</tr>
