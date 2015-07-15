@@ -28,6 +28,10 @@ Instruction to deploy each parts of the project are available in the [Deployment
 
 ## RadioVIS Server
 
+### MQ and VIS on same machine
+If you are using RabbitMQ and VIS on the same machine make sure that the config.py contains either localhost as MQ server
+or to add the machines public DNS name to /etc/hosts.
+
 ### Processes
 
 ![Image](architecture-radiovis-processes.png?raw=true)

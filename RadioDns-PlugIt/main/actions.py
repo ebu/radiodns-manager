@@ -13,6 +13,14 @@ def main_home(request):
     
     return PlugItRedirect('stations')
 
+# Include terms
+@action(route="/terms/", template="terms.html")
+@only_orga_member_user()
+def terms(request):
+    """Show the system status."""
+
+    return { }
+
 
 # Load the list of countries. Cached
 @action(route="/ecc_list")

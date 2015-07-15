@@ -2,6 +2,9 @@ from fabric.api import *
 from fabric.contrib.files import upload_template, append, sed
 import config
 import utils
+import time
+import shutil
+
 
 
 # list of dependencies to install
@@ -65,6 +68,34 @@ def create_user():
         mysql_execute("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (config.MYSQL_USER, config.MYSQL_PASSWORD), "root", config.MYSQL_PASSWORD)
         mysql_execute("GRANT ALL ON %s.* TO '%s'@'localhost'; FLUSH PRIVILEGES;" % (config.MYSQL_DATABASE, config.MYSQL_USER), "root", config.MYSQL_PASSWORD)
 
+@task
+@roles('radiodns')
+def backup_mysql(retrieve=True):
+    """Backup the mysql database to the persistant storage"""
+    # mount_persistant()
+
+    # (idInstance, ipInstance) = Ec2.getMysqlIdAndPrivIpFromIp(env.host)
+    # passwd = utils.genMysqlPassword(idInstance, ipInstance)
+
+    # Make a unique backup
+    now = time.strftime("%Y%m%d%H%M%S")
+
+    run('mysqldump --user %s --password=\'%s\' %s | gzip > /tmp/%s.sql.gz' % (
+        config.MYSQL_USER,
+        config.MYSQL_PASSWORD, #passwd,
+        config.MYSQL_DATABASE,
+        now
+    ))
+
+    # Save it as lastest (after, so only if successful !)
+    run('cp /tmp/%s.sql.gz /tmp/latest.sql.gz' % (now,))
+
+    if retrieve:
+        # If needed, retrive the backup
+        get('/tmp/%s.sql.gz' % (now,), "mysqldumps/%s.sql.gz" % (now,))
+        shutil.copyfile("mysqldumps/%s.sql.gz" % (now,), "mysqldumps/latest.sql.gz")
+
+    # umount_persistant()
 
 @task
 def install_pip_dependencies():
@@ -183,6 +214,7 @@ def deploy():
 @task
 def update():
     """Upgrade code to the latest version"""
+    backup_mysql()
     pull_code()
     update_database()
     restart_apache()

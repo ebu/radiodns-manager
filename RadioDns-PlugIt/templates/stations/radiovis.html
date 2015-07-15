@@ -179,13 +179,23 @@
 		}
 
         function play_topic(topic, stationname, channel) {
-            var modalUrl = "{{ebuio_baseUrl}}radiovis/channels/playermodal/?topic="+topic+"&stationname="+stationname+"&name="+channel;
-            $.ajax({
-                url: modalUrl
-            }).success(function (data) {
-                $('#player_modal').html(data);
-                $('#player_modal').modal('show');
-            });
+            if(true) {
+                var popupUrl = "http://ebu.io{{ebuio_baseUrl}}radiovis/channels/player/?topic="+topic+"&stationname="+stationname+"&name="+channel;
+                play_popup(popupUrl);
+            } else {
+                var modalUrl = "{{ebuio_baseUrl}}radiovis/channels/playermodal/?topic="+topic+"&stationname="+stationname+"&name="+channel;
+                $.ajax({
+                    url: modalUrl
+                }).success(function (data) {
+                    $('#player_modal').html(data);
+                    $('#player_modal').modal('show');
+                });
+            }
+        }
+        function play_popup(url) {
+            newwindow=window.open(url,'name','height=400,width=450');
+            if (window.focus) {newwindow.focus()}
+            return false;
         }
 
         function closetopic(data) {
