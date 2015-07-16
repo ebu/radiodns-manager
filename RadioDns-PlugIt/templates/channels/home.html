@@ -89,9 +89,11 @@
 					<td>{% if c.type_id == 'id' %}<a href="{{c.stream_url}}" target="_blank">{{c.stream_url}}</a>{% else %}{{c.radiodns_entry}}{% endif %}</td>
 					<td id="fqdn-{{c.id}}">{{c.station_json.fqdn}}</td>
 					<td>
+						{% if c.type_id == 'id' %} {% else %}
                         <div id="vis-{{c.id}}">{% if c.station_json.radiovis_service %}<small>VIS</small> {{c.station_json.radiovis_service}}{% endif %}</div>
                         <div id="epg-{{c.id}}">{% if c.station_json.radioepg_service %}<small>EPG</small> {{c.station_json.radioepg_service}}{% endif %}</div>
                         <div id="tag-{{c.id}}">{% if c.station_json.radiotag_service %}<small>TAG</small> {{c.station_json.radiotag_service}}{% endif %}</div>
+						{% endif %}
                     </td>
 					<td style="text-align:right;">
 						{% if ebuio_u.ebuio_orga_admin %}
