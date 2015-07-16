@@ -189,11 +189,8 @@
         // Link Check to Button
         $('#checkButton').on('click', function () {
             var $btn = $(this).button('loading')
-
 		    {% for c in list %}
-			checkChannel({{c.id}});
-		    {% endfor %}
-
+		    {% if c.type_id != 'id' %}checkChannel({{c.id}});{% endif %}{% endfor %}
             // Reset Button
             $btn.button('reset')
           })
