@@ -370,7 +370,7 @@ def epg_sch_1_xml(path, date):
                 if elem.date_of_start_time.date() == date_to_filter:
                     list.append(elem.json)
 
-            return Response(render_template('radioepg/schedule/textxml.html', schedules=list,
+            return Response(render_template('radioepg/schedule/xml1.html', schedules=list,
                                             start_time=real_start_date.strftime(time_format),
                                             end_time=real_end_date.strftime(time_format),
                                             creation_time=datetime.datetime.now().strftime(time_format)),
