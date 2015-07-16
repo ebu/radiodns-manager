@@ -265,14 +265,9 @@ def serviceprovider_gallery_edit(request, id):
 
                 # Based on what size to replace only upload the required ones
                 replace_size = request.form.get('replace_size')
-                if replace_size:
-                    print "Replace size is " + replace_size
-                else:
-                    print "No replace size set"
 
                 if not replace_size:
                     try:
-                        print "-- Uploading general image"
                         awsutils.upload_public_image(sp, name, full_path)
                     except:
                         pass
@@ -282,10 +277,8 @@ def serviceprovider_gallery_edit(request, id):
                 for size in config.RADIODNS_REQUIRED_IMAGESIZES:
                     size_prefix = '%dx%d' % (size[0], size[1])
                     if not replace_size or replace_size == size_prefix:
-                        print "-- Replacing size " + size_prefix
                         image = Image.open(full_path)
                         if image.size != (size[0], size[1]):
-                            print "-- Resizing to " + size_prefix
                             image.thumbnail(size, Image.ANTIALIAS)
                             background = Image.new('RGBA' if full_path else 'RGB', size, (255, 255, 255, 0))
                             background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
@@ -294,11 +287,9 @@ def serviceprovider_gallery_edit(request, id):
                         else:
                             # Keep original since size Match !
                             unique_path = full_path
-                            print "-- Already size match " + size_prefix
                         # Upload to s3
                         try:
                             s3filename = size_prefix + '/' + name
-                            print "---- Uploading size " + size_prefix + " - " + s3filename
                             awsutils.upload_public_image(sp, s3filename, unique_path)
                             if size == (32, 32):
                                 object.url32x32 = s3filename
