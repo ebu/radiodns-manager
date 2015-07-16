@@ -74,6 +74,7 @@
 			<div class="col-sm-9 col-md-7">
 				<select name="ecc_id" class="form-control" id="ecc" cval="{{object.ecc_id}}">
 				</select>
+				<small>Country Code</small>
 			</div>
 		</div>
 
@@ -88,8 +89,8 @@
 		<div class="form-group opblk opblk_frequency">
 			<label class="col-sm-3 col-md-3 control-label">Frequency:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="frequency" value="{{object.frequency}}">
-				<small>wildcard * possible</small>
+				<input type="text" class="form-control" id="frequency" name="frequency" value="{{object.frequency}}">
+				<small>wildcard * is possible, otherwise use 5 digits, 97.10 becomes 09710</small>
 			</div>
 		</div>
 
@@ -177,8 +178,8 @@
         <div class="form-group opblk opblk_mime_type">
 			<label class="col-sm-3 col-md-3 control-label">Mime Type:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="mime_type" value="{{object.mime_type}}">
-				<small>audio/mpeg or audio/aac etc.</small>
+				<input type="text" class="form-control" id="mime_type" name="mime_type" value="{{object.mime_type}}">
+				<small><a onclick="$('#mime_type').val('audio/mpeg');" class="btn btn-xs btn-default">audio/mpeg</a> or <a onclick="$('#mime_type').val('audio/aac');" class="btn btn-xs btn-default">audio/aac</a> etc.</small>
 			</div>
 		</div>
 
@@ -270,38 +271,47 @@
 		update_display();
 		load_countries();
 
-		// Automatic fqdn and serviceIdentifier
-        var fqdn_edited = {% if object.fqdn %} true {% else %} false {% endif %};
-        var si_edited = {% if object.serviceIdentifier %} true {% else %} false {% endif %};
+		// Automatic Frequency Transformation
+		$('#frequency').on('focusout', function() {
+		    if($(this).val() != ""){
+		    	var str = $(this).val();
+				var result = '000000' + str.replace(/[. ]/g, '');
+				$(this).val(result.substr(result.length-5));
+            }
+		});
 
-        $('#stream_url').on('focusout', function() {
-            if($(this).val() != ""){
-                var re = /^\w+:\/\/([^\/]+)\/(.+)$/g;
-                var match = re.exec($(this).val());
-                if(match) {
-                    if(!fqdn_edited) {
-                        $('#fqdn').val(match[1].toLowerCase());
-                    }
-                    if(!si_edited) {
-                        $('#serviceIdentifier').val(match[2].replace(/[^0-9a-zA-Z]/g, '').substring(0,16).toLowerCase());
-                    }
-                }
-            }
-		});
-		$('#fqdn').on('focusout', function() {
-		    if($(this).val() != ""){
-		        fqdn_edited = true;
-            } else {
-                fqdn_edited = false;
-            }
-		});
-		$('#serviceIdentifier').on('focusout', function() {
-		    if($(this).val() != ""){
-		        si_edited = true;
-            } else {
-                si_edited = false;
-            }
-		});
+		// Automatic fqdn and serviceIdentifier
+        // var fqdn_edited = {% if object.fqdn %} true {% else %} false {% endif %};
+        // var si_edited = {% if object.serviceIdentifier %} true {% else %} false {% endif %};
+
+        // $('#stream_url').on('focusout', function() {
+        //     if($(this).val() != ""){
+        //         var re = /^\w+:\/\/([^\/]+)\/(.+)$/g;
+        //         var match = re.exec($(this).val());
+        //         if(match) {
+        //             if(!fqdn_edited) {
+        //                 $('#fqdn').val(match[1].toLowerCase());
+        //             }
+        //             if(!si_edited) {
+        //                 $('#serviceIdentifier').val(match[2].replace(/[^0-9a-zA-Z]/g, '').substring(0,16).toLowerCase());
+        //             }
+        //         }
+        //     }
+		// });
+		// $('#fqdn').on('focusout', function() {
+		//     if($(this).val() != ""){
+		//         fqdn_edited = true;
+        //     } else {
+        //         fqdn_edited = false;
+        //     }
+		// });
+		// $('#serviceIdentifier').on('focusout', function() {
+		//     if($(this).val() != ""){
+		//         si_edited = true;
+        //     } else {
+        //         si_edited = false;
+        //     }
+		// });
 
 	</script>
 
