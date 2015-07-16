@@ -70,6 +70,14 @@ def create_user():
 
 @task
 @roles('radiodns')
+def allow_remote_connection():
+    """Allow remote connections for the database"""
+    with settings(warn_only=True):
+        mysql_execute("GRANT ALL ON %s.* TO '%s'@'%%' IDENTIFIED BY '%s'; FLUSH PRIVILEGES;" % (config.MYSQL_DATABASE, config.MYSQL_USER, config.MYSQL_PASSWORD), "root", config.MYSQL_PASSWORD)
+
+
+@task
+@roles('radiodns')
 def backup_mysql(retrieve=True):
     """Backup the mysql database to the persistant storage"""
     # mount_persistant()

@@ -49,6 +49,19 @@ For easy model upgrade, alembic is used. When a model is modified it's possible 
 `alembic upgrade head` is used to apply changes, upgrading the database to the latest version.
 Details are available in the official documentation of alembic.
 
+### Migration Issue with Log INdexs or with constraint on Logo
+
+If you end up stuck on alembic upgrade because of an index or because of a foreign key constraint. Make sure that
+ the constrains are fine. Use the following to check service_provider logos for example:
+
+    SELECT * from service_provider LEFT JOIN logo_image ON (service_provider.default_logo_image_id = logo_image.id) 
+    WHERE service_provider.default_logo_image_id  IS NOT NULL AND logo_image.id IS NULL;
+    
+Or remove the dupplicate indexes using :
+
+    DROP INDEX ix_log_entry_reception_timestamp on log_entry;
+    
+
 # Config
 
 The configuration is stored inside `config.py`, who can be created from `config.py.dist`.
