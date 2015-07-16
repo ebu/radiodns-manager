@@ -368,7 +368,7 @@ class Channel(db.Model):
     name = db.Column(db.String(255))
 
     TYPE_ID_CHOICES = [('fm', 'VHF/FM', ['ecc_id', 'pi', 'frequency']),
-                       ('dab', 'DAB', ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa']),
+                       ('dab', 'DAB', ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'mime_type']),
                        ('drm', 'DRM', ['sid']),
                        ('amss', 'AMSS', ['sid']),
                        ('hd', 'HD Radio', ['cc', 'tx']),
@@ -415,6 +415,14 @@ class Channel(db.Model):
                 entry.mime_type = 'audio/mpeg'
             else:
                 entry.mime_type = self.mime_type
+            if self.type_id == 'id' and not self.mime_type:
+                entry.mime_type = 'audio/mpeg'
+            else:
+                entry.mime_type = self.mime_type
+            if self.type_id == 'id' and not self.bitrate:
+                entry.bitrate = 128
+            else:
+                entry.bitrate = self.bitrate
 
         db.session.commit()
 
@@ -431,7 +439,7 @@ class Channel(db.Model):
 
         object = GenericServiceFollowingEntry()
         object.channel_id = self.id
-        object.active = False
+        object.active = True
         object.cost = 100
         object.offset = 0
 
@@ -443,6 +451,10 @@ class Channel(db.Model):
                 object.mime_type = 'audio/mpeg'
             else:
                 object.mime_type = self.mime_type
+            if not self.bitrate:
+                object.bitrate = 128
+            else:
+                object.bitrate = self.bitrate
         if self.type_id == 'fm':
             object.cost = 50
         if self.type_id == 'dab':
@@ -717,6 +729,7 @@ class GenericServiceFollowingEntry(db.Model):
     cost = db.Column(db.Integer)
     offset = db.Column(db.Integer)
     mime_type = db.Column(db.String(255))
+    bitrate = db.Column(db.Integer)
 
     channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'), nullable=True)
 
