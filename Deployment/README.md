@@ -102,7 +102,13 @@ Subnets allowed to use the PlugIt API.
 
 # Main commands
 
-You can use `fab --list` to list all commands.
+You can use `fab --list` to list all commands. 
+
+### Restart all services
+
+Use the `restart_services` command to restart all the services on all serviers required by radiodns and vis
+
+    fab restart_services
 
 #### plugit_server.deploy
 

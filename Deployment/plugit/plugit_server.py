@@ -175,6 +175,7 @@ def configure():
 
 
 @task
+@roles('radiodns')
 def restart_apache():
     """Restart apache"""
     sudo("service apache2 restart")

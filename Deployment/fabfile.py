@@ -6,6 +6,7 @@ from rabbitmq import rabbitmq_server
 from plugit import plugit_server
 from radiovis import radiovis_server
 
+import time
 import config
 import boto.ec2
 
@@ -126,3 +127,21 @@ def deploy_rabbtimq():
     print '\n\nStarting RabbitMQ Server Deployment.\n'
 
     rabbitmq_server.deploy()
+
+
+@task
+def restart_services():
+    """Restart all Services"""
+    print '\n\nRestarting RadioDNS and RadioVIS Services.\n'
+
+    print '\n\nRestarting RadioDNS Plugit Server ...\n'
+    execute(plugit_server.restart_apache)
+    time.sleep(2)
+
+    print '\n\nRestarting RadioVIS Main Service ...\n'
+    execute(radiovis_server.restart_radiovis)
+    time.sleep(2)
+
+    print '\n\nRestarting RadioVIS Fallback Service ...\n'
+    execute(radiovis_server.restart_fallback)
+    time.sleep(2)
