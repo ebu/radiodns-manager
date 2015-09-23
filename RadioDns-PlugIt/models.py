@@ -77,7 +77,9 @@ class ServiceProvider(db.Model):
         return awsutils.check_serviceprovider(self)
 
     def escape_slash_rfc3986(self, value):
-        return value.replace('/', '%2F')
+        if value:
+            return value.replace('/', '%2F')
+        return ''
 
     @property
     def default_logo_image_data(self):
