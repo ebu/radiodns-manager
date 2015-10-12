@@ -9,18 +9,25 @@ import re
 
 import boto
 from boto.s3.key import Key
+from boto.s3.connection import OrdinaryCallingFormat
 import boto.route53
 
+AWS_ACCESS_KEY = ''
+AWS_SECRET_KEY = ''
 
-s3 = boto.connect_s3(AWS_ACCESS_KEY, AWS_SECRET_KEY,  host='s3-eu-west-1.amazonaws.com')
+
+s3 = boto.connect_s3(AWS_ACCESS_KEY, AWS_SECRET_KEY,  host='s3-eu-west-1.amazonaws.com', calling_format=OrdinaryCallingFormat())
 
 bucket = None
 bucketName = "eis-static.ebu.io"
 bucket = s3.get_bucket(bucketName)
 
+f = open('vbc_files.txt','w')
+
 for key in bucket.list(prefix="generated-vbc15/"):
     fname = key.name
     print fname
+    f.write('%s\t%s\n' % (key.name, key.last_modified))
     if (not os.path.basename(fname)==""):
                 try:
                     key.get_contents_to_filename(fname)
