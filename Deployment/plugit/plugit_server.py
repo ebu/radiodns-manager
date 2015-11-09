@@ -21,7 +21,6 @@ def mysql_execute(sql, user, password):
     return run('echo "%s" | mysql --user="%s" --password="%s"' % (sql, user, password))
 
 
-@task
 def upgrade():
     """Upgrde the package database and the server packag
     """
@@ -29,7 +28,6 @@ def upgrade():
     sudo("apt-get upgrade -y")
 
 
-@task
 def create_logs():
     """Create log folders"""
     with settings(warn_only=True):
@@ -37,7 +35,6 @@ def create_logs():
         sudo('chmod 777 /home/ubuntu/logs')
 
 
-@task
 def install_dependencies():
     """Install the DEPENDENCIES for the project
     """
@@ -55,13 +52,11 @@ def install_dependencies():
     sudo('aptitude install -y mysql-server')
 
 
-@task
 def create_database():
     """Create the mysql database"""
     mysql_execute("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" % (config.MYSQL_DATABASE,), "root", config.MYSQL_PASSWORD)
 
 
-@task
 def create_user():
     """Create the mysql suer"""
     with settings(warn_only=True):
@@ -105,7 +100,7 @@ def backup_mysql(retrieve=True):
 
     # umount_persistant()
 
-@task
+
 def install_pip_dependencies():
     """Install the PIP_DEPENDENCIES for the project
     """
@@ -114,7 +109,6 @@ def install_pip_dependencies():
     run('rm pip_requirements.txt')
 
 
-@task
 def git_init():
     """Init the git repository"""
 
@@ -135,14 +129,12 @@ def git_init():
         run('git pull origin ' + config.RADIODNS_BRANCH)
 
 
-@task
 def pull_code():
     """Pull the latest version from the git repository"""
     with cd('~/gitrepo-plugit'):
         run('git pull origin ' + config.RADIODNS_BRANCH)
 
 
-@task
 def configure():
     """Configure apache and the flask server"""
 
@@ -181,14 +173,12 @@ def restart_apache():
     sudo("service apache2 restart")
 
 
-@task
 def update_database():
     """Update database to the lastest version"""
     with cd('~/gitrepo-plugit/' + config.RADIODNS_FOLDER):
         run('alembic upgrade head')
 
 
-@task
 def install_logstash():
     """Install logstash"""
 
@@ -203,7 +193,6 @@ def install_logstash():
     sudo('service logstash start')
 
 
-@task
 def deploy():
     """Deploy a plugit server on the current host
     """
@@ -220,7 +209,6 @@ def deploy():
     # install_logstash()
 
 
-@task
 def update():
     """Upgrade code to the latest version"""
     backup_mysql()

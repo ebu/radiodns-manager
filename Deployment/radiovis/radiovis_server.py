@@ -12,7 +12,6 @@ DEPENDENCIES = ['python-gevent', 'python-setuptools', 'supervisor', 'git', 'buil
 conf = utils.conf_path_builder(__file__)
 
 
-@task
 def upgrade():
     """Upgrde the package database and the server packag
     """
@@ -20,7 +19,6 @@ def upgrade():
     sudo("apt-get upgrade -y")
 
 
-@task
 def create_logs():
     """Create log folders"""
     with settings(warn_only=True):
@@ -28,7 +26,6 @@ def create_logs():
         sudo('chmod 777 /home/ubuntu/logs')
 
 
-@task
 def install_dependencies():
     """Install the DEPENDENCIES for the project
     """
@@ -44,7 +41,6 @@ def install_pip_dependencies():
     run('rm pip_requirements.txt')
 
 
-@task
 def git_init():
     """Init the git repository"""
 
@@ -65,7 +61,6 @@ def git_init():
         run('git pull origin ' + config.RADIOVIS_BRANCH)
 
 
-@task
 def pull_code():
     """Pull the latest version from the git repository"""
     with cd('~/gitrepo-radiovis'):
@@ -96,51 +91,6 @@ def restart_fallback():
     with cd('~/gitrepo-radiovis/' + config.RADIOVIS_FOLDER):
         run('supervisorctl -c supervisord-fallback.conf restart fallbackserver')
 
-
-@task
-def start_simpleserver():
-    """Start the fallback server (using supervisord)"""
-    with cd('~/radiovis-html5player/website'):
-        run('supervisord -c supervisord-simpleserver.conf')
-
-
-@task
-def stop_simpleserver():
-    """Stop the simpleserver server (using supervisord)"""
-    with cd('~/radiovis-html5player/website'):
-        run('supervisorctl -c supervisord-simpleserver.conf stop simpleserver')
-        run('supervisorctl -c supervisord-simpleserver.conf shutdown')
-
-
-@task
-def restart_simpleserver():
-    """Restart the simpleserver server (using supervisord)"""
-    with cd('~/radiovis-html5player/website'):
-        run('supervisorctl -c supervisord-simpleserver.conf restart simpleserver')
-
-
-@task
-def start_websocketserver():
-    """Start the websocketserver server (using supervisord)"""
-    with cd('~/radiovis-html5player/websocketserver'):
-        run('supervisord -c supervisord-websocketserver.conf')
-
-
-@task
-def stop_websocketserver():
-    """Stop the websocketserver server (using supervisord)"""
-    with cd('~/radiovis-html5player/websocketserver'):
-        run('supervisorctl -c supervisord-websocketserver.conf stop websocketserver')
-        run('supervisorctl -c supervisord-websocketserver.conf shutdown')
-
-
-@task
-def restart_websocketserver():
-    """Restart the websocketserver server (using supervisord)"""
-    with cd('~/radiovis-html5player/websocketserver'):
-        run('supervisorctl -c supervisord-websocketserver.conf restart websocketserver')
-
-
 @task
 @roles('radiovis')
 def start_radiovis():
@@ -166,7 +116,6 @@ def restart_radiovis():
         run('supervisorctl -c supervisord-radiovis.conf restart radiovisserver')
 
 
-@task
 def configure():
     """Configure radiovisserver and supervisord"""
 
@@ -203,7 +152,6 @@ def configure():
         })
 
 
-@task
 def deploy():
     """Deploy a radiovis server on the current host
     """
@@ -217,7 +165,6 @@ def deploy():
     setup_startup_cronjobs()
 
 
-@task
 def setup_startup_cronjobs():
     """Setup statup cronjobs to start radiovis server and fallback automaticaly"""
     run('touch /tmp/crondump')
@@ -232,7 +179,6 @@ def setup_startup_cronjobs():
     run('crontab /tmp/crondump')
 
 
-@task
 def deploy_withfallback():
     """Deploy a radiovis server on the current host, with fallback server
     """
@@ -240,8 +186,6 @@ def deploy_withfallback():
     restart_fallback()
 
 
-@task
-@roles('radiovis')
 def update():
     """Upgrade code to the latest version"""
     install_dependencies()
@@ -250,8 +194,6 @@ def update():
     restart_radiovis()
 
 
-@task
-@roles('radiovis')
 def update_withfallback():
     """Upgrade code to the latest version, including fallback server"""
     update()

@@ -5,6 +5,7 @@ from fabric.state import output
 from rabbitmq import rabbitmq_server
 from plugit import plugit_server
 from radiovis import radiovis_server
+from radiows import radiows_server
 
 import time
 import config
@@ -18,6 +19,7 @@ env.roledefs = {
     'radiodns': [],
     'radiovis': [],
     'rabbitmq': [],
+    'radiowsserver': [],
 }
 # Set settings
 env.user = config.SSH_USER
@@ -41,6 +43,13 @@ for res in conn.get_all_instances(filters={"tag:id": config.RADIOVIS_AWS_TAG, 'i
     for ins in res.instances:
         print '   Adding '+ins.public_dns_name + ' ('+ins.ip_address+')'
         env.roledefs['radiovis'].append('ubuntu@' + ins.ip_address)
+print '------------------------------'
+print '------------------------------'
+print 'Adding RadioWSServer EC2 instances by tag : ' + config.WS_AWS_TAG
+for res in conn.get_all_instances(filters={"tag:id": config.WS_AWS_TAG, 'instance-state-code': 16}):  # 16 = Running
+    for ins in res.instances:
+        print '   Adding '+ins.public_dns_name + ' ('+ins.ip_address+')'
+        env.roledefs['radiowsserver'].append('ubuntu@' + ins.ip_address)
 print '------------------------------'
 print '------------------------------'
 print 'Adding RabbitMQ EC2 instances by tag : ' + config.RABBITMQ_AWS_TAG
@@ -78,6 +87,14 @@ def list_machines():
     print "############################################"
     print
     for h in env.roledefs['radiovis']:
+        print '    -  ' + h
+    print
+    print
+    print "############################################"
+    print "#            RADIO WS MACHINES             #"
+    print "############################################"
+    print
+    for h in env.roledefs['radiowsserver']:
         print '    -  ' + h
     print
     print
@@ -120,6 +137,23 @@ def update_radiovis():
 
     radiovis_server.update_withfallback()
 
+
+@task
+@roles('radiowsserver')
+def deploy_radiows():
+    """Deploy Radio WebSocket Servers"""
+    print '\n\nStarting RadioWS Server Deployment.\n'
+
+    radiows_server.deploy()
+
+@task
+@roles('radiowsserver')
+def update_radiows():
+    """Update RadioWS Servers"""
+    print '\n\nUpdating RadioWS Server Deployment.\n'
+
+    radiows_server.update()
+
 @task
 @roles('rabbitmq')
 def deploy_rabbtimq():
@@ -132,7 +166,7 @@ def deploy_rabbtimq():
 @task
 def restart_services():
     """Restart all Services"""
-    print '\n\nRestarting RadioDNS and RadioVIS Services.\n'
+    print '\n\nRestarting RadioDNS, RadioVIS and RadioWS Services.\n'
 
     print '\n\nRestarting RadioDNS Plugit Server ...\n'
     execute(plugit_server.restart_apache)
@@ -144,4 +178,8 @@ def restart_services():
 
     print '\n\nRestarting RadioVIS Fallback Service ...\n'
     execute(radiovis_server.restart_fallback)
+    time.sleep(2)
+
+    print '\n\nRestarting RadioWS Service ...\n'
+    execute(radiows_server.restart_websocketserver)
     time.sleep(2)

@@ -1,3 +1,4 @@
+from fabric.api import *
 from fabric.api import sudo, run, task, env, settings
 import config
 
@@ -8,7 +9,6 @@ DEPENDENCIES = ['rabbitmq-server']
 RABBITMQ_NODE = "server"
 
 
-@task 
 def upgrade():
     """Upgrde the package database and the server packag
     """
@@ -16,7 +16,6 @@ def upgrade():
     sudo("apt-get upgrade -y")
 
 
-@task
 def install_dependencies():
     """Install the DEPENDENCIES for the project
     """
@@ -24,6 +23,7 @@ def install_dependencies():
 
 
 @task
+@roles('rabbitmq')
 def start():
     """Start rabbit mq, this will do nothing if rabbitmq server is already running
     """
@@ -31,19 +31,25 @@ def start():
 
 
 @task
+@roles('rabbitmq')
 def stop():
     """Stop rabbitmq without any warning
     """
     sudo("/etc/init.d/rabbitmq-server stop")
 
-
 @task
+@roles('rabbitmq')
+def restart():
+    """Restart rabbitmq without any warning
+    """
+    sudo("/etc/init.d/rabbitmq-server restart")
+
+
 def rabbitmq_ctl(*args):
     """Wrapper for the rabbitmqctl command
     """
     return sudo("rabbitmqctl " + " ".join(args))
 
-@task
 def add_user(user, password):
     """Add the user to rabbitmq, if the user already exist the password will be set again
     """
@@ -54,7 +60,6 @@ def add_user(user, password):
         with settings(warn_only=True):
             rabbitmq_ctl("add_user", user, password)
 
-@task
 def setup_auth():
     """setup the admin user and the rabbitmq user in read only.
     """
@@ -69,18 +74,15 @@ def setup_auth():
     rabbitmq_ctl("set_user_tags", "guest")
 
 
-@task
 def activate_management():
     sudo("rabbitmq-plugins enable rabbitmq_management")
 
-@task
 def set_permission(host, user, conf, write, read):
     """Wrapper around the permission setting for rabbitmq
     """
     rabbitmq_ctl("set_permissions", "-p", host, user, conf, write, read)
 
 
-@task
 def deploy():
     """Deploy a rabbit mq server on the current host
     """
