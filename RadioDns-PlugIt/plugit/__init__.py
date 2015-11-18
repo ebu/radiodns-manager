@@ -13,6 +13,7 @@ from params import PI_BASE_URL
 app = Flask("sample-project", static_folder='media', static_url_path=PI_BASE_URL + 'media')
 # For SqlAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Cache configuration for locally served pages
 # Check Configuring Flask-Cache section for more details
