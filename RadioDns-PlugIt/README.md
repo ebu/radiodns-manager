@@ -11,6 +11,30 @@ The API is also called by the RadioVisServer.
 
 The API allow the management of stations and channels.
 
+### Running RadioDNS
+
+#### Preparing the `venv`
+
+    cd RadioDns-PlugIt
+    pip install virtualenv
+    virtualenv venv
+
+Activate the environment
+
+    source venv/bin/activate
+    
+Install the required PIP dependencies
+
+    pip install -r ../Deployment/plugit/configFiles/pip_requirements.txt
+    
+To deactivate the running environment
+
+    deactivate
+    
+#### Running the PlugIt Server
+
+    python server.py
+
 ## RadioVis
 
 The API allow management of defaults medias, and store logs about messages sent on different topics.

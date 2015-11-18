@@ -11,3 +11,4 @@ raven
 Pillow
 boto
 Flask-Cache
+MySQL-python

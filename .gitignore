@@ -43,3 +43,6 @@ RadioDns-PlugIt/config.py
 
 # IDEA Pycharm and IntelliJ ignore
 .idea
+
+# Virtual Environment
+venv
