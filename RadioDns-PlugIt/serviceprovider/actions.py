@@ -106,7 +106,6 @@ def serviceprovider_edit(request, id):
         if object.short_description == '':
             errors.append("Please set a short description")
 
-
         # If no errors, save
         if not errors:
 
@@ -151,7 +150,7 @@ def serviceprovider_gallery_home(request):
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
 
     if sp:
-        for elem in LogoImage.query.filter_by(service_provider_id = int(sp.id)).order_by(LogoImage.filename).all():
+        for elem in LogoImage.query.filter_by(service_provider_id=int(sp.id)).order_by(LogoImage.filename).all():
             list.append(elem.json)
 
     saved = request.args.get('saved') == 'yes'
@@ -159,7 +158,7 @@ def serviceprovider_gallery_home(request):
 
     image_url_prefix = awsutils.get_public_urlprefix(sp)
 
-    return {'list': list, 'image_url_prefix':image_url_prefix, 'saved': saved, 'deleted': deleted}
+    return {'list': list, 'image_url_prefix': image_url_prefix, 'saved': saved, 'deleted': deleted}
 
 
 @action(route="/serviceprovider/images/edit/<id>", template="serviceprovider/images/edit.html", methods=['POST', 'GET'])
@@ -227,9 +226,8 @@ def serviceprovider_gallery_edit(request, id):
 
             file = request.files['file']
             if file:
-
                 filename = secure_filename(file.filename)
-                full_path = unique_filename('media/uploads/serviceprovider/images/' + filename)
+                full_path = unique_filename(os.path.join('./media/uploads/serviceprovider/images/', filename))
                 path, name = os.path.split(full_path)
 
                 ## Delete existing one and only create a unique filename otherwise
@@ -240,9 +238,10 @@ def serviceprovider_gallery_edit(request, id):
                         pass
                     name = object.filename
                     full_path = os.path.join(path, name)
+                else:
+                    object.filename = name
 
-                file.save(full_path)
-                object.filename = name
+                saved = file.save(full_path)
 
             # Check errors
             if object.name == '':
@@ -253,9 +252,14 @@ def serviceprovider_gallery_edit(request, id):
             else:
 
                 if imghdr.what(full_path) not in ['jpeg', 'png']:
-                    errors.append("Image is not an png or jpeg image")
+                    errors.append("Image is not an png or jpeg image (it has header {})".format(imghdr.what(full_path)))
                     os.unlink(full_path)
                     object.filename = None
+
+        # Check that we actually wrote the file
+        if not os.path.isfile(full_path):
+            errors.append(
+                    "Something went wrong while transforming your image. Try again later or contact the administration.")
 
         # If no errors, save
         if not errors:
@@ -357,7 +361,6 @@ def serviceprovider_gallery_setdefault(request, id):
 
             db.session.commit()
 
-
     return PlugItRedirect('serviceprovider/?saved=yes')
 
 
@@ -366,7 +369,6 @@ def serviceprovider_gallery_setdefault(request, id):
 @only_orga_admin_user()
 def serviceprovider_gallery_delete(request, id):
     """Delete an Image."""
-
 
     plugitapi = PlugItAPI(config.API_URL)
     orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))

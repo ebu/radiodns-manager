@@ -6,4 +6,4 @@ import actions
 
 if __name__ == "__main__":
     plugit.load_actions(actions)
-    plugit.app.run(debug=plugit.params.DEBUG)
+    plugit.app.run(host="0.0.0.0", debug=plugit.params.DEBUG, threaded=True)

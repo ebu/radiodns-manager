@@ -1,23 +1,26 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-#from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
-#import re
+# from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
+# import re
 
 import config
 import re
 
 import boto
+from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.key import Key
 import boto.route53
+
 
 ### BUCKETS AND FILES
 
 def get_or_create_bucket(service_provider):
     """Returns the bucket or creates a new one according to service_provider"""
-    #s3 = boto.s3.connect_to_region('eu-central-1', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
-    s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,  host='s3-eu-west-1.amazonaws.com') #host='s3-eu-central-1.amazonaws.com')
-
+    # s3 = boto.s3.connect_to_region('eu-central-1', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
+    s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,
+                         host='s3-eu-west-1.amazonaws.com',
+                         calling_format=OrdinaryCallingFormat())  # host='s3-eu-central-1.amazonaws.com')
     bucket = None
     bucketName = "static.%s" % (service_provider.fqdn.lower().rstrip('.'))
 
@@ -30,12 +33,14 @@ def get_or_create_bucket(service_provider):
         endpoint = get_website_endpoint(bucket)
         update_or_create_provider_cname("static", service_provider, endpoint)
         return bucket
+    except Exception as e:
+        print(e)
 
 
 def get_website_endpoint(bucket):
     """Bypasses the us-east vs. eu-west issue on website endpoint"""
     endpoint = bucket.get_website_endpoint()
-    return endpoint #.replace("us-east-1", "eu-west-1") works with spec connection
+    return endpoint  # .replace("us-east-1", "eu-west-1") works with spec connection
 
 
 def set_right_bucket(bucket):
@@ -56,6 +61,7 @@ def upload_public_image(service_provider, filename, filepath):
 
     return filename
 
+
 def delete_public_image(service_provider, filename):
     """Upload image to service_provider bucket"""
 
@@ -64,16 +70,16 @@ def delete_public_image(service_provider, filename):
 
     return filename
 
+
 def get_public_urlprefix(service_provider):
     """Public Url to filename"""
     # TODO Handle https depending on AWS
     return "http://%s.%s/" % ('static', service_provider.fqdn.lower().rstrip('.'))
 
+
 def get_public_image_url(service_provider, filename):
     """Public Url to filename"""
     return "%s%s" % (get_public_urlprefix(service_provider), filename)
-
-
 
 
 ### ROUTE 53
@@ -109,6 +115,7 @@ def get_or_create_zone_forprovider(service_provider):
 
     return zone
 
+
 def update_or_create_provider_cname(prefix, service_provider, endpoint):
     """Creates a new CNAME entry or updates it"""
     zone = get_or_create_zone_forprovider(service_provider)
@@ -117,6 +124,7 @@ def update_or_create_provider_cname(prefix, service_provider, endpoint):
     cname = update_or_create_cname(zone, name, endpoint)
 
     return cname
+
 
 def update_or_create_cname(zone, name, value):
     """Creates a new CNAME entry or updates it"""
@@ -130,8 +138,8 @@ def update_or_create_cname(zone, name, value):
 
     cname = zone.get_cname(name)
 
-
     return cname.resource_records[0]
+
 
 def get_provider_cname(prefix, service_provider, zone):
     """Gets CNAME entry"""
@@ -140,6 +148,7 @@ def get_provider_cname(prefix, service_provider, zone):
     cname = zone.get_cname(name)
 
     return cname
+
 
 def update_or_create_vissrv_station(station):
     """Creates a new CNAME entry or updates it"""
@@ -157,6 +166,7 @@ def update_or_create_vissrv_station(station):
             value = service_string(host, port)
             return update_or_create_srv(zone, name, value)
     return None
+
 
 def remove_vissrv_station(station):
     """Removes the VIS entry of a station"""
@@ -185,6 +195,7 @@ def update_or_create_epgsrv_station(station):
             return update_or_create_srv(zone, name, value)
     return None
 
+
 def remove_epgsrv_station(station):
     """Removes the EPG entry of a station"""
     if station.radioepg_enabled and station.service_provider:
@@ -192,6 +203,7 @@ def remove_epgsrv_station(station):
         prefix = '_radioepg._tcp'
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
         remove_srv(zone, name)
+
 
 def update_or_create_tagsrv_station(station):
     """Creates a new CNAME entry or updates it"""
@@ -211,6 +223,7 @@ def update_or_create_tagsrv_station(station):
             return update_or_create_srv(zone, name, value)
     return None
 
+
 def remove_tagsrv_station(station):
     """Removes the TAG entry of a station"""
     if station.radioepg_enabled and station.service_provider:
@@ -218,6 +231,7 @@ def remove_tagsrv_station(station):
         prefix = '_radiotag._tcp'
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
         remove_srv(zone, name)
+
 
 def update_or_create_srv(zone, name, value):
     """Creates a new CNAME entry or updates it"""
@@ -229,6 +243,7 @@ def update_or_create_srv(zone, name, value):
         srv = zone.add_record('SRV', name, value)
     srv = zone.find_records(name, 'SRV', desired=1)
     return srv.resource_records[0]
+
 
 def update_or_create_a(zone, name, value):
     """Creates a new CNAME entry or updates it"""
@@ -253,6 +268,7 @@ def service_string(server, port):
     srv = "%d %d %d %s" % (0, 100, int(port), server)
     return srv
 
+
 def get_parent_ns(zone):
     """Creates a new CNAME entry or updates it"""
     route53 = zone.route53connection
@@ -263,6 +279,7 @@ def get_parent_ns(zone):
     parentzone = route53.get_zone(parentName)
 
     return parentzone.find_records(zone.name, 'NS')
+
 
 def update_or_create_parent_ns(zone):
     """Creates a new CNAME entry or updates it"""
@@ -284,10 +301,10 @@ def update_or_create_parent_ns(zone):
 
     return zone
 
+
 ### REMOVAL
 
 def remove_station(st):
-
     if st:
         # _radiovis._tcp
         remove_vissrv_station(st)
@@ -300,7 +317,6 @@ def remove_station(st):
 ### CHECKS
 
 def check_mainzone():
-
     mainzone = get_or_create_mainzone()
     mainns = mainzone.get_nameservers()
     parent = get_parent_ns(mainzone)
@@ -316,12 +332,12 @@ def check_mainzone():
 
     return {'isvalid': isvalid, 'name': mainzone.name, 'mainzone': {'zone': mainzone.name, 'ns': mainns},
             'parentns': {'entry': parent.name, 'value': parentns},
-            'services': {'vis': {'name': config.RADIOVIS_DNS, 'ip': visserver}, #'wildcard': viswildcard},
-                         'epg': {'name': config.RADIOEPG_DNS, 'ip': epgserver}, #'wildcard': epgwildcard},
-                         'tag': {'name': config.RADIOTAG_DNS, 'ip': tagserver}}} #'wildcard': tagwildcard}}}
+            'services': {'vis': {'name': config.RADIOVIS_DNS, 'ip': visserver},  # 'wildcard': viswildcard},
+                         'epg': {'name': config.RADIOEPG_DNS, 'ip': epgserver},  # 'wildcard': epgwildcard},
+                         'tag': {'name': config.RADIOTAG_DNS, 'ip': tagserver}}}  # 'wildcard': tagwildcard}}}
+
 
 def check_serviceprovider(sp):
-
     if sp:
         # NS
         zone = get_or_create_zone_forprovider(sp)
@@ -345,18 +361,18 @@ def check_serviceprovider(sp):
 
         isvalid = nsisvalid and bucketisvalid and visservice and epgservice and tagservice
 
-        return {'isvalid': isvalid, 'name': zone.name, 'zone': {'isvalid': nsisvalid,'zone': zone.name, 'ns': zonens},
+        return {'isvalid': isvalid, 'name': zone.name, 'zone': {'isvalid': nsisvalid, 'zone': zone.name, 'ns': zonens},
                 'parentns': {'entry': parent.name, 'value': parentns},
                 'bucket': {'isvalid': bucketisvalid, 'name': bucket.name, 'publicendpoint': bucketendpoint,
-                           'cname':{'name': staticcnamename, 'record': staticnamerecord}},
-                'services':{'vis': {'name': sp.vis_fqdn, 'value': visservice},
-                            'epg': {'name': sp.epg_fqdn, 'value': epgservice},
-                            'tag': {'name': sp.tag_fqdn, 'value': tagservice}}}
+                           'cname': {'name': staticcnamename, 'record': staticnamerecord}},
+                'services': {'vis': {'name': sp.vis_fqdn, 'value': visservice},
+                             'epg': {'name': sp.epg_fqdn, 'value': epgservice},
+                             'tag': {'name': sp.tag_fqdn, 'value': tagservice}}}
 
     return {'isvalid': False}
 
-def check_station(st):
 
+def check_station(st):
     if st:
         # _radiovis._tcp
         vis = update_or_create_vissrv_station(st)
@@ -379,8 +395,8 @@ def check_station(st):
         isvalid = visisvalid and epgisvalid and tagisvalid
 
         return {'isvalid': isvalid, 'name': st.fqdn,
-                'radiovis': {'isvalid': visisvalid, 'enabled':st.radiovis_enabled, 'fqdn': vis},
-                'radioepg': {'isvalid': epgisvalid, 'enabled':st.radioepg_enabled, 'fqdn': epg},
-                'radiotag': {'isvalid': tagisvalid, 'enabled':st.radiotag_enabled, 'fqdn': tag}}
+                'radiovis': {'isvalid': visisvalid, 'enabled': st.radiovis_enabled, 'fqdn': vis},
+                'radioepg': {'isvalid': epgisvalid, 'enabled': st.radioepg_enabled, 'fqdn': epg},
+                'radiotag': {'isvalid': tagisvalid, 'enabled': st.radiotag_enabled, 'fqdn': tag}}
 
     return {'isvalid': False}
