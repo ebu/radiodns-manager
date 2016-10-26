@@ -278,7 +278,7 @@
 
 		// Automatic Frequency Transformation
 		$('#frequency').on('focusout', function() {
-		    if($(this).val() != ""){
+		    if($(this).val() != "" && $(this).val() != "*"){
 		    	var str = $(this).val();
 				var result = '000000' + str.replace(/[. ]/g, '');
 				$(this).val(result.substr(result.length-5));
