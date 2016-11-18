@@ -3,7 +3,7 @@ var radiovisplayer_websockets = new Array();
 
 function radiovisplayer_initsocket(topic, host, port) {
 
-	ws = new WebSocket("ws://" + host + ":" + port + topic);
+	ws = new WebSocket("wss://" + host + ":" + port + topic);
 
 	// Save data for reconnection
 	ws.radiovis_topic = topic;
