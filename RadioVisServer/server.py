@@ -29,9 +29,10 @@ import sys
 # The logger
 logging.basicConfig(format="[%(levelname)s] %(asctime)-15s - %(message)s", level=config.LOG_LEVEL)
 logger = logging.getLogger('radiovisserver')
-fh = FileHandler(filename='radiovis-server.log', mode='a')
-fh.setFormatter(Formatter(fmt="[%(levelname)s] %(asctime)-15s - %(message)s"))
-logger.addHandler(fh)
+# Logging to file is handled outside by supvervisord instead of the application itself
+# fh = FileHandler(filename='radiovis-server.log', mode='a')
+# fh.setFormatter(Formatter(fmt="[%(levelname)s] %(asctime)-15s - %(message)s"))
+# logger.addHandler(fh)
 
 
 # Last message by TOPIC
