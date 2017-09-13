@@ -166,7 +166,7 @@ def channels_edit(request, id):
                 errors.append("serviceIdentifier must be up to 16 letters or number, lowercase")
 
         if object.mime_type is not None:
-            if not re.match(r"^\w+\/\w+$", object.mime_type):
+            if not re.match(r"^([!-\.0-~]{1,}\/[!-\.0-~]{1,})+$", object.mime_type):
                 errors.append("mime_type must be of format string/string ")
 
         if object.bitrate is not None:
