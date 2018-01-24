@@ -38,7 +38,7 @@ or to add the machines public DNS name to /etc/hosts.
 
 ## Contact
 
-Contact the EBU (Mathias Coinchon, coinchon@ebu.ch) if you need more information about RadioDNS and its associated developments.
+Contact the EBU (Ben Poor poor@ebu.ch) if you need more information about RadioDNS and its associated developments.
 
 
 ## Contributors
