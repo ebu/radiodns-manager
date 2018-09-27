@@ -31,6 +31,26 @@ Old instructions to deploy each parts of the project are available in the [Deplo
 
 To get at least the basic service working you must have the PlugIt Client (standalone_proxy), the Dns service (RadioDns-Plugit) and a mysql instance (you can use the one provided in docker-compose-dev.yml, by using the `docker-compose -f docker-compose-dev.yml up -d`) up and running.
 
+# How to run in local development 
+
+To start up a local instance
+
+```
+docker-compose up --build 
+```
+
+To shut down the local instance
+
+```
+docker-compose down
+```
+
+To remove the database and start afresh
+
+```
+docker-volume rm radiodns-plugit_db_data 
+```
+
 ## Contribution guidelines
 - Always fix version of dependencies.
 - Any new module that can be written in python 3 must be written in python 3.
