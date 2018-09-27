@@ -1,0 +1,56 @@
+# Tests for RadioDNS
+
+## Setup
+This environment supports firefox and google chrome as remote controlled headless browser.
+
+You'll need to download both browser's drivers:
+- https://sites.google.com/a/chromium.org/chromedriver/downloads
+- https://github.com/mozilla/geckodriver/releases
+
+Copy them to the root directory of this project.
+
+You also need the following dependencies:
+- python 3.7
+- docker 18.06.1
+- virtualenv 16.0.0
+
+Next you have to setup the virtualenv:
+
+    virtualenv venv
+    source venv/bin/activate
+    
+And then install the required PIP dependencies
+
+    pip install .
+    
+This test suite assumes that you have already installed the following projects (located in the root folder of this repository) along with their dependencies:
+- MockApi
+- RadioDns-PlugIt
+- standalone_proxy
+
+You'll find installation instructions for each project in the README.md of their respective folder.
+
+## Marking tests dependencies
+Sometimes a test is required to run before an other. In order to do
+so one must use the run decorator to specify the runtime order like this:
+
+    @pytest.mark.run(order=1)
+    
+The first test to run os the service provider test. The second is the station test. Theses test
+populate the database for further usage.
+
+The run(order=1) decorator should be used only to mark tests dependencies between files.
+To mark dependencies in the same module (class or file) it is advised to use the
+
+    @pytest.mark.run(before='<name_of_the_test>')
+  
+or the 
+
+    @pytest.mark.run(after='<name_of_the_test>')
+    
+decorator.
+
+## Run
+To run the test suite run
+
+    python run.py

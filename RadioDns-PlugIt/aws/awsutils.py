@@ -1,34 +1,30 @@
 # -*- coding: utf-8 -*-
 
-# Utils
-# from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
-# import re
-
-import config
 import re
 
 import boto
+import boto.route53
 from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.key import Key
-import boto.route53
+
+import config
 
 
-### BUCKETS AND FILES
+# BUCKETS AND FILES
 
 def get_or_create_bucket(service_provider):
     """Returns the bucket or creates a new one according to service_provider"""
-    # s3 = boto.s3.connect_to_region('eu-central-1', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
     s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,
                          host='s3-eu-west-1.amazonaws.com',
                          calling_format=OrdinaryCallingFormat())  # host='s3-eu-central-1.amazonaws.com')
     bucket = None
-    bucketName = "static.%s" % (service_provider.fqdn.lower().rstrip('.'))
+    bucket_name = "static.%s" % (service_provider.fqdn.lower().rstrip('.'))
 
     try:
-        bucket = s3.get_bucket(bucketName)
+        bucket = s3.get_bucket(bucket_name)
         return bucket
     except boto.exception.S3ResponseError:
-        bucket = s3.create_bucket(bucketName, location='eu-west-1')
+        bucket = s3.create_bucket(bucket_name, location='eu-west-1')
         set_right_bucket(bucket)
         endpoint = get_website_endpoint(bucket)
         update_or_create_provider_cname("static", service_provider, endpoint)
@@ -82,17 +78,17 @@ def get_public_image_url(service_provider, filename):
     return "%s%s" % (get_public_urlprefix(service_provider), filename)
 
 
-### ROUTE 53
+# ROUTE 53
 
 def get_or_create_mainzone():
     """Returns the zone or creates a new one according to service_provider"""
     route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
 
-    zoneName = config.DOMAIN
+    zone_name = config.DOMAIN
 
-    zone = route53.get_zone(zoneName)
+    zone = route53.get_zone(zone_name)
     if not zone:
-        zone = route53.create_zone(zoneName)
+        zone = route53.create_zone(zone_name)
 
     # Make sure parent zone has NS
     update_or_create_parent_ns(zone)
@@ -104,11 +100,11 @@ def get_or_create_zone_forprovider(service_provider):
     """Returns the zone or creates a new one according to service_provider"""
     route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
 
-    zoneName = service_provider.fqdn
+    zone_name = service_provider.fqdn
 
-    zone = route53.get_zone(zoneName)
+    zone = route53.get_zone(zone_name)
     if not zone:
-        zone = route53.create_zone(zoneName)
+        zone = route53.create_zone(zone_name)
 
     # Make sure parent zone has NS
     update_or_create_parent_ns(zone)
@@ -274,11 +270,11 @@ def get_parent_ns(zone):
     route53 = zone.route53connection
 
     find = re.compile(r"^([^.]+).(.+)$")
-    parentName = re.search(find, zone.name).group(2)
+    parent_name = re.search(find, zone.name).group(2)
 
-    parentzone = route53.get_zone(parentName)
+    parent_zone = route53.get_zone(parent_name)
 
-    return parentzone.find_records(zone.name, 'NS')
+    return parent_zone.find_records(zone.name, 'NS')
 
 
 def update_or_create_parent_ns(zone):
@@ -286,23 +282,23 @@ def update_or_create_parent_ns(zone):
     route53 = zone.route53connection
 
     find = re.compile(r"^([^.]+).(.+)$")
-    parentName = re.search(find, zone.name).group(2)
-    parentZone = route53.get_zone(parentName)
-    parentNSE = parentZone.find_records(zone.name, 'NS')
+    parent_name = re.search(find, zone.name).group(2)
+    parent_zone = route53.get_zone(parent_name)
+    parent_nse = parent_zone.find_records(zone.name, 'NS')
 
     NSE = zone.get_nameservers()
-    if not parentNSE:
+    if not parent_nse:
         # Create Parent NS entries if missing
-        parentZone.add_record('NS', zone.name, NSE)
+        parent_zone.add_record('NS', zone.name, NSE)
     else:
         # Check if correct
-        if NSE not in parentNSE.resource_records:
-            parentZone.update_record(parentNSE, NSE)
+        if NSE not in parent_nse.resource_records:
+            parent_zone.update_record(parent_nse, NSE)
 
     return zone
 
 
-### REMOVAL
+# REMOVAL
 
 def remove_station(st):
     if st:
@@ -314,7 +310,7 @@ def remove_station(st):
         remove_tagsrv_station(st)
 
 
-### CHECKS
+# CHECKS
 
 def check_mainzone():
     mainzone = get_or_create_mainzone()

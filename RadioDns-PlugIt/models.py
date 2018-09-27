@@ -1,14 +1,15 @@
-from plugit import db
-from aws import awsutils
-import dns.resolver
-import config
-import string
-import random
 import datetime
 import json
+import random
+import string
+import unicodedata
 import urllib
 
-import unicodedata
+import dns.resolver
+
+import config
+from aws import awsutils
+from db_utils import db
 
 
 def to_json(inst, cls, bonusProps=[]):
@@ -155,7 +156,10 @@ class ServiceProvider(db.Model):
 
     @property
     def image_url_prefix(self):
-        return awsutils.get_public_urlprefix(self)
+        if config.STANDALONE:
+            return config.LOGO_PUBLIC_URL + "/"
+        else:
+            return awsutils.get_public_urlprefix(self)
 
     @property
     def json(self):
@@ -862,14 +866,14 @@ class LogoImage(db.Model):
     @property
     def public_320x240_url(self):
         if self.url320x240:
-            return "%s%s" % (self.service_provider.image_url_prefix, self.url320x240)
+            return "%s%s" % (self.service_provider.image_url_prefix , self.url320x240)
         else:
             return self.public_url
 
     @property
     def public_600x600_url(self):
         if self.url600x600:
-            return "%s%s" % (self.service_provider.image_url_prefix, self.url600x600)
+            return "%s%s" % (self.service_provider.image_url_prefix , self.url600x600)
         else:
             return self.public_url
 

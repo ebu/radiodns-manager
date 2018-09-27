@@ -5,13 +5,15 @@ from plugit.utils import action, only_orga_member_user, json_only, cache, PlugIt
 
 from models import Ecc
 
+
 # Include homepage
 @action(route="/", template="main/home.html")
 @only_orga_member_user()
 def main_home(request):
     """Show the home page."""
-    
+
     return PlugItRedirect('stations')
+
 
 # Include terms
 @action(route="/terms/", template="terms.html")
@@ -19,7 +21,7 @@ def main_home(request):
 def terms(request):
     """Show the system status."""
 
-    return { }
+    return {}
 
 
 # Load the list of countries. Cached
@@ -33,5 +35,5 @@ def main_ecc_list(request):
 
     for elem in Ecc.query.order_by(Ecc.name).all():
         list.append(elem.json)
-    
+
     return {'list': list}

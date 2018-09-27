@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: plugitdns
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:

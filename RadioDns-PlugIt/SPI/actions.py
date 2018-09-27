@@ -1,55 +1,36 @@
-from flask import Flask
 # For Caching
-from flask.ext.cache import Cache
-# For SqlAlchemy
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask import abort, send_from_directory, request
-import config
-import routes
 import re
 
-from params import PI_BASE_URL
-
-app = Flask("sample-project", static_folder='media', static_url_path=PI_BASE_URL + 'media')
 # For SqlAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_URL
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+import plugit
+from flask import abort, send_from_directory, request as Request
 
-# Cache configuration for locally served pages
-# Check Configuring Flask-Cache section for more details
-# TODO Put this in config
-app.config['CACHE_TYPE'] = 'simple'
-app.cache = Cache(app)
+import config
 
-
-if config.SENTRY_DSN:
-    from raven.contrib.flask import Sentry
-    app.config['SENTRY_DSN'] = config.SENTRY_DSN
-    sentry = Sentry(app)
-
-db = SQLAlchemy(app)
 
 def make_xsi1_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
-    hostname = request.host
-    args = str(hash(frozenset(request.args.items())))
-    return (hostname + '_xsi1_' +args).encode('utf-8')
+    hostname = Request.host
+    args = str(hash(frozenset(Request.args.items())))
+    return (hostname + '_xsi1_' + args).encode('utf-8')
+
 
 def make_pi1_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
-    hostname = request.host
-    path = request.path
-    args = str(hash(frozenset(request.args.items())))
-    return (hostname + '_pi1_' + path + '_' +args).encode('utf-8')
+    hostname = Request.host
+    path = Request.path
+    args = str(hash(frozenset(Request.args.items())))
+    return (hostname + '_pi1_' + path + '_' + args).encode('utf-8')
+
 
 def make_xsi3_hostname_cache_key(*args, **kwargs):
     """Generates a cachekey containing the hostname"""
-    hostname = request.host
-    args = str(hash(frozenset(request.args.items())))
-    return (hostname + '_xsi3_' +args).encode('utf-8')
+    hostname = Request.host
+    args = str(hash(frozenset(Request.args.items())))
+    return (hostname + '_xsi3_' + args).encode('utf-8')
 
-@app.route('/radiodns/epg/XSI.xml')
-@app.cache.cached(timeout=500, key_prefix='XSI1_')
+
+@plugit.app.route('/radiodns/epg/XSI.xml')
 def epg_1_xml():
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
     # Specified by v1.1 2013.10 /radiodns/epg/XSI.xml
@@ -70,8 +51,8 @@ def epg_1_xml():
         stations = None
 
         # Find out what stations to serve if by codops or station
-        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.'+config.XSISERVING_DOMAIN)
-        r = regex.search(request.host)
+        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
+        r = regex.search(Request.host)
         if r:
             station = r.groupdict()['station']
             provider = r.groupdict()['provider']
@@ -80,7 +61,8 @@ def epg_1_xml():
                 # We have a station based query
                 sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
                 if sp:
-                    stations = Station.query.filter_by(service_provider_id=sp.id, radioepg_enabled=True) #, fqdn_prefix=station)
+                    stations = Station.query.filter_by(service_provider_id=sp.id,
+                                                       radioepg_enabled=True)  # , fqdn_prefix=station)
 
             if station:
                 # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
@@ -90,7 +72,7 @@ def epg_1_xml():
             sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
             stations = Station.query.filter_by(radioepg_enabled=True)
 
-        if not sp:
+        if not sp and not config.STANDALONE:
             abort(404)
 
         list = []
@@ -138,15 +120,18 @@ def epg_1_xml():
                     list.append([elem.json, entries])
 
         return Response(render_template('radioepg/servicefollowing/xml1.html', stations=list, service_provider=sp,
-                                        creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+                                        creation_time=datetime.datetime.now().strftime(time_format)),
+                        mimetype='text/xml')
 
     # Else
     abort(404)
+
+
 # Override Cache Key for XSI 1
 epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
-@app.route('/radiodns/spi/3.1/SI.xml')
-@app.cache.cached(timeout=500, key_prefix='XSI3_')
+
+@plugit.app.route('/radiodns/spi/3.1/SI.xml')
 def epg_3_xml():
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
     # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
@@ -167,8 +152,8 @@ def epg_3_xml():
         stations = None
 
         # Find out what stations to serve if by codops or station
-        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.'+config.XSISERVING_DOMAIN)
-        r = regex.search(request.host)
+        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
+        r = regex.search(Request.host)
         if r:
             station = r.groupdict()['station']
             provider = r.groupdict()['provider']
@@ -177,7 +162,8 @@ def epg_3_xml():
                 # We have a station based query
                 sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
                 if sp:
-                    stations = Station.query.filter_by(service_provider_id=sp.id, radioepg_enabled=True) #, fqdn_prefix=station)
+                    stations = Station.query.filter_by(service_provider_id=sp.id,
+                                                       radioepg_enabled=True)  # , fqdn_prefix=station)
 
             if station:
                 # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
@@ -187,24 +173,24 @@ def epg_3_xml():
             sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
             stations = Station.query.filter_by(radioepg_enabled=True)
 
-        if not sp:
+        if not sp and not config.STANDALONE:
             abort(404)
 
         list = []
 
         if stations:
-            for elem in stations:
+            for station in stations:
 
                 entries = []
 
                 # Channels
-                for elem2 in elem.channels.order_by(Channel.name).all():
-                    if elem2.servicefollowingentry.active:
-                        entries.append(elem2.servicefollowingentry.json)
+                for channel in station.channels.order_by(Channel.name).all():
+                    if channel.servicefollowingentry.active:
+                        entries.append(channel.servicefollowingentry.json)
 
-                        if elem2.type_id == 'fm':  # For FM, also add with the country code
+                        if channel.type_id == 'fm':  # For FM, also add with the country code
                             try:
-                                data2 = elem2.servicefollowingentry.json
+                                data2 = channel.servicefollowingentry.json
 
                                 # Split the URI
                                 uri_dp = data2['uri'].split(':', 2)
@@ -227,23 +213,26 @@ def epg_3_xml():
                                 pass
 
                 # Custom entries
-                for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
-                    if elem2.active:
-                        entries.append(elem2.json)
+                for channel in station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
+                    if channel.active:
+                        entries.append(channel.json)
 
                 # List station anyway
-                list.append([elem.json, entries])
+                list.append([station.json, entries])
 
         return Response(render_template('radioepg/servicefollowing/xml3.html', stations=list, service_provider=sp,
-                                        creation_time=datetime.datetime.now().strftime(time_format)), mimetype='text/xml')
+                                        creation_time=datetime.datetime.now().strftime(time_format)),
+                        mimetype='text/xml')
 
     # Else
     abort(404)
+
+
 # Override Cache Key for XSI 3
 epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
-@app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
-@app.cache.cached(timeout=500)
+
+@plugit.app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
 def logo(id, w, h):
     """Return a logo for a station"""
 
@@ -255,13 +244,14 @@ def logo(id, w, h):
     if not station:
         abort(404)
 
-    dest_file = 'media/uploads/radioepg/cache/S%s_W%s_H%s_L%s.png' % (str(int(id)), str(int(w)), str(int(h)), str(station.epg_picture_id) if station.epg_picture_id else 'B')
+    dest_file = 'media/uploads/radioepg/cache/S%s_W%s_H%s_L%s.png' % (
+        str(int(id)), str(int(w)), str(int(h)), str(station.epg_picture_id) if station.epg_picture_id else 'B')
 
     if not os.path.isfile(dest_file):
-
         from PIL import Image
         size = (w, h)
-        image = Image.open(station.epg_picture.filename if station.epg_picture else 'media/uploads/radioepg/default.png')
+        image = Image.open(
+            station.epg_picture.filename if station.epg_picture else 'media/uploads/radioepg/default.png')
         image.thumbnail(size, Image.ANTIALIAS)
         background = Image.new('RGBA' if station.epg_picture else 'RGB', size, (255, 255, 255, 0))
         background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
@@ -270,8 +260,8 @@ def logo(id, w, h):
 
     return send_from_directory(".", dest_file)
 
-@app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
-@app.cache.cached(timeout=500, key_prefix='PI1_')
+
+@plugit.app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
 def epg_sch_1_xml(path, date):
     """Special call for EPG scheduling xml"""
 
@@ -287,8 +277,8 @@ def epg_sch_1_xml(path, date):
         channels = None
 
         # Find out what stations to serve if by codops or station
-        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.'+config.XSISERVING_DOMAIN)
-        r = regex.search(request.host)
+        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
+        r = regex.search(Request.host)
         if r:
 
             station = r.groupdict()['station']
@@ -379,9 +369,7 @@ def epg_sch_1_xml(path, date):
 
     abort(404)
     # return 'Not enabled'
+
+
 # Override Cache Key for PI 1
 epg_sch_1_xml.make_cache_key = make_pi1_hostname_cache_key
-
-# Load remaining plug-it routes
-def load_actions(act_mod):
-    routes.load_routes(app, act_mod)

@@ -1,0 +1,34 @@
+{% extends "plugIt/plugItBase-common.html" %}
+
+{% block extra_head %}
+
+    <style>
+        body { padding-top: 70px; } /* padding due to navbar top */
+    </style>
+
+{% endblock %}
+
+{% block nav_block %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+{% endblock %}
+
+{% block main_content %}
+    <div>
+        <div class="col-md-2">
+            {{ plugit_menu }}
+        </div>
+
+        <div class="col-md-8 col-md-offset-1">
+
+            {% block content %}{{ plugit_content|safe }}
+            {% endblock %}
+
+            <hr/>
+
+            <div class="footer">
+                <p>&copy; EBU 2013 - 2017</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
