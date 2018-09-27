@@ -58,7 +58,7 @@ STATION_SERVICES_HTML_TR = [
 ]
 
 
-@pytest.mark.run(order=2)
+@pytest.mark.run(order=3)
 def test_create_station(stack_setup, browser_setup):
     db = stack_setup
     driver = browser_setup
