@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork, no_template
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, \
+    addressInNetwork, no_template
+from werkzeug.utils import secure_filename
 
 from models import db, Station, Channel, Picture, Ecc, LogEntry, ServiceProvider
 from plugit.api import PlugItAPI, Orga
@@ -13,7 +15,6 @@ import sys
 import time
 import uuid
 
-from werkzeug import secure_filename
 from flask import abort
 
 from PIL import Image
@@ -29,7 +30,7 @@ def radiovis_gallery_home(request):
 
     list = []
 
-    for elem in Picture.query.filter_by(orga = int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
+    for elem in Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
         list.append(elem.json)
 
     saved = request.args.get('saved') == 'yes'
@@ -53,9 +54,9 @@ def radiovis_gallery_edit(request, id):
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
 
-
     if id != '-':
-        object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+        object = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')),
+                                         id=int(id)).first()
 
     if request.method == 'POST':
 
@@ -222,15 +223,18 @@ def radiovis_channels_home(request):
 
     list = []
 
-    for elem in Channel.query.filter(Channel.type_id!='id').join(Station).filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name,Channel.type_id,Channel.name).all():
+    for elem in Channel.query.filter(Channel.type_id != 'id').join(Station).filter(
+            Station.orga == int(request.args.get('ebuio_orgapk'))).order_by(Station.name, Channel.type_id,
+                                                                            Channel.name).all():
         list.append(elem.json)
 
     pictures = []
 
-    for elem in Picture.query.filter_by(orga = int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
+    for elem in Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(Picture.name).all():
         pictures.append(elem.json)
 
     return {'list': list, 'pictures': pictures}
+
 
 @action(route="/radiovis/channels/player/", template="radiovis/channels/player.html")
 @no_template()
@@ -242,6 +246,7 @@ def radiovis_channels_player(request):
     name = request.args.get('name')
 
     return {'stationname': stationname, 'name': name, 'topic': topic}
+
 
 @action(route="/radiovis/channels/playermodal/", template="radiovis/channels/playermodal.html")
 @no_template()
@@ -261,7 +266,8 @@ def radiovis_channels_playermodal(request):
 def radiovis_channels_set(request, id, pictureid):
     """Set a default value for a channel"""
 
-    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Channel.query.join(Station).filter(Channel.id == int(id),
+                                                Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
     picture = Picture.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(pictureid)).first()
 
@@ -280,7 +286,8 @@ def radiovis_channels_set(request, id, pictureid):
 def radiovis_channels_logs(request, id):
     """Show logs for a channel"""
 
-    object = Channel.query.join(Station).filter(Channel.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Channel.query.join(Station).filter(Channel.id == int(id),
+                                                Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
     if not object:
         abort(404)
@@ -288,7 +295,8 @@ def radiovis_channels_logs(request, id):
 
     list = []
 
-    for logentry in LogEntry.query.filter(LogEntry.topic.ilike(object.topic + '%')).order_by(-LogEntry.reception_timestamp).all():
+    for logentry in LogEntry.query.filter(LogEntry.topic.ilike(object.topic + '%')).order_by(
+            -LogEntry.reception_timestamp).all():
         list.append(logentry.json)
 
     return {'list': list, 'channel': object.json}
@@ -388,6 +396,7 @@ def radiovis_api_get_all_channels(request, secret):
 
     return {'list': list}
 
+
 @action(route="/radiovis/api/<secret>/get_all_vis_channels")
 @only_orga_admin_user()  # To prevent call from IO
 @json_only()
@@ -404,6 +413,7 @@ def radiovis_api_get_all_vis_channels(request, secret):
         list.append((channel.topic, channel.id))
 
     return {'list': list}
+
 
 @action(route="/radiovis/api/<secret>/get_channel_default")
 @only_orga_admin_user()  # To prevent call from IO
@@ -440,7 +450,7 @@ def radiovis_api_cleanup_logs(request, secret):
     # db.session.commit()
     from sqlalchemy.sql import text
     db.engine.execute(text('DELETE FROM log_entry WHERE reception_timestamp <  :t'),
-                      t = (time.time() - int(request.form.get('max_age'))))
+                      t=(time.time() - int(request.form.get('max_age'))))
 
     return {}
 

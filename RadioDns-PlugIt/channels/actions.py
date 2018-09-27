@@ -4,7 +4,6 @@
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
 
 from models import db, Station, Channel, Ecc, ServiceProvider
-from aws import awsutils
 import re
 
 import config
@@ -66,7 +65,8 @@ def channels_edit(request, id):
     station_id = request.args.get('station_id')
     if station_id:
         station = Station.query.filter(Station.id == station_id,
-                                       Station.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))).first()
+                                       Station.orga == int(request.args.get('ebuio_orgapk') or request.form.get(
+                                           'ebuio_orgapk'))).first()
 
     if id != '-':
         object = Channel.query.join(Station).filter(Channel.id == int(id),
@@ -172,7 +172,6 @@ def channels_edit(request, id):
         if object.bitrate is not None:
             if not re.match(r"^[0-9]+$", object.bitrate):
                 errors.append("bitrate must be digits")
-
 
         # Check station
         sta = Station.query.filter_by(id=object.station_id).first()
@@ -389,7 +388,6 @@ def string_to_channel(linedata, station):
     # Define Type
     object.name = data[0]
     object.type_id = data[1]
-
 
     # FM
     # name	fm	ecc	pid	frequency

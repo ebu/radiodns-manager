@@ -2,6 +2,7 @@
 
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
+from werkzeug.utils import secure_filename
 
 from models import db, ServiceProvider, LogoImage
 from plugit.api import PlugItAPI, Orga
@@ -12,12 +13,13 @@ import os
 import sys
 import time
 
-from werkzeug import secure_filename
 from PIL import Image
 import imghdr
 import uuid
 
 import json
+
+from utils import sendImageToMockApi
 
 
 @action(route="/serviceprovider/", template="serviceprovider/home.html")
@@ -225,12 +227,19 @@ def serviceprovider_gallery_edit(request, id):
             new_file = True
 
             file = request.files['file']
+
+            imageDirectoryPath = './media/uploads/serviceprovider/images/'
+            if not os.path.exists(imageDirectoryPath):
+                os.makedirs(imageDirectoryPath)
+
             if file:
                 filename = secure_filename(file.filename)
-                full_path = unique_filename(os.path.join('./media/uploads/serviceprovider/images/', filename))
+                full_path = os.path.join('./media/uploads/serviceprovider/images/', filename)
+                if not config.DEBUG:
+                    full_path = unique_filename(full_path)
                 path, name = os.path.split(full_path)
 
-                ## Delete existing one and only create a unique filename otherwise
+                # Delete existing one and only create a unique filename otherwise
                 if object.filename:
                     try:
                         os.unlink(object.filename)
@@ -272,7 +281,10 @@ def serviceprovider_gallery_edit(request, id):
 
                 if not replace_size:
                     try:
-                        awsutils.upload_public_image(sp, name, full_path)
+                        if config.STANDALONE:
+                            sendImageToMockApi({name: open(full_path, 'rb')})
+                        else:
+                            awsutils.upload_public_image(sp, name, full_path)
                     except:
                         pass
 
@@ -284,9 +296,13 @@ def serviceprovider_gallery_edit(request, id):
                         image = Image.open(full_path)
                         if image.size != (size[0], size[1]):
                             image.thumbnail(size, Image.ANTIALIAS)
-                            background = Image.new('RGBA' if full_path else 'RGB', size, (255, 255, 255, 0))
+                            background = Image.new('RGBA' if image.mode in ('RGBA', 'LA') else 'RGB', size, (255, 255, 255, 0))
                             background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
-                            unique_path = unique_filename(full_path)
+                            if config.DEBUG:
+                                _, path, ext = full_path.split(".")
+                                unique_path = "." + path + size_prefix + "." + ext
+                            else:
+                                unique_path = unique_filename(full_path)
                             background.save(unique_path)
                         else:
                             # Keep original since size Match !
@@ -294,7 +310,11 @@ def serviceprovider_gallery_edit(request, id):
                         # Upload to s3
                         try:
                             s3filename = size_prefix + '/' + name
-                            awsutils.upload_public_image(sp, s3filename, unique_path)
+                            if config.STANDALONE:
+                                sendImageToMockApi({name: open(unique_path, 'rb')}, size_prefix)
+                            else:
+                                awsutils.upload_public_image(sp, s3filename, unique_path)
+
                             if size == (32, 32):
                                 object.url32x32 = s3filename
                             if size == (112, 32):

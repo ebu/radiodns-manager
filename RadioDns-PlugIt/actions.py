@@ -3,6 +3,9 @@
 # Include main methods
 from main.actions import *
 
+# Include SPI methods
+from SPI.actions import *
+
 # Include system methods
 from system.actions import *
 

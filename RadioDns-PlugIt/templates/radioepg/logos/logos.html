@@ -48,7 +48,7 @@
 					<td><h4>{{c.name}}</h4></td>
 					<td>
 						{% if ebuio_u.ebuio_orga_admin %}
-                                <select style="margin-bottom: 0px;" class="form-control"
+                                <select id="logo_select" style="margin-bottom: 0px;" class="form-control"
                                         onchange="switch_default({{c.id}}, $(this).val(), $(this));">
                                     <option value="0" {% if not c.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
                                     {% for p in pictures %}

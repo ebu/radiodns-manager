@@ -1,23 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork, no_template
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, no_template
 
-from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule, GenericServiceFollowingEntry, LogoImage
-
-import urlparse
-
-import os
-import sys
-import time
-
-from werkzeug import secure_filename
-from flask import abort
-
-from PIL import Image
-import imghdr
-
-import config
+from models import db, Station, Channel, Show, Schedule, GenericServiceFollowingEntry, LogoImage
 
 
 def stations_lists(orga):
@@ -52,7 +38,8 @@ def radioepg_shows_home(request):
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
 
-    return {'list': list, 'saved': saved, 'deleted': deleted, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'list': list, 'saved': saved, 'deleted': deleted, 'current_station_id': current_station_id,
+            'current_station': current_station.json, 'stations': stations_json}
 
 
 @action(route="/radioepg/shows/edit/<id>", template="radioepg/shows/edit.html", methods=['POST', 'GET'])
@@ -66,7 +53,8 @@ def radioepg_shows_edit(request, id):
     errors = []
 
     if id != '-':
-        object = Show.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+        object = Show.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')),
+                                      id=int(id)).first()
 
     if request.method == 'POST':
 
@@ -104,8 +92,10 @@ def radioepg_shows_edit(request, id):
     if object:
         object = object.json
 
-    colors = [('Red', '#e41a1c'), ('Blue', '#377eb8'), ('Green', '#4daf4a'), ('Magenta', '#984ea3'), ('Orange', '#ff7f00'), ('Yellow', '#ffff33'), ('Brown', '#a65628'), ('Pink', '#f781bf'), ('Gray', '#999999')]
-    return {'object': object, 'colors': colors,  'errors': errors, 'current_station_id': station_id }
+    colors = [('Red', '#e41a1c'), ('Blue', '#377eb8'), ('Green', '#4daf4a'), ('Magenta', '#984ea3'),
+              ('Orange', '#ff7f00'), ('Yellow', '#ffff33'), ('Brown', '#a65628'), ('Pink', '#f781bf'),
+              ('Gray', '#999999')]
+    return {'object': object, 'colors': colors, 'errors': errors, 'current_station_id': station_id}
 
 
 @action(route="/radioepg/shows/delete/<id>")
@@ -142,7 +132,8 @@ def radioepg_schedule_home(request):
     for elem in current_station.shows.order_by(Show.medium_name).all():
         list.append(elem.json)
 
-    return {'shows': list, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'shows': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
+            'stations': stations_json}
 
 
 @action(route="/radioepg/schedule/<id>/events")
@@ -158,8 +149,9 @@ def radioepg_schedule_get_events(request, id):
     list = []
 
     for sche in object.schedules.all():
-        list.append(dict(id=sche.id, title=sche.show.medium_name, start=start_date+sche.seconds_from_base, end=start_date+sche.
-            seconds_from_base+sche.length*60, allDay=False, color=sche.show.color, textColor='#000'))
+        list.append(dict(id=sche.id, title=sche.show.medium_name, start=start_date + sche.seconds_from_base,
+                         end=start_date + sche.
+                         seconds_from_base + sche.length * 60, allDay=False, color=sche.show.color, textColor='#000'))
 
     return {'list': list}
 
@@ -243,7 +235,7 @@ def radioepg_schedule_xml(request, id):
 
     station = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
 
-    import datetime, time
+    import datetime
 
     time_format = '%Y%m%dT%H%M%S'
 
@@ -257,7 +249,8 @@ def radioepg_schedule_xml(request, id):
         elem.start_date = start_date
         list.append(elem.json)
 
-    return {'schedules': list, 'start_time': start_date.strftime(time_format), 'end_time': end_date.strftime(time_format)}
+    return {'schedules': list, 'start_time': start_date.strftime(time_format),
+            'end_time': end_date.strftime(time_format)}
 
 
 @action(route="/radioepg/servicefollowing/", template="radioepg/servicefollowing/home.html")
@@ -284,10 +277,12 @@ def radioepg_sf_home(request):
     for elem in current_station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
         list.append(elem.json)
 
-    return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
+            'stations': stations_json}
 
 
-@action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html", methods=['POST', 'GET'])
+@action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html",
+        methods=['POST', 'GET'])
 @only_orga_admin_user()
 def radioepg_servicefollowing_edit(request, id):
     """Edit a servicefollowing entry."""
@@ -309,7 +304,8 @@ def radioepg_servicefollowing_edit(request, id):
         else:
             station_to_test = object.channel.station
 
-        if station_to_test.id != int(station_id) or not station_to_test.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
+        if station_to_test.id != int(station_id) or not station_to_test.orga == int(
+                request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
             object = None
 
     if request.method == 'POST':
@@ -369,7 +365,6 @@ def radioepg_servicefollowing_delete(request, id):
                 db.session.delete(object)
                 db.session.commit()
 
-
     if request.args.get('backtostation') == '1':
         return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
     return PlugItRedirect('radioepg/servicefollowing/?deleted=yes&station_id=' + station_id)
@@ -398,7 +393,6 @@ def radioepg_servicefollowing_turn(request, mode, id):
         if station_to_test.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
             object.active = mode == 'on'
             db.session.commit()
-
 
     if request.args.get('backtostation') == '1':
         return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
@@ -530,7 +524,8 @@ def radioepg_logos_home(request):
 
     list = []
 
-    for elem in Station.query.filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name).all():
+    for elem in Station.query.filter(Station.orga == int(request.args.get('ebuio_orgapk'))).order_by(
+            Station.name).all():
         list.append(elem.json)
 
     pictures = []
@@ -547,7 +542,7 @@ def radioepg_logos_home(request):
 def radioepg_logos_set(request, id, imageid):
     """Set a default value for a station"""
 
-    object = Station.query.filter(Station.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Station.query.filter(Station.id == int(id), Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
     image = LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(imageid)).first()
 

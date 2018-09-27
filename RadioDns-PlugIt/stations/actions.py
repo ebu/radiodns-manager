@@ -122,8 +122,9 @@ def station_radiovis_channels(request, id):
 
     list = []
 
-    for elem in Channel.query.filter(Channel.type_id!='id').join(Station).filter(Station.id == station.id and Station.orga == int(
-            request.args.get('ebuio_orgapk'))).order_by(Channel.type_id, Channel.name).all():
+    for elem in Channel.query.filter(Channel.type_id != 'id').join(Station).filter(
+            Station.id == station.id and Station.orga == int(
+                request.args.get('ebuio_orgapk'))).order_by(Channel.type_id, Channel.name).all():
         list.append(elem.json)
 
     pictures = []
@@ -184,7 +185,7 @@ def stations_edit(request, id):
             if orga.codops:
                 sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
                 if sp:
-                    object.service_provider = sp;
+                    object.service_provider = sp
 
         object.name = request.form.get('name')
         object.short_name = request.form.get('short_name')
@@ -360,7 +361,6 @@ def station_check(request, id):
     """Check AWS State for Station."""
 
     plugitapi = PlugItAPI(config.API_URL)
-    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
 
     station = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
 
