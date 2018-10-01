@@ -47,3 +47,4 @@ RadioDns-PlugIt/config.py
 # Virtual Environment
 venv
 .DS_Store
+/.env

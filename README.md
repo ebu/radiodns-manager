@@ -36,13 +36,13 @@ To get at least the basic service working you must have the PlugIt Client (stand
 To start up a local instance
 
 ```
-docker-compose up --build 
+./standalone-start.sh 
 ```
 
 To shut down the local instance
 
 ```
-docker-compose down
+docker-compose -f docker-compose-standalone.yml down
 ```
 
 To remove the database and start afresh
@@ -50,6 +50,24 @@ To remove the database and start afresh
 ```
 docker-volume rm radiodns-plugit_db_data 
 ```
+
+## WIP: How to deploy in staging
+
+To configure
+
+    cp .env.example .env
+    
+Then edit the .env file until it match the correct configuration.
+
+To build and deploy the containers
+
+    docker-compose up --build
+    
+To stop the containers
+
+    docker-compose down
+    
+
 
 ## Contribution guidelines
 - Always fix version of dependencies.

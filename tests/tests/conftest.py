@@ -40,7 +40,7 @@ logger = logging.getLogger("RadioDNS Tests")
 
 TEST_MYSQL_USER = os.environ.get('TEST_DOCKER_TRIES_INTERVAL', 'root')
 TEST_MYSQL_PASSWORD = os.environ.get('TEST_MYSQL_PASSWORD', '1234')
-TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'plugitdns')
+TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'radiodns')
 
 TEST_BROWSER = os.environ.get('TEST_BROWSER', "chrome")
 

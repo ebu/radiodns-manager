@@ -1,6 +1,7 @@
 #Plugit Standalone Proxy
 
-This serves as a replacement for the ebu.io plugit instance for local dev.
+This serves as a replacement for the ebu.io plugit instance for local dev. Do not run this container in production!
+It is advised to use the official PlugIt Proxy from EBU.io.
 
 ## Setup
 
