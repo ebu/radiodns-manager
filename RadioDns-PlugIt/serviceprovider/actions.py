@@ -264,6 +264,9 @@ def serviceprovider_gallery_edit(request, id):
                     errors.append("Image is not an png or jpeg image (it has header {})".format(imghdr.what(full_path)))
                     os.unlink(full_path)
                     object.filename = None
+        else:
+            errors.append("You must choose an image.")
+            return {'errors': errors}
 
         # Check that we actually wrote the file
         if not os.path.isfile(full_path):

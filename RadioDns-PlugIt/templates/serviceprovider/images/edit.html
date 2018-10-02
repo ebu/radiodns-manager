@@ -39,14 +39,14 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="name" value="{{object.name}}">
+				<input id="name" type="text" class="form-control" name="name" value="{{object.name}}">
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Photo:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="file" class="form-control" name="file">
+				<input id="img_file_input" type="file" class="form-control" name="file">
 				{% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
 				<br /><small>PNG or JPEG. Please upload an initial logo of minimum size 600x600. Logo will be resized to {% for w in sizes %} {{w.0}}x{{w.1}} {% endfor %}.<br />
 				You can upload different sizes later when editing the image.</small>
@@ -70,7 +70,7 @@
 
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
-				<input type="submit" class="btn btn-primary" value="Save">
+				<input id="img_save" type="submit" class="btn btn-primary" value="Save" disabled>
 				<a href="{{ebuio_baseUrl}}serviceprovider/images/" class="btn btn-default">Cancel</a>
 			</div>
 		</div>
@@ -78,6 +78,28 @@
 	</form>
 
 	<hr style="visibility: hidden; clear: both;">
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const saveButton = $("#img_save");
+            const fileInput = $("#img_file_input");
+            const nameInput = $("#name");
+
+            function updateSaveButton() {
+                saveButton.prop('disabled', (nameInput.val().length === 0) || (fileInput.val().length === 0));
+            }
+            updateSaveButton();
+
+            fileInput.change(function(){
+                updateSaveButton();
+            });
+
+            nameInput.change(function(){
+                updateSaveButton();
+            });
+        });
+
+    </script>
 
 {% endblock %}
 
