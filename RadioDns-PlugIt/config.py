@@ -3,6 +3,8 @@ import os
 
 from utils import safe_cast
 
+RADIO_DNS_PORT = safe_cast(os.environ.get('RADIO_DNS_PORT', '5000'), int, 5000)
+
 # Url to the ebu.io API.
 API_URL = os.environ.get('API_URL', 'http://127.0.0.1:8000/')
 

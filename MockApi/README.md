@@ -29,4 +29,4 @@ You'll find in the root project a script installing every project with their dep
 ## Run
 To run start the mock API run
 
-    python src/app.py
+    python app.py

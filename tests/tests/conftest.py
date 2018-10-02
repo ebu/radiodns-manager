@@ -12,23 +12,35 @@ from sqlalchemy import create_engine
 random.seed(9001)
 
 # options to connect to test proxy.
-TEST_PROXY_PORT = int(os.environ.get('TEST_PROXY_PORT', '4000'))
+TEST_PROXY_PORT = int(os.environ.get('TEST_PROXY_PORT', '4001'))
 TEST_PROXY_URL = """http://{host}:{port}/plugIt/""".format(
     host=os.environ.get('TEST_PROXY_HOSTNAME', '127.0.0.1'),
     port=TEST_PROXY_PORT
 )
 
 # url to connect to RadioDNS service
-TEST_RADIO_DNS_PORT = int(os.environ.get('TEST_RADIO_DNS_PORT', '5000'))
+TEST_RADIO_DNS_PORT = int(os.environ.get('TEST_RADIO_DNS_PORT', '5001'))
 TEST_RADIO_DNS_URL = """http://{host}:{port}/""".format(
     host=os.environ.get('TEST_RADIO_DNS_HOSTNAME', '127.0.0.1'),
     port=TEST_RADIO_DNS_PORT
 )
 
-TEST_MOCK_API_PORT = int(os.environ.get('TEST_MOCK_API_PORT', '8000'))
+TEST_MOCK_API_PORT = int(os.environ.get('TEST_MOCK_API_PORT', '8001'))
 TEST_MOCK_API_URL = """http://{host}:{port}/""".format(
     host=os.environ.get('TEST_MOCK_API_URL', '127.0.0.1'),
     port=TEST_MOCK_API_PORT
+)
+
+TEST_MYSQL_USER = os.environ.get('TEST_DOCKER_TRIES_INTERVAL', 'root')
+TEST_MYSQL_PASSWORD = os.environ.get('TEST_MYSQL_PASSWORD', '1234')
+TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'plugitdns')
+
+TEST_DATABASE_PORT = int(os.environ.get('TEST_DATABASE_PORT', '3307'))
+TEST_DATABASE_CONNECTION_URL_BASE = """://{user}:{password}@127.0.0.1:{port}/{dbname}""".format(
+    user=TEST_MYSQL_USER,
+    password=TEST_MYSQL_PASSWORD,
+    dbname=TEST_MYSQL_DB_NAME,
+    port=TEST_DATABASE_PORT
 )
 
 # max number health checks to the docker stack the test suite will make before considering that the
@@ -37,10 +49,6 @@ TEST_MAX_TRIES_TO_DOCKER_TO_BOOT = int(os.environ.get('TEST_MAX_TRIES_TO_DOCKER_
 # time in seconds between docker stack health checks
 TEST_DOCKER_TRIES_INTERVAL = int(os.environ.get('TEST_DOCKER_TRIES_INTERVAL', '1'))
 logger = logging.getLogger("RadioDNS Tests")
-
-TEST_MYSQL_USER = os.environ.get('TEST_DOCKER_TRIES_INTERVAL', 'root')
-TEST_MYSQL_PASSWORD = os.environ.get('TEST_MYSQL_PASSWORD', '1234')
-TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'plugitdns')
 
 TEST_BROWSER = os.environ.get('TEST_BROWSER', "chrome")
 
@@ -51,7 +59,7 @@ def teardown_stack():
     It should be respectively the proxy, the plugit dns and the mock api.
     Also stops the test db docker container.
     """
-    subprocess.run(args="docker-compose down", cwd="../../", shell=True)
+    subprocess.run(args="docker-compose -f docker-compose-test.yml down", cwd="../", shell=True)
     subprocess.run(args="""kill $(lsof -t -i :{port})""".format(port=TEST_PROXY_PORT), shell=True)
     subprocess.run(args="""kill $(lsof -t -i :{port})""".format(port=TEST_RADIO_DNS_PORT), shell=True)
     subprocess.run(args="""kill $(lsof -t -i :{port})""".format(port=TEST_MOCK_API_PORT), shell=True)
@@ -65,21 +73,37 @@ def stack_setup():
     """
     logger.info("Starting docker test environment...")
 
-    teardown_stack()  # remove any instances or docker instances of the dev stack
-    subprocess.run(args="docker-compose -f docker-compose-test.yml up -d", cwd="../../", shell=True)
+    # Setup local environment variables
+    env = os.environ.copy()
+    env["PROXY_HOST"] = """0.0.0.0:{port}""".format(port=TEST_PROXY_PORT)
+    env["PLUGIT_SERVER"] = "http://127.0.0.1:{port}".format(port=TEST_RADIO_DNS_PORT)
+    env["DEBUG"] = "True"
+    env["SQLALCHEMY_URL"] = "mysql" + TEST_DATABASE_CONNECTION_URL_BASE
+    env["PI_BASE_URL"] = "/"
+    env["LOGO_INTERNAL_URL"] = """http://127.0.0.1:{port}/uploads""".format(port=TEST_MOCK_API_PORT)
+    env["LOGO_PUBLIC_URL"] = """http://127.0.0.1:{port}/uploads""".format(port=TEST_MOCK_API_PORT)
+    env["API_URL"] = """http://127.0.0.1:{port}/""".format(port=TEST_MOCK_API_PORT)
+    env["MOCK_API_PORT"] = str(TEST_MOCK_API_PORT)
+    env["RADIO_DNS_PORT"] = str(TEST_RADIO_DNS_PORT)
+
+    teardown_stack()  # remove any instances or docker instances of the test previous stack
+    subprocess.run(args="docker-compose -f docker-compose-test.yml up -d", cwd="../", shell=True)
     subprocess.Popen(
-        args="source venv/bin/activate && python manage.py runserver 0.0.0.0:4000",
+        args="""source venv/bin/activate && python manage.py runserver 0.0.0.0:{port}""".format(port=TEST_PROXY_PORT),
         cwd="../../standalone_proxy",
+        env=env,
         shell=True
     )
     subprocess.Popen(
         args="source venv/bin/activate && python app.py",
         cwd="../../MockApi",
+        env=env,
         shell=True
     )
     subprocess.Popen(
         args="source venv/bin/activate && python server.py",
         cwd="../../RadioDns-PlugIt",
+        env=env,
         shell=True
     )
 
@@ -98,19 +122,11 @@ def stack_setup():
             raise Exception("Docker-compose or a subprocess is not running. Check the log above for any errors.")
         time.sleep(TEST_DOCKER_TRIES_INTERVAL)
 
-    engine = create_engine(
-        """mysql+pymysql://{user}:{password}@127.0.0.1:3306/{dbname}""".format(
-            user=TEST_MYSQL_USER,
-            password=TEST_MYSQL_PASSWORD,
-            dbname=TEST_MYSQL_DB_NAME
-        ), echo=False)
+    engine = create_engine("mysql+pymysql" + TEST_DATABASE_CONNECTION_URL_BASE, echo=False)
     conn = engine.connect()
     yield conn
     conn.close()
     teardown_stack()
-
-
-subprocess.run(args="docker-compose down", cwd="../../", shell=True)
 
 
 def firefox_setup():
@@ -122,7 +138,7 @@ def firefox_setup():
     from selenium.webdriver.firefox.options import Options
     firefox_options = Options()
     firefox_options.add_argument("-headless")
-    return webdriver.Firefox(executable_path=os.path.abspath("../geckodriver"), firefox_options=firefox_options)
+    return webdriver.Firefox(executable_path=os.path.abspath("../geckodriver"), options=firefox_options)
 
 
 def chrome_setup():
@@ -134,7 +150,7 @@ def chrome_setup():
     from selenium.webdriver.chrome.options import Options
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    return webdriver.Chrome(executable_path=os.path.abspath("../chromedriver"), chrome_options=chrome_options)
+    return webdriver.Chrome(executable_path=os.path.abspath("../chromedriver"), options=chrome_options)
 
 
 @pytest.fixture
