@@ -16,19 +16,23 @@ You also need the following dependencies:
 
 Next you have to setup the virtualenv:
 
-    virtualenv venv
+    virtualenv --python=<your path to python3 binary> venv
     source venv/bin/activate
     
 And then install the required PIP dependencies
 
     pip install .
     
+To deactivate the running environment
+
+    deactivate
+    
+You'll find in the root project a script installing every project with their dependencies.
+    
 This test suite assumes that you have already installed the following projects (located in the root folder of this repository) along with their dependencies:
 - MockApi
 - RadioDns-PlugIt
 - standalone_proxy
-
-You'll find installation instructions for each project in the README.md of their respective folder.
 
 ## Marking tests dependencies
 Sometimes a test is required to run before an other. In order to do
@@ -51,6 +55,11 @@ or the
 decorator.
 
 ## Run
+First make sure you activated the correct virtual env.
+
+    deactivate
+    source venv/bin/activate
+
 To run the test suite run
 
     python run.py

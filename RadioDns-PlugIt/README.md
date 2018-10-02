@@ -22,7 +22,7 @@ The API allow the management of stations and channels.
 
 ##### Preparing the `venv`
 
-    virtualenv venv
+    virtualenv --python=<your path to python2 binary> venv
     source venv/bin/activate
     
 Install the required PIP dependencies
@@ -32,6 +32,8 @@ Install the required PIP dependencies
 To deactivate the running environment
 
     deactivate
+    
+You'll find in the root project a script installing every project with their dependencies.
     
 #### Running the PlugIt Server
 

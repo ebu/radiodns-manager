@@ -31,6 +31,8 @@ Old instructions to deploy each parts of the project are available in the [Deplo
 
 To get at least the basic service working you must have the PlugIt Client (standalone_proxy), the Dns service (RadioDns-Plugit) and a mysql instance (you can use the one provided in docker-compose-dev.yml, by using the `docker-compose -f docker-compose-dev.yml up -d`) up and running.
 
+To install automatically the python environment on an unix system simply use the setup-envs.sh script.
+
 # How to run in local development 
 
 To start up a local instance

@@ -11,15 +11,18 @@ You need the following dependencies:
 
 Next you have to setup the virtualenv:
 
-    virtualenv venv
+    virtualenv --python=<your path to python2 binary> venv
     source venv/bin/activate
     
 And then install the required PIP dependencies
 
     pip install .
-    
+  
+To deactivate the running environment
 
-You'll find installation instructions for each project in the README.md of their respective folder.
+    deactivate
+    
+You'll find in the root project a script installing every project with their dependencies.
 
 ## Run
 To run start the Plugit Standalone Proxy:

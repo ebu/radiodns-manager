@@ -33,7 +33,7 @@ TEST_MOCK_API_URL = """http://{host}:{port}/""".format(
 
 # max number health checks to the docker stack the test suite will make before considering that the
 # docker stack could not be started
-TEST_MAX_TRIES_TO_DOCKER_TO_BOOT = int(os.environ.get('TEST_MAX_TRIES_TO_DOCKER_TO_BOOT', '20'))
+TEST_MAX_TRIES_TO_DOCKER_TO_BOOT = int(os.environ.get('TEST_MAX_TRIES_TO_DOCKER_TO_BOOT', '60'))
 # time in seconds between docker stack health checks
 TEST_DOCKER_TRIES_INTERVAL = int(os.environ.get('TEST_DOCKER_TRIES_INTERVAL', '1'))
 logger = logging.getLogger("RadioDNS Tests")
