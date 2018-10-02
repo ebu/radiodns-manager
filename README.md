@@ -27,11 +27,15 @@ This part will be updated once a new structure is fixed.
 
 ## Installation
 
-Old instructions to deploy each parts of the project are available in the [Deployment folder](https://github.com/ebu/radiodns-plugit/tree/develop/Deployment) (On this revision omit RadioVisServer as further investigation is needed on this project). For local development please refer to each project's readme.
+To install automatically the python environment on an unix system simply use the `setup-envs.sh script.
 
 To get at least the basic service working you must have the PlugIt Client (standalone_proxy), the Dns service (RadioDns-Plugit) and a mysql instance (you can use the one provided in docker-compose-dev.yml, by using the `docker-compose -f docker-compose-dev.yml up -d`) up and running.
 
-To install automatically the python environment on an unix system simply use the setup-envs.sh script.
+Old instructions to deploy each parts of the project are available in the [Deployment folder](https://github.com/ebu/radiodns-plugit/tree/develop/Deployment) (On this revision omit RadioVisServer as further investigation is needed on this project). For local development please refer to each project's readme.
+
+## How to run tests
+If you haven't already, run the `setup-envs.sh` (if you are on an unix based system).
+Then set your working directory to the tests folder and read its README for further instructions.
 
 # How to run in local development 
 

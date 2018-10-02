@@ -1,13 +1,11 @@
 # Tests for RadioDNS
 
 ## Setup
+
+If you successfully ran the `setup-envs.sh` script from the root folder you may go to 
+the run section directly.
+
 This environment supports firefox and google chrome as remote controlled headless browser.
-
-You'll need to download both browser's drivers:
-- https://sites.google.com/a/chromium.org/chromedriver/downloads
-- https://github.com/mozilla/geckodriver/releases
-
-Copy them to the root directory of this project.
 
 You also need the following dependencies:
 - python 3.7
@@ -34,6 +32,16 @@ This test suite assumes that you have already installed the following projects (
 - RadioDns-PlugIt
 - standalone_proxy
 
+## Run
+First make sure you activated the correct virtual env (Ignore the deactivate error if any).
+
+    deactivate
+    source venv/bin/activate
+
+To run the test suite run
+
+    python run.py
+    
 ## Marking tests dependencies
 Sometimes a test is required to run before an other. In order to do
 so one must use the run decorator to specify the runtime order like this:
@@ -53,13 +61,3 @@ or the
     @pytest.mark.run(after='<name_of_the_test>')
     
 decorator.
-
-## Run
-First make sure you activated the correct virtual env.
-
-    deactivate
-    source venv/bin/activate
-
-To run the test suite run
-
-    python run.py
