@@ -1,25 +1,20 @@
 # -*- coding: utf-8 -*-
 
+import imghdr
+import os
+import sys
+import uuid
+
+from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
 from werkzeug.utils import secure_filename
 
-from models import db, ServiceProvider, LogoImage
-from plugit.api import PlugItAPI, Orga
 import config
+from actions_utils import get_orga_service_provider
 from aws import awsutils
-
-import os
-import sys
-import time
-
-from PIL import Image
-import imghdr
-import uuid
-
-import json
-
-from utils import sendImageToMockApi
+from models import db, ServiceProvider, LogoImage
+from utils import send_image_to_mock_api
 
 
 @action(route="/serviceprovider/", template="serviceprovider/home.html")
@@ -27,12 +22,7 @@ from utils import sendImageToMockApi
 def serviceprovider_home(request):
     """Show the serviceprovider."""
 
-    plugitapi = PlugItAPI(config.API_URL)
-    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
-
-    sp = None
-    if orga.codops:
-        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+    orga, sp = get_orga_service_provider(request)
 
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
@@ -41,10 +31,7 @@ def serviceprovider_home(request):
     image_url_prefix = None
     default_logo = None
 
-    if sp:
-        sp = sp.json
-
-    return {'serviceprovider': sp, 'ebu_codops': orga.codops, 'saved': saved, 'deleted': deleted}
+    return {'serviceprovider': sp.json if sp else None, 'ebu_codops': orga.codops, 'saved': saved, 'deleted': deleted}
 
 
 @action(route="/serviceprovider/check")
@@ -144,23 +131,20 @@ def serviceprovider_gallery_home(request):
 
     list = []
 
-    plugitapi = PlugItAPI(config.API_URL)
-    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
-
-    sp = None
-    if orga.codops:
-        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+    orga, sp = get_orga_service_provider(request)
+    image_url_prefix = ""
 
     if sp:
         for elem in LogoImage.query.filter_by(service_provider_id=int(sp.id)).order_by(LogoImage.filename).all():
             list.append(elem.json)
 
+        image_url_prefix = awsutils.get_public_urlprefix(sp)
+
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
 
-    image_url_prefix = awsutils.get_public_urlprefix(sp)
-
-    return {'list': list, 'image_url_prefix': image_url_prefix, 'saved': saved, 'deleted': deleted}
+    return {'list': list, 'image_url_prefix': image_url_prefix, 'saved': saved, 'deleted': deleted,
+            'serviceprovider': sp.json if sp else None}
 
 
 @action(route="/serviceprovider/images/edit/<id>", template="serviceprovider/images/edit.html", methods=['POST', 'GET'])
@@ -285,7 +269,7 @@ def serviceprovider_gallery_edit(request, id):
                 if not replace_size:
                     try:
                         if config.STANDALONE:
-                            sendImageToMockApi({name: open(full_path, 'rb')})
+                            send_image_to_mock_api({name: open(full_path, 'rb')})
                         else:
                             awsutils.upload_public_image(sp, name, full_path)
                     except:
@@ -302,8 +286,8 @@ def serviceprovider_gallery_edit(request, id):
                             background = Image.new('RGBA' if image.mode in ('RGBA', 'LA') else 'RGB', size, (255, 255, 255, 0))
                             background.paste(image, ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
                             if config.DEBUG:
-                                _, path, ext = full_path.split(".")
-                                unique_path = "." + path + size_prefix + "." + ext
+                                pos = full_path.rfind(".")
+                                unique_path = full_path[:pos] + size_prefix + full_path[pos:]
                             else:
                                 unique_path = unique_filename(full_path)
                             background.save(unique_path)
@@ -314,7 +298,7 @@ def serviceprovider_gallery_edit(request, id):
                         try:
                             s3filename = size_prefix + '/' + name
                             if config.STANDALONE:
-                                sendImageToMockApi({name: open(unique_path, 'rb')}, size_prefix)
+                                send_image_to_mock_api({name: open(unique_path, 'rb')}, size_prefix)
                             else:
                                 awsutils.upload_public_image(sp, s3filename, unique_path)
 

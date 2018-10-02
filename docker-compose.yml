@@ -16,7 +16,7 @@ services:
     environment:
       PROXY_HOST: 0.0.0.0:4000
       PLUGIT_SERVER: http://dns_server:5000
-      DEBUG: "False"
+      DEBUG: "True"
     ports:
       - "4000:4000"
 
