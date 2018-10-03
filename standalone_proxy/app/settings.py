@@ -5,7 +5,7 @@ from os.path import abspath, dirname, join, normpath
 
 
 # Django settings for PlugIt project.
-DEBUG = "True" == os.environ.get('DEBUG', 'True')
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 

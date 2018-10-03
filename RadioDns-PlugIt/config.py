@@ -7,7 +7,7 @@ from utils import safe_cast
 API_URL = os.environ.get('API_URL', 'http://127.0.0.1:8000/')
 
 # Url for the mysql connection of alchemy.
-SQLALCHEMY_URL = os.environ.get('SQLALCHEMY_URL', 'mysql://root:1234@127.0.0.1:3306/plugitdns')
+SQLALCHEMY_URL = os.environ.get('SQLALCHEMY_URL', 'mysql://root:1234@127.0.0.1:3306/radiodns')
 
 # API secret.
 API_SECRET = os.environ.get('API_SECRET', 'dev-secret')
@@ -50,14 +50,14 @@ DEBUG = "True" == os.environ.get('DEBUG', 'True')
 # playing around.
 STANDALONE = "True" == os.environ.get('STANDALONE', 'True')
 
-# The url URL prefix for all the services of this server.
+# The base URL for the PlugIi API - prefix url to access utilities of this server (e.g. /radiodns/ping).
 PI_BASE_URL = os.environ.get('PI_BASE_URL', '/')
 
 # Allowed origin for this service.
 PI_ALLOWED_NETWORKS = os.environ.get('PI_ALLOWED_NETWORKS', '0.0.0.0/0').strip().split(',')
 
 # Flask Log
-FLASK_LOG_PATH = os.environ.get('FLASK_LOG_PATH', '/home/ubuntu/logs/flask.log')
+FLASK_LOG_PATH = os.environ.get('FLASK_LOG_PATH', '/opt/app/flask.log')
 FLASK_LOG_SIZE = safe_cast(os.environ.get('FLASK_LOG_SIZE', '10485764'), int)  # 1MB
 
 # Url to the Sentry DNS service.
@@ -74,3 +74,9 @@ LOGO_INTERNAL_URL = os.environ.get('LOGO_INTERNAL_URL', 'http://127.0.0.1:8000/u
 
 # [Standalone mode only] Url of the docker host were the browser can access logos.
 LOGO_PUBLIC_URL = os.environ.get('LOGO_PUBLIC_URL', 'http://127.0.0.1:8000/uploads')
+
+# Time in seconds before reusing cache.
+XML_CACHE_TIMEOUT = safe_cast(os.environ.get('XML_CACHE_TIMEOUT', '0'), int)  # in seconds
+IMG_CACHE_TIMEOUT = safe_cast(os.environ.get('IMG_CACHE_TIMEOUT', '0'), int)  # in seconds
+
+DATABASE_CONNECTION_MERCY_TIME = safe_cast(os.environ.get('XML_CACHE_TIMEOUT', '60'), int)
