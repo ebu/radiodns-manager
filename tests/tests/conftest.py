@@ -33,7 +33,7 @@ TEST_MOCK_API_URL = """http://{host}:{port}/""".format(
 
 TEST_MYSQL_USER = os.environ.get('TEST_DOCKER_TRIES_INTERVAL', 'root')
 TEST_MYSQL_PASSWORD = os.environ.get('TEST_MYSQL_PASSWORD', '1234')
-TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'plugitdns')
+TEST_MYSQL_DB_NAME = os.environ.get('TEST_MYSQL_DB_NAME', 'radiodns')
 
 TEST_DATABASE_PORT = int(os.environ.get('TEST_DATABASE_PORT', '3307'))
 TEST_DATABASE_CONNECTION_URL_BASE = """://{user}:{password}@127.0.0.1:{port}/{dbname}""".format(
