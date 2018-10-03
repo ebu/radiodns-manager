@@ -20,7 +20,7 @@
         </div>
         <div id="page-functions" class="pull-right">
 			{% block pagefunctions %}
-			{% if ebuio_u.ebuio_orga_admin %}
+			{% if ebuio_u.ebuio_orga_admin and serviceprovider %}
                     <label class="control-label">Select Station:</label>
 				    <select id="station-selector" class="form-control23" onchange="window.location='?station_id=' + $(this).val();">
 					{% for station in stations %}
@@ -35,66 +35,75 @@
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
-
-	{% if nostations %}
-		No stations !
+    {% if not serviceprovider %}
+		 <div class="alert alert-warning" role="alert">
+			<p><strong>No configuration for your organisation exists yet.</strong> <br />
+			Start by creating the initial service provider configuration.
+			 </p>
+			<p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a></p>
+		</div>
 	{% else %}
 
-		{% if saved %}
-			<div class="alert">
-				Entry has been saved
-			</div>
-		{% endif %}
+        {% if nostations %}
+            No stations !
+        {% else %}
 
-		{% if deleted %}
-			<div class="alert">
-				Entry has been deleted
-			</div>
-		{% endif %}
+            {% if saved %}
+                <div class="alert">
+                    Entry has been saved
+                </div>
+            {% endif %}
 
-		<table class="table table-striped table-hover table-condensed">
-			<thead>
-				<tr>
-					<th>Channel name</th>
-					<th>Channel</th>
-					<th>Cost</th>
-					<th>Mime/type</th>
-					<th>Bitrate</th>
-					<th>Offset</th>
-					<th>On/Off</th>
-					<th style="width: 150px;"></th>
-				</tr>
-			</thead>
+            {% if deleted %}
+                <div class="alert">
+                    Entry has been deleted
+                </div>
+            {% endif %}
 
-			<tbody>
-				{% for s in list %}
-					<tr class="{% if s.active %}text-success{% else %}text-danger{% endif %}">
-						<td>{{s.channel_name}}</td>
-						<td>{{s.uri}}</td>
-						<td>{{s.cost}}</td>
-						<td>{{s.mime_type}}</td>
-						<td>{{s.bitrate}}</td>
-						<td>{{s.offset}}</td>
-						<td>{{s.active|yesno:"On,Off"}}</td>
-						<td style="text-align: right;">
-							{% if ebuio_u.ebuio_orga_admin %}
-								{% if s.type == 'ip' %}<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/delete/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>{% endif %}
-								{% if s.active %}
-									<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/off/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-danger">Turn off</a>
-								{% else %}
-									<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/on/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-success">Turn on</a>
-								{% endif %}
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Channel name</th>
+                        <th>Channel</th>
+                        <th>Cost</th>
+                        <th>Mime/type</th>
+                        <th>Bitrate</th>
+                        <th>Offset</th>
+                        <th>On/Off</th>
+                        <th style="width: 150px;"></th>
+                    </tr>
+                </thead>
 
-								<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/edit/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-primary">Edit</a>
-							{% endif %}
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+                <tbody>
+                    {% for s in list %}
+                        <tr class="{% if s.active %}text-success{% else %}text-danger{% endif %}">
+                            <td>{{s.channel_name}}</td>
+                            <td>{{s.uri}}</td>
+                            <td>{{s.cost}}</td>
+                            <td>{{s.mime_type}}</td>
+                            <td>{{s.bitrate}}</td>
+                            <td>{{s.offset}}</td>
+                            <td>{{s.active|yesno:"On,Off"}}</td>
+                            <td style="text-align: right;">
+                                {% if ebuio_u.ebuio_orga_admin %}
+                                    {% if s.type == 'ip' %}<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/delete/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>{% endif %}
+                                    {% if s.active %}
+                                        <a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/off/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-danger">Turn off</a>
+                                    {% else %}
+                                        <a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/on/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-success">Turn on</a>
+                                    {% endif %}
+
+                                    <a href="{{ebuio_baseUrl}}radioepg/servicefollowing/edit/{{s.id}}?station_id={{current_station_id}}" class="btn btn-xs btn-primary">Edit</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
 
-	{% endif %}
+        {% endif %}
+    {% endif %}
 
 	<script type="text/javascript">
 

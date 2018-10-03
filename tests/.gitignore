@@ -1,7 +1,5 @@
 
 /.idea/
-/chromedriver
-/geckodriver
 /venv/
 /tests/geckodriver.log
 /.pytest_cache/

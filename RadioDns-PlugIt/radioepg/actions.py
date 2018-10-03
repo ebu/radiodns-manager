@@ -3,6 +3,7 @@
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, no_template
 
+from actions_utils import get_orga_service_provider
 from models import db, Station, Channel, Show, Schedule, GenericServiceFollowingEntry, LogoImage
 
 
@@ -119,6 +120,8 @@ def radioepg_shows_delete(request, id):
 def radioepg_schedule_home(request):
     """Show the schedule."""
 
+    _, sp = get_orga_service_provider(request)
+
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
     if not stations_json:
@@ -133,7 +136,7 @@ def radioepg_schedule_home(request):
         list.append(elem.json)
 
     return {'shows': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
-            'stations': stations_json}
+            'stations': stations_json, 'serviceprovider': sp.json if sp else None}
 
 
 @action(route="/radioepg/schedule/<id>/events")
@@ -258,6 +261,8 @@ def radioepg_schedule_xml(request, id):
 def radioepg_sf_home(request):
     """Show the list to manage service following."""
 
+    _, sp = get_orga_service_provider(request)
+
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
     if not stations_json:
@@ -278,7 +283,7 @@ def radioepg_sf_home(request):
         list.append(elem.json)
 
     return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
-            'stations': stations_json}
+            'stations': stations_json, 'serviceprovider': sp.json if sp else None}
 
 
 @action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html",
@@ -521,6 +526,7 @@ def radioepg_servicefollowing_turn(request, mode, id):
 @only_orga_member_user()
 def radioepg_logos_home(request):
     """Show the list of stations to edit current logo."""
+    _, sp = get_orga_service_provider(request)
 
     list = []
 
@@ -530,10 +536,12 @@ def radioepg_logos_home(request):
 
     pictures = []
 
-    for elem in LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(LogoImage.name).all():
-        pictures.append(elem.json)
+    if sp:
+        for elem in LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(
+                LogoImage.name).all():
+            pictures.append(elem.json)
 
-    return {'list': list, 'pictures': pictures}
+    return {'list': list, 'pictures': pictures, 'serviceprovider': sp.json if sp else None}
 
 
 @action(route="/radioepg/logos/set/<id>/<imageid>")

@@ -1,6 +1,3 @@
-import math
-import random
-
 import requests
 
 import config
@@ -22,7 +19,7 @@ def safe_cast(val, target_type, default=None):
         return default
 
 
-def sendImageToMockApi(image, size_prefix=""):
+def send_image_to_mock_api(image, size_prefix=""):
     """
     Standalone function allowing to send an image to any mock api server.
 

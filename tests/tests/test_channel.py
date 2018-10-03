@@ -16,16 +16,16 @@ CHANNELS_HTML_TR = [
     'Classical Station dab CS_DAB 0.4001.43e1.fe1.dab.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.127.0.0.1:5000standalone.ebu.io\nDelete Edit',
     'Classical Station drm CS_DRM 4001.drm.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.127.0.0.1:5000standalone.ebu.io\nDelete Edit',
     'Classical Station fm CS_VHF_FM 00917.c00f.fe1.fm.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.127.0.0.1:5000standalone.ebu.io\nDelete Edit',
-    'Classical Station hd CS_HD_RADIO 0eaff.fe1.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.127.0.0.1:5000standalone.ebu.io\nDelete Edit',
+    'Classical Station hd CS_HD_RADIO 0eaff.9e0.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.127.0.0.1:5000standalone.ebu.io\nDelete Edit',
     'Classical Station id CS_IP http://server/stream classicalstation.standalone.radio.ebu.io Delete Edit'
 ]
 
 CHANNELS_MYSQL_TR = [
-    'CS_VHF_FM None 1 None None 00917 C00F None None None None fm None None None',
-    'CS_DAB None 1 43e1 None None None 0 None 4001 None dab None audio/mpeg None',
+    'CS_VHF_FM None 81 None None 00917 C00F None None None None fm None None None',
+    'CS_DAB None 81 43e1 None None None 0 None 4001 None dab None audio/mpeg None',
     'CS_DRM None None None None None None None None 4001 None drm None None None',
     'CS_AMSS None None None None None None None None 4001 None amss None None None',
-    'CS_HD_RADIO fE1 None None None None None None None None 0EAFF hd None None None',
+    'CS_HD_RADIO 9E0 None None None None None None None None 0EAFF hd None None None',
     'CS_IP None None None classicalstation.standalone.radio.ebu.io None None None ebu1standalone None None id 200 audio/mpeg http://server/stream'
 ]
 
@@ -109,7 +109,7 @@ def test_create_channel(stack_setup, browser_setup):
     assert bearers[1].attrib["mimeValue"] == "audio/mpeg"
     assert bearers[2].attrib["id"] == "drm:4001"
     assert bearers[2].attrib["cost"] == "100"
-    assert bearers[3].attrib["id"] == "hd:fe1.0eaff"
+    assert bearers[3].attrib["id"] == "hd:9e0.0eaff"
     assert bearers[3].attrib["cost"] == "100"
     assert bearers[4].attrib["id"] == "http://server/stream"
     assert bearers[4].attrib["cost"] == "100"

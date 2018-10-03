@@ -41,6 +41,22 @@ SERVICE_PROVIDER_MYSQL_TR = [
 
 
 @pytest.mark.run(order=1)
+def test_no_provider(stack_setup, browser_setup):
+    driver = browser_setup
+    driver.get(TEST_PROXY_URL + "serviceprovider/images/")
+    assert len(driver.find_elements_by_class_name("alert-warning")) == 1
+
+    driver.get(TEST_PROXY_URL + "radioepg/logos/")
+    assert len(driver.find_elements_by_class_name("alert-warning")) == 1
+
+    driver.get(TEST_PROXY_URL + "radioepg/servicefollowing/")
+    assert len(driver.find_elements_by_class_name("alert-warning")) == 1
+
+    driver.get(TEST_PROXY_URL + "radioepg/schedule/")
+    assert len(driver.find_elements_by_class_name("alert-warning")) == 1
+
+
+@pytest.mark.run(order=2)
 def test_create_service_provider(stack_setup, browser_setup):
     db = stack_setup
     driver = browser_setup
