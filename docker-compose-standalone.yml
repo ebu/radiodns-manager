@@ -39,8 +39,8 @@ services:
       LOGO_PUBLIC_URL: http://127.0.0.1:8000/uploads
       API_URL: http://mock_api:8000/
       DEBUG: "False"
-      XML_CACHE_TIMEOUT: 150
-      IMG_CACHE_TIMEOUT: 150
+      XML_CACHE_TIMEOUT: 10
+      IMG_CACHE_TIMEOUT: 10
 
   reverse_proxy:
     build: nginx/reverse_proxy/.

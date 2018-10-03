@@ -36,7 +36,7 @@ To get at least the basic service working you must have the PlugIt Client (stand
 To start up a local instance
 
 ```
-./standalone-start.sh 
+docker-compose -f docker-compose-standalone.yml up --build -d
 ```
 
 To shut down the local instance
