@@ -3,11 +3,11 @@ version: '3.7'
 services:
 
   test_database:
-    image: mysql
+    image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_DATABASE: plugitdns
+      MYSQL_DATABASE: radiodns
       MYSQL_ROOT_PASSWORD: 1234
     ports:
       - "3307:3306"

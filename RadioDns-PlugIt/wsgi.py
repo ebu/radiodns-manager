@@ -1,13 +1,10 @@
-import os
+from plugit import app as application, routes
 
-os.chdir('/home/ubuntu/gitrepo-plugit/RadioDns-PlugIt')
-
-from plugit import routes
 import actions
 import config
-from plugit import app as application
+from server import db_setup
 
-if not application.debug:
+if not config.DEBUG:
     import logging
     from logging.handlers import RotatingFileHandler
 
@@ -17,3 +14,5 @@ if not application.debug:
     application.logger.addHandler(file_handler)
 
 routes.load_routes(application, actions)
+db_setup()
+

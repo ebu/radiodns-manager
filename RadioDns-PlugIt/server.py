@@ -15,18 +15,7 @@ from db_utils import db
 from models import Ecc
 
 
-@backoff.on_exception(backoff.fibo, OperationalError, max_time=30)
-def establishConnection(sqlalchemy_engine):
-    """
-    Tries to establish a connection with the database. Give up after 30 seconds.
-    :param sqlalchemy_engine: The sqlalchemy engine configured for the desired database.
-    :return: the connection object to the database or raise an exception after 30 seconds.
-    """
-    return sqlalchemy_engine.connect()
-
-
-if __name__ == "__main__":
-    logging.info("Starting server...")
+def db_setup():
     engine = create_engine(config.SQLALCHEMY_URL)
     logging.info("Waiting database to come online. Use CTRL + C to interrupt at any moment.")
 
@@ -44,6 +33,21 @@ if __name__ == "__main__":
         db.session.commit()
         logging.info("Databases evolutions applied.")
     conn.close()
+
+
+@backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
+def establishConnection(sqlalchemy_engine):
+    """
+    Tries to establish a connection with the database. Give up after 30 seconds.
+    :param sqlalchemy_engine: The sqlalchemy engine configured for the desired database.
+    :return: the connection object to the database or raise an exception after 30 seconds.
+    """
+    return sqlalchemy_engine.connect()
+
+
+if __name__ == "__main__":
+    logging.info("Starting server...")
+    db_setup()
 
     plugit.load_actions(actions)
     plugit.app.run(host="0.0.0.0", debug=config.DEBUG, port=config.RADIO_DNS_PORT, threaded=True)

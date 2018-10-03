@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: radiodns
+      MYSQL_ROOT_PASSWORD: 1234
+
+  plugit_proxy:
+    build: standalone_proxy/.
+    ports:
+      - "4000:4000"
+    environment:
+      PLUGIT_SERVER: http://reverse_proxy:5000
+      DEBUG: "False"
+
+  mock_api:
+    build: MockApi/.
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: "False"
+
+  dns_server:
+    build: RadioDns-PlugIt/.
+    depends_on:
+      - plugit_proxy
+      - database
+      - mock_api
+    environment:
+      SQLALCHEMY_URL: mysql://root:1234@database:3306/radiodns
+      PI_BASE_URL: /
+      LOGO_INTERNAL_URL: http://mock_api:8000/uploads
+      LOGO_PUBLIC_URL: http://127.0.0.1:8000/uploads
+      API_URL: http://mock_api:8000/
+      DEBUG: "False"
+      XML_CACHE_TIMEOUT: 10
+      IMG_CACHE_TIMEOUT: 10
+
+  reverse_proxy:
+    build: nginx/reverse_proxy/.
+    ports:
+      - "5000:5000"
+    depends_on:
+      - plugit_proxy
+      - dns_server
+
+volumes:
+  db_data:

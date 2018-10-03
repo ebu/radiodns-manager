@@ -42,13 +42,13 @@ Then set your working directory to the tests folder and read its README for furt
 To start up a local instance
 
 ```
-docker-compose up --build 
+docker-compose -f docker-compose-standalone.yml up --build -d
 ```
 
 To shut down the local instance
 
 ```
-docker-compose down
+docker-compose -f docker-compose-standalone.yml down
 ```
 
 To remove the database and start afresh
@@ -56,6 +56,24 @@ To remove the database and start afresh
 ```
 docker-volume rm radiodns-plugit_db_data 
 ```
+
+## WIP: How to deploy in staging
+
+To configure
+
+    cp .env.example .env
+    
+Then edit the .env file until it match the correct configuration.
+
+To build and deploy the containers
+
+    docker-compose up --build
+    
+To stop the containers
+
+    docker-compose down
+    
+
 
 ## Contribution guidelines
 - Always fix version of dependencies.

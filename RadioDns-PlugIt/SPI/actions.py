@@ -3,6 +3,7 @@ import re
 
 # For SqlAlchemy
 import plugit
+from plugit.utils import cache
 from flask import abort, send_from_directory, request as Request
 
 import config
@@ -31,6 +32,7 @@ def make_xsi3_hostname_cache_key(*args, **kwargs):
 
 
 @plugit.app.route('/radiodns/epg/XSI.xml')
+@plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 def epg_1_xml():
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
     # Specified by v1.1 2013.10 /radiodns/epg/XSI.xml
@@ -132,6 +134,7 @@ epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 
 @plugit.app.route('/radiodns/spi/3.1/SI.xml')
+@plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 def epg_3_xml():
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
     # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
@@ -233,6 +236,7 @@ epg_3_xml.make_cache_key = make_xsi3_hostname_cache_key
 
 
 @plugit.app.route('/radiodns/logo/<int:id>/<int:w>/<int:h>/logo.png')
+@plugit.utils.cache(time=config.IMG_CACHE_TIMEOUT)
 def logo(id, w, h):
     """Return a logo for a station"""
 
@@ -262,6 +266,7 @@ def logo(id, w, h):
 
 
 @plugit.app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
+@plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 def epg_sch_1_xml(path, date):
     """Special call for EPG scheduling xml"""
 
