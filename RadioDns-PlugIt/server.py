@@ -50,4 +50,4 @@ if __name__ == "__main__":
     db_setup()
 
     plugit.load_actions(actions)
-    plugit.app.run(host="0.0.0.0", debug=config.DEBUG, threaded=True)
+    plugit.app.run(host="0.0.0.0", debug=config.DEBUG, port=config.RADIO_DNS_PORT, threaded=True)

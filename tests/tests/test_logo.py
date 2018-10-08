@@ -4,21 +4,21 @@ import time
 import requests
 from sqlalchemy import text
 
-from tests.conftest import TEST_PROXY_URL, TEST_RADIO_DNS_URL
+from tests.conftest import TEST_PROXY_URL, TEST_RADIO_DNS_URL, TEST_MOCK_API_PORT
 import xml.etree.ElementTree as ET
 from tests.utilities.utilities import compare_lists, sql_alchemy_result_to_list
 
 HTML_IMAGES = [
-    ['32', '32', 'http://127.0.0.1:8000/uploads/32x32/classical_music.jpg'],
-    ['112', '32', 'http://127.0.0.1:8000/uploads/112x32/classical_music.jpg'],
-    ['128', '128', 'http://127.0.0.1:8000/uploads/128x128/classical_music.jpg'],
-    ['320', '240', 'http://127.0.0.1:8000/uploads/320x240/classical_music.jpg'],
-    ['600', '600', 'http://127.0.0.1:8000/uploads/600x600/classical_music.jpg'],
-    ['32', '32', 'http://127.0.0.1:8000/uploads/32x32/classical_music.png'],
-    ['112', '32', 'http://127.0.0.1:8000/uploads/112x32/classical_music.png'],
-    ['128', '128', 'http://127.0.0.1:8000/uploads/128x128/classical_music.png'],
-    ['320', '240', 'http://127.0.0.1:8000/uploads/320x240/classical_music.png'],
-    ['600', '600', 'http://127.0.0.1:8000/uploads/600x600/classical_music.png'],
+    ['32', '32', '''http://127.0.0.1:{port}/uploads/32x32/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT)],
+    ['112', '32', 'http://127.0.0.1:{port}/uploads/112x32/classical_music.jpg'.format(port=TEST_MOCK_API_PORT)],
+    ['128', '128', 'http://127.0.0.1:{port}/uploads/128x128/classical_music.jpg'.format(port=TEST_MOCK_API_PORT)],
+    ['320', '240', 'http://127.0.0.1:{port}/uploads/320x240/classical_music.jpg'.format(port=TEST_MOCK_API_PORT)],
+    ['600', '600', 'http://127.0.0.1:{port}/uploads/600x600/classical_music.jpg'.format(port=TEST_MOCK_API_PORT)],
+    ['32', '32', 'http://127.0.0.1:{port}/uploads/32x32/classical_music.png'.format(port=TEST_MOCK_API_PORT)],
+    ['112', '32', 'http://127.0.0.1:{port}/uploads/112x32/classical_music.png'.format(port=TEST_MOCK_API_PORT)],
+    ['128', '128', 'http://127.0.0.1:{port}/uploads/128x128/classical_music.png'.format(port=TEST_MOCK_API_PORT)],
+    ['320', '240', 'http://127.0.0.1:{port}/uploads/320x240/classical_music.png'.format(port=TEST_MOCK_API_PORT)],
+    ['600', '600', 'http://127.0.0.1:{port}/uploads/600x600/classical_music.png'.format(port=TEST_MOCK_API_PORT)],
 ]
 
 HTML_IMAGES_NAMES = ["Classic_main", "Classic_main_2"]
@@ -49,12 +49,12 @@ MSQL_ROWS = [
     ]
 ]
 
-XML_ROWS = [
-    'http://127.0.0.1:8000/uploads/32x32/classical_music.jpg',
-    'http://127.0.0.1:8000/uploads/112x32/classical_music.jpg',
-    'http://127.0.0.1:8000/uploads/128x128/classical_music.jpg',
-    'http://127.0.0.1:8000/uploads/320x240/classical_music.jpg',
-    'http://127.0.0.1:8000/uploads/600x600/classical_music.jpg',
+XML_URLS = [
+    '''http://127.0.0.1:{port}/uploads/32x32/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT),
+    '''http://127.0.0.1:{port}/uploads/112x32/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT),
+    '''http://127.0.0.1:{port}/uploads/128x128/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT),
+    '''http://127.0.0.1:{port}/uploads/320x240/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT),
+    '''http://127.0.0.1:{port}/uploads/600x600/classical_music.jpg'''.format(port=TEST_MOCK_API_PORT),
 ]
 
 
@@ -106,4 +106,8 @@ def test_logo(stack_setup, browser_setup):
     assert res.status_code == 200
     xml_root = ET.fromstring(res.text)
     multimedias = list(map(lambda x: x.attrib["url"], xml_root.findall(".//{http://www.worlddab.org/schemas/spi/31}multimedia")))
-    assert compare_lists(multimedias, XML_ROWS, True)
+    assert compare_lists(multimedias, XML_URLS, True)
+
+    # Check images availability
+    for url in XML_URLS:
+        assert requests.get(url).status_code == 200
