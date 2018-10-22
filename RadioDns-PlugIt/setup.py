@@ -24,7 +24,7 @@ setup(
         'dnspython==1.15.0',
         'requests==2.19.1',
         'raven==6.9.0',
-        'boto==2.49.0',
+        'boto==2.43.0',
         'Pillow==5.2.0',
         'plugit==0.3.12',
         'MySQL-python==1.2.5',

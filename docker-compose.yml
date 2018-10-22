@@ -4,22 +4,55 @@ services:
 
   database:
     image: mysql:8.0
+    restart: always
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - db_data:/var/lib/mysql
+    - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   dns_server:
     build: RadioDns-PlugIt/.
     restart: always
     depends_on:
-      - database
+    - database
+    environment:
+      API_URL: ${API_URL}
+      SQLALCHEMY_URL: ${SQLALCHEMY_URL}
+      API_SECRET: ${API_SECRET}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      DOMAIN: ${DOMAIN}
+      XSISERVING_ENABLED: ${XSISERVING_ENABLED}
+      XSISERVING_DOMAIN: ${XSISERVING_DOMAIN}
+      RADIOVIS_SERVICE_DEFAULT: ${RADIOVIS_SERVICE_DEFAULT}
+      RADIOEPG_SERVICE_DEFAULT: ${RADIOEPG_SERVICE_DEFAULT}
+      RADIOTAG_SERVICE_DEFAULT: ${RADIOTAG_SERVICE_DEFAULT}
+      RADIOTAG_ENABLED: ${RADIOTAG_ENABLED}
+      RADIOVIS_DNS: ${RADIOVIS_DNS}
+      RADIOEPG_DNS: ${RADIOEPG_DNS}
+      RADIOTAG_DNS: ${RADIOTAG_DNS}
+      DEBUG: ${DEBUG}
+      STANDALONE: ${STANDALONE}
+      PI_BASE_URL: ${PI_BASE_URL}
+      PI_ALLOWED_NETWORKS: ${PI_ALLOWED_NETWORKS}
+      FLASK_LOG_PATH: /opt/app/flask.log
+      FLASK_LOG_SIZE: 10485764
+      SENTRY_DSN: ${SENTRY_DSN}
+      PI_API_VERSION: ${PI_API_VERSION}
+      PI_API_NAME: ${PI_API_NAME}
+      XML_CACHE_TIMEOUT: ${XML_CACHE_TIMEOUT}
+      IMG_CACHE_TIMEOUT: ${IMG_CACHE_TIMEOUT}
+      DATABASE_CONNECTION_MERCY_TIME: ${DATABASE_CONNECTION_MERCY_TIME}
 
   reverse_proxy:
     build: nginx/reverse_proxy/.
+    restart: always
     ports:
-      - "80:5000"
+    - "80:5000"
     depends_on:
-      - dns_server
+    - dns_server
 
 volumes:
   db_data:

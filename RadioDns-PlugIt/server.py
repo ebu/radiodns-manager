@@ -15,11 +15,27 @@ from db_utils import db
 from models import Ecc
 
 
+@backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
+def establishConnection(sqlalchemy_engine):
+    """
+    Tries to establish a connection with the database. Give up after 30 seconds.
+    :param sqlalchemy_engine: The sqlalchemy engine configured for the desired database.
+    :return: the connection object to the database or raise an exception after 30 seconds.
+    """
+    return sqlalchemy_engine.connect()
+
+
 def db_setup():
     engine = create_engine(config.SQLALCHEMY_URL)
     logging.info("Waiting database to come online. Use CTRL + C to interrupt at any moment.")
+    conn = None
 
-    conn = establishConnection(engine)
+    while conn is None:
+        try:
+            conn = establishConnection(engine)
+        except OperationalError:
+            logging.warning("""Couldn't connect to the server in {time} seconds to the database."""
+                            .format(time=config.DATABASE_CONNECTION_MERCY_TIME))
 
     logging.info("Connection with database established")
 
@@ -33,16 +49,6 @@ def db_setup():
         db.session.commit()
         logging.info("Databases evolutions applied.")
     conn.close()
-
-
-@backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
-def establishConnection(sqlalchemy_engine):
-    """
-    Tries to establish a connection with the database. Give up after 30 seconds.
-    :param sqlalchemy_engine: The sqlalchemy engine configured for the desired database.
-    :return: the connection object to the database or raise an exception after 30 seconds.
-    """
-    return sqlalchemy_engine.connect()
 
 
 if __name__ == "__main__":
