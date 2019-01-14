@@ -47,7 +47,7 @@ def serviceprovider_check(request):
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
 
-    if sp:
+    if sp and not config.STANDALONE:
         return sp.check_aws()
 
     return {'isvalid': False}

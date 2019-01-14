@@ -1,18 +1,14 @@
-import config
-
-import logging
-
-import requests
-
-from beaker.cache import CacheManager
-import pylibmc
-from beaker.util import parse_cache_config_options
-
 import json
-
+import logging
+import socket
 import sys
 
-import socket
+import pylibmc
+import requests
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
+
+import config
 
 
 class RadioDns_():
@@ -23,16 +19,21 @@ class RadioDns_():
     def __init__(self):
         self.logger = logging.getLogger('radiovisserver.radiodns')
         self.cache = CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodns', expire=60)
-        self.durablecache = pylibmc.Client(["127.0.0.1"], binary=True,
-                                           behaviors={"tcp_nodelay": True,
-                                                      "ketama": True})  # CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodnsdurable')
+        self.durablecache = pylibmc.Client(
+            [config.MEMCACHED_HOST],
+            binary=True,
+            behaviors={
+                "tcp_nodelay": True,
+                "ketama": True,
+            }
+        )  # CacheManager(**parse_cache_config_options(config.CACHE_OPTS)).get_cache('radiodnsdurable')
 
     def do_query(self, url, params):
         try:
             return requests.get(config.API_URL + url, data=params).json()
         except:
             # Ommit params as it's may contain passwords
-            self.logger.error("Error trying query %s" % (url, ))
+            self.logger.error("Error trying query %s" % (url,))
             return None
 
     def check_auth(self, user, password, ip):
@@ -47,7 +48,7 @@ class RadioDns_():
                 self.logger.debug("Password ok")
                 return True
             else:
-                self.logger.warning("Cannot auth: %s" % (result['error'], ))
+                self.logger.warning("Cannot auth: %s" % (result['error'],))
                 return False
         else:
             self.logger.error("No reply when check_auth ?")
@@ -87,7 +88,6 @@ class RadioDns_():
             self.logger.error("Error trying to update channel topics in durable cache. %s" % (e))
             return
 
-
     def contains_channel_topic(self, topic):
         """Checks if cache contains a particular channel"""
         try:
@@ -107,9 +107,12 @@ class RadioDns_():
 
         self.logger.debug("Converting %s to use gcc" % (topic,))
 
-        cachevalue = self.durablecache.get('radiovis_isoecc_' + topic)
-        if cachevalue:
-            return cachevalue
+        try:
+            cachevalue = self.durablecache.get('radiovis_isoecc_' + topic)
+            if cachevalue:
+                return cachevalue
+        except (pylibmc.ConnectionError, pylibmc.ServerDown) as e:
+            self.logger.warning("No memcached backend is running! %s" % (e,))
 
         def convert_topic():
 
@@ -129,7 +132,10 @@ class RadioDns_():
             gcc_topic = '/'.join(splited_topic)
 
             self.logger.debug("Setting radiovis_isoecc_ to durable cache topic list with %s." % (gcc_topic))
-            self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic, time=RadioDns.CACHE_DURATION)
+            try:
+                self.durablecache.set('radiovis_isoecc_' + topic, gcc_topic, time=RadioDns.CACHE_DURATION)
+            except (pylibmc.ConnectionError, pylibmc.ServerDown) as e:
+                self.logger.warning("No memcached backend is running! %s" % (e,))
             return gcc_topic
 
         return self.cache.get(key='topic-to-gcc-' + topic, createfunc=convert_topic)
@@ -187,18 +193,24 @@ class RadioDns_():
         """Return the default image, link and message for a channel"""
 
         # Get out of cache if available
-        cachevalue = self.durablecache.get('get_channel_default_' + str(id))
-        if cachevalue:
-            return cachevalue
+        try:
+            cachevalue = self.durablecache.get('get_channel_default_' + str(id))
+            if cachevalue:
+                return cachevalue
+        except (pylibmc.ConnectionError, pylibmc.ServerDown) as e:
+            self.logger.warning("No memcached backend is running! %s" % (e,))
 
         result = self.do_query('get_channel_default', {'id': id})
 
         if result is None:
-            self.logger.error("No reply when get_channel_default %s ?" % (id, ))
+            self.logger.error("No reply when get_channel_default %s ?" % (id,))
             return []
 
         # Save to cache
-        self.durablecache.set('get_channel_default_' + str(id), result['info'], time=RadioDns.CACHE_DURATION)
+        try:
+            self.durablecache.set('get_channel_default_' + str(id), result['info'], time=RadioDns.CACHE_DURATION)
+        except (pylibmc.ConnectionError, pylibmc.ServerDown) as e:
+            self.logger.warning("No memcached backend is running! %s" % (e,))
 
         return result['info']
 
@@ -209,7 +221,7 @@ class RadioDns_():
                                            'timestamp': timestamp})
 
         if result is None:
-            self.logger.error("No reply when add_log %s %s %s %s ?" % (topic, message, headers, timestamp, ))
+            self.logger.error("No reply when add_log %s %s %s %s ?" % (topic, message, headers, timestamp,))
 
     def cleanup_logs(self, max_age):
         """Clean logs"""

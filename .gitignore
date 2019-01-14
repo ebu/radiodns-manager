@@ -48,3 +48,4 @@ RadioDns-PlugIt/config.py
 venv
 .DS_Store
 /.env
+/Nginx/blockips.conf

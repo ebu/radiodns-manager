@@ -3,125 +3,29 @@ import re
 
 # For SqlAlchemy
 import plugit
-from plugit.utils import cache
 from flask import abort, send_from_directory, request as Request
+from plugit.utils import cache
 
 import config
-
-
-def make_xsi1_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_xsi1_' + args).encode('utf-8')
-
-
-def make_pi1_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    path = Request.path
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_pi1_' + path + '_' + args).encode('utf-8')
-
-
-def make_xsi3_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_xsi3_' + args).encode('utf-8')
+from SPI.utils import make_xsi1_hostname_cache_key, retrieve_spi_data, make_xsi3_hostname_cache_key, \
+    make_pi1_hostname_cache_key
+from actions_utils import with_client_identification
 
 
 @plugit.app.route('/radiodns/epg/XSI.xml')
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
-def epg_1_xml():
+@with_client_identification
+def epg_1_xml(client):
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
-    # Specified by v1.1 2013.10 /radiodns/epg/XSI.xml
-    # http://<host>:<port>/radiodns/epg/XSI.xml
-    # http://radiodns.org/wp-content/uploads/2013/10/REPG01-v1.1.pdf
-
-    #        chrts.epg.radio.ebu.io >> XSI for all CHRTS Channels
-    # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
 
     if config.XSISERVING_ENABLED:
-
-        from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
         from flask import render_template, Response
         import datetime
         time_format = '%Y-%m-%dT%H:%M:%S%z'
 
-        sp = None
-        stations = None
+        data, sp = retrieve_spi_data(client)
 
-        # Find out what stations to serve if by codops or station
-        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
-        r = regex.search(Request.host)
-        if r:
-            station = r.groupdict()['station']
-            provider = r.groupdict()['provider']
-
-            if provider:
-                # We have a station based query
-                sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
-                if sp:
-                    stations = Station.query.filter_by(service_provider_id=sp.id,
-                                                       radioepg_enabled=True)  # , fqdn_prefix=station)
-
-            if station:
-                # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
-                stations = filter(lambda x: x.fqdn_prefix == station, stations)
-
-        else:
-            sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
-            stations = Station.query.filter_by(radioepg_enabled=True)
-
-        if not sp and not config.STANDALONE:
-            abort(404)
-
-        list = []
-
-        if stations:
-            for elem in stations:
-
-                entries = []
-
-                # Channels
-                for elem2 in elem.channels.order_by(Channel.name).all():
-                    if elem2.servicefollowingentry.active:
-                        entries.append(elem2.servicefollowingentry.json)
-
-                        if elem2.type_id == 'fm':  # For FM, also append with the country code
-                            try:
-                                data2 = elem2.servicefollowingentry.json
-
-                                # Split the URI
-                                uri_dp = data2['uri'].split(':', 2)
-                                uri_p = uri_dp[1].split('.')
-
-                                pi_code = uri_p[0]
-
-                                # Get the ISO code form the picode
-                                ecc = Ecc.query.filter_by(pi=pi_code[0].upper(), ecc=pi_code[1:].upper()).first()
-
-                                uri_p[0] = ecc.iso.lower()
-
-                                # Update the new URL
-                                data2['uri'] = uri_dp[0] + ':' + '.'.join(uri_p)
-
-                                # Add the service
-                                entries.append(data2)
-
-                            except:
-                                pass
-
-                # Custom entries
-                for elem2 in elem.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
-                    if elem2.active:
-                        entries.append(elem2.json)
-
-                if entries:
-                    list.append([elem.json, entries])
-
-        return Response(render_template('radioepg/servicefollowing/xml1.html', stations=list, service_provider=sp,
+        return Response(render_template('radioepg/servicefollowing/xml1.html', stations=data, service_provider=sp,
                                         creation_time=datetime.datetime.now().strftime(time_format)),
                         mimetype='text/xml')
 
@@ -135,95 +39,18 @@ epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 
 @plugit.app.route('/radiodns/spi/3.1/SI.xml')
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
-def epg_3_xml():
+@with_client_identification
+def epg_3_xml(client):
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
-    # Specified by 3.1.1 /radiodns/spi/3.1/SI.xml
-    # http://<host>:<port>/radiodns/spi/3.1/SI.xml
-    # http://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
-
-    #        chrts.epg.radio.ebu.io >> XSI for all CHRTS Channels
-    # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
 
     if config.XSISERVING_ENABLED:
-
-        from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
         from flask import render_template, Response
         import datetime
         time_format = '%Y-%m-%dT%H:%M:%S%z'
 
-        sp = None
-        stations = None
+        data, sp = retrieve_spi_data(client)
 
-        # Find out what stations to serve if by codops or station
-        regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
-        r = regex.search(Request.host)
-        if r:
-            station = r.groupdict()['station']
-            provider = r.groupdict()['provider']
-
-            if provider:
-                # We have a station based query
-                sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
-                if sp:
-                    stations = Station.query.filter_by(service_provider_id=sp.id,
-                                                       radioepg_enabled=True)  # , fqdn_prefix=station)
-
-            if station:
-                # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
-                stations = filter(lambda x: x.fqdn_prefix == station, stations)
-
-        else:
-            sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
-            stations = Station.query.filter_by(radioepg_enabled=True)
-
-        if not sp and not config.STANDALONE:
-            abort(404)
-
-        list = []
-
-        if stations:
-            for station in stations:
-
-                entries = []
-
-                # Channels
-                for channel in station.channels.order_by(Channel.name).all():
-                    if channel.servicefollowingentry.active:
-                        entries.append(channel.servicefollowingentry.json)
-
-                        if channel.type_id == 'fm':  # For FM, also add with the country code
-                            try:
-                                data2 = channel.servicefollowingentry.json
-
-                                # Split the URI
-                                uri_dp = data2['uri'].split(':', 2)
-                                uri_p = uri_dp[1].split('.')
-
-                                pi_code = uri_p[0]
-
-                                # Get the ISO code form the picode
-                                ecc = Ecc.query.filter_by(pi=pi_code[0].upper(), ecc=pi_code[1:].upper()).first()
-
-                                uri_p[0] = ecc.iso.lower()
-
-                                # Update the new URL
-                                data2['uri'] = uri_dp[0] + ':' + '.'.join(uri_p)
-
-                                # Add the service
-                                entries.append(data2)
-
-                            except:
-                                pass
-
-                # Custom entries
-                for channel in station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
-                    if channel.active:
-                        entries.append(channel.json)
-
-                # List station anyway
-                list.append([station.json, entries])
-
-        return Response(render_template('radioepg/servicefollowing/xml3.html', stations=list, service_provider=sp,
+        return Response(render_template('radioepg/servicefollowing/xml3.html', stations=data, service_provider=sp,
                                         creation_time=datetime.datetime.now().strftime(time_format)),
                         mimetype='text/xml')
 
@@ -274,7 +101,7 @@ def epg_sch_1_xml(path, date):
     # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
 
     if config.XSISERVING_ENABLED:
-        from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
+        from models import Station, Channel, Ecc, ServiceProvider
         from flask import render_template, Response
         import datetime
         time_format = '%Y-%m-%dT%H:%M:%S%z'
@@ -296,7 +123,7 @@ def epg_sch_1_xml(path, date):
                     channels = Channel.query.join(Station).filter(Station.service_provider_id == sp.id,
                                                                   Station.radioepgpi_enabled).all()
 
-            if station:
+            if station and channels:
                 # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
                 channels = filter(lambda x: x.station.fqdn_prefix == station, channels)
 

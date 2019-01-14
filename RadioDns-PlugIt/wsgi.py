@@ -3,6 +3,7 @@ from plugit import app as application, routes
 import actions
 import config
 from server import db_setup
+from werkzeug.contrib.fixers import ProxyFix
 
 if not config.DEBUG:
     import logging
@@ -14,5 +15,6 @@ if not config.DEBUG:
     application.logger.addHandler(file_handler)
 
 routes.load_routes(application, actions)
+application.wsgi_app = ProxyFix(application.wsgi_app)
 db_setup()
 

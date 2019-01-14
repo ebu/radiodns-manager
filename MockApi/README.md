@@ -1,10 +1,11 @@
 #Development mock API.
 
 The Mock API serves as a local dev replacement for some AWS and ebu.io functionalities. 
-Currently it provides functionalities like image hosting and
-organisation api rest endpoint. 
+Currently it provides image hosting and organisation api rest endpoint. 
 
 ## Setup
+
+Virtualenv is not mandatory but **STRONGLY** recommended.
 
 You need the following dependencies:
 - python 3.7
@@ -30,3 +31,7 @@ You'll find in the root project a script installing every project with their dep
 To run start the mock API run
 
     python app.py
+    
+## Configuration
+
+You can configure the application by setting the environment variables described in `config.py`.

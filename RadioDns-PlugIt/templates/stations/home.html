@@ -10,217 +10,258 @@
 {% block content %}
 
     {% block pageheader %}
-    <div class="menubar">
-        <div class="sidebar-toggler visible-xs">
-            <i class="ion-navicon"></i>
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ ebuio_orga.name }} :: Stations
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                {% block pagefunctions %}
+                    {% if ebuio_u.ebuio_orga_admin and serviceprovider %}
+                        <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default"
+                                autocomplete="off">
+                            Check Stations
+                        </button>
+                        <a href="{{ ebuio_baseUrl }}stations/edit/-" class="btn btn-primary">Add a new station</a>
+                    {% endif %}
+                {% endblock %}
+            </div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
-        <div class="page-title">
-            {{ebuio_orga.name}} :: Stations
-            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
-        </div>
-        <div id="page-functions" class="pull-right">
-			{% block pagefunctions %}
-                {% if ebuio_u.ebuio_orga_admin and serviceprovider %}
-                    <button type="button" id="checkButton" data-loading-text="Checking..." class="btn btn-default" autocomplete="off">
-                          Check Stations
-                    </button>
-					<a href="{{ebuio_baseUrl}}stations/edit/-" class="btn btn-primary">Add a new station</a>
-				{% endif %}
-			{% endblock %}
-		</div>
-        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
-    </div>
     {% endblock %}
 
-	{% if saved %}
-		<div class="alert alert-success" role="alert">
-			Station has been saved
-		</div>
-	{% endif %}
+    {% if saved %}
+        <div class="alert alert-success" role="alert">
+            Station has been saved
+        </div>
+    {% endif %}
 
-	{% if deleted %}
-		<div class="alert alert-success" role="alert">
-			Station has been deleted
-		</div>
-	{% endif %}
+    {% if deleted %}
+        <div class="alert alert-success" role="alert">
+            Station has been deleted
+        </div>
+    {% endif %}
 
-	{% if passworded %}
-		<div class="alert alert-success" role="alert">
-			A new password has been generated
-		</div>
-	{% endif %}
+    {% if passworded %}
+        <div class="alert alert-success" role="alert">
+            A new password has been generated
+        </div>
+    {% endif %}
 
-	{% if not ebu_codops %}
+    {% if not ebu_codops %}
         <div class="alert alert-danger" role="alert">
-			<strong>No CODOPS has been defined for your organisation yet.</strong> <br />
-            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) to get started.
-		</div>
+            <strong>No CODOPS has been defined for your organisation yet.</strong> <br/>
+            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>)
+            to get started.
+        </div>
     {% elif not serviceprovider %}
-		 <div class="alert alert-warning" role="alert">
-			<p><strong>No configuration for your organisation exists yet.</strong> <br />
-			Start by creating the initial service provider configuration.
-			 </p>
-			<p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}" class="btn btn-primary">Edit</a></p>
-		</div>
-	{% else %}
+        <div class="alert alert-warning" role="alert">
+            <p><strong>No configuration for your organisation exists yet.</strong> <br/>
+                Start by creating the initial service provider configuration.
+            </p>
+            <p><a href="{{ ebuio_baseUrl }}serviceprovider/edit/{{ serviceprovider.id }}{% if not s %}-{% endif %}"
+                  class="btn btn-primary">Edit</a></p>
+        </div>
+    {% else %}
 
-	<div class="table-responsive">
-	<table id="radiodns-station-table" class="display" cellspacing="0" width="100%">
-		<thead>
-			<tr>
-				<th></th>
-				<th>Name</th>
-				<th>Service Provider</th>
-				<th>FQDN</th>
-				<th>Services</th>
-                {% if False %}
-				{% if ebuio_u.ebuio_orga_admin %}
-					<th colspan="2">RadioVIS Stomp</th>
-				{% endif %}
-                {% endif %}
-				<th style="width: 150px;"></th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{% for s in list %}
-				<tr>
-					<td>{% if s.default_logo_image_data %}<img style="height: 32px;width: 32px;" src="{{s.default_logo_image_data.public_32x32_url}}">
-						{% else %}
-						<a href="{{ebuio_baseUrl}}radioepg/logos/" class="btn btn-xs btn-primary">Set logo</a>
-						{% endif %}
-					</td>
-					<td><a href="{{ebuio_baseUrl}}stations/{{s.id}}"><strong>{{s.name}}</strong></a></td>
-					<td>{% if s.service_provider_data %}
-						{{s.service_provider_data.short_name}}
-						{% else %}
-						<span class="text-danger">
-							<i class="ion-alert-circled"></i>
-							No Service Provider linked<br />
-							<a href="{{ebuio_baseUrl}}stations/linkserviceprovider/{{s.id}}" class="btn btn-xs btn-primary">Link now</a>
-						</span>
-						{% endif %}</td>
-					<td>{% if s.service_provider_data %}{{s.fqdn}}{% endif %}</td>
-					<td>
-						<span id="vis-{{s.id}}">{% if s.radiovis_service %}<small>VIS</small> {{s.radiovis_service}}{% endif %}</span><br />
-						<span id="epg-{{s.id}}">{% if s.radioepg_service %}<small>EPG</small> {{s.radioepg_service}}{% endif %}</span><br />
-						{% if RADIOTAG_ENABLED %}<span id="tag-{{s.id}}">{% if s.radiotag_service %}<small>TAG</small> {{s.radiotag_service}}{% endif %}</span>{% endif %}
-					</td>
+        <div class="table-responsive">
+            <table id="radiodns-station-table" class="display" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Service Provider</th>
+                    <th>FQDN</th>
+                    <th>Services</th>
                     {% if False %}
-					{% if s.radiovis_enabled %}
-					{% if ebuio_u.ebuio_orga_admin %}
-					<td>Username: <br />Password:<br />Allowed IPs</td>
-					<td>{{s.stomp_username}}<br />
-						<span id="pwd-{{s.id}}" style="display:none;">{{s.random_password}}</span>
-						<a href="#" id="pwd-btn-{{s.id}}" onclick="$('#pwd-{{s.id}}').toggle();$('#pwd-btn-{{s.id}}').toggle();return false;" class="btn btn-xs btn-default">Show password</a>
-						<br />
-						{{s.ip_allowed}}</td>
-					{% endif %}
-					{% else %}
-					<td></td>
-					<td></td>
-					{% endif %}
-                    {% endif %}
-					<td style="text-align:right;">
-						{% if ebuio_u.ebuio_orga_admin %}
-                            {% if False %}
-							<a href="{{ebuio_baseUrl}}stations/newpassword/{{s.id}}" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure ?');">New password</a>
-                            {% endif %}
-                            <a href="{{ebuio_baseUrl}}stations/{{s.id}}" class="btn btn-sm btn-default">Details</a>
-							<a href="{{ebuio_baseUrl}}stations/edit/{{s.id}}" class="btn btn-sm btn-primary">Edit</a>
-                            <a href="{{ebuio_baseUrl}}stations/delete/{{s.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+                        {% if ebuio_u.ebuio_orga_admin %}
+                            <th colspan="2">RadioVIS Stomp</th>
                         {% endif %}
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	</div>
+                    {% endif %}
+                    <th style="width: 150px;"></th>
+                </tr>
+                </thead>
 
-    <script src='{{ebuio_baseUrl}}media/js/ajaxq.js'></script>
-    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
-	<script type="text/javascript">
-		function checkStation(id) {
-			$.ajaxq("rdns-stationq", {
-				url: '{{ebuio_baseUrl}}stations/check/' + id,
-				dataType: 'json',
-				success: function(data) {
-					if (data.radiovis) {
-						if(data.radiovis.enabled) {
-							$('#vis-' + id).html('<small>VIS</small> '+data.radiovis.fqdn);
-							if(data.radiovis.isvalid) {
-								$('#vis-' + id).addClass('text-success');
-							}
-						} else {
-							$('#vis-' + id).addClass('text-muted');
-							$('#vis-' + id).html('<small>VIS</small> '+'vis disabled');
-						}
-					} else {
-						$('#vis-' + id).addClass('text-danger');
-						$('#vis-' + id).html('<small>VIS</small> '+'missing vis information');
-					}
-					if (data.radioepg) {
-						if(data.radioepg.enabled) {
-							$('#epg-' + id).html('<small>EPG</small> '+data.radioepg.fqdn);
-							if(data.radioepg.isvalid) {
-								$('#epg-' + id).addClass('text-success');
-							}
-						} else {
-							$('#epg-' + id).addClass('text-muted');
-							$('#epg-' + id).html('<small>EPG</small> '+'epg disabled');
-						}
-					} else {
-						$('#epg-' + id).addClass('text-danger');
-						$('#epg-' + id).html('<small>EPG</small> '+'missing epg information');
-					}
-					if (data.radiotag) {
-						if(data.radiotag.enabled) {
-							$('#tag-' + id).html('<small>TAG</small> '+data.radiotag.fqdn);
-							if(data.radiotag.isvalid) {
-								$('#tag-' + id).addClass('text-success');
-							}
-						} else {
-							$('#tag-' + id).addClass('text-muted');
-							$('#tag-' + id).html('<small>TAG</small> '+'tag disabled');
-						}
-					} else {
-						$('#tag-' + id).addClass('text-danger');
-						$('#tag-' + id).html('<small>TAG</small> '+'missing tag information');
-					}
+                <tbody>
+                {% for station in stations %}
+                    <tr>
+                        <td>{% if station.default_logo_image_data %}<img style="height: 32px;width: 32px;"
+                                                                         src="{{ station.default_logo_image_data.public_32x32_url }}">
+                        {% else %}
+                            <a href="{{ ebuio_baseUrl }}radioepg/logos/" class="btn btn-xs btn-primary">Set logo</a>
+                        {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ ebuio_baseUrl }}stations/{{ station.id }}"><strong>{{ station.name }}</strong></a>
+                        </td>
+                        <td>{% if station.service_provider_data %}
+                            {{ station.service_provider_data.short_name }}
+                        {% else %}
+                            <span class="text-danger">
+							<i class="ion-alert-circled"></i>
+							No Service Provider linked<br/>
+							<a href="{{ ebuio_baseUrl }}stations/linkserviceprovider/{{ station.id }}"
+                               class="btn btn-xs btn-primary">Link now</a>
+						</span>
+                        {% endif %}</td>
+                        <td>{% if station.service_provider_data %}{{ station.fqdn }}{% endif %}</td>
+                        <td>
+                            <span id="vis-{{ station.id }}">
+                                {% if station.radiovis_service %}
+                                    <small>VIS</small> {{ station.radiovis_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            <span id="epg-{{ station.id }}">
+                                {% if station.radioepg_service %}
+                                    <small>EPG</small> {{ station.radioepg_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            <span id="spi-{{ station.id }}">
+                                {% if station.radiospi_service %}
+                                    <small>SPI</small> {{ station.radiospi_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            {% if RADIOTAG_ENABLED %}
+                                <span id="tag-{{ station.id }}">
+                                    {% if station.radiotag_service %}
+                                        <small>TAG</small> {{ station.radiotag_service }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
 
-				}
-			});
+                        </td>
+                        {% if False %}
+                            {% if station.radiovis_enabled %}
+                                {% if ebuio_u.ebuio_orga_admin %}
+                                    <td>Username: <br/>Password:<br/>Allowed IPs</td>
+                                    <td>{{ station.stomp_username }}<br/>
+                                        <span id="pwd-{{ station.id }}"
+                                              style="display:none;">{{ station.random_password }}</span>
+                                        <a href="#" id="pwd-btn-{{ station.id }}"
+                                           onclick="$('#pwd-{{ station.id }}').toggle();$('#pwd-btn-{{ station.id }}').toggle();return false;"
+                                           class="btn btn-xs btn-default">Show password</a>
+                                        <br/>
+                                        {{ station.ip_allowed }}</td>
+                                {% endif %}
+                            {% else %}
+                                <td></td>
+                                <td></td>
+                            {% endif %}
+                        {% endif %}
+                        <td style="text-align:right;">
+                            <div style="display: block">
+                                {% if ebuio_u.ebuio_orga_admin %}
+                                    {% if False %}
+                                        <a href="{{ ebuio_baseUrl }}stations/newpassword/{{ station.id }}"
+                                           class="btn btn-sm btn-warning" onclick="return confirm('Are you sure ?');">New
+                                            password</a>
+                                    {% endif %}
+                                    <a href="{{ ebuio_baseUrl }}stations/{{ station.id }}"
+                                       class="btn btn-sm btn-default">Details</a>
+                                    <a href="{{ ebuio_baseUrl }}stations/edit/{{ station.id }}"
+                                       class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="{{ ebuio_baseUrl }}stations/delete/{{ station.id }}"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Are you sure ?');">Delete</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-			// Tool Tips
-			$('[data-toggle="tooltip"]').tooltip({html: true});
-		}
+        <script src='{{ ebuio_baseUrl }}media/js/ajaxq.js'></script>
+        <script src='{{ ebuio_baseUrl }}media/js/jquery.dataTables.min.js'></script>
+        <link rel="stylesheet" type="text/css" href="{{ ebuio_baseUrl }}media/css/jquery.dataTables.min.css"/>
+        <script type="text/javascript">
+            function checkStation(id) {
+                $.ajaxq("rdns-stationq", {
+                    url: '{{ebuio_baseUrl}}stations/check/' + id,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.radiovis) {
+                            if (data.radiovis.enabled) {
+                                $('#vis-' + id).html('<small>VIS</small> ' + data.radiovis.fqdn);
+                                if (data.radiovis.isvalid) {
+                                    $('#vis-' + id).addClass('text-success');
+                                }
+                            } else {
+                                $('#vis-' + id).addClass('text-muted');
+                                $('#vis-' + id).html('<small>VIS</small> ' + 'vis disabled');
+                            }
+                        } else {
+                            $('#vis-' + id).addClass('text-danger');
+                            $('#vis-' + id).html('<small>VIS</small> ' + 'missing vis information');
+                        }
+                        if (data.radioepg) {
+                            if (data.radioepg.enabled) {
+                                $('#epg-' + id).html('<small>EPG</small> ' + data.radioepg.fqdn);
+                                if (data.radioepg.isvalid) {
+                                    $('#epg-' + id).addClass('text-success');
+                                }
+                            } else {
+                                $('#epg-' + id).addClass('text-muted');
+                                $('#epg-' + id).html('<small>EPG</small> ' + 'epg disabled');
+                            }
+                        } else {
+                            $('#epg-' + id).addClass('text-danger');
+                            $('#epg-' + id).html('<small>EPG</small> ' + 'missing epg information');
+                        }
+                        if (data.radiotag) {
+                            if (data.radiotag.enabled) {
+                                $('#tag-' + id).html('<small>TAG</small> ' + data.radiotag.fqdn);
+                                if (data.radiotag.isvalid) {
+                                    $('#tag-' + id).addClass('text-success');
+                                }
+                            } else {
+                                $('#tag-' + id).addClass('text-muted');
+                                $('#tag-' + id).html('<small>TAG</small> ' + 'tag disabled');
+                            }
+                        } else {
+                            $('#tag-' + id).addClass('text-danger');
+                            $('#tag-' + id).html('<small>TAG</small> ' + 'missing tag information');
+                        }
 
-        // Link Check to Button
-        $('#checkButton').on('click', function () {
-            var $btn = $(this).button('loading')
+                    }
+                });
 
-		    {% for c in list %}
-                checkStation({{c.id}});
-            {% endfor %}
+                // Tool Tips
+                $('[data-toggle="tooltip"]').tooltip({html: true});
+            }
 
-            // Reset Button
-            $btn.button('reset')
-          })
+            // Link Check to Button
+            $('#checkButton').on('click', function () {
+                var $btn = $(this).button('loading');
 
-        $(document).ready(function() {
-            $('#radiodns-station-table').DataTable( {
-                    "paging":   false,
+                {% for c in list %}
+                    checkStation({{c.id}});
+                {% endfor %}
+
+                // Reset Button
+                $btn.button('reset')
+            });
+
+            $(document).ready(function () {
+                $('#radiodns-station-table').DataTable({
+                    "paging": false,
                     "ordering": true,
-                    "info":     true,
-                    columnDefs: [ { orderable: false, targets: [0,4,5] },
-                                { "bSearchable": false, "aTargets": [0,4,5] } ]
-                } );
-        } );
+                    "info": true,
+                    columnDefs: [{orderable: false, targets: [0, 4, 5]},
+                        {"bSearchable": false, "aTargets": [0, 4, 5]}]
+                });
+            });
 
-	</script>
+        </script>
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}
 

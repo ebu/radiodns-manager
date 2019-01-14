@@ -2,22 +2,11 @@ version: '3.7'
 
 services:
 
-  database:
-    image: mysql:8.0
-    restart: always
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:
-    - db_data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-
   dns_server:
     build: RadioDns-PlugIt/.
     restart: always
-    depends_on:
-    - database
     environment:
+      RADIO_DNS_PORT: ${RADIO_DNS_PORT}
       API_URL: ${API_URL}
       SQLALCHEMY_URL: ${SQLALCHEMY_URL}
       API_SECRET: ${API_SECRET}
@@ -26,13 +15,15 @@ services:
       DOMAIN: ${DOMAIN}
       XSISERVING_ENABLED: ${XSISERVING_ENABLED}
       XSISERVING_DOMAIN: ${XSISERVING_DOMAIN}
-      RADIOVIS_SERVICE_DEFAULT: ${RADIOVIS_SERVICE_DEFAULT}
-      RADIOEPG_SERVICE_DEFAULT: ${RADIOEPG_SERVICE_DEFAULT}
-      RADIOTAG_SERVICE_DEFAULT: ${RADIOTAG_SERVICE_DEFAULT}
+      RADIOVIS_PORT: ${RADIOVIS_PORT}
+      RADIOEPG_PORT: ${RADIOEPG_PORT}
+      RADIOTAG_PORT: ${RADIOTAG_PORT}
+      RADIOSPI_PORT: ${RADIOSPI_PORT}
       RADIOTAG_ENABLED: ${RADIOTAG_ENABLED}
       RADIOVIS_DNS: ${RADIOVIS_DNS}
       RADIOEPG_DNS: ${RADIOEPG_DNS}
       RADIOTAG_DNS: ${RADIOTAG_DNS}
+      RADIOSPI_DNS: ${RADIOSPI_DNS}
       DEBUG: ${DEBUG}
       STANDALONE: ${STANDALONE}
       PI_BASE_URL: ${PI_BASE_URL}
@@ -45,14 +36,19 @@ services:
       XML_CACHE_TIMEOUT: ${XML_CACHE_TIMEOUT}
       IMG_CACHE_TIMEOUT: ${IMG_CACHE_TIMEOUT}
       DATABASE_CONNECTION_MERCY_TIME: ${DATABASE_CONNECTION_MERCY_TIME}
+      VIS_WEB_SOCKET_ENDPOINT_HOST: ${VIS_WEB_SOCKET_ENDPOINT_HOST}
 
   reverse_proxy:
-    build: nginx/reverse_proxy/.
+    build:
+      context: Nginx/.
+      dockerfile: Dockerfile.prod
     restart: always
+    environment:
+      VIS_INTERNAL_HOST: ${VIS_INTERNAL_HOST}
+      VIS_ADMIN_HOSTNAME: ${VIS_ADMIN_HOSTNAME}
+      VIS_WEB_SOCKET_ENDPOINT_HOST: ${VIS_WEB_SOCKET_ENDPOINT_HOST}
     ports:
-    - "80:5000"
+    - "80:80"
+    - "443:443"
     depends_on:
     - dns_server
-
-volumes:
-  db_data:

@@ -1,333 +1,308 @@
 {% extends "plugIt/base.html" %}
 {% load plugit_tags %}
 
-{% block title %}Station :: {{station.name}}{% endblock %}
+{% block title %}Station :: {{ station.name }}{% endblock %}
 
 {% block menubar %}
-{% plugitInclude "menubar" %}
+    {% plugitInclude "menubar" %}
 {% endblock %}
 
 {% block content %}
 
-{% block pageheader %}
-<div class="menubar">
-    <div class="sidebar-toggler visible-xs">
-        <i class="ion-navicon"></i>
-    </div>
-    <div class="page-title">
-        {{ebuio_orga.name}} :: <a href="{{ebuio_baseUrl}}stations">Stations</a> :: {{station.name}}
-        <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
-    </div>
-    <div id="page-functions" class="pull-right">
-        {% block pagefunctions %}
-        {% if ebuio_u.ebuio_orga_admin %}
-        <a href="{{ebuio_baseUrl}}stations/edit/{{station.id}}{% if not station %}-{% endif %}"
-           class="btn btn-primary">Edit</a>
-        <a href="{{ebuio_baseUrl}}stations/delete/{{station.id}}" class="btn btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-        {% endif %}
-        {% endblock %}
-    </div>
-    <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
-</div>
-{% endblock %}
-
-<div role="tabpanel">
-
-  <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="{{ebuio_baseUrl}}stations/{{station.id}}">Details</a></li>
-        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/channels">Channels</a></li>
-        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radiovis/channels"><small>VIS</small> Channel Images</a></li>
-        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radioepg/servicefollowing"><small>EPG</small> Service Following</a></li>
-    </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="details">
-
-        {% if saved %}
-        <div class="alert alert-success" role="alert">
-            Station configuration has been saved
-        </div>
-        {% endif %}
-
-
-        {% if deleted %}
-        <div class="alert alert-success" role="alert">
-            Service Provider configuration has been deleted
-        </div>
-        {% endif %}
-
-
-        {% if not ebu_codops %}
-        <div class="alert alert-danger" role="alert">
-            <strong>No CODOPS has been defined for your organisation yet.</strong> <br/>
-            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>)
-            to get started.
-        </div>
-        {% else %}
-
-        {% if not serviceprovider %}
-        <div class="alert alert-warning" role="alert">
-            <p><strong>No configuration for your organisation exists yet.</strong> <br/>
-                Start by creating the initial service provider configuration.
-            </p>
-
-            <p><a href="{{ebuio_baseUrl}}serviceprovider/edit/{{serviceprovider.id}}{% if not s %}-{% endif %}"
-                  class="btn btn-primary">Edit</a></p>
-        </div>
-        {% else %}
-
-
-        <div class="row">
-            <div class="col-md-7">
-                <h3>Current configuration:</h3>
-
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-condensed">
-                        <tbody>
-                        <tr>
-                            <th>Short Name</th>
-                            <td>{{station.short_name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Medium Name</th>
-                            <td>{{station.medium_name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Long Name</th>
-                            <td>{{station.long_name}}</td>
-                        </tr>
-                        <tr>
-                            <th>Short Description</th>
-                            <td>{{station.short_description}}</td>
-                        </tr>
-                        {% comment %}
-                        <tr>
-                            <th>Long Description</th>
-                            <td>{{station.long_description}}</td>
-                        </tr>
-                        {% endcomment %}
-                        <tr>
-                            <th>Default Url</th>
-                            <td><a href="{{station.url_default}}" target="_blank">{{station.url_default}}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Default Language</th>
-                            <td>{{station.default_language}}</td>
-                        </tr>
-                        <tr>
-                            <th>Postal Address</th>
-                            <td>{{station.postal_name}}<br/>
-                                {{station.street}}<br/>
-                                {{station.city}}{%if station.zipcode %}, {{station.zipcode}}{% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Country</th>
-                            <td>{{station.epg_country}}</td>
-                        </tr>
-                        <tr>
-                            <th>Phone Number</th>
-                            <td>{{station.phone_number}}</td>
-                        </tr>
-                        <tr>
-                            <th>SMS</th>
-                            <td>{% if station.sms_description %} {{station.sms_description}}: {% endif %} {% if station.sms_number %}<a href="{{station.epg_sms}}">Send {{station.sms_body}} to {{station.sms_number}}</a>{% endif %}</td>
-                        </tr>
-                        <tr>
-                            <th>E-Mail</th>
-                            <td>{% if station.email_description %}{{station.email_description}} : {% endif%}{%if station.epg_email %}<a href="{{station.epg_email}}">{{station.email_address}}</a>{% endif %}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
             </div>
-            {% if station.default_logo_image_data %}
-            <div class="col-md-4 col-md-offset-1">
-                <h3>Current station logo:</h3>
-                <div class="row">
-                    <div class="col-md-12">
-                        <img style="width: 100%; max-width:600px;" id="station-img-{{station.id}}" src="{{station.default_logo_image_data.public_600x600_url}}">
-                    </div>
-                    <div class="col-md-12">
-                        <h4>Change logo</h4>
-                        <select style="margin-bottom: 0px;" class="form-control"
-                                onchange="switch_default({{station.id}}, $(this).val(), $(this));">
-                            <option value="0" {% if not station.default_logo_image_data %} selected{% endif %}><i>Disabled</i></option>
-                            {% for p in pictures %}
-                                <option value="{{p.id}}" data-public_url="{{p.public_600x600_url}}" {% if station.default_logo_image_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
+            <div class="page-title">
+                {{ ebuio_orga.name }} :: <a href="{{ ebuio_baseUrl }}stations">Stations</a> :: {{ station.name }}
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
             </div>
-
-            <script type="text/javascript">
-                function switch_default(id, val, elemToBlink) {
-                    $.ajax({
-                        url: '{{ebuio_baseUrl}}radioepg/logos/set/' + id + '/' + val,
-                        success: function() {
-                            elemToBlink.css('backgroundColor', 'green');
-                            elemToBlink.css('opacity', '0.25');
-                            elemToBlink.animate({ opacity: 1 }, 500, function() {
-                                elemToBlink.css('backgroundColor', '#ffffff');
-                            } );
-                            // Update inline image
-                            if(val == 0) {
-                                $('#station-img-'+id).hide();
-                            } else {
-                                $('#station-img-'+id).show();
-                                var selected = elemToBlink.find('option:selected');
-                                var new_public_url = selected.data('public_url');
-                                $('#station-img-'+id).attr("src", new_public_url);
-                            }
-                        }
-                    })
-                }
-            </script>
-            {% endif %}
-        </div>
-        <hr/>
-        <div class="row">
-
-            <h3>Services:</h3>
-
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-condensed">
-                    <tbody>
-                    <tr>
-                        <th style="width:250px;">Status:</th>
-                        <td><span id="radiodns-station-status" class="label label-default">Loading</span></td>
-                    </tr>
-                    <tr>
-                        <th>FQDN:</th>
-                        <td>{% if station.service_provider_data %}{{station.fqdn}}{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <th>RadioVIS SlideShow Service Uri:</th>
-                        <td><span id="vis-{{station.id}}">{% if station.radiovis_service %}<small>VIS</small> {{station.radiovis_service}}{% endif %}</span></td>
-                    </tr>
-                    <tr>
-                        <th>RadioVIS Credentials:</th>
-                        <td>
-                            {% if station.radiovis_enabled %}
-                            <table>
-                                <tr>
-                                    <td>Username:</td>
-                                    <td>{{station.stomp_username}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Password:</td>
-                                    <td><span id="pwd-{{station.id}}" style="display:none;">{{station.random_password}}</span>
-                                    <a href="#" id="pwd-btn-{{station.id}}" onclick="$('#pwd-{{station.id}}').toggle();$('#pwd-btn-{{station.id}}').toggle();return false;" class="btn btn-xs btn-default">Show password</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Allowed IPs</td>
-                                    <td>{{station.ip_allowed}}</td>
-                                </tr>
-                            </table>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>SPI RadioEPG Service Uri:</th>
-                        <td><span id="epg-{{station.id}}">{% if station.radioepg_service %}<small>EPG</small> {{station.radioepg_service}}{% endif %}</span></td>
-                    </tr>
-                    <tr>
-                        <th>Program Information Enabled:</th>
-                        <td><span id="epgpi-{{station.id}}">{% if station.radioepgpi_enabled %}<small>ENABLED</small>{% else %}<small>DISABLED</small>{% endif %}</span></td>
-                    </tr>
-                    {% if RADIOTAG_ENABLED %}
-                    <tr>
-                        <th>TAG Service</th>
-                        <td><span id="tag-{{station.id}}">{% if station.radiotag_service %}<small>TAG</small> {{station.radiotag_service}}{% endif %}</span></td>
-                    </tr>
+            <div id="page-functions" class="pull-right">
+                {% block pagefunctions %}
+                    {% if ebuio_u.ebuio_orga_admin %}
+                        <a href="{{ ebuio_baseUrl }}stations/edit/{{ clients_stations.0.1.id }}"
+                           class="btn btn-primary">Edit</a>
+                        <a href="{{ ebuio_baseUrl }}stations/delete/{{ clients_stations.0.1.id }}" class="btn btn-danger"
+                           onclick="return confirm('Are you sure ?');">Delete</a>
                     {% endif %}
-                    </tbody>
-                </table>
+                {% endblock %}
             </div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
-        </div>
-  </div>
-</div>
+    {% endblock %}
 
-<script src='{{ebuio_baseUrl}}media/js/ajaxq.js'></script>
-<script type="text/javascript">
-		function checkStation(id) {
-			$.ajaxq("rdns-stationq", {
-				url: '{{ebuio_baseUrl}}stations/check/' + id,
-				dataType: 'json',
-				success: function(data) {
-				    if (data.isvalid) {
-                        $('#radiodns-station-status').html('Success');
-                        $('#radiodns-station-status').removeClass('label-default');
-                        $('#radiodns-station-status').addClass('label-success');
-                    } else {
-                        $('#radiodns-station-status').html('Failed');
-                        $('#radiodns-station-status').removeClass('label-default');
-                        $('#radiodns-station-status').addClass('label-danger');
-                    }
+    <ul class="nav nav-tabs">
+        {% for cs in clients_stations %}
+            <li class="nav-item">
+                <a id="nav_tab_{{ cs.0.id }}" class="nav-link" href="">{{ cs.0.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div role="tabpanel">
 
-					if (data.radiovis) {
-						if(data.radiovis.enabled) {
-							$('#vis-' + id).html('<small>VIS</small> '+data.radiovis.fqdn);
-							if(data.radiovis.isvalid) {
-								$('#vis-' + id).addClass('text-success');
-							}
-						} else {
-							$('#vis-' + id).addClass('text-muted');
-							$('#vis-' + id).html('<small>VIS</small> '+'vis disabled');
-						}
-					} else {
-						$('#vis-' + id).addClass('text-danger');
-						$('#vis-' + id).html('<small>VIS</small> '+'missing vis information');
-					}
-					if (data.radioepg) {
-						if(data.radioepg.enabled) {
-							$('#epg-' + id).html('<small>EPG</small> '+data.radioepg.fqdn);
-							if(data.radioepg.isvalid) {
-								$('#epg-' + id).addClass('text-success');
-							}
-						} else {
-							$('#epg-' + id).addClass('text-muted');
-							$('#epg-' + id).html('<small>EPG</small> '+'epg disabled');
-						}
-					} else {
-						$('#epg-' + id).addClass('text-danger');
-						$('#epg-' + id).html('<small>EPG</small> '+'missing epg information');
-					}
-					if (data.radiotag) {
-						if(data.radiotag.enabled) {
-							$('#tag-' + id).html('<small>TAG</small> '+data.radiotag.fqdn);
-							if(data.radiotag.isvalid) {
-								$('#tag-' + id).addClass('text-success');
-							}
-						} else {
-							$('#tag-' + id).addClass('text-muted');
-							$('#tag-' + id).html('<small>TAG</small> '+'tag disabled');
-						}
-					} else {
-						$('#tag-' + id).addClass('text-danger');
-						$('#tag-' + id).html('<small>TAG</small> '+'missing tag information');
-					}
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="details">
 
-				}
-			});
-
-			// Tool Tips
-			$('[data-toggle="tooltip"]').tooltip({html: true});
-		}
-
-        // Check
-        checkStation({{station.id}});
+                {% if saved %}
+                    <div class="alert alert-success" role="alert">
+                        Station configuration has been saved
+                    </div>
+                {% endif %}
 
 
-	</script>
+                {% if deleted %}
+                    <div class="alert alert-success" role="alert">
+                        Service Provider configuration has been deleted
+                    </div>
+                {% endif %}
 
-{% endif %}
-{% endif %}
 
+                {% if not ebu_codops %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>No CODOPS has been defined for your organisation yet.</strong> <br/>
+                        As this is a required global setting, please contact Mathias Coinchon (<a
+                            href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>)
+                        to get started.
+                    </div>
+
+                {% elif not serviceprovider %}
+                    <div class="alert alert-warning" role="alert">
+                        <p><strong>No configuration for your organisation exists yet.</strong> <br/>
+                            Start by creating the initial service provider configuration.
+                        </p>
+
+                        <p><a href="{{ ebuio_baseUrl }}serviceprovider/edit/
+                            {{ serviceprovider.id }}{% if not s %}-{% endif %}"
+                              class="btn btn-primary">Edit</a></p>
+                    </div>
+                {% else %}
+                    {% for cs in clients_stations %}
+
+                        <div id="tab_wrapper_{{ cs.0.id }}" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    {% if cs.0.id == 0 %}
+                                        <h3>Current configuration:</h3>
+                                    {% else %}
+                                        <h3>Station's overrides:</h3>
+                                    {% endif %}
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover table-condensed">
+                                            <tbody>
+                                            <tr>
+                                                <th>Short Name</th>
+                                                <td>{{ cs.1.short_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Medium Name</th>
+                                                <td>{{ cs.1.medium_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Long Name</th>
+                                                <td>{{ cs.1.long_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Short Description</th>
+                                                <td>{{ cs.1.short_description }}</td>
+                                            </tr>
+                                            {% comment %}
+                                                <tr>
+                                                    <th>Long Description</th>
+                                                    <td>{{ cs.1.long_description }}</td>
+                                                </tr>
+                                            {% endcomment %}
+                                            <tr>
+                                                <th>Default Url</th>
+                                                <td>
+                                                    {% if cs.1.url_default %}
+                                                        <a href="{{ cs.1.url_default }}"
+                                                           target="_blank">{{ cs.1.url_default }}</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Default Language</th>
+                                                <td>{{ cs.1.default_language }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Postal Address</th>
+                                                <td>{{ cs.1.postal_name }}<br/>
+                                                    {{ cs.1.street }}<br/>
+                                                    {{ cs.1.city }}{% if cs.1.zipcode %}, {{ cs.1.zipcode }}{% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Country</th>
+                                                {% if cs.1.epg_country %}
+                                                    <td>{{ cs.1.epg_country }}</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <th>Phone Number</th>
+                                                <td>{{ cs.1.phone_number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>SMS</th>
+                                                <td>{% if cs.1.sms_description %} {{ cs.1.sms_description }}
+                                                    : {% endif %}
+                                                    {% if cs.1.sms_number %}
+                                                        <a href="{{ cs.1.epg_sms }}">Send {{ cs.1.sms_body }}
+                                                            to {{ cs.1.sms_number }}</a>{% endif %}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>E-Mail</th>
+                                                <td>{% if cs.1.email_description %}{{ cs.1.email_description }}
+                                                    : {% endif %}
+                                                    {% if cs.1.epg_email %}
+                                                        <a href="{{ cs.1.epg_email }}">{{ cs.1.email_address }}</a>{% endif %}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% if cs.1.default_logo_image_data %}
+                                    <div class="col-md-4 col-md-offset-1">
+                                        <h3>Current station logo:</h3>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img style="width: 100%; max-width:600px;"
+                                                     id="station-img-{{ cs.1.id }}"
+                                                     src="{{ cs.1.default_logo_image_data.public_600x600_url }}">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <h4>Change logo</h4>
+                                                <select style="margin-bottom: 0px;" class="form-control"
+                                                        onchange="StationModuleDetails.prototype.switch_default({{ cs.1.id }}, $(this).val(), $(this));">
+                                                    <option value="0" {% if not cs.1.default_logo_image_data %}
+                                                            selected{% endif %}><i>Disabled</i></option>
+                                                    {% for p in pictures %}
+                                                        <option value="{{ p.id }}"
+                                                                data-public_url="{{ p.public_600x600_url }}"
+                                                                {% if cs.1.default_logo_image_data.id == p.id %}selected{% endif %}>{{ p.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if cs.0.id == 0 %}
+                                <hr/>
+                                <div class="row">
+
+                                    <h3>Services:</h3>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover table-condensed">
+                                            <tbody>
+                                            <tr>
+                                                <th style="width:250px;">Status:</th>
+                                                <td><span id="radiodns-station-status"
+                                                          class="label label-default">Loading</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>FQDN:</th>
+                                                <td>{% if cs.1.service_provider_data %}{{ cs.1.fqdn }}{% endif %}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>VIS Service Details:</th>
+                                                <td><span id="vis-{{ cs.1.id }}">{% if cs.1.radiovis_service %}
+                                                    <small>VIS</small> {{ cs.1.radiovis_service }}{% endif %}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>RadioVIS Credentials:</th>
+                                                <td>
+                                                    {% if cs.1.radiovis_enabled %}
+                                                        <table>
+                                                            <tr>
+                                                                <td>Username:</td>
+                                                                <td>{{ cs.1.stomp_username }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Password:</td>
+                                                                <td><span id="pwd-{{ cs.1.id }}"
+                                                                          style="display:none;">{{ cs.1.random_password }}</span>
+                                                                    <a href="#" id="pwd-btn-{{ cs.1.id }}"
+                                                                       onclick="$('#pwd-{{ cs.1.id }}').toggle();$('#pwd-btn-{{ cs.1.id }}').toggle();return false;"
+                                                                       class="btn btn-xs btn-default">Show password</a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Allowed IPs</td>
+                                                                <td>{{ cs.1.ip_allowed }}</td>
+                                                            </tr>
+                                                        </table>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>SPI Service Details:</th>
+                                                <td>
+                                                    <span id="epg-{{ cs.1.id }}">
+                                                        {% if cs.1.radioepg_service %}
+                                                            <small>EPG</small>
+                                                            {{ cs.1.radioepg_service }}
+                                                        {% endif %}
+                                                    </span><br/>
+                                                    <span id="spi-{{ cs.1.id }}">
+                                                        {% if cs.1.radiospi_service %}
+                                                            <small>SPI</small>
+                                                            {{ cs.1.radiospi_service }}
+                                                        {% endif %}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Program Information Enabled:</th>
+                                                <td>
+                                                    <span id="epgpi-{{ cs.1.id }}">
+                                                    {% if cs.1.radioepgpi_enabled %}
+                                                        <small>ENABLED</small>
+                                                    {% else %}
+                                                        <small>DISABLED</small>
+                                                    {% endif %}
+                                                </span>
+                                                </td>
+                                            </tr>
+                                            {% if RADIOTAG_ENABLED %}
+                                                <tr>
+                                                    <th>TAG Service</th>
+                                                    <td><span id="tag-{{ cs.1.id }}">{% if cs.1.radiotag_service %}
+                                                        <small>TAG</small> {{ cs.1.radiotag_service }}{% endif %}</span>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                    </div>
+                    </div>
+
+                    <script src='{{ ebuio_baseUrl }}media/js/ajaxq.js'></script>
+                    <script src='{{ ebuio_baseUrl }}media/js/visibility.js'></script>
+                    <script src='{{ ebuio_baseUrl }}media/js/stations/detail.js'></script>
+                    <script type="text/javascript">
+                        // Check
+                        $(document).ready(function () {
+                            const clientsIds = [];
+                            {% for cs in clients_stations %}
+                                clientsIds.push({{ cs.0.id }});
+                            {% endfor %}
+                            StationModuleDetails.prototype.checkStation({{ clients_stations.0.1.id }});
+                            VisibilityModule.prototype.init({{ clients_stations.0.0.id }}, clientsIds);
+                        });
+
+                    </script>
+                {% endif %}
 {% endblock %}
 

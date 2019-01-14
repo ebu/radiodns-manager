@@ -5,14 +5,14 @@ import subprocess
 
 import backoff
 import plugit
+from alembic.config import Config
 from alembic.migration import MigrationContext
+from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 import actions
 import config
-from db_utils import db
-from models import Ecc
 
 
 @backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
@@ -32,6 +32,7 @@ def db_setup():
 
     while conn is None:
         try:
+            logging.info("Trying connection...")
             conn = establishConnection(engine)
         except OperationalError:
             logging.warning("""Couldn't connect to the server in {time} seconds to the database."""
@@ -40,13 +41,11 @@ def db_setup():
     logging.info("Connection with database established")
 
     context = MigrationContext.configure(conn)
-    heads = context.get_current_heads()
-    if not len(heads) or heads[0] != context.get_current_revision():
+    alembic_script = ScriptDirectory.from_config(Config("./alembic.ini"))
+    if context.get_current_revision() != alembic_script.get_current_head():
         logging.info("Applying database evolutions, this might take a while.")
         process = subprocess.Popen("alembic upgrade head", shell=True)
         process.wait()
-        db.session.add(Ecc(name="France", iso="FR", pi="f", ecc="E1"))
-        db.session.commit()
         logging.info("Databases evolutions applied.")
     conn.close()
 

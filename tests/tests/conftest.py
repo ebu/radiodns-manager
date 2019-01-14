@@ -43,6 +43,8 @@ TEST_DATABASE_CONNECTION_URL_BASE = """://{user}:{password}@127.0.0.1:{port}/{db
     port=TEST_DATABASE_PORT
 )
 
+HEADLESS = "True" == os.environ.get('HEADLESS', 'True')
+
 # max number health checks to the docker stack the test suite will make before considering that the
 # docker stack could not be started
 TEST_MAX_TRIES_TO_DOCKER_TO_BOOT = int(os.environ.get('TEST_MAX_TRIES_TO_DOCKER_TO_BOOT', '60'))
@@ -94,19 +96,19 @@ def stack_setup():
     subprocess.run(args="docker-compose -f docker-compose-test.yml up -d", cwd="../", shell=True)
     subprocess.Popen(
         args="""source venv/bin/activate && python manage.py runserver 0.0.0.0:{port}""".format(port=TEST_PROXY_PORT),
-        cwd="../../standalone_proxy",
+        cwd="./../../standalone_proxy",
         env=env,
         shell=True
     )
     subprocess.Popen(
         args="source venv/bin/activate && python app.py",
-        cwd="../../MockApi",
+        cwd="./../../MockApi",
         env=env,
         shell=True
     )
     subprocess.Popen(
         args="source venv/bin/activate && python server.py",
-        cwd="../../RadioDns-PlugIt",
+        cwd="./../../RadioDns-PlugIt",
         env=env,
         shell=True
     )
@@ -138,10 +140,11 @@ def firefox_setup():
     Sets up firefox in a headless mode for remote control with selenium.
     :return: driver allowing remote control.
     """
-    logger.info("Setting firefox...")
+    logger.info("Setting up firefox...")
     from selenium.webdriver.firefox.options import Options
     firefox_options = Options()
-    firefox_options.add_argument("-headless")
+    if HEADLESS:
+        firefox_options.add_argument("-headless")
     return webdriver.Firefox(executable_path=os.path.abspath("../geckodriver"), options=firefox_options)
 
 
@@ -150,24 +153,30 @@ def chrome_setup():
     Sets up chrome in a headless mode for remote control with selenium.
     :return: driver allowing remote control.
     """
-    logger.info("Setting chrome...")
+    logger.info("Setting up chrome...")
     from selenium.webdriver.chrome.options import Options
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    return webdriver.Chrome(executable_path=os.path.abspath("../chromedriver"), options=chrome_options)
+    if HEADLESS:
+        chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(executable_path=os.path.abspath("../chromedriver"), options=chrome_options)
+    driver.get('chrome://settings/clearBrowserData')
+    return driver
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def browser_setup():
     """
     Sets up a browser of your choice to be remotely controlled with selenium.
     :return: driver allowing remote control.
     """
-    if TEST_BROWSER == "chrome":
-        driver = chrome_setup()
-        driver.get('chrome://settings/clearBrowserData')
-    else:
+    if TEST_BROWSER == "firefox":
         driver = firefox_setup()
+    elif TEST_BROWSER == "chrome":
+        driver = chrome_setup()
+    else:
+        logger.warning("No browser specified in the TEST_BROWSER env var. Using default option (chrome).")
+        driver = chrome_setup()
+        
     driver.get(TEST_PROXY_URL + "ebuio_setUser?mode=adm")
     yield driver
     driver.close()

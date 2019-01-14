@@ -38,7 +38,7 @@
             <script src="{{ebuio_baseUrl}}media/js/radiovis-html5player.js"></script>
             <script>
 				$(document).ready(function(){
-					$('#frame1').radiovisplayer('{{topic}}', 'radiows.ebu.io', 4443);
+					$('#frame1').radiovisplayer('{{topic}}', '{{ ws_endpoint }}', '{{ secure }}' === 'True');
 				});
 
             </script>

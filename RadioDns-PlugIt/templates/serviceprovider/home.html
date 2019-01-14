@@ -198,6 +198,10 @@
                 <td><span id="radioepg-service"><i class="ion-load-c"></i></span></td>
             </tr>
             <tr>
+                <th>SPI Service</th>
+                <td><span id="radiospi-service"><i class="ion-load-c"></i></span></td>
+            </tr>
+            <tr>
                 <th>TAG Service</th>
                 <td><span id="radiotag-service"><i class="ion-load-c"></i></span></td>
             </tr>
@@ -261,6 +265,8 @@
 					    $('#radiovis-service').addClass('text-success');
 					    $('#radioepg-service').html(data.services.epg.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.epg.value);
 					    $('#radioepg-service').addClass('text-success');
+					    $('#radiospi-service').html(data.services.spi.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.spi.value);
+					    $('#radiospi-service').addClass('text-success');
 					    $('#radiotag-service').html(data.services.tag.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.tag.value);
 					    $('#radiotag-service').addClass('text-success');
 					} else {
@@ -268,6 +274,8 @@
 					    $('#radiovis-service').addClass('text-danger');
 					    $('#radioepg-service').html('Error');
 					    $('#radioepg-service').addClass('text-danger');
+					    $('#radiospi-service').html('Error');
+					    $('#radiospi-service').addClass('text-danger');
 					    $('#radiotag-service').html('Error');
 					    $('#radiotag-service').addClass('text-danger');
 					}

@@ -1,9 +1,7 @@
 RadioDns - PlugIt
 =================
 
-This folder contains the PlugIt server API. It has to run in OrgaMode (see PlugIt README for details).
-
-The API is also called by the RadioVisServer.
+This folder contains the RadioDns API server. The API is also called by the RadioVisServer.
 
 # Features
 
@@ -19,6 +17,8 @@ The API allow the management of stations and channels.
 - virtualenv 16.0.0
 
 #### installation
+
+Virtualenv is not mandatory but **STRONGLY** recommended.
 
 ##### Preparing the `venv`
 
@@ -39,6 +39,8 @@ You'll find in the root project a script installing every project with their dep
 
     python server.py
     
+Remember that you must have a running pproxy (PlugIt Proxy) in order to test the service.
+
 #### Extra steps for mac users
 
 You need the mysql connector
@@ -63,8 +65,6 @@ Finally you have to add those lines to your .bash_profile (in your home director
 
     LDFLAGS:  -L/usr/local/opt/openssl/lib
     CPPFLAGS: -I/usr/local/opt/openssl/include
-    
-Remember that you must have a running client (proxy) in order to test the service.
 
 ## RadioVis /!\ Not ready for use in this revision
 
@@ -87,7 +87,7 @@ You can install them using `pip install .`
 
 ## Test
 
-Tests are available in the RadioDns-Tests folder of the root folder.
+Tests are available in the tests folder of the root folder.
 
 ## Core
 
@@ -108,7 +108,7 @@ Details are available in the official documentation of alembic.
 
 Migrations are done automatically by the server at startup if needed.
 
-### Migration Issue with Log INdexs or with constraint on Logo
+### Migration Issue with Log Indexs or with constraint on Logo
 
 If you end up stuck on alembic upgrade because of an index or because of a foreign key constraint. Make sure that
  the constrains are fine. Use the following to check service_provider logos for example:

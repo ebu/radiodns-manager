@@ -1,12 +1,10 @@
-
-import uuid
 import logging
-import time
 import re
-
-from gevent.coros import RLock
+import time
+import uuid
 
 from gevent import spawn, queue
+from gevent.lock import RLock
 
 from radiodns import RadioDns
 
@@ -58,7 +56,6 @@ class StompServer():
 
         # True if threads should be stopped
         self.sucide = False
-
 
     def close(self):
 
@@ -128,9 +125,9 @@ class StompServer():
         """Send a frame to the client"""
 
         # Lock the send, so we don't send a command inside a command
-        logger.debug("%s:%s Wait for lock to send frame: %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
+        logger.debug(
+            "%s:%s Wait for lock to send frame: %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
         with self.lock:
-
             message_to_send = ''
 
             message_to_send += command + '\n'
@@ -161,7 +158,6 @@ class StompServer():
             except:
                 return False
 
-
         # If queue is not full, put it directory
         if not self.queue.full():
             if put_in_queue():  # Another thread can fill the queue
@@ -190,7 +186,8 @@ class StompServer():
 
                 if result:
                     topic, message, bonusHeaders = result
-                    logger.debug("%s:%s Got a message on topic %s: %s (headers: %s)" % (self.info_ip, self.info_port, topic, message, bonusHeaders))
+                    logger.debug("%s:%s Got a message on topic %s: %s (headers: %s)" % (
+                    self.info_ip, self.info_port, topic, message, bonusHeaders))
 
                     # Is the user subscribed ?
                     if topic in self.topics:
@@ -241,12 +238,13 @@ class StompServer():
             # A: Connection. Wait for a connect
             logger.debug("%s:%s Waiting for CONNECT" % (self.info_ip, self.info_port))
             (command, headers, body) = self.get_frame()
+            logger.debug("GOT COMMAND %s" % (command, ))
 
             if command != 'CONNECT':
-                logger.error("%s:%s Unexcepted command, %s instead of CONNECT" % (self.info_ip, self.info_port, command))
+                logger.error(
+                    "%s:%s Unexcepted command, %s instead of CONNECT" % (self.info_ip, self.info_port, command))
                 self.send_frame('ERROR', [('message', 'Excepted CONNECT')], '')
                 return
-
 
             # Check username and password, if any
             user = get_header_value(headers, 'login')
@@ -305,7 +303,8 @@ class StompServer():
                 # If the client want us to ack the server, ackit
                 receipt = get_header_value(headers, 'receipt')
                 if receipt:
-                    logger.debug("%s:%s Sending RECEIPT as requested (R-id: %s)" % (self.info_ip, self.info_port, receipt))
+                    logger.debug(
+                        "%s:%s Sending RECEIPT as requested (R-id: %s)" % (self.info_ip, self.info_port, receipt))
                     self.send_frame('RECEIPT', [('receipt-id', receipt)], '')
 
                 # Parse the command
@@ -332,24 +331,26 @@ class StompServer():
                             self.channelsByIds[id] = channel
                             self.idsByChannels[channel] = id
 
-
                         # If FM Subscribe to Wildcard channel as well
                         if channel[:10] == "/topic/fm/":
 
                             # Check if channel exsists as is
                             if radioDns.contains_channel_topic(channel):
                                 self.topics.append(channel)
-                                logger.debug("%s:%s Client is now subscribed to Regular FM %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                                logger.debug("%s:%s Client is now subscribed to Regular FM %s [ID: %s]" % (
+                                self.info_ip, self.info_port, channel, id))
                             else:
                                 # Convert to ECC
                                 channel = str(radioDns.convert_fm_topic_to_gcc(channel))
 
                                 if radioDns.contains_channel_topic(channel):
                                     self.topics.append(channel)
-                                    logger.debug("%s:%s Client is now subscribed to Regular FM GCC %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                                    logger.debug("%s:%s Client is now subscribed to Regular FM GCC %s [ID: %s]" % (
+                                    self.info_ip, self.info_port, channel, id))
                                 else:
                                     # Does not exists thus convert to wildcard
-                                    fm_regex = re.compile('\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/(?P<type>\w+)')
+                                    fm_regex = re.compile(
+                                        '\/topic\/fm\/(?P<ecc>\w+)\/(?P<pi>\w+)\/(?P<freq>\w+)\/(?P<type>\w+)')
                                     fm_r = fm_regex.search(channel)
                                     if fm_r:
                                         fm_ecc = fm_r.groupdict()['ecc']
@@ -358,16 +359,18 @@ class StompServer():
 
                                         channel = str('/topic/fm/%s/%s/*/%s' % (fm_ecc, fm_pi, fm_type))
                                         self.topics.append(channel)
-                                        logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                                        logger.debug("%s:%s Client is now subscribed to FM wildcard %s [ID: %s]" % (
+                                        self.info_ip, self.info_port, channel, id))
                                     else:
-                                        logger.warning("%s:%s SUBSCRIBE with incorrect destination: %s" % (self.info_ip, self.info_port, channel))
-                                        self.send_frame('ERROR', [('message', 'Your destination does not matcht required format.')], '')
+                                        logger.warning("%s:%s SUBSCRIBE with incorrect destination: %s" % (
+                                        self.info_ip, self.info_port, channel))
+                                        self.send_frame('ERROR', [
+                                            ('message', 'Your destination does not matcht required format.')], '')
 
                         else:
                             self.topics.append(channel)
-                            logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
-
-
+                            logger.debug("%s:%s Client is now subscribed to %s [ID: %s]" % (
+                            self.info_ip, self.info_port, channel, id))
 
                         self.monitoring.count("radiovis.global.subscriptions", {
                             "topic": channel,
@@ -378,13 +381,15 @@ class StompServer():
                         # Send the last message from the topic. A message may be send twice, but that should be ok
                         if get_header_value(headers, 'x-ebu-nofastreply') != 'yes':
 
-                            logger.debug("%s:%s Fast sending of previous message for topic %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                            logger.debug("%s:%s Fast sending of previous message for topic %s [ID: %s]" % (
+                            self.info_ip, self.info_port, channel, id))
                             converted_channel = radioDns.convert_fm_topic_to_gcc(channel)
 
                             if channel in self.LAST_MESSAGES:
                                 body, headers = self.LAST_MESSAGES[channel]
                                 self.new_message(channel, body, headers)
-                                logger.debug("%s:%s Fast sending completed for %s : %s (headers: %s)" % (self.info_ip, self.info_port, channel, body, headers))
+                                logger.debug("%s:%s Fast sending completed for %s : %s (headers: %s)" % (
+                                self.info_ip, self.info_port, channel, body, headers))
 
 
                 elif command == 'UNSUBSCRIBE':
@@ -398,13 +403,15 @@ class StompServer():
                             self.send_frame('ERROR', [('message', 'No ID or channel')], '')
                         else:
                             if id not in self.channelsByIds:
-                                logger.error("%s:%s Unsubscribe with unknow id (%s)" % (self.info_ip, self.info_port, id))
+                                logger.error(
+                                    "%s:%s Unsubscribe with unknow id (%s)" % (self.info_ip, self.info_port, id))
                                 self.send_frame('ERROR', [('message', 'Unknow ID')], '')
                             else:
                                 channel = self.channelsByIds[id]
 
                     if channel not in self.topics:
-                        logger.error("%s:%s Unsubscribe on unsubcribled channel (%s)" % (self.info_ip, self.info_port, channel))
+                        logger.error(
+                            "%s:%s Unsubscribe on unsubcribled channel (%s)" % (self.info_ip, self.info_port, channel))
                         self.send_frame('ERROR', [('message', 'Not subscribled')], '')
                     else:
 
@@ -414,12 +421,14 @@ class StompServer():
                             del self.channelsByIds[id]
                             del self.idsByChannels[channel]
 
-                        logger.debug("%s:%s Client unsubscribed from %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
+                        logger.debug(
+                            "%s:%s Client unsubscribed from %s [ID: %s]" % (self.info_ip, self.info_port, channel, id))
 
                 elif command == 'SEND':
 
                     if self.station_id is None:
-                        logger.warning("%s:%s Tried to SEND without been authenticated !" % (self.info_ip, self.info_port))
+                        logger.warning(
+                            "%s:%s Tried to SEND without been authenticated !" % (self.info_ip, self.info_port))
                         self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
                     else:
 
@@ -448,10 +457,12 @@ class StompServer():
                                     break
 
                             if not all_destinations and not channel_ok:
-                                logger.warning("%s:%s Tryed to send to a destination not autorized ! (%s vs %s)" % (self.info_ip, self.info_port, destination, allowed_channels))
+                                logger.warning("%s:%s Tryed to send to a destination not autorized ! (%s vs %s)" % (
+                                self.info_ip, self.info_port, destination, allowed_channels))
                                 self.send_frame('ERROR', [('message', 'You cannot do that.')], '')
                             else:
-                                logger.debug("%s:%s Allowed to send the message to %s" % (self.info_ip, self.info_port, destination))
+                                logger.debug("%s:%s Allowed to send the message to %s" % (
+                                self.info_ip, self.info_port, destination))
                                 # Prepare headers
                                 msg_headers = {}
 
@@ -475,19 +486,22 @@ class StompServer():
                                     # Destination
                                     msg_headers['topic'] = destination
 
-                                    logger.debug("%s:%s Sending message %s to %s (headers: %s)" % (self.info_ip, self.info_port, body, destination, msg_headers))
+                                    logger.debug("%s:%s Sending message %s to %s (headers: %s)" % (
+                                    self.info_ip, self.info_port, body, destination, msg_headers))
 
                                     self.rabbitcox.send_message(msg_headers, body)
 
                                 if all_destinations:
-                                    logger.debug("%s:%s Broadcasting to all channels !!" % (self.info_ip, self.info_port))
+                                    logger.debug(
+                                        "%s:%s Broadcasting to all channels !!" % (self.info_ip, self.info_port))
                                     for dest in allowed_channels:
                                         send_to_dest(dest + destination[9:])
                                 else:
                                     send_to_dest(destination)
 
                 else:
-                    logger.warning("%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
+                    logger.warning(
+                        "%s:%s Unexcepted command %s %s %s" % (self.info_ip, self.info_port, command, headers, body))
 
         except Exception as e:
             logger.warn("%s:%s Error in run: %s" % (self.info_ip, self.info_port, e))
