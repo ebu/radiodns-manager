@@ -10,6 +10,5 @@ setup(name='RadioDNSTests',
           'requests==2.19.1',
           'SQLAlchemy==1.2.11',
           'PyMySQL==0.9.2',
-          'pytest-ordering==0.5',
       ],
       )

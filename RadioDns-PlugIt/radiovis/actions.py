@@ -21,6 +21,7 @@ from PIL import Image
 import imghdr
 
 import config
+from utils import send_image_to_mock_api
 
 
 @action(route="/radiovis/gallery/", template="radiovis/gallery/home.html")
@@ -154,7 +155,10 @@ def radiovis_gallery_edit(request, id):
             # Upload to s3
             if new_file:
                 try:
-                    awsutils.upload_public_image(sp, name, full_path)
+                    if config.STANDALONE:
+                        send_image_to_mock_api({name: open(full_path, 'rb')})
+                    else:
+                        awsutils.upload_public_image(sp, name, full_path)
                 except:
                     pass
             # TODO Clean up old images on S3
@@ -257,7 +261,12 @@ def radiovis_channels_playermodal(request):
     stationname = request.args.get('stationname')
     name = request.args.get('name')
 
-    return {'stationname': stationname, 'name': name, 'topic': topic}
+    return {
+        'stationname': stationname,
+        'name': name, 'topic': topic,
+        'ws_endpoint': config.VIS_WEB_SOCKET_ENDPOINT_HOST,
+        'secure': not config.DEBUG
+    }
 
 
 @action(route="/radiovis/channels/set/<id>/<pictureid>")

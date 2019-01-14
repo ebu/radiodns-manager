@@ -12,7 +12,7 @@ from aws import awsutils
 from db_utils import db
 
 
-def to_json(inst, cls, bonusProps=[]):
+def  to_json(inst, cls, bonusProps=[]):
     """
     Jsonify the sql alchemy query result.
     Inspired from http://stackoverflow.com/a/9746249
@@ -131,6 +131,12 @@ class ServiceProvider(db.Model):
         return None
 
     @property
+    def spi_fqdn(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOSPI_DNS)
+        return None
+
+    @property
     def tag_fqdn(self):
         if self.codops:
             return "%s.%s" % (self.codops.lower(), config.RADIOTAG_DNS)
@@ -155,6 +161,12 @@ class ServiceProvider(db.Model):
         return None
 
     @property
+    def spi_service(self):
+        if self.codops:
+            return "%s.%s" % (self.codops.lower(), config.RADIOSPI_SERVICE_DEFAULT)
+        return None
+
+    @property
     def image_url_prefix(self):
         if config.STANDALONE:
             return config.LOGO_PUBLIC_URL + "/"
@@ -172,6 +184,7 @@ class ServiceProvider(db.Model):
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer, index=True)
+    parent = db.Column(db.Integer)
     name = db.Column(db.String(80))
     short_name = db.Column(db.String(8))
     medium_name = db.Column(db.String(16))
@@ -207,12 +220,12 @@ class Station(db.Model):
     radioepg_service = db.Column(db.String(255))
     radiotag_enabled = db.Column(db.Boolean, index=True)
     radiotag_service = db.Column(db.String(255))
+    radiospi_enabled = db.Column(db.Boolean, index=True)
+    radiospi_service = db.Column(db.String(255))
 
     service_provider_id = db.Column(db.Integer, db.ForeignKey('service_provider.id'))
 
     ip_allowed = db.Column(db.String(256))  # A list of ip/subnet, with , between
-
-    short_description = db.Column(db.String(180))
 
     genres = db.Column(db.Text())
 
@@ -226,8 +239,13 @@ class Station(db.Model):
                                       db.ForeignKey('logo_image.id', use_alter=True, name='fk_epg_default_logo_id'))
     default_logo_image = db.relationship("LogoImage", foreign_keys=[default_logo_image_id])
 
-    __table_args__ = (db.Index('ix_station_spid_radioepg_enabled', "service_provider_id", "radioepg_enabled"), )
+    fk_client = db.Column(db.Integer, db.ForeignKey('clients.id', use_alter=True, name='station_clients_id_fk'))
+    client = db.relationship("Clients", foreign_keys=[fk_client])
 
+    __table_args__ = (db.Index('ix_station_spid_radioepg_enabled', "service_provider_id", "radioepg_enabled"),)
+
+    def __getitem__(self, item):
+        return getattr(self, item)
 
     def escape_slash_rfc3986(self, value):
         if value:
@@ -274,7 +292,7 @@ class Station(db.Model):
     def epg_sms(self):
         if self.sms_body:
             if self.sms_body:
-                return "sms:%s?%s" % (self.sms_number, urllib.urlencode({'body':self.sms_body}))
+                return "sms:%s?%s" % (self.sms_number, urllib.urlencode({'body': self.sms_body}))
             else:
                 return "sms:%s" % (self.sms_number)
         return None
@@ -309,15 +327,16 @@ class Station(db.Model):
                 return "ebu%s%s" % (self.id, self.service_provider.codops.lower())
         return None
 
-    def __init__(self, orga):
+    def __init__(self, orga, name=u''):
         self.orga = orga
+        self.name = name
 
     def __repr__(self):
         return '<Station %r[%s]>' % (self.name, self.orga)
 
     @property
     def ascii_name(self):
-        return unicodedata.normalize('NFKD', self.name).encode('ascii', 'ignore')
+        return unicodedata.normalize('NFKD', self.name if self.name else u'').encode('ascii', 'ignore')
 
     def gen_random_password(self):
         self.random_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
@@ -328,7 +347,7 @@ class Station(db.Model):
     @property
     def short_name_to_use(self):
         """Return the shortname, based on the name or the short one"""
-        return (self.short_name or self.name)[:8]
+        return (self.short_name or self.name)[:8] if self.short_name or self.name else u''
 
     @property
     def fqdn_prefix(self):
@@ -358,7 +377,22 @@ class Ecc(db.Model):
     iso = db.Column(db.String(2), index=True)
     pi = db.Column(db.String(2))
     ecc = db.Column(db.String(3))
-    __table_args__ = (db.Index('ix_ecc_pi_ecc', "pi", "ecc"), )
+    __table_args__ = (db.Index('ix_ecc_pi_ecc', "pi", "ecc"),)
+
+    def __repr__(self):
+        return '<Ecc %r>' % self.name
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)
+
+
+class Clients(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(500))
+    orga = db.Column(db.Integer)
+    identifier = db.Column(db.String(128))
+    email = db.Column(db.String(255))
 
     def __repr__(self):
         return '<Ecc %r>' % self.name
@@ -379,7 +413,7 @@ class Channel(db.Model):
                        ('amss', 'AMSS', ['sid']),
                        ('hd', 'HD Radio', ['cc', 'tx']),
                        ('id', 'IP', ['fqdn', 'serviceIdentifier', 'stream_url', 'mime_type', 'bitrate'])
-    ]
+                       ]
     TO_IGNORE_IN_DNS = ['stream_url', 'mime_type', 'bitrate']
 
     type_id = db.Column(db.String(5), index=True)
@@ -405,6 +439,9 @@ class Channel(db.Model):
 
     fqdn = db.Column(db.String(255))
     serviceIdentifier = db.Column(db.String(16))
+
+    fk_client = db.Column(db.Integer, db.ForeignKey('clients.id', use_alter=True, name='channel_clients_id_fk'))
+    client = db.relationship("Clients", foreign_keys=[fk_client])
 
     default_picture_id = db.Column(db.Integer, db.ForeignKey('picture.id'))
 
@@ -539,7 +576,11 @@ class Channel(db.Model):
     def json(self):
         return to_json(self, self.__class__,
                        ['topic', 'station_json', 'radiodns_entry', 'station_name', 'station_ascii_name',
-                        'default_picture_data', 'topic_no_slash'])
+                        'default_picture_data', 'topic_no_slash', 'client_json'])
+
+    @property
+    def client_json(self):
+        return self.client.json if self.client else {'name': 'default'}
 
     @property
     def station_json(self):
@@ -866,14 +907,14 @@ class LogoImage(db.Model):
     @property
     def public_320x240_url(self):
         if self.url320x240:
-            return "%s%s" % (self.service_provider.image_url_prefix , self.url320x240)
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url320x240)
         else:
             return self.public_url
 
     @property
     def public_600x600_url(self):
         if self.url600x600:
-            return "%s%s" % (self.service_provider.image_url_prefix , self.url600x600)
+            return "%s%s" % (self.service_provider.image_url_prefix, self.url600x600)
         else:
             return self.public_url
 

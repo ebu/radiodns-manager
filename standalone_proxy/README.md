@@ -3,6 +3,8 @@
 This serves as a replacement for the ebu.io plugit instance for local dev. Do not run this container in production!
 It is advised to use the official PlugIt Proxy from EBU.io.
 
+Virtualenv is not mandatory but **STRONGLY** recommended.
+
 ## Setup
 
 You need the following dependencies:

@@ -6,13 +6,13 @@ from utils import safe_cast
 RADIO_DNS_PORT = safe_cast(os.environ.get('RADIO_DNS_PORT', '5000'), int, 5000)
 
 # Url to the ebu.io API.
-API_URL = os.environ.get('API_URL', 'http://127.0.0.1:8000/')
+API_URL = os.environ.get('API_URL', 'http://127.0.0.1:4000/')
 
 # Url for the mysql connection of alchemy.
 SQLALCHEMY_URL = os.environ.get('SQLALCHEMY_URL', 'mysql://root:1234@127.0.0.1:3306/radiodns')
 
 # API secret. Random string defined by hand. To be append in the EBU.io configuration at the PlugItURI
-# field. It looks something like this: http://<host>/<API_SECRET>.
+# field. It looks something like this: http://<host>/<API_SECRET>/.
 API_SECRET = os.environ.get('API_SECRET', 'dev-secret')
 
 # Amazon AWS
@@ -33,16 +33,21 @@ XSISERVING_ENABLED = "True" == os.environ.get('XSISERVING_ENABLED', 'True')
 XSISERVING_DOMAIN = os.environ.get('XSISERVING_DOMAIN', '127.0.0.1:5000')
 
 # Default Service URLs for RadioDNS Services
-RADIOVIS_SERVICE_DEFAULT = os.environ.get('RADIOVIS_SERVICE_DEFAULT', '127.0.0.1:5000')
-RADIOEPG_SERVICE_DEFAULT = os.environ.get('RADIOEPG_SERVICE_DEFAULT', '127.0.0.1:5000')
-RADIOTAG_SERVICE_DEFAULT = os.environ.get('RADIOTAG_SERVICE_DEFAULT', '127.0.0.1:5000')
+RADIOVIS_DNS = os.environ.get('RADIOVIS_DNS', '127.0.0.1')
+RADIOEPG_DNS = os.environ.get('RADIOEPG_DNS', '127.0.0.1')
+RADIOTAG_DNS = os.environ.get('RADIOTAG_DNS', '127.0.0.1')
+RADIOSPI_DNS = os.environ.get('RADIOSPI_DNS', '127.0.0.1')
+
+RADIOVIS_PORT = os.environ.get('RADIOVIS_PORT', '61613')
+RADIOEPG_PORT = os.environ.get('RADIOEPG_PORT', '5000')
+RADIOTAG_PORT = os.environ.get('RADIOTAG_PORT', '5000')
+RADIOSPI_PORT = os.environ.get('RADIOSPI_PORT', '5000')
+
+RADIOVIS_SERVICE_DEFAULT = RADIOVIS_DNS + ":" + RADIOVIS_PORT
+RADIOEPG_SERVICE_DEFAULT = RADIOEPG_DNS + ":" + RADIOEPG_PORT
+RADIOTAG_SERVICE_DEFAULT = RADIOTAG_DNS + ":" + RADIOTAG_PORT
+RADIOSPI_SERVICE_DEFAULT = RADIOSPI_DNS + ":" + RADIOSPI_PORT
 RADIOTAG_ENABLED = "True" == os.environ.get('RADIOTAG_ENABLED', 'False')
-
-# Other radio services
-RADIOVIS_DNS = os.environ.get('RADIOVIS_DNS', '127.0.0.1:5000')
-RADIOEPG_DNS = os.environ.get('RADIOEPG_DNS', '127.0.0.1:5000')
-RADIOTAG_DNS = os.environ.get('RADIOTAG_DNS', '127.0.0.1:5000')
-
 
 RADIODNS_REQUIRED_IMAGESIZES = [(32, 32), (112, 32), (128, 128), (320, 240), (600, 600)]
 
@@ -55,7 +60,7 @@ STANDALONE = "True" == os.environ.get('STANDALONE', 'True')
 
 # The base URL for the PlugIi API - prefix url to access utilities of this server (e.g. /radiodns/ping).
 # In staging and production mode, that should be the API_SECRET.
-PI_BASE_URL = os.environ.get('PI_BASE_URL', '/')
+PI_BASE_URL = os.environ.get('PI_BASE_URL', '/dev-secret/')
 
 # Allowed origin for this service.
 PI_ALLOWED_NETWORKS = os.environ.get('PI_ALLOWED_NETWORKS', '0.0.0.0/0').strip().split(',')
@@ -85,3 +90,6 @@ IMG_CACHE_TIMEOUT = safe_cast(os.environ.get('IMG_CACHE_TIMEOUT', '0'), int)  # 
 
 # Time during the server will try to connect to the mysql server before giving up (in seconds).
 DATABASE_CONNECTION_MERCY_TIME = safe_cast(os.environ.get('DATABASE_CONNECTION_MERCY_TIME', '30'), int)
+
+# Endpoint to the VIS player of radiodns manager.
+VIS_WEB_SOCKET_ENDPOINT_HOST = os.environ.get('VIS_WEB_SOCKET_ENDPOINT_HOST', '127.0.0.1')

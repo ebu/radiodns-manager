@@ -3,6 +3,7 @@
     <ul>
         <li><a href="{{ebuio_baseUrl}}stations/">My Stations</a></li>
         <li><a href="{{ebuio_baseUrl}}channels/">My Channels</a></li>
+        <li><a href="{{ebuio_baseUrl}}clients/">My Clients</a></li>
         <li><a href="{{ebuio_baseUrl}}serviceprovider/">Service Provider</a></li>
     </ul>
 </div>
@@ -33,6 +34,13 @@
 </div>
 {% endif %}
 
+<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/overrides.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="application/javascript">
+    const ebuio_baseUrl = "{{ebuio_baseUrl}}";
+</script>
 <div class="menu-section">
     <h3><a href="{{ebuio_baseUrl}}terms/">Terms of Use</a></h3>
 </div>

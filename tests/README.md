@@ -2,7 +2,7 @@
 
 ## Setup
 
-If you successfully ran the `setup-envs.sh` script from the root folder you may go to 
+If you successfully ran the `setup-envs.sh` script from the scripts folder you may go to 
 the run section directly.
 
 This environment supports firefox and google chrome as remote controlled headless browser.

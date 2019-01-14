@@ -13,7 +13,6 @@ from gevent import spawn
 from gevent.server import StreamServer
 
 import logging
-from logging import *
 
 from monitoring import Monitoring
 
@@ -23,7 +22,6 @@ from stomp import StompServer
 
 from rabbitmq import RabbitConnexion
 
-import signal
 import sys
 
 # The logger

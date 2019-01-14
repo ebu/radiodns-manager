@@ -7,12 +7,22 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:
-      - db_data:/var/lib/mysql
+    - db_data_radiodns:/var/lib/mysql
     environment:
       MYSQL_DATABASE: radiodns
       MYSQL_ROOT_PASSWORD: 1234
     ports:
       - "3306:3306"
 
+  rabbitmq:
+    image: rabbitmq:3.7.8-management-alpine
+    hostname: radiodnsrabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
 volumes:
-  db_data:
+  db_data_radiodns:

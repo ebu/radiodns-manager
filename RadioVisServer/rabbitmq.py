@@ -1,16 +1,12 @@
-from haigha.connection import Connection
-
 import logging
+import sys
 import time
 
-import config
-import sys
-
+from haigha.connection import Connection
 from haigha.message import Message
 
-
+import config
 from radiodns import RadioDns
-
 
 
 class RabbitConnexion():
@@ -38,6 +34,8 @@ class RabbitConnexion():
         # Initialize RadioDNS Caches
         self.radioDns.update_channel_topics()
 
+        self.cox = None
+
     def consumer(self, msg):
         """Called when a rabbitmq message arrives"""
 
@@ -58,7 +56,6 @@ class RabbitConnexion():
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
 
-
                 # Save the message as the last one
                 converted_topic = self.radioDns.convert_fm_topic_to_gcc(topic)
                 self.LAST_MESSAGES[converted_topic] = (body, bonusHeaders)
@@ -73,9 +70,9 @@ class RabbitConnexion():
                     self.watchdog.new_message(topic, body, bonusHeaders, int(headers['when']))
 
             else:
-                self.logger.warning("Got message without topic: %s" % (msg, ))
+                self.logger.warning("Got message without topic: %s" % (msg,))
         except Exception as e:
-            self.logger.error("Error in consumer: %s", (e, ))
+            self.logger.error("Error in consumer: %s", (e,))
 
     def run(self):
         """Thread with connection to rabbitmq"""
@@ -88,8 +85,11 @@ class RabbitConnexion():
         while True:
             try:
                 time.sleep(1)
-                self.logger.debug("Connecting to RabbitMQ (user=%s,host=%s,port=%s,vhost=%s)" % (config.RABBITMQ_USER, config.RABBITMQ_HOST, config.RABBITMQ_PORT, config.RABBITMQ_VHOST))
-                self.cox = Connection(user=config.RABBITMQ_USER, password=config.RABBITMQ_PASSWORD, vhost=config.RABBITMQ_VHOST, host=config.RABBITMQ_HOST, port=config.RABBITMQ_PORT, debug=config.RABBITMQ_DEBUG)
+                self.logger.debug("Connecting to RabbitMQ (user=%s,host=%s,port=%s,vhost=%s)" % (
+                    config.RABBITMQ_USER, config.RABBITMQ_HOST, config.RABBITMQ_PORT, config.RABBITMQ_VHOST))
+                self.cox = Connection(user=config.RABBITMQ_USER, password=config.RABBITMQ_PASSWORD,
+                                      vhost=config.RABBITMQ_VHOST, host=config.RABBITMQ_HOST, port=config.RABBITMQ_PORT,
+                                      debug=config.RABBITMQ_DEBUG)
 
                 self.logger.debug("Creating the channel")
                 self.ch = self.cox.channel()
@@ -99,7 +99,7 @@ class RabbitConnexion():
                 queue_name = None
 
                 def queue_qb(queue, msg_count, consumer_count):
-                    self.logger.debug("Created queue %s" % (queue, ))
+                    self.logger.debug("Created queue %s" % (queue,))
                     global queue_name
                     queue_name = queue
 
@@ -122,7 +122,7 @@ class RabbitConnexion():
                     self.logger.warning("Queue creation timeout !")
                     raise Exception("Cannot create queue !")
 
-                self.logger.debug("Binding the exchange %s" % (config.RABBITMQ_EXCHANGE, ))
+                self.logger.debug("Binding the exchange %s" % (config.RABBITMQ_EXCHANGE,))
                 self.ch.queue.bind(queue_name, config.RABBITMQ_EXCHANGE, '')
 
                 self.logger.debug("Binding the comsumer")
@@ -130,15 +130,17 @@ class RabbitConnexion():
 
                 self.logger.debug("Ready, waiting for events !")
                 while True:
-                    if not hasattr(self.ch, 'channel') or (hasattr(self.ch.channel, '_closed') and self.ch.channel._closed):
+                    if not hasattr(self.ch, 'channel') or (
+                            hasattr(self.ch.channel, '_closed') and self.ch.channel._closed):
                         self.logger.warning("Channel is closed")
                         raise Exception("Connexion or channel closed !")
                     self.cox.read_frames()
 
             except Exception as e:
-                self.logger.error("Error in run: %s" % (e, ))
+                self.logger.error("Error in run: %s" % (e,))
             finally:
-                self.cox.close()
+                if self.cox is not None:
+                    self.cox.close()
 
     def send_message(self, headers, message):
         """Send a message to the queue"""
@@ -147,7 +149,6 @@ class RabbitConnexion():
         headers['when'] = str(int(time.time()))
 
         self.logger.info("Sending message (with headers %s) %s to %s" % (headers, message, config.RABBITMQ_EXCHANGE))
-
 
         if config.RABBITMQ_LOOPBACK:
             self.logger.info("Sending using loopback, calling function directly")

@@ -64,12 +64,12 @@ def save_file(path):
 
 @app.route('/uploads', methods=['POST'])
 def upload_file():
-    save_file(None)
+    return save_file(None)
 
 
 @app.route('/uploads/<path:path>', methods=['POST'])
 def upload_file_resized(path):
-    save_file(path)
+    return save_file(path)
 
 
 @app.route('/uploads/<path:path>')

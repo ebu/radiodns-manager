@@ -30,7 +30,9 @@ setup(
         'MySQL-python==1.2.5',
         'Werkzeug==0.14.1',
         'pylint==1.9.3',
-        'backoff==1.6.0'
+        'backoff==1.6.0',
+        'jsonschema==2.6.0',
+        'simplejson==3.16.0',
     ],
     include_package_data=True,
 )

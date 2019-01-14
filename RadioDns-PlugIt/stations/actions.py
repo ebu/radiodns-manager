@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
-from plugit.api import PlugItAPI, Orga
+
 import config
-from models import db, Station, ServiceProvider, LogoImage, Channel, GenericServiceFollowingEntry, Picture
+from actions_utils import get_orga_service_provider
 from aws import awsutils
-import json
+from models import db, Station, ServiceProvider, LogoImage, Channel, GenericServiceFollowingEntry, Picture
+from stations.utils import save_or_update_station, get_client_and_station, update_station_srv, \
+    combine_client_and_station
 
 
 @action(route="/stations/", template="stations/home.html")
@@ -21,10 +24,10 @@ def stations_home(request):
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
 
-    list = []
-
-    for elem in Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(Station.name).all():
-        list.append(elem.json)
+    stations = map(
+        lambda station: station.json,
+        Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), parent=None).order_by(Station.name).all(),
+    )
 
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
@@ -34,7 +37,7 @@ def stations_home(request):
         sp = sp.json
 
     return {'serviceprovider': sp, 'ebu_codops': orga.codops,
-            'list': list, 'saved': saved, 'deleted': deleted, 'passworded': passworded,
+            'stations': stations, 'saved': saved, 'deleted': deleted, 'passworded': passworded,
             'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
 
 
@@ -53,12 +56,9 @@ def station_details(request, id):
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
 
-    station = None
-    if id != '-':
-        station = Station.query.filter_by(
-            orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+    clients, stations = get_client_and_station(request, id)
 
-    if not station:
+    if stations == [None]:
         return PlugItRedirect('')
 
     if sp:
@@ -69,7 +69,8 @@ def station_details(request, id):
     for elem in LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(LogoImage.name).all():
         pictures.append(elem.json)
 
-    return {'station': station.json, 'pictures': pictures, 'serviceprovider': sp, 'ebu_codops': orga.codops,
+    return {'clients_stations': combine_client_and_station(request, clients, stations, False),
+            'pictures': pictures, 'serviceprovider': sp, 'ebu_codops': orga.codops,
             'saved': saved, 'deleted': deleted}
 
 
@@ -77,9 +78,6 @@ def station_details(request, id):
 @only_orga_member_user()
 def station_channels(request, id):
     """Show the list of channels."""
-
-    plugitapi = PlugItAPI(config.API_URL)
-    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
 
     saved = request.args.get('saved') == 'yes'
     newchannelscount = request.args.get('newchannelscount')
@@ -168,122 +166,26 @@ def station_epg_sf(request, id):
 def stations_edit(request, id):
     """Edit a station."""
 
-    object = None
+    orga_id = int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
+    orga, sp = get_orga_service_provider(request)
     errors = []
-
-    if id != '-':
-        object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')),
-                                         id=int(id)).first()
+    clients, stations = get_client_and_station(request, id)
 
     if request.method == 'POST':
+        station, errors = save_or_update_station(sp, request, errors, stations[0])
+        update_station_srv(station)
 
-        if not object:
-            object = Station(int(request.form.get('ebuio_orgapk')))
-            plugitapi = PlugItAPI(config.API_URL)
-            orga = plugitapi.get_orga(request.form.get('ebuio_orgapk'))
+        for client in clients[1:]:
+            station_override = Station.query.filter_by(fk_client=client.id, parent=station.id, orga=orga_id).first()
+            _, errors = save_or_update_station(sp, request, errors, station_override, client, station)
+        db.session.commit()
 
-            if orga.codops:
-                sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
-                if sp:
-                    object.service_provider = sp
-
-        object.name = request.form.get('name')
-        object.short_name = request.form.get('short_name')
-        object.medium_name = request.form.get('medium_name')
-        object.long_name = request.form.get('long_name')
-        object.short_description = request.form.get('short_description')
-        object.long_description = request.form.get('long_description')
-        object.url_default = request.form.get('url_default')
-        object.ip_allowed = request.form.get('ip_allowed')
-
-        object.postal_name = request.form.get('postal_name')
-        object.street = request.form.get('street')
-        object.city = request.form.get('city')
-        object.zipcode = request.form.get('zipcode')
-        object.phone_number = request.form.get('phone_number')
-        object.sms_number = request.form.get('sms_number')
-        object.sms_body = request.form.get('sms_body')
-        object.sms_description = request.form.get('sms_description')
-        object.keywords = request.form.get('keywords')
-        object.email_address = request.form.get('email_address')
-        object.email_description = request.form.get('email_description')
-
-        object.default_language = request.form.get('default_language')
-        object.location_country = request.form.get('location_country')
-
-        genres = []
-
-        genre_href = request.form.getlist('genrehref[]')
-        genre_href = filter(None, genre_href)
-        genre_name = request.form.getlist('genrename[]')
-        genre_name = filter(None, genre_name)
-
-        # Services
-        object.radiovis_service = request.form.get('radiovis_service')
-        radiovis_enabled = False
-        if 'radiovis_enabled' in request.form:
-            radiovis_enabled = True
-            awsutils.update_or_create_vissrv_station(object)
-        else:
-            if object.radiovis_enabled:
-                # Previously enabled
-                awsutils.remove_vissrv_station(object)
-        object.radiovis_enabled = radiovis_enabled
-
-        object.radioepg_service = request.form.get('radioepg_service')
-        radioepg_enabled = False
-        if 'radioepg_enabled' in request.form:
-            radioepg_enabled = True
-            awsutils.update_or_create_epgsrv_station(object)
-        else:
-            if object.radioepg_enabled:
-                # Previously enabled
-                awsutils.remove_epgsrv_station(object)
-        object.radioepg_enabled = radioepg_enabled
-
-        # RadioEPG Program Information Service
-        radioepgpi_enabled = False
-        if 'radioepgpi_enabled' in request.form:
-            radioepgpi_enabled = True
-        object.radioepgpi_enabled = radioepgpi_enabled
-
-        object.radiotag_service = request.form.get('radiotag_service')
-        radiotag_enabled = False
-        if 'radiotag_enabled' in request.form:
-            radiotag_enabled = True
-            awsutils.update_or_create_tagsrv_station(object)
-        else:
-            if object.radiotag_enabled:
-                # Previously enabled
-                awsutils.remove_tagsrv_station(object)
-        object.radiotag_enabled = radiotag_enabled
-
-        for h in genre_href:
-            genres.append({'href': h, 'name': genre_name.pop(0)})
-
-        object.genres = json.dumps(genres)
-
-        # Check errors
-        if object.name == '':
-            errors.append("Please set a name")
-
-        # If no errors, save
-        if not errors:
-
-            if not object.id:
-                object.gen_random_password()
-                db.session.add(object)
-
-            db.session.commit()
-
-            return PlugItRedirect('stations/' + str(object.id) + '?saved=yes')
+        return PlugItRedirect('stations/' + str(station.id) + '?saved=yes')
 
     default_radiovis = ""
     default_radioepg = ""
     default_radiotag = ""
-
-    plugitapi = PlugItAPI(config.API_URL)
-    orga = plugitapi.get_orga(request.args.get('ebuio_orgapk'))
+    default_radiospi = ""
 
     sp = None
     if orga.codops:
@@ -292,19 +194,23 @@ def stations_edit(request, id):
             default_radiovis = sp.vis_service
             default_radioepg = sp.epg_service
             default_radiotag = sp.tag_service
+            default_radiospi = sp.spi_service
 
     if sp:
         sp = sp.json
 
-    if object:
-        object = object.json
-
-    return {'object': object, 'errors': errors,
+    return {'clients_stations': combine_client_and_station(request, clients, stations),
+            'errors': errors,
             'sp': sp,
+            'id': id,
+            'clients': map(lambda c: c.json, clients),
             'default_radiovis_service': default_radiovis,
             'default_radioepg_service': default_radioepg,
             'default_radiotag_service': default_radiotag,
-            'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED}
+            'default_radiospi_service': default_radiospi,
+            'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED,
+
+            }
 
 
 @action(route="/stations/delete/<id>")
@@ -314,7 +220,8 @@ def stations_delete(request, id):
     """Delete a station."""
 
     object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
-    awsutils.remove_station(object)
+    if not config.STANDALONE:
+        awsutils.remove_station(object)
     db.session.delete(object)
     db.session.commit()
 
@@ -347,7 +254,7 @@ def stations_linkserviceprovider(request, id):
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
         if sp:
             object = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
-            object.service_provider = sp;
+            object.service_provider = sp
 
             db.session.commit()
 

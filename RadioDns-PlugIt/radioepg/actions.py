@@ -11,7 +11,7 @@ def stations_lists(orga):
     list = {}
     list_json = []
 
-    for elem in Station.query.filter_by(orga=orga).order_by(Station.name).all():
+    for elem in Station.query.filter_by(orga=orga, fk_client=None).order_by(Station.name).all():
         list_json.append(elem.json)
         list[elem.id] = elem
 

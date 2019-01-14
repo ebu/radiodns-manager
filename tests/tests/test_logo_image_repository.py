@@ -8,7 +8,6 @@ def test_image_edit_no_inputs(stack_setup, browser_setup):
     driver.get(TEST_PROXY_URL + "serviceprovider/images/edit/-")
     assert driver.find_element_by_id("img_file_input").get_attribute("value") == ""
     assert driver.find_element_by_id("name").get_attribute("value") == ""
-    a = driver.find_element_by_id("img_save").get_attribute("disabled")
     assert driver.find_element_by_id("img_save").get_attribute("disabled") == "true"
 
 

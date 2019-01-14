@@ -10,633 +10,914 @@
 {% block content %}
 
     {% block pageheader %}
-    <div class="menubar">
-        <div class="sidebar-toggler visible-xs">
-            <i class="ion-navicon"></i>
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ ebuio_orga.name }} :: <a href="{{ ebuio_baseUrl }}stations">Stations</a> :: Edit a station
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
-        <div class="page-title">
-            {{ebuio_orga.name}} :: <a href="{{ebuio_baseUrl}}stations">Stations</a> :: Edit a station
-            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
-        </div>
-        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
-        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
-    </div>
     {% endblock %}
 
-	{% if errors %}
-		<div class="alert alert-error">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
-
-	<form action="" method="POST" class="form-horizontal">
-		{% csrf_token %}
-
-        <h2>Names</h2>
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Name:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="name" id="station-name" class="form-control" value="{{object.name}}"><br />
-				<small>Technical Description for usernames and RadioDNS Naming.</small>
-			</div>
-		</div>
-		{% if object.id %}
-		<div class="form-group" id="station-name-change-warning" style="display:none;">
-			<div class="col-sm-9 col-md-7 col-sm-offset-3 alert alert-danger" role="alert">
-				<p><strong>Changing the Station's name is not recommended as this will require manual DNS changes.</strong> <br />
-				Please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>) for further information</p>
-			</div>
-		</div>
-		{% endif %}
-
-		<hr />
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Short name (8 chars)</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="short_name" id="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Medium name (16 chars)</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="medium_name" id="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Long name (128 chars)</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="long_name" id="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
-			</div>
-		</div>
-
-		<hr />
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="short_description" id="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
-			</div>
-		</div>
-
-		{% comment %}
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="long_description" class="form-control" value="{{object.long_description}}" maxlength="180">
-			</div>
-		</div>
-		{% endcomment %}
-
-		<hr />
-
-        <h2>Language</h2>
-
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label"></label>
-            <div class="col-sm-9 col-md-7">
-                <button type="button" id="copyLanguageButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
-                      Same as Service Provider
-                </button>
-            </div>
+    {% if errors %}
+        <div class="alert alert-error">
+            <ul>
+                {% for e in errors %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ul>
         </div>
+    {% endif %}
 
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Default Language</label>
-            <div class="col-sm-9 col-md-7">
-                <select name="default_language" class="form-control" id="default_language" cval="{{object.default_language}}">
-                    <option value=""></option><option value="af">Afrikaans</option><option value="ak">Akan</option><option value="an">aragonés</option><option value="ar">عربي</option><option value="as">অসমীয়া</option><option value="ast">Asturianu</option><option value="az">Azərbaycanca</option><option value="be">Беларуская</option><option value="bg">Български</option><option value="br">Brezhoneg</option><option value="ca">Català</option><option value="cs">Čeština</option><option value="csb">Kaszëbsczi</option><option value="cy">Cymraeg</option><option value="da">Dansk</option><option value="de">Deutsch</option><option value="dsb">Dolnoserbšćina</option><option value="el">Ελληνικά</option><option value="en-GB">English (British)</option><option value="en-US">English (US)</option><option value="eo">Esperanto</option><option value="es-AR">Español (de Argentina)</option><option value="es-CL">Español (de Chile)</option><option value="es-ES">Español (de España)</option><option value="es-MX">Español (de México)</option><option value="et">Eesti keel</option><option value="eu">Euskara</option><option value="fa">فارسی</option><option value="ff">Pulaar-Fulfulde</option><option value="fi">suomi</option><option value="fr">Français</option><option value="fy-NL">Frysk</option><option value="ga-IE">Gaeilge</option><option value="gd">Gàidhlig</option><option value="gl">Galego</option><option value="he">עברית</option><option value="hi-IN">हिन्दी (भारत)</option><option value="hr">Hrvatski</option><option value="hsb">Hornjoserbsce</option><option value="hu">magyar</option><option value="hy-AM">Հայերեն</option><option value="id">Bahasa Indonesia</option><option value="is">íslenska</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ka">ქართული</option><option value="kk">Қазақ</option><option value="km">ខ្មែរ</option><option value="ko">한국어</option><option value="ku">Kurdî</option><option value="lg">Luganda</option><option value="lij">Ligure</option><option value="lt">lietuvių kalba</option><option value="lv">Latviešu</option><option value="mk">Македонски</option><option value="ml">മലയാളം</option><option value="mr">मराठी</option><option value="ms">Melayu</option><option value="my">မြန်မာဘာသာ</option><option value="nb-NO">Norsk bokmål</option><option value="nl">Nederlands</option><option value="nso">Sepedi</option><option value="oc">occitan (lengadocian)</option><option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option><option value="pl">Polski</option><option value="pt-BR">Português (do Brasil)</option><option value="pt-PT">Português (Europeu)</option><option value="rm">rumantsch</option><option value="ro">română</option><option value="ru">Русский</option><option value="sk">slovenčina</option><option value="sl">Slovenščina</option><option value="son">Soŋay</option><option value="sq">Shqip</option><option value="sr">Српски</option><option value="sv-SE">Svenska</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="ur">اُردو</option><option value="vi">Tiếng Việt</option><option value="xh">isiXhosa</option><option value="zh-CN">中文 (简体)</option><option value="zh-TW">正體中文 (繁體)</option>
-                </select>
-            </div>
-        </div>
-
-        <hr />
-
-        <h2>Links</h2>
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Default Url:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
-			</div>
-		</div>
-        <hr />
-
-
-        <h2>Address</h2>
-
-
-         <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label"></label>
-            <div class="col-sm-9 col-md-7">
-                <button type="button" id="copyAddressButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
-                      Same as Service Provider
-                </button>
-                <button type="button" id="keepNameButton" data-loading-text="Loading..." class="btn btn-default btn-sm" autocomplete="off">
-                      Keep Channel Name
-                </button>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
-            <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="postal_name" id="postal_name" value="{{object.postal_name}}"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Street</label>
-            <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="street" id="street" value="{{object.street}}"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
-            <div class="col-sm-9 col-md-7">
-                <div class="row">
-                    <div class="col-lg-4">
-                    <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{{object.zipcode}}"/>
-                    </div>
-                    <div class="col-lg-8">
-                    <input type="text" class="form-control" name="city" id="city" value="{{object.city}}"/>
+    <ul class="nav nav-tabs" id="nav-tab-display">
+        {% for cs in clients_stations %}
+            <li id="nav_li_{{ cs.0.id }}" class="nav-item">
+                <a id="nav_tab_{{ cs.0.id }}" class="nav-link" href="" style="margin:0; display: inline-flex">
+                    {{ cs.0.name }}
+                    {% if forloop.counter0 != 0 and cs.1.id %}
+                        <button class="btn btn-danger btn-close"
+                                onclick="StationModuleEdit.prototype.deleteStation({{ cs.0.id }})">
+                            <i class="fa fa-close"></i>
+                        </button>
+                    {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <form id="stations_form" action="" method="POST" class="form-horizontal">
+        {% csrf_token %}
+        {% for cs in clients_stations %}
+            {% if cs.0.id != 0 %}
+                <input id="is_client_override_{{ cs.0.id }}" name="is_client_override_{{ cs.0.id }}" type="hidden"
+                       value="False">
+            {% endif %}
+            <div id="tab_wrapper_{{ cs.0.id }}">
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_name" class="dot"></div>
+                        <h2 style="display: inline-block;">Names</h2>
+                        <button
+                                id="reset-override-name-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Name:</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" name="name_{{ cs.0.id }}" id="station-name_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.name }}"><br/>
+                        <small>Technical Description for usernames and RadioDNS Naming.</small>
+                    </div>
+                </div>
+                {% if cs.1.id %}
+                    <div class="form-group" id="station-name-change-warning_{{ cs.0.id }}"
+                         style="display:none;">
+                        <div class="col-sm-9 col-md-7 col-sm-offset-3 alert alert-danger" role="alert">
+                            <p><strong>Changing the Station's name is not recommended as this will require
+                                manual
+                                DNS
+                                changes.</strong> <br/>
+                                Please contact Mathias Coinchon (<a
+                                        href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>)
+                                for
+                                further information</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <hr/>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Short name (8 chars)</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" name="short_name_{{ cs.0.id }}" id="short_name_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.short_name }}" maxlength="8">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Medium name (16 chars)</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" name="medium_name_{{ cs.0.id }}" id="medium_name_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.medium_name }}" maxlength="16">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Long name (128 chars)</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" name="long_name_{{ cs.0.id }}" id="long_name_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.long_name }}"
+                               maxlength="128">
+                    </div>
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" name="short_description_{{ cs.0.id }}"
+                               id="short_description_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.short_description }}" maxlength="180">
+                    </div>
+                </div>
+
+                {% comment %}
+                    <div class="form-group">
+                        <label class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="text" name="long_description_{{ cs.0.id }}" class="form-control"
+                                   value="{{ cs.1.long_description }}" maxlength="180">
+                        </div>
+                    </div>
+                {% endcomment %}
+
+                <hr/>
+
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_language" class="dot"></div>
+                        <h2 style="display: inline-block;">Language</h2>
+                        <button
+                                id="reset-override-language-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label"></label>
+                    <div class="col-sm-9 col-md-7">
+                        <button type="button" id="copyLanguageButton_{{ cs.0.id }}" data-loading-text="Loading..."
+                                class="btn btn-default btn-sm" autocomplete="off">
+                            Same as Service Provider
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Default Language</label>
+                    <div class="col-sm-9 col-md-7">
+                        <select name="default_language_{{ cs.0.id }}" class="form-control"
+                                id="default_language_{{ cs.0.id }}"
+                                cval="{{ cs.1.default_language }}">
+                            <option value=""></option>
+                            <option value="af">Afrikaans</option>
+                            <option value="ak">Akan</option>
+                            <option value="an">aragonés</option>
+                            <option value="ar">عربي</option>
+                            <option value="as">অসমীয়া</option>
+                            <option value="ast">Asturianu</option>
+                            <option value="az">Azərbaycanca</option>
+                            <option value="be">Беларуская</option>
+                            <option value="bg">Български</option>
+                            <option value="br">Brezhoneg</option>
+                            <option value="ca">Català</option>
+                            <option value="cs">Čeština</option>
+                            <option value="csb">Kaszëbsczi</option>
+                            <option value="cy">Cymraeg</option>
+                            <option value="da">Dansk</option>
+                            <option value="de">Deutsch</option>
+                            <option value="dsb">Dolnoserbšćina</option>
+                            <option value="el">Ελληνικά</option>
+                            <option value="en-GB">English (British)</option>
+                            <option value="en-US">English (US)</option>
+                            <option value="eo">Esperanto</option>
+                            <option value="es-AR">Español (de Argentina)</option>
+                            <option value="es-CL">Español (de Chile)</option>
+                            <option value="es-ES">Español (de España)</option>
+                            <option value="es-MX">Español (de México)</option>
+                            <option value="et">Eesti keel</option>
+                            <option value="eu">Euskara</option>
+                            <option value="fa">فارسی</option>
+                            <option value="ff">Pulaar-Fulfulde</option>
+                            <option value="fi">suomi</option>
+                            <option value="fr">Français</option>
+                            <option value="fy-NL">Frysk</option>
+                            <option value="ga-IE">Gaeilge</option>
+                            <option value="gd">Gàidhlig</option>
+                            <option value="gl">Galego</option>
+                            <option value="he">עברית</option>
+                            <option value="hi-IN">हिन्दी (भारत)</option>
+                            <option value="hr">Hrvatski</option>
+                            <option value="hsb">Hornjoserbsce</option>
+                            <option value="hu">magyar</option>
+                            <option value="hy-AM">Հայերեն</option>
+                            <option value="id">Bahasa Indonesia</option>
+                            <option value="is">íslenska</option>
+                            <option value="it">Italiano</option>
+                            <option value="ja">日本語</option>
+                            <option value="ka">ქართული</option>
+                            <option value="kk">Қазақ</option>
+                            <option value="km">ខ្មែរ</option>
+                            <option value="ko">한국어</option>
+                            <option value="ku">Kurdî</option>
+                            <option value="lg">Luganda</option>
+                            <option value="lij">Ligure</option>
+                            <option value="lt">lietuvių kalba</option>
+                            <option value="lv">Latviešu</option>
+                            <option value="mk">Македонски</option>
+                            <option value="ml">മലയാളം</option>
+                            <option value="mr">मराठी</option>
+                            <option value="ms">Melayu</option>
+                            <option value="my">မြန်မာဘာသာ</option>
+                            <option value="nb-NO">Norsk bokmål</option>
+                            <option value="nl">Nederlands</option>
+                            <option value="nso">Sepedi</option>
+                            <option value="oc">occitan (lengadocian)</option>
+                            <option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option>
+                            <option value="pl">Polski</option>
+                            <option value="pt-BR">Português (do Brasil)</option>
+                            <option value="pt-PT">Português (Europeu)</option>
+                            <option value="rm">rumantsch</option>
+                            <option value="ro">română</option>
+                            <option value="ru">Русский</option>
+                            <option value="sk">slovenčina</option>
+                            <option value="sl">Slovenščina</option>
+                            <option value="son">Soŋay</option>
+                            <option value="sq">Shqip</option>
+                            <option value="sr">Српски</option>
+                            <option value="sv-SE">Svenska</option>
+                            <option value="ta">தமிழ்</option>
+                            <option value="te">తెలుగు</option>
+                            <option value="th">ไทย</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="uk">Українська</option>
+                            <option value="ur">اُردو</option>
+                            <option value="vi">Tiếng Việt</option>
+                            <option value="xh">isiXhosa</option>
+                            <option value="zh-CN">中文 (简体)</option>
+                            <option value="zh-TW">正體中文 (繁體)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr/>
+
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_links" class="dot"></div>
+                        <h2 style="display: inline-block;">Links</h2>
+                        <button
+                                id="reset-override-links-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Default Url:</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input id="default_url_{{ cs.0.id }}" type="text" name="url_default_{{ cs.0.id }}"
+                               class="form-control"
+                               value="{{ cs.1.url_default }}"
+                               maxlength="255">
+                    </div>
+                </div>
+                <hr/>
+
+
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_address" class="dot"></div>
+                        <h2 style="display: inline-block;">Address</h2>
+                        <button
+                                id="reset-override-address-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label"></label>
+                    <div class="col-sm-9 col-md-7">
+                        <button type="button" id="copyAddressButton_{{ cs.0.id }}" data-loading-text="Loading..."
+                                class="btn btn-default btn-sm" autocomplete="off">
+                            Same as Service Provider
+                        </button>
+                        <button type="button" id="keepNameButton_{{ cs.0.id }}" data-loading-text="Loading..."
+                                class="btn btn-default btn-sm"
+                                autocomplete="off">
+                            Keep Channel Name
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" class="form-control" name="postal_name_{{ cs.0.id }}"
+                               id="postal_name_{{ cs.0.id }}"
+                               value="{{ cs.1.postal_name }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Street</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" class="form-control" name="street_{{ cs.0.id }}"
+                               id="street_{{ cs.0.id }}"
+                               value="{{ cs.1.street }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
+                    <div class="col-sm-9 col-md-7">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control pull-left" name="zipcode_{{ cs.0.id }}"
+                                       id="zipcode_{{ cs.0.id }}"
+                                       value="{{ cs.1.zipcode }}"/>
+                            </div>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="city_{{ cs.0.id }}"
+                                       id="city_{{ cs.0.id }}"
+                                       value="{{ cs.1.city }}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Country</label>
+                    <div class="col-sm-9 col-md-7">
+                        <select class="form-control" name="location_country_{{ cs.0.id }}"
+                                id="location_country_{{ cs.0.id }}"
+                                cval="{{ cs.1.location_country }}">
+                        </select>
+                    </div>
+                </div>
+                <hr/>
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_contact" class="dot"></div>
+                        <h2 style="display: inline-block;">Contact</h2>
+                        <button
+                                id="reset-override-contact-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
+                    <div class="col-sm-9 col-md-7">
+                        <input type="text" class="form-control" name="phone_number_{{ cs.0.id }}"
+                               id="phone_number_{{ cs.0.id }}"
+                               value="{{ cs.1.phone_number }}"/>
+                        <small>Format: +41-22-7172745</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">SMS</label>
+                    <div class="col-sm-9 col-md-7">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon-sms-number_{{ cs.0.id }}">Number</span>
+                            <input type="text" class="form-control" name="sms_number_{{ cs.0.id }}"
+                                   id="sms_number_{{ cs.0.id }}"
+                                   value="{{ cs.1.sms_number }}" aria-describedby="basic-addon-sms-number"/>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon-sms-body_{{ cs.0.id }}">Body</span>
+                            <input type="text" class="form-control" name="sms_body_{{ cs.0.id }}"
+                                   id="sms_body_{{ cs.0.id }}"
+                                   value="{{ cs.1.sms_body }}"
+                                   aria-describedby="basic-addon-sms-body"/>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"
+                                  id="basic-addon-sms-descr_{{ cs.0.id }}">Description</span>
+                            <input type="text" class="form-control" name="sms_description_{{ cs.0.id }}"
+                                   id="sms_description_{{ cs.0.id }}"
+                                   value="{{ cs.1.sms_description }}" aria-describedby="basic-addon-sms-descr"/>
+                        </div>
+                        <small>Example: "Send 'STATION_A ' to 406" where 406 is the number, 'STATION_A' is the body. As
+                            description use something like "Contact the Studio".
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">E-Mail</label>
+                    <div class="col-sm-9 col-md-7">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon-email-address_{{ cs.0.id }}">E-Mail</span>
+                            <input type="text" class="form-control" name="email_address_{{ cs.0.id }}"
+                                   id="email_address_{{ cs.0.id }}"
+                                   value="{{ cs.1.email_address }}" aria-describedby="basic-addon-email-address"/>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"
+                                  id="basic-addon-email-descr_{{ cs.0.id }}">Description</span>
+                            <input type="text" class="form-control" name="email_description_{{ cs.0.id }}"
+                                   id="email_description_{{ cs.0.id }}"
+                                   value="{{ cs.1.email_description }}" aria-describedby="basic-addon-email-descr"/>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <div style="margin-bottom: 10px;">
+                    <div class="row-centered">
+                        <div id="dot_grp_{{ cs.0.id }}_genres" class="dot"></div>
+                        <h2 style="display: inline-block;">Genres</h2>
+                        <button
+                                id="reset-override-genres-btn_{{ cs.0.id }}"
+                                name="reset-override-btn_{{ cs.0.id }}"
+                                style="display: none; margin: 0 0 -15px 15px;"
+                                type="button"
+                                class="btn btn-default btn-sm"
+                        >
+                            Reset override
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 control-label">Genres:</label>
+                    <div class="col-sm-9 col-md-7">
+                        <table class="table table-condensed" id="genre_list_{{ cs.0.id }}">
+
+                            {#<tr><th></th><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>#}
+                            <tr id="genre_row_template_{{ cs.0.id }}" name="genre-select_{{ cs.0.id }}"
+                                class="genre_row" style="display:none;">
+                                <td>
+                                    <select id="genre-select-_{{ cs.0.id }}" class="genre-select form-control">
+                                        <option value="">--</option>
+                                        <option value="3.1.1">News (PTy 1 - News)</option>
+                                        <option value="3.1.1.11">Local/Regional</option>
+                                        <option value="">--</option>
+                                        <option value="3.6">Other Music (PTy 15 - Other Music)</option>
+                                        <option value="3.6.1">Classical music</option>
+                                        <option value="3.6.1.5">Light Classical music (PTy 13 - Light Classical)
+                                        </option>
+                                        <option value="3.6.1.2">Serious Classical (PTy 14 - Serious Classical)</option>
+                                        <option value="3.6.2">Jazz (PTy 24 - Jazz Music)</option>
+                                        <option value="3.6.3">Background music</option>
+                                        <option value="3.6.3.2">Easy Listening (PTy 12 - EL)</option>
+                                        <option value="3.6.3.5">Oldies (PTy 27 - Oldies)</option>
+                                        <option value="3.6.4">Pop-rock (PTy 11 - Rock)</option>
+                                        <option value="3.6.4.1">Pop (PTy 10 - Pop)</option>
+                                        <option value="3.6.4.11">Seasonal/Holiday</option>
+                                        <option value="3.6.4.14">Rock</option>
+                                        <option value="3.6.4.14.2">Metal</option>
+                                        <option value="3.6.4.17">Singer/Songwriter</option>
+                                        <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
+                                        <option value="3.6.6">Country and Western (PTy 25 - Country Music)</option>
+                                        <option value="3.6.7">Rap/Hip Hop/Reggae</option>
+                                        <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
+                                        <option value="3.6.8.3">Techno/Industrial</option>
+                                        <option value="3.6.8.4">House/Techno House</option>
+                                        <option value="3.6.9">World/Traditional/Folk (PTy 26/28 - National/Folk Music)
+                                        </option>
+                                        <option value="3.6.10">Hit-Chart/Song Requests</option>
+                                        <option value="">--</option>
+                                        <option value="1.2">Information (PTy 3 - Information)</option>
+                                        <option value="2.1.4">Documentary (PTy 29 - Documentary)</option>
+                                        <option value="2.1.8">Phone-In (PTy 21 - PhoneIn)</option>
+                                        <option value="3.1">Non-fiction (PTy 9 - Varied)</option>
+                                        <option value="3.1.1.6">National/Politics</option>
+                                        <option value="3.1.1.12">Traffic</option>
+                                        <option value="3.1.1.13">Weather forecasts (PTy 16 - Weather)</option>
+                                        <option value="3.1.1.14">Service information</option>
+                                        <option value="3.1.1.16">Current Affairs (PTy 2 - Current Affairs)</option>
+                                        <option value="3.1.2.1">Religious/Philisophies (PTy 20 - Religion)</option>
+                                        <option value="3.1.3.2">Social (PTy 19 - Social Affairs)</option>
+                                        <option value="3.1.3.5">Finance (PTy 17 - Finance)</option>
+                                        <option value="3.1.3.6">Education (PTy 5 - Education)</option>
+                                        <option value="3.1.4">Arts and Media (PTy 7 - Culture)</option>
+                                        <option value="3.1.6">Sciences (PTy 8 - Science)</option>
+                                        <option value="3.2">Sports (PTy 4 - Sport)</option>
+                                        <option value="3.3">Leisure (PTy 23 - Leisure)</option>
+                                        <option value="3.3.5">Travel (PTy 22 - Travel)</option>
+                                        <option value="3.4">Fiction (PTy 6 - Drama)</option>
+                                        <option value="3.6.13">Spoken</option>
+                                        <option value="4.2.1">Children (PTy 18 - Childrens Programmes)</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="genrehref[]_{{ cs.0.id }}"
+                                           id="genre-href-_{{ cs.0.id }}"
+                                           class="genre-href form-control"
+                                           value="{{ g.href }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="genrename[]"
+                                           id="genre-name-_{{ cs.0.id }}"
+                                           class="genre-name form-control"
+                                           value="{{ g.name }}">
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-xs btn-danger"
+                                       onclick="return StationModuleEdit.prototype.del_genre(this);">Remove</a>
+                                </td>
+                            </tr>
+
+                            {% for g in cs.1.genres_list %}
+
+                                <tr id="genre_row_template_{{ cs.0.id }}-{{ forloop.counter0 }}"
+                                    class="genre_row hello">
+                                    <td>
+                                        <select class="genre-select form-control">
+                                            <option value="">--</option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1" %}
+                                                selected {% endif %} value="3.1.1">News (PTy 1 - News)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.11" %}
+                                                selected {% endif %} value="3.1.1.11">Local/Regional
+                                            </option>
+                                            <option value="">--</option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6" %}
+                                                selected {% endif %} value="3.6">Other Music (PTy 15 - Other Music)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.1" %}
+                                                selected {% endif %} value="3.6.1">Classical music
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.1.5" %}
+                                                selected {% endif %} value="3.6.1.5">Light Classical music (PTy 13 -
+                                                Light Classical)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.1.2" %}
+                                                selected {% endif %} value="3.6.1.2">Serious Classical (PTy 14 - Serious
+                                                Classical)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.2" %}
+                                                selected {% endif %} value="3.6.2">Jazz (PTy 24 - Jazz Music)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.3" %}
+                                                selected {% endif %} value="3.6.3">Background music
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.3.2" %}
+                                                selected {% endif %} value="3.6.3.2">Easy Listening (PTy 12 - EL)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.3.5" %}
+                                                selected {% endif %} value="3.6.3.5">Oldies (PTy 27 - Oldies)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4" %}
+                                                selected {% endif %} value="3.6.4">Pop-rock (PTy 11 - Rock)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4.1" %}
+                                                selected {% endif %} value="3.6.4.1">Pop (PTy 10 - Pop)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4.11" %}
+                                                selected {% endif %} value="3.6.4.11">Seasonal/Holiday
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4.14" %}
+                                                selected {% endif %} value="3.6.4.14">Rock
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4.14.2" %}
+                                                selected {% endif %} value="3.6.4.14.2">Metal
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.4.17" %}
+                                                selected {% endif %} value="3.6.4.17">Singer/Songwriter
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.5" %}
+                                                selected {% endif %} value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.6" %}
+                                                selected {% endif %} value="3.6.6">Country and Western (PTy 25 - Country
+                                                Music)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.7" %}
+                                                selected {% endif %} value="3.6.7">Rap/Hip Hop/Reggae
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.8" %}
+                                                selected {% endif %} value="3.6.8">Electronic/Club/Urban/Dance/DJ
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.8.3" %}
+                                                selected {% endif %} value="3.6.8.3">Techno/Industrial
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.8.4" %}
+                                                selected {% endif %} value="3.6.8.4">House/Techno House
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.9" %}
+                                                selected {% endif %} value="3.6.9">World/Traditional/Folk (PTy 26/28 -
+                                                National/Folk Music)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.10" %}
+                                                selected {% endif %} value="3.6.10">Hit-Chart/Song Requests
+                                            </option>
+                                            <option value="">--</option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:1.2" %}
+                                                selected {% endif %} value="1.2">Information (PTy 3 - Information)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:2.1.4" %}
+                                                selected {% endif %} value="2.1.4">Documentary (PTy 29 - Documentary)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:2.1.8" %}
+                                                selected {% endif %} value="2.1.8">Phone-In (PTy 21 - PhoneIn)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1" %}
+                                                selected {% endif %} value="3.1">Non-fiction (PTy 9 - Varied)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.6" %}
+                                                selected {% endif %} value="3.1.1.6">National/Politics
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.12" %}
+                                                selected {% endif %} value="3.1.1.12">Traffic
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.13" %}
+                                                selected {% endif %} value="3.1.1.13">Weather forecasts (PTy 16 -
+                                                Weather)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.14" %}
+                                                selected {% endif %} value="3.1.1.14">Service information
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.1.16" %}
+                                                selected {% endif %} value="3.1.1.16">Current Affairs (PTy 2 - Current
+                                                Affairs)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.2.1" %}
+                                                selected {% endif %} value="3.1.2.1">Religious/Philisophies (PTy 20 -
+                                                Religion)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.3.2" %}
+                                                selected {% endif %} value="3.1.3.2">Social (PTy 19 - Social Affairs)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.3.5" %}
+                                                selected {% endif %} value="3.1.3.5">Finance (PTy 17 - Finance)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.3.6" %}
+                                                selected {% endif %} value="3.1.3.6">Education (PTy 5 - Education)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.4" %}
+                                                selected {% endif %} value="3.1.4">Arts and Media (PTy 7 - Culture)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.1.6" %}
+                                                selected {% endif %} value="3.1.6">Sciences (PTy 8 - Science)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.2" %}
+                                                selected {% endif %} value="3.2">Sports (PTy 4 - Sport)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.3" %}
+                                                selected {% endif %} value="3.3">Leisure (PTy 23 - Leisure)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.3.5" %}
+                                                selected {% endif %} value="3.3.5">Travel (PTy 22 - Travel)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.4" %}
+                                                selected {% endif %} value="3.4">Fiction (PTy 6 - Drama)
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:3.6.13" %}
+                                                selected {% endif %} value="3.6.13">Spoken
+                                            </option>
+                                            <option {% if g.href == "urn:tva:metadata:cs:ContentCS:2011:4.2.1" %}
+                                                selected {% endif %} value="4.2.1">Children (PTy 18 - Childrens
+                                                Programmes)
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="genrehref[]_{{ cs.0.id }}_{{ forloop.counter0 }}"
+                                               class="genre-href form-control"
+                                               value="{{ g.href }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="genrename[]"
+                                               class="genre-name form-control"
+                                               value="{{ g.name }}">
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-xs btn-danger"
+                                           onclick="return StationModuleEdit.prototype.del_genre(this);">Remove</a>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </table>
+                        <a id="add_gender_button_{{ cs.0.id }}" class="btn btn-xs btn-default"
+                           onclick="StationModuleEdit.prototype.append_genre_select({{ cs.0.id }});">Add genre</a>
+                    </div>
+                </div>
+                <label></label>
+
+
+                <hr/>
+                {% if cs.0.id == 0 %}
+                    <div style="margin-bottom: 10px;">
+                        <div class="row-centered">
+                            <div class="dot"></div>
+                            <h2 style="display: inline-block;">Services</h2>
+                            <button
+                                    name="reset-override-btn_{{ cs.0.id }}"
+                                    style="display: none; margin: 0 0 -15px 15px;;"
+                                    type="button"
+                                    class="btn btn-default btn-sm"
+                            >
+                                Reset overrides
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 col-md-3 control-label">Enable RadioVIS Services:</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="checkbox" name="radiovis_enabled_{{ cs.0.id }}"
+                                   id="radiovis_enabled_{{ cs.0.id }}"
+                                   class="form-control"
+                                   value="radiovis_enabled"
+                                   {% if cs.1.radiovis_enabled %}checked="checked" {% endif %}/>
+                        </div>
+                    </div>
+                    <div id="radiovis_enabled_options_{{ cs.0.id }}" {% if not cs.1.radiovis_enabled %}
+                         style="display:none;" {% endif %}>
+                        <div class="form-group">
+                            <label class="col-sm-3 col-md-3 control-label">RadioVIS SlideShow Service Uri:</label>
+                            <div class="col-sm-9 col-md-7">
+                                <input type="text" name="radiovis_service_{{ cs.0.id }}"
+                                       id="radiovis_service_{{ cs.0.id }}"
+                                       class="form-control"
+                                       value="{{ cs.1.radiovis_service }}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br/> to the radiovis
+                                server:</label>
+                            <div class="col-sm-9 col-md-7">
+                                <input id="ip_allowed_{{ cs.0.id }}" type="text" name="ip_allowed_{{ cs.0.id }}"
+                                       class="form-control"
+                                       value="{{ cs.1.ip_allowed }}"><br/>
+                                <small>
+                                    A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0,
+                                    192.168.42.0/24</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-md-3 control-label">Enable Service and Program Information
+                            (SPI):</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="checkbox" name="radioepg_enabled_{{ cs.0.id }}"
+                                   id="radioepg_enabled_{{ cs.0.id }}"
+                                   class="form-control"
+                                   value="radioepg_enabled"
+                                   {% if cs.1.radioepg_enabled %}checked="checked" {% endif %}/>
+                        </div>
+                    </div>
+                    <div class="form-group" id="radioepg_enabled_options_{{ cs.0.id }}"
+                            {% if not cs.1.radioepg_enabled %}
+                         style="display:none;" {% endif %}>
+                        <label class="col-sm-3 col-md-3 control-label">RadioEPG Service Uri:</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="text" name="radioepg_service_{{ cs.0.id }}"
+                                   id="radioepg_service_{{ cs.0.id }}"
+                                   class="form-control"
+                                   value="{{ cs.1.radioepg_service }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group" id="radiospi_enabled_options_{{ cs.0.id }}"
+                            {% if not cs.1.radioepg_enabled %}
+                         style="display:none;" {% endif %}>
+                        <label class="col-sm-3 col-md-3 control-label">RadioSPI Service Uri:</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="text" name="radiospi_service_{{ cs.0.id }}"
+                                   id="radiospi_service_{{ cs.0.id }}"
+                                   class="form-control"
+                                   value="{{ cs.1.radiospi_service }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group" id="radioepgpi_enabled_options_{{ cs.0.id }}"
+                            {% if not cs.1.radioepg_enabled %}
+                         style="display:none;" {% endif %}>
+                        <label class="col-sm-3 col-md-3 control-label">Enable Program Information (EPG - PI):</label>
+                        <div class="col-sm-9 col-md-7">
+                            <input type="checkbox" name="radioepgpi_enabled_{{ cs.0.id }}"
+                                   id="radioepgpi_enabled_{{ cs.0.id }}"
+                                   class="form-control"
+                                   value="radioepgpi_enabled"
+                                   {% if cs.1.radioepgpi_enabled %}checked="checked" {% endif %}/>
+                        </div>
+                    </div>
+                    {% if RADIOTAG_ENABLED %}
+                        <div class="form-group">
+                            <label class="col-sm-3 col-md-3 control-label">Enable RadioTAG Services:</label>
+                            <div class="col-sm-9 col-md-7">
+                                <input type="checkbox" name="radiotag_enabled_{{ cs.0.id }}"
+                                       id="radiotag_enabled_{{ cs.0.id }}"
+                                       class="form-control"
+                                       value="radiotag_enabled"
+                                       {% if cs.1.radiotag_enabled %}checked="checked" {% endif %}/>
+                            </div>
+                        </div>
+                        <div class="form-group" id="radiotag_enabled_options_{{ cs.0.id }}"
+                                {% if not cs.1.radiotag_enabled %}
+                             style="display:none;" {% endif %}>
+                            <label class="col-sm-3 col-md-3 control-label">RadioTAG Service Uri:</label>
+                            <div class="col-sm-9 col-md-7">
+                                <input type="text" name="radiotag_service_{{ cs.0.id }}"
+                                       id="radiotag_service_{{ cs.0.id }}"
+                                       class="form-control"
+                                       value="{{ cs.1.radiotag_service }}"/>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <hr/>
+                {% endif %}
             </div>
-        </div>
+        {% endfor %}
+
         <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Country</label>
-            <div class="col-sm-9 col-md-7">
-                <select class="form-control" name="location_country" id="location_country" cval="{{object.location_country}}">
-				</select>
+            <div class="col-sm-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary"
+                        value="Save">Save
+                </button>
+                <button type="button" onclick="window.location.href='{{ ebuio_baseUrl }}stations/{{ cs.1.id }}'"
+                        class="btn btn-default">Cancel
+                </button>
             </div>
         </div>
-        <hr />
-        <h2>Contact</h2>
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
-            <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{object.phone_number}}"/>
-                <small>Format: +41-22-7172745</small>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">SMS</label>
-            <div class="col-sm-9 col-md-7">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon-sms-number">Number</span>
-                    <input type="text" class="form-control" name="sms_number" id="sms_number" value="{{object.sms_number}}" aria-describedby="basic-addon-sms-number"/>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon-sms-body">Body</span>
-                <input type="text" class="form-control" name="sms_body" id="sms_body" value="{{object.sms_body}}" aria-describedby="basic-addon-sms-body"/>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon-sms-descr">Description</span>
-                <input type="text" class="form-control" name="sms_description" id="sms_description" value="{{object.sms_description}}" aria-describedby="basic-addon-sms-descr"/>
-                </div>
-                <small>Example: "Send 'STATION_A ' to 406" where 406 is the number, 'STATION_A' is the body. As description use something like "Contact the Studio".</small>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 control-label">E-Mail</label>
-            <div class="col-sm-9 col-md-7">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon-email-address">E-Mail</span>
-                    <input type="text" class="form-control" name="email_address" id="email_address" value="{{object.email_address}}" aria-describedby="basic-addon-email-address"/>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon-email-descr">Description</span>
-                <input type="text" class="form-control" name="email_description" id="email_description" value="{{object.email_description}}" aria-describedby="basic-addon-email-descr"/>
-                </div>
-            </div>
-        </div>
-		<hr />
-
-        <h2>Genres</h2>
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Genres:</label>
-			<div class="col-sm-9 col-md-7">
-				<table class="table table-condensed" id="genre_list">
-
-					{#<tr><th></th><th>Href (e.g.:  <i>urn:tva:metadata:cs:ContentCS:2004:3.1.1.11</i>)</th><th>Name (e.g: <i>Local/Regional</i>)</th><th></th></tr>#}
-                    <tr id="genre_row_template" class="genre_row" style="display:none;" >
-                        <td>
-                            <select id="genre-select-" class="genre-select form-control">
-                                <option value="">--</option>
-                                <option value="3.1.1">News (PTy 1 - News)</option>
-                                <option value="3.1.1.11">Local/Regional</option>
-                                <option value="">--</option>
-                                <option value="3.6">Other Music (PTy 15 - Other Music)</option>
-                                <option value="3.6.1">Classical music</option>
-                                <option value="3.6.1.5">Light Classical music (PTy 13 - Light Classical)</option>
-                                <option value="3.6.1.2">Serious Classical (PTy 14 - Serious Classical)</option>
-                                <option value="3.6.2">Jazz (PTy 24 - Jazz Music)</option>
-                                <option value="3.6.3">Background music</option>
-                                <option value="3.6.3.2">Easy Listening (PTy 12 - EL)</option>
-                                <option value="3.6.3.5">Oldies (PTy 27 - Oldies)</option>
-                                <option value="3.6.4">Pop-rock (PTy 11 - Rock)</option>
-                                <option value="3.6.4.1">Pop (PTy 10 - Pop)</option>
-                                <option value="3.6.4.11">Seasonal/Holiday</option>
-                                <option value="3.6.4.14">Rock</option>
-                                <option value="3.6.4.14.2">Metal</option>
-                                <option value="3.6.4.17">Singer/Songwriter</option>
-                                <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
-                                <option value="3.6.6">Country and Western (PTy 25 - Country Music)</option>
-                                <option value="3.6.7">Rap/Hip Hop/Reggae</option>
-                                <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
-                                <option value="3.6.8.3">Techno/Industrial</option>
-                                <option value="3.6.8.4">House/Techno House</option>
-                                <option value="3.6.9">World/Traditional/Folk (PTy 26/28 - National/Folk Music)</option>
-                                <option value="3.6.10">Hit-Chart/Song Requests</option>
-                                <option value="">--</option>
-                                <option value="1.2">Information (PTy 3 - Information)</option>
-                                <option value="2.1.4">Documentary (PTy 29 - Documentary)</option>
-                                <option value="2.1.8">Phone-In (PTy 21 - PhoneIn)</option>
-                                <option value="3.1">Non-fiction (PTy 9 - Varied)</option>
-                                <option value="3.1.1.6">National/Politics</option>
-                                <option value="3.1.1.12">Traffic</option>
-                                <option value="3.1.1.13">Weather forecasts (PTy 16 - Weather)</option>
-                                <option value="3.1.1.14">Service information</option>
-                                <option value="3.1.1.16">Current Affairs (PTy 2 - Current Affairs)</option>
-                                <option value="3.1.2.1">Religious/Philisophies (PTy 20 - Religion)</option>
-                                <option value="3.1.3.2">Social (PTy 19 - Social Affairs)</option>
-                                <option value="3.1.3.5">Finance (PTy 17 - Finance)</option>
-                                <option value="3.1.3.6">Education (PTy 5 - Education)</option>
-                                <option value="3.1.4">Arts and Media (PTy 7 - Culture)</option>
-                                <option value="3.1.6">Sciences (PTy 8 - Science)</option>
-                                <option value="3.2">Sports (PTy 4 - Sport)</option>
-                                <option value="3.3">Leisure (PTy 23 - Leisure)</option>
-                                <option value="3.3.5">Travel (PTy 22 - Travel)</option>
-                                <option value="3.4">Fiction (PTy 6 - Drama)</option>
-                                <option value="3.6.13">Spoken</option>
-                                <option value="4.2.1">Children (PTy 18 - Childrens Programmes)</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" name="genrehref[]" id="genre-href-" class="genre-href form-control" value="{{g.href}}">
-                        </td>
-                        <td>
-                            <input type="text" name="genrename[]" id="genre-name-" class="genre-name form-control" value="{{g.name}}">
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-xs btn-danger" onclick="return del_genre(this);">Remove</a>
-                        </td>
-                    </tr>
-
-				{% for g in object.genres_list %}
-
-                    <tr class="genre_row hello" >
-                        <td>
-                            <select class="genre-select form-control">
-                                <option value="">--</option>
-                                <option value="3.1.1">News (PTy 1 - News)</option>
-                                <option value="3.1.1.11">Local/Regional</option>
-                                <option value="">--</option>
-                                <option value="3.6">Other Music (PTy 15 - Other Music)</option>
-                                <option value="3.6.1">Classical music</option>
-                                <option value="3.6.1.5">Light Classical music (PTy 13 - Light Classical)</option>
-                                <option value="3.6.1.2">Serious Classical (PTy 14 - Serious Classical)</option>
-                                <option value="3.6.2">Jazz (PTy 24 - Jazz Music)</option>
-                                <option value="3.6.3">Background music</option>
-                                <option value="3.6.3.2">Easy Listening (PTy 12 - EL)</option>
-                                <option value="3.6.3.5">Oldies (PTy 27 - Oldies)</option>
-                                <option value="3.6.4">Pop-rock (PTy 11 - Rock)</option>
-                                <option value="3.6.4.1">Pop (PTy 10 - Pop)</option>
-                                <option value="3.6.4.11">Seasonal/Holiday</option>
-                                <option value="3.6.4.14">Rock</option>
-                                <option value="3.6.4.14.2">Metal</option>
-                                <option value="3.6.4.17">Singer/Songwriter</option>
-                                <option value="3.6.5">Blues/RnB/Soul/Gospel/Spiritual</option>
-                                <option value="3.6.6">Country and Western (PTy 25 - Country Music)</option>
-                                <option value="3.6.7">Rap/Hip Hop/Reggae</option>
-                                <option value="3.6.8">Electronic/Club/Urban/Dance/DJ</option>
-                                <option value="3.6.8.3">Techno/Industrial</option>
-                                <option value="3.6.8.4">House/Techno House</option>
-                                <option value="3.6.9">World/Traditional/Folk (PTy 26/28 - National/Folk Music)</option>
-                                <option value="3.6.10">Hit-Chart/Song Requests</option>
-                                <option value="">--</option>
-                                <option value="1.2">Information (PTy 3 - Information)</option>
-                                <option value="2.1.4">Documentary (PTy 29 - Documentary)</option>
-                                <option value="2.1.8">Phone-In (PTy 21 - PhoneIn)</option>
-                                <option value="3.1">Non-fiction (PTy 9 - Varied)</option>
-                                <option value="3.1.1.6">National/Politics</option>
-                                <option value="3.1.1.12">Traffic</option>
-                                <option value="3.1.1.13">Weather forecasts (PTy 16 - Weather)</option>
-                                <option value="3.1.1.14">Service information</option>
-                                <option value="3.1.1.16">Current Affairs (PTy 2 - Current Affairs)</option>
-                                <option value="3.1.2.1">Religious/Philisophies (PTy 20 - Religion)</option>
-                                <option value="3.1.3.2">Social (PTy 19 - Social Affairs)</option>
-                                <option value="3.1.3.5">Finance (PTy 17 - Finance)</option>
-                                <option value="3.1.3.6">Education (PTy 5 - Education)</option>
-                                <option value="3.1.4">Arts and Media (PTy 7 - Culture)</option>
-                                <option value="3.1.6">Sciences (PTy 8 - Science)</option>
-                                <option value="3.2">Sports (PTy 4 - Sport)</option>
-                                <option value="3.3">Leisure (PTy 23 - Leisure)</option>
-                                <option value="3.3.5">Travel (PTy 22 - Travel)</option>
-                                <option value="3.4">Fiction (PTy 6 - Drama)</option>
-                                <option value="3.6.13">Spoken</option>
-                                <option value="4.2.1">Children (PTy 18 - Childrens Programmes)</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" name="genrehref[]" class="genre-href form-control" value="{{g.href}}">
-                        </td>
-                        <td>
-                            <input type="text" name="genrename[]" class="genre-name form-control" value="{{g.name}}">
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-xs btn-danger"  onclick="return del_genre(this);">Remove</a>
-                        </td>
-                    </tr>
-
-				{% endfor %}
-
-				</table>
-                <script type="text/javascript">
-
-                    function changeGenreSelection(row) {
-                      var genreUrn = "urn:tva:metadata:cs:ContentCS:2011:";
-                      var genre_txt = row.parents('.genre_row').find( ".genre-select option:selected" ).text();
-                      genre_txt = genre_txt.replace(/\(.*\)/, '').trim();
-                      row.parents('.genre_row').find('.genre-href').val(genreUrn + row.parents('.genre_row').find('.genre-select').val());
-                      row.parents('.genre_row').find('.genre-name').val(genre_txt);
-                    }
 
 
-                    $('.genre-select').on('change', function() { changeGenreSelection($( this )); });
+    </form>
+    <script src='{{ ebuio_baseUrl }}media/js/utilities.js'></script>
+    <script src='{{ ebuio_baseUrl }}media/js/visibility.js'></script>
+    <script src='{{ ebuio_baseUrl }}media/js/stations/edit.js'></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const module = StationModuleEdit.prototype;
+            module.numberOfExistingDefaultGenre = {{ cs.0.1.genres_list|length }};
+            {% for cs in clients_stations %}
+                {% if cs.1.id and forloop.counter0 != 0 %}
+                    module.onEditMode[{{ cs.0.id }}] = true;
+                {% endif %}
+                {% if cs.1.id %}
+                    module.stationsIds[{{ cs.0.id }}] = {{ cs.1.id }};
+                {% endif %}
+                module.clientsIds.push({{ cs.0.id }});
+            {% endfor %}
 
-                    var number = 0;
-                    function append_genre_select() {
-                        var temp = $('#genre_row_template').clone();
-                        temp = temp.show();
-                        temp = temp.html(function(index,html){
-                            var a = html.replace(/genre-select-/g,'genre-select-'+number);
-                            a = a.replace(/genre-href-/g,'genre-href-'+number);
-                            a = a.replace(/genre-name-/g,'genre-name-'+number);
-                            return a;
-                        });
-                        temp = temp.attr("id",temp.attr("id")+'-'+number);
-                        temp.find('.genre-select').on('change', function() { changeGenreSelection($( this )); });
+            module.init();
 
-                        $('#genre_row_template').parent().append(temp);
+            VisibilityModule.prototype.init(
+                {{ clients_stations.0.0.id }},
+                module.clientsIds,
+                module.updateTab
+            );
 
-                        number++;
-                    }
-
-                    function load_countries() {
-                        $.ajax({
-                            url: '{{ebuio_baseUrl}}ecc_list',
-                            dataType: 'json',
-                            success: function(data) {
-
-                                $(data.list).each(function(_, el) {
-                                    opt = '<option value="' + el.iso.toLowerCase() + '">' + el.name + ' (' + el.iso + ')</option>';
-
-                                    $('#location_country').append(opt);
-                                })
-
-                                $('#location_country').val($('#location_country').attr('cval'));
-                            }
-                        })
-                    }
-                    load_countries();
-
-                    $('#default_language').val($('#default_language').attr('cval'));
-
-
-                </script>
-                <a id="add_gender_button" class="btn btn-xs btn-default" onclick="append_genre_select();">Add genre</a>
-			</div>
-		</div>
-		<label></label>
-
-
-		<hr />
-
-        <h2>Services</h2>
-
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Enable RadioVIS Services:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="checkbox" name="radiovis_enabled" id="radiovis_enabled" class="form-control" value="radiovis_enabled" {% if object.radiovis_enabled %} checked="checked" {% endif %} />
-			</div>
-		</div>
-		<div id="radiovis_enabled_options" {% if not object.radiovis_enabled %} style="display:none;" {% endif %}>
-			<div class="form-group" >
-				<label class="col-sm-3 col-md-3 control-label">RadioVIS SlideShow Service Uri:</label>
-				<div class="col-sm-9 col-md-7">
-					<input type="text" name="radiovis_service" id="radiovis_service" class="form-control" value="{{object.radiovis_service}}" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br /> to the radiovis server:</label>
-				<div class="col-sm-9 col-md-7">
-					<input type="text" name="ip_allowed" class="form-control" value="{{object.ip_allowed}}"><br />
-					<small>
-						A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0, 192.168.42.0/24</i>
-					</small>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Enable Service and Program Information (SPI):</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="checkbox" name="radioepg_enabled" id="radioepg_enabled" class="form-control" value="radioepg_enabled" {% if object.radioepg_enabled %} checked="checked" {% endif %} />
-			</div>
-		</div>
-		<div class="form-group" id="radioepg_enabled_options" {% if not object.radioepg_enabled %} style="display:none;" {% endif %}>
-			<label class="col-sm-3 col-md-3 control-label">SPI RadioEPG Service Uri:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="radioepg_service" id="radioepg_service" class="form-control" value="{{object.radioepg_service}}" />
-			</div>
-		</div>
-        <div class="form-group" id="radioepgpi_enabled_options" {% if not object.radioepg_enabled %} style="display:none;" {% endif %}>
-			<label class="col-sm-3 col-md-3 control-label">Enable Program Information (EPG - PI):</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="checkbox" name="radioepgpi_enabled" id="radioepgpi_enabled" class="form-control" value="radioepgpi_enabled" {% if object.radioepgpi_enabled %} checked="checked" {% endif %} />
-			</div>
-		</div>
-		{% if RADIOTAG_ENABLED %}
-		<div class="form-group">
-			<label class="col-sm-3 col-md-3 control-label">Enable RadioTAG Services:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="checkbox" name="radiotag_enabled" id="radiotag_enabled" class="form-control" value="radiotag_enabled" {% if object.radiotag_enabled %} checked="checked" {% endif %} />
-			</div>
-		</div>
-		<div class="form-group" id="radiotag_enabled_options" {% if not object.radiotag_enabled %} style="display:none;" {% endif %}>
-			<label class="col-sm-3 col-md-3 control-label">RadioTAG Service Uri:</label>
-			<div class="col-sm-9 col-md-7">
-				<input type="text" name="radiotag_service" id="radiotag_service" class="form-control" value="{{object.radiotag_service}}" />
-			</div>
-		</div>
-		{% endif %}
-
-		<hr />
-
-		<div class="form-group">
-			<div class="col-sm-4 col-sm-offset-3">
-				<input type="submit" class="btn btn-primary" value="Save">
-				<a href="{{ebuio_baseUrl}}stations/{{object.id}}" class="btn btn-default">Cancel</a>
-			</div>
-		</div>
-
-
-	</form>
-
-	<script type="text/javascript">
-
-		function del_genre(elem) {
-			$(elem).parent().parent().remove();
-			return false;
-		}
-
-        // Link Copy Address to Button
-        $('#copyAddressButton').on('click', function () {
-            var $btn = $(this).button('loading')
-
-		    $('#postal_name').val('{{sp.postal_name}}');
-		    $('#street').val('{{sp.street}}');
-		    $('#zipcode').val('{{sp.zipcode}}');
-		    $('#city').val('{{sp.city}}');
-		    $('#location_country').val('{{sp.location_country}}');
-
-            // Reset Button
-            $btn.button('reset')
-          })
-          $('#keepNameButton').on('click', function () {
-            var $btn = $(this).button('loading')
-
-		    $('#postal_name').val($('#medium_name').val());
-
-            // Reset Button
-            $btn.button('reset')
-          })
-        // Link Language to Button
-        $('#copyLanguageButton').on('click', function () {
-            var $btn = $(this).button('loading')
-
-		    $('#default_language').val('{{sp.default_language}}');
-
-            // Reset Button
-            $btn.button('reset')
-          })
-
-		{% if object.id %}
-		var initialName = $('#station-name').val();
-		$('#station-name').keypress(function( event ) {
-			var newName = $('#station-name').val();
-			if(initialName != newName) {
-				$('#station-name-change-warning').show();
-			} else {
-				$('#station-name-change-warning').hide();
-			}
-		});
-		$('#station-name').change(function( event ) {
-			var newName = $('#station-name').val();
-			if(initialName != newName) {
-				$('#station-name-change-warning').show();
-			} else {
-				$('#station-name-change-warning').hide();
-			}
-		});
-		{% endif %}
-
-        // Automatic naming
-        var short_name_edited = {% if object.short_name %} true {% else %} false {% endif %};
-        var medium_name_edited = {% if object.medium_name %} true {% else %} false {% endif %};
-        var long_name_edited = {% if object.long_name %} true {% else %} false {% endif %};
-        var short_description_edited = {% if object.short_description %} true {% else %} false {% endif %};
-
-        $('#station-name').on('focusout', function() {
-            if($(this).val() != ""){
-                if(!short_name_edited) {
-                    $('#short_name').val($(this).val());
+            let defaultLanguage = "";
+            {% for cs in clients_stations %}
+                defaultLanguage = $('#default_language_{{ cs.0.id }}').attr('cval');
+                if (defaultLanguage !== "") {
+                    $('#default_language_{{ cs.0.id }}').val(defaultLanguage);
+                } else {
+                    $('#default_language_{{ cs.0.id }}').val($('#default_language_0').attr('cval'));
                 }
-                if(!medium_name_edited) {
-                    $('#medium_name').val($(this).val());
-                }
-                if(!long_name_edited) {
-                    $('#long_name').val($(this).val());
-                }
-                if(!short_description_edited) {
-                    $('#short_description').val($(this).val());
-                }
-            }
-		});
-        $('#short_name').on('focusout', function() {
-            if($(this).val() != ""){
-                short_name_edited = true;
-                if(!medium_name_edited) {
-                    $('#medium_name').val($(this).val());
-                }
-                if(!long_name_edited) {
-                    $('#long_name').val($(this).val());
-                }
-                if(!short_description_edited) {
-                    $('#short_description').val($(this).val());
-                }
-            }
-		});
-        $('#medium_name').on('focusout', function() {
-            if($(this).val() != ""){
-                medium_name_edited = true;
-                if(!long_name_edited) {
-                    $('#long_name').val($(this).val());
-                }
-                if(!short_description_edited) {
-                    $('#short_description').val($(this).val());
-                }
-            }
-		});
-        $('#long_name').on('focusout', function() {
-            if($(this).val() != ""){
-                long_name_edited = true;
-                if(!short_description_edited) {
-                    $('#short_description').val($(this).val());
-                }
-            }
-		});
-		$('#short_description').on('focusout', function() {
-            if($(this).val() != ""){
-                short_description_edited = true;
-            }
-		});
-
-
-        // Services
-		$('#radiovis_enabled').click(function () {
-			$("#radiovis_enabled_options").toggle(this.checked);
-			if(this.checked && $("#radiovis_service").val() == "") {
-				$("#radiovis_service").val('{{default_radiovis_service}}');
-			} else {
-				$("#radiovis_service").val('');
-			}
-		});
-		$('#radioepg_enabled').click(function () {
-			$("#radioepg_enabled_options").toggle(this.checked);
-			$("#radioepgpi_enabled_options").toggle(this.checked);
-			if(this.checked && $("#radioepg_service").val() == "") {
-				$("#radioepg_service").val('{{default_radioepg_service}}')
-			} else {
-				$("#radioepg_service").val('');
-			}
-		});
-		$('#radiotag_enabled').click(function () {
-			$("#radiotag_enabled_options").toggle(this.checked);
-			if(this.checked && $("#radiotag_service").val() == "") {
-				$("#radiotag_service").val('{{default_radiotag_service}}')
-			} else {
-				$("#radiotag_service").val('');
-			}
-		});
-
-	</script>
-
-
+                module.attachEventsListenerToTab(
+                    {{ cs.0.id }},
+                    {
+                        id: {% if object.id %} {{ cs.1.id }} {% else %} null {% endif %},
+                        short_name: {% if cs.1.short_name %} true {% else %} false {% endif %},
+                        medium_name: {% if cs.1.medium_name %} true {% else %} false {% endif %},
+                        long_name: {% if cs.1.long_name %} true {% else %} false {% endif %},
+                        short_description: {% if cs.1.short_description %} true {% else %} false {% endif %},
+                    },
+                    {
+                        postal_name: '{{ sp.postal_name }}',
+                        street: '{{ sp.street }}',
+                        zipcode: '{{ sp.zipcode }}',
+                        city: '{{ sp.city }}',
+                        location_country: '{{ sp.location_country }}',
+                        default_language: '{{ sp.default_language }}',
+                    },
+                    '{{ default_radiovis_service }}',
+                    '{{ default_radioepg_service }}',
+                    '{{ default_radiospi_service }}',
+                    '{{ default_radiotag_service }}',
+                );
+            {% endfor %}
+        });
+    </script>
 {% endblock %}
 

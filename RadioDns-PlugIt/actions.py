@@ -24,6 +24,9 @@ from radiovis.actions import *
 # Include radioepg methods
 from radioepg.actions import *
 
+# Include clients methods
+from clients.actions import *
+
 from plugit.utils import action
 
 

@@ -17,10 +17,10 @@ import config
 import logging
 
 from gevent import monkey
+
 monkey.patch_all()
 
-
-from gevent.coros import RLock
+from gevent.lock import RLock
 from gevent import spawn, joinall
 import time
 
@@ -109,7 +109,7 @@ class Fallback():
 
     def new_message(self, topic, body, bonusHeaders, when):
         """Called when a new message arrives"""
-        self.logger.debug("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders, ))
+        self.logger.debug("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders,))
 
         gcc_topic = radioDns.convert_fm_topic_to_gcc(topic)
         # Save to mysql
@@ -121,7 +121,7 @@ class Fallback():
 
         with self.channels_lock:
             self.channels_last_message[realTopic] = when
-            self.logger.debug("Last message for %s is now %s" % (realTopic, self.channels_last_message[realTopic], ))
+            self.logger.debug("Last message for %s is now %s" % (realTopic, self.channels_last_message[realTopic],))
 
     def checks_channels(self):
         """Check for timeout for each channels"""
@@ -137,7 +137,8 @@ class Fallback():
 
             with self.channels_lock:
                 for c in self.channels:
-                    if c not in self.channels_last_message or (self.channels_last_message[c] + config.FB_FALLBACK_TIME < time.time()):
+                    if c not in self.channels_last_message or (
+                            self.channels_last_message[c] + config.FB_FALLBACK_TIME < time.time()):
                         self.logger.info("Timeout on %s !" % (c,))
 
                         # Get info and send emssage
@@ -153,15 +154,19 @@ class Fallback():
                             else:
                                 image = details['public_url']
 
-                            self.logger.info("Sending image %s with link %s and text %s on channel %s" % (image, link, text, c))
+                            self.logger.info(
+                                "Sending image %s with link %s and text %s on channel %s" % (image, link, text, c))
 
                             timestamp = str(int(time.time() * 1000))
 
-                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int), 'topic': c + 'text', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
+                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int),
+                                       'topic': c + 'text', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "TEXT " + text)
 
-                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int), 'topic': c + 'image', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
+                            headers = {'trigger-time': 'NOW', 'link': link, 'message-id': str(uuid.uuid4().int),
+                                       'topic': c + 'image', 'expires': '0', 'priority': '0', 'timestamp': timestamp}
                             self.rabbitmq.send_message(headers, "SHOW " + image)
+
 
 # The logger
 logging.basicConfig(level=config.LOG_LEVEL)
