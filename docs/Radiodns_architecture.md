@@ -35,26 +35,26 @@ In this mode, the DNS part of the application doesn't work but the services do (
 Mock Api handles the logo hosting and organisation REST endpoint.
 
 ## DNS architecture
-All DNS architecture is hosted in amazon web services, route53.
-Currently, RadioDns hostname radio.ebu.io.
+All DNS architecture is hosted in amazon web services inn route53.
+Currently, the RadioDns hostname is radio.ebu.io.
 
 radio.ebu.io contains in its an A record pointing to the RadioDns instance. Every service provider's codops is a
-subdomain of radio.ebu.io. For example the sp having 'zzebu' as codops as a registered hosted name of zzebu.radio.ebu.io.
+subdomain of radio.ebu.io. For example the sp having 'zzebu' as codops has a registered hosted name of zzebu.radio.ebu.io.
 So every service provider has its own hosted zone and in the radio.ebu.io hosted zone there is the delegation of their
 subdomain to their hosted zone.
 
 radio.ebu.io also contains CNAME records to map the service providers services (EPG, SPI, VIS, EPGI) to the radio.ebu.io
 services. 
 
-The services providers hosted zone contains SRV records for the discovery of their services per station (EPG, SPI, VIS, EPGI).
-Currently as there is no station filtering in RadioDns EPG/SPI XML generation this feature will either be removed in the
+The service providers hosted zone contains SRV records for the discovery of their services per station (EPG, SPI, VIS, EPGI).
+Currently as there is no station filtering in RadioDns EPG/SPI XML generation. This feature will either be removed in the
 next iterations of the application or fully implemented.
 
 ## HTTPS considerations
 It is the system admin's responsibility to ensure HTTPS certificates renewal. Currently
 there is support for letsencrypt.org certificates via a cron job that runs on the EC2 instance itself. But the application
 does not provide a way to handle automated certificate renewal from within its docker containers. This is because
-in the future RadioDns would be something that will be deplorable by everyone and EBU don't want to impose constraints.
+in the future RadioDns would be something that will be deployable by everyone and EBU don't want to impose constraints.
 
 If you want/require automated certificate renewal within the NGINX docker container, feel free to use a custom one.
 In the future, an example container with letsencrypt.org certificates auto renewal will be made.

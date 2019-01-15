@@ -9,8 +9,9 @@ Virtualenv is not mandatory but **STRONGLY** recommended.
 
 You need the following dependencies:
 - python 2.7
-- docker 18.06.1
-- virtualenv 16.0.0
+- docker 18.06.1+
+- virtualenv 16.0.0+
+- docker-compose 1.23.2+
 
 Next you have to setup the virtualenv:
 

@@ -36,13 +36,15 @@ testing purposes. See deployment for notes on how to deploy the project on a liv
 
 ### Prerequisites
 - python 2.7 and 3.7
-- docker 18.06.1
-- virtualenv 16.0.0
+- docker 18.06.1+
+- virtualenv 16.0.0+
+- docker-compose 1.23.2+
 
 ### Installing
-To install automatically the python environment on an unix system use the `setup-envs.sh script (in the scripts folder).
+To install automatically the python environment on an unix system use the `setup-envs.sh` script (in the scripts folder).
 
-On windows you'll have to setup a virtual env for the following projects:
+On windows you'll have to setup a virtual env for the following projects (create and activate the venv + installing pip 
+dependencies):
 - standalone_proxy (python2)
 - RadioDns-PlugIt (python2)
 - RadioVisServer (python2)
@@ -55,13 +57,13 @@ Then set your working directory to the tests folder and read its README for furt
 
 ## Backup and restore database
 ### Backup
-    docker exec CONTAINER /usr/bin/mysqldump -u root --password=PASSWORD DATABASE > backup.sql
+    docker exec <name_of_docker_container> /usr/bin/mysqldump -u root --password=<database_passowrd> <database_name> > backup.sql
 
 ### Restore
-    cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=PASSWORD DATABASE
+    cat backup.sql | docker exec -i <name_of_docker_container> /usr/bin/mysql -u root --password=<database_passowrd> <database_name>
     
-## Deployment in production
-Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_user_guide.md).    
+## Deployment in production - EBU.io
+Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_user_guide.md).
 
 ## General architecture
 Architecture is described in [the docs](/docs/Radiodns_architecture.md)

@@ -10,16 +10,16 @@ This documents covers the deployment of the application on an EC2 amazon ubuntu 
 ### AWS Setup
 First, go to ec2 and select “launch a new instance”. Be sure to follow every one of the seven steps of the instance creation.
 
--  Select ubuntu 18 as AMI.
--  Select as machine a micro.t2.
--  You can leave the details as default.
--  Use the default storage provided.
--  Leave tag as they are.
+1.  Select ubuntu 18 as AMI.
+2. Select as machine a medium.t2.
+3. You can leave the details as default.
+4. Use the default storage provided.
+5.  Leave tag as they are.
 -  Create or use a security group called "RadioDns-sg" that enables communication with ports 22, 80, 443 from anywhere.
 Then create a security group called "RadioVis-sg" that enables communication with ports 22 and 61613 from anywhere. Then allow
 all traffic from "RadioDns-sg" security group. Also allow all traffic from "RadioVis-sg" in the RadioDns security group.
 -  Launch the instance. Attach the "RadioDns-sg" to the instance.
--  Redo steps 1 to 6 then attach to this new second instance the "RadioVis-sg" security group.
+-  Redo steps 1 to 5 then attach to this new second instance the "RadioVis-sg" security group.
 -  Next, we need to create an IAM user. Go to https://console.aws.amazon.com/iam/home. Choose as Access type “Programmatic access”. 
 Once created save its access key and secret key. **This is your only change to save them somewhere**. ![image10](/docs/images/image10.png)
 -  Add this user to a group that have full permissions (`AmazonS3FullAccess` and `AmazonRoute53FullAccess`) on route 53 and s3. 
@@ -75,7 +75,7 @@ This guide assumes that you are using the default VPC of your AWS account.
 commands:
 ```
 docker --version
-docker-compose -`v
+docker-compose -v
 docker run
 docker run hello-world
 ```
