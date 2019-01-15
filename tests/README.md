@@ -9,8 +9,9 @@ This environment supports firefox and google chrome as remote controlled headles
 
 You also need the following dependencies:
 - python 3.7
-- docker 18.06.1
-- virtualenv 16.0.0
+- docker 18.06.1+
+- virtualenv 16.0.0+
+- docker-compose 1.23.2+
 
 Next you have to setup the virtualenv:
 
@@ -27,10 +28,11 @@ To deactivate the running environment
     
 You'll find in the root project a script installing every project with their dependencies.
     
-This test suite assumes that you have already installed the following projects (located in the root folder of this repository) along with their dependencies:
+This test suite assumes that you have already installed the following projects (located in the root folder of this repository) 
+along with their dependencies:
 - MockApi
 - RadioDns-PlugIt
-- standalone_proxy
+- LightweightPlugitProxy
 
 ## Run
 First make sure you activated the correct virtual env (Ignore the deactivate error if any).

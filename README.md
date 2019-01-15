@@ -45,7 +45,7 @@ To install automatically the python environment on an unix system use the `setup
 
 On windows you'll have to setup a virtual env for the following projects (create and activate the venv + installing pip 
 dependencies):
-- standalone_proxy (python2)
+- LightweightPlugitProxy (python2)
 - RadioDns-PlugIt (python2)
 - RadioVisServer (python2)
 - MockApi (python3)
@@ -54,16 +54,12 @@ dependencies):
 ## How to run tests
 If you haven't already, run the `setup-envs.sh` (if you are on an unix based system, script located in the scripts folder).
 Then set your working directory to the tests folder and read its README for further instructions.
-
-## Backup and restore database
-### Backup
-    docker exec <name_of_docker_container> /usr/bin/mysqldump -u root --password=<database_passowrd> <database_name> > backup.sql
-
-### Restore
-    cat backup.sql | docker exec -i <name_of_docker_container> /usr/bin/mysql -u root --password=<database_passowrd> <database_name>
     
 ## Deployment in production - EBU.io
-Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_user_guide.md).
+Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_EBU-IO.md).
+
+## Deployment in production - standalone
+Deployment instructions on a production server without EBU.io are detailed in [the docs](/docs/Radiodns_manual_deployment.md).
 
 ## General architecture
 Architecture is described in [the docs](/docs/Radiodns_architecture.md)
@@ -85,6 +81,4 @@ Contact the EBU (Ben Poor poor@ebu.ch) if you need more information about RadioD
 
 
 ## Copyright & License
-Copyright (c) 2013-2015, EBU-UER Technology & Innovation
-
-The code is under BSD (3-Clause) License. (see LICENSE.txt)
+The code is under GPLv3 License. (see LICENSE.txt)

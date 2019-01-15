@@ -404,10 +404,10 @@ StationModuleEdit.prototype.updateTab = function (tabId) {
 StationModuleEdit.prototype.deleteStation = function (id) {
     if (confirm('You are about to delete this station\'s override. Are you sure?')) {
         UtilitiesModule.prototype.request(
-            `/plugIt/stations/delete/${StationModuleEdit.prototype.stationsIds[id]}`,
+            `/stations/delete/${StationModuleEdit.prototype.stationsIds[id]}`,
             "GET"
         ).then(function () {
-            window.location.href = `/plugIt/stations/edit/${StationModuleEdit.prototype.stationsIds[0]}`;
+            window.location.href = `/stations/edit/${StationModuleEdit.prototype.stationsIds[0]}`;
         })
     }
 };

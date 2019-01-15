@@ -13,7 +13,7 @@ random.seed(9001)
 
 # options to connect to test proxy.
 TEST_PROXY_PORT = int(os.environ.get('TEST_PROXY_PORT', '4001'))
-TEST_PROXY_URL = """http://{host}:{port}/plugIt/""".format(
+TEST_PROXY_URL = """http://{host}:{port}/""".format(
     host=os.environ.get('TEST_PROXY_HOSTNAME', '127.0.0.1'),
     port=TEST_PROXY_PORT
 )
@@ -82,7 +82,7 @@ def stack_setup():
     # Setup local environment variables
     env = os.environ.copy()
     env["PROXY_HOST"] = """0.0.0.0:{port}""".format(port=TEST_PROXY_PORT)
-    env["PLUGIT_SERVER"] = "http://127.0.0.1:{port}".format(port=TEST_RADIO_DNS_PORT)
+    env["PLUGIT_APP_URL"] = "http://127.0.0.1:{port}".format(port=TEST_RADIO_DNS_PORT)
     env["DEBUG"] = "True"
     env["SQLALCHEMY_URL"] = "mysql" + TEST_DATABASE_CONNECTION_URL_BASE
     env["PI_BASE_URL"] = "/"
@@ -91,12 +91,21 @@ def stack_setup():
     env["API_URL"] = """http://127.0.0.1:{port}/""".format(port=TEST_MOCK_API_PORT)
     env["MOCK_API_PORT"] = str(TEST_MOCK_API_PORT)
     env["RADIO_DNS_PORT"] = str(TEST_RADIO_DNS_PORT)
+    env["DATABASE_PORT"] = str(os.environ.get('DATABASE_PORT', '5432'))
+    env["SU_NAME"] = "admin"
+    env["SU_EMAIL"] = "admin@test.com"
+    env["SU_PASSWORD"] = "1234"
+    env["PLUGIT_REMOTE_SERVER_SECRET"] = ""
 
     teardown_stack()  # remove any instances or docker instances of the test previous stack
     subprocess.run(args="docker-compose -f docker-compose-test.yml up -d", cwd="../", shell=True)
     subprocess.Popen(
-        args="""source venv/bin/activate && python manage.py runserver 0.0.0.0:{port}""".format(port=TEST_PROXY_PORT),
-        cwd="./../../standalone_proxy",
+        args="""source venv/bin/activate && \\
+        python wait_db.py && \\
+        python manage.py migrate --noinput && \\
+        python manage.py initadmin && \\
+        python manage.py runserver 0.0.0.0:{port}""".format(port=TEST_PROXY_PORT),
+        cwd="./../../LightweightPlugitProxy",
         env=env,
         shell=True
     )
@@ -113,13 +122,16 @@ def stack_setup():
         shell=True
     )
 
-    # Here we just want to poll the proxy and the mock api until we get a 403 and a 200 which means the RadioDNS plugit
-    # has done db migrations and is ready with the mock API.
+    # Here we just want to poll the proxy, the plugit backend and the mock api until we get a a 200 for each and a 404
+    # from the plugit backend which means the RadioDNS plugit has done db migrations and is ready with the mock API.
     for number_of_attempts in range(1, TEST_MAX_TRIES_TO_DOCKER_TO_BOOT + 1):
         try:
-            proxy_request = requests.get(TEST_PROXY_URL)
             mock_api_request = requests.get(TEST_MOCK_API_URL)
-            if proxy_request.status_code == 403 and mock_api_request.status_code == 200:
+            plugit_backend = requests.get(env["PLUGIT_APP_URL"] + "/stations")
+            proxy_request = requests.get(TEST_PROXY_URL)
+            if proxy_request.status_code == 403\
+                and mock_api_request.status_code == 200\
+                and plugit_backend.status_code == 404:
                 break
         except requests.exceptions.ConnectionError:
             pass
@@ -159,7 +171,6 @@ def chrome_setup():
     if HEADLESS:
         chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(executable_path=os.path.abspath("../chromedriver"), options=chrome_options)
-    driver.get('chrome://settings/clearBrowserData')
     return driver
 
 
@@ -176,7 +187,11 @@ def browser_setup():
     else:
         logger.warning("No browser specified in the TEST_BROWSER env var. Using default option (chrome).")
         driver = chrome_setup()
-        
-    driver.get(TEST_PROXY_URL + "ebuio_setUser?mode=adm")
+
+    driver.get(TEST_PROXY_URL + "accounts/login/")
+    driver.find_element_by_id("id_username").send_keys("admin")
+    driver.find_element_by_id("id_password").send_keys("1234")
+    driver.find_element_by_tag_name("form").submit()
+    time.sleep(2)
     yield driver
     driver.close()

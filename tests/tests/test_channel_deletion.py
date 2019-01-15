@@ -39,9 +39,9 @@ def test_delete_channel(stack_setup, browser_setup):
     driver = browser_setup
 
     driver.get(TEST_PROXY_URL + "channels/")
-    driver.find_element_by_css_selector("[href='/plugIt/channels/delete/2']").send_keys(Keys.RETURN)
+    driver.find_element_by_css_selector("[href='/channels/delete/2']").send_keys(Keys.RETURN)
     accept_alert(driver)
-    WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "[href='/plugIt/channels/delete/2']")))
+    WebDriverWait(driver, 5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "[href='/channels/delete/2']")))
 
     channel_tr = list(map(lambda x: x.text, driver
                           .find_element_by_id("radiodns-channel-table")

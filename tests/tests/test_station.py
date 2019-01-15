@@ -248,7 +248,7 @@ def test_delete_station(stack_setup, browser_setup):
     assert result.rowcount == 8
 
     driver.get(TEST_PROXY_URL + "stations/4")
-    driver.find_element_by_css_selector('[href="/plugIt/stations/delete/4"]').send_keys(Keys.RETURN)
+    driver.find_element_by_css_selector('[href="/stations/delete/4"]').send_keys(Keys.RETURN)
     accept_alert(driver)
     time.sleep(2)
     result = db.engine.execute(text(MYSQL_STATION_QUERY_ALL))
@@ -256,7 +256,7 @@ def test_delete_station(stack_setup, browser_setup):
     assert db.engine.execute(text("SELECT id FROM station WHERE id=4")).rowcount == 0
 
     driver.get(TEST_PROXY_URL + "stations/")
-    driver.find_element_by_css_selector('[href="/plugIt/stations/delete/6"]').send_keys(Keys.RETURN)
+    driver.find_element_by_css_selector('[href="/stations/delete/6"]').send_keys(Keys.RETURN)
     accept_alert(driver)
     time.sleep(2)
     result = db.engine.execute(text(MYSQL_STATION_QUERY_ALL))
