@@ -73,5 +73,53 @@ Details are available in the official documentation of alembic.
 
 Migrations are done automatically by the server at startup if needed.
 
-# Config
-The configuration is stored inside `config.py`. You can change it by setting environment variables  corresponding to the config parameters.
+# Configuration
+The configuration is stored inside `config.py`. You can change it by setting environment variables corresponding to the config parameters.
+
+Here is a list of the options you can configure through environment variables:
+- **RADIO_DNS_PORT**: Port where the app will listen to. Numeric. Defaults to `4000`.
+- **API_URL**: Url to the PlugIt Proxy (either EBU.io or Lightweight Plugit Proxy (LPP)). Defaults to `http://127.0.0.1:4000/`.
+The api url must end with a `/`.
+- **SQLALCHEMY_URL**: Url of the following scheme: `mysql://<msql_user>:<password>@<host>:<port>/<database_name>`. Defaults to
+`mysql://root:<password>@127.0.0.1:3306/radiodns`.
+- **API_SECRET**: Random string defined by hand. Defaults to `dev-secret`.
+- **AWS_ACCESS_KEY**: AWS access key, in case the apps needs to use AWS resources.
+- **AWS_SECRET_KEY**: AWS secret key, in case the apps needs to use AWS resources.
+- **DOMAIN**: Domain name base for all services. Defaults to `radio.ebu.io`.
+- **RADIOTAG_ENABLED**: TAG service switch. Can be `True|False`. Defaults to `True`.
+- **XSISERVING_ENABLED**: EPG and SPI services switch. Can be `True|False`. Defaults to `True`.
+- **XSISERVING_DOMAIN**: Domain where the EPG and SPI services will be served. Defaults to `127.0.0.1:5000`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOVIS_DNS**: Domain name where the VIS service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOEPG_DNS**: Domain name where the EPG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOTAG_DNS**: Domain name where the TAG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOSPI_DNS**: Domain name where the SPI service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOVIS_PORT**: Port where the VIS service will be accessible. Defaults to `61613`.
+- **RADIOEPG_PORT**: Port where the EPG service will be accessible. Defaults to `5000`.
+- **RADIOTAG_PORT**: Port where the TAG service will be accessible. Defaults to `5000`.
+- **RADIOSPI_PORT**: Port where the SPI service will be accessible. Defaults to `5000`.
+- **DEBUG**: Can be True|False. Defaults to True. If True we Flask app will run in debug mode. Otherwise, it will run in production mode.
+- **STANDALONE**: Wherever the app should run without external dependencies such as AWS, EBU.IO, etc.
+Mostly for local testing.
+- **PI_BASE_URL**: The base URL for the PlugIi API - prefix url to access utilities of this server (e.g. <PI_BASE_URL>/radiodns/ping).
+In staging and production mode, that should be the **API_SECRET** parameter. Defaults to `dev-secret`.
+- **PI_ALLOWED_NETWORKS**: Allowed hosts for this service. List of hosts commas separated. Defaults to `0.0.0.0/0`.
+- **PI_API_VERSION**: Version of this service. 
+- **PI_API_NAME**: Name of this service.
+- **XML_CACHE_TIMEOUT**: Time in seconds before discarding XML cache. Numeric. Defaults to `0`.
+- **DATABASE_CONNECTION_MERCY_TIME**: Time to wait (in seconds) until each reset of the backoff database connection retry 
+function. Numeric. Default to `60`. The application will wait an increasingly longer time for each failed database connection attempts.
+This is done in order to avoid having multiple apps connecting to a database at the same time but rather spread those
+connections so all app can reconnect smoothly. After X seconds (X being the time chosen for this parameter) the increasing
+ time to wait between each attempt will be reset so an application doesn't take 300 seconds to reconnect to its database.
+- **VIS_WEB_SOCKET_ENDPOINT_HOST**: Endpoint to the VIS player of RadioDns manager. Used by the HTML vis player. Defaults to
+`127.0.0.1`.
+
+** STANDALONE OPTIONS **
+- **LOGO_INTERNAL_URL**: Logo upload url. This has to point to the MockApi inside the docker network. Defaults to `http://127.0.0.1:8000/uploads`.
+- **LOGO_PUBLIC_URL**: Url of the docker host were the browser can access logos. Defaults to `http://127.0.0.1:8000/uploads`.
+- **IMG_CACHE_TIMEOUT**: Time in seconds before discarding images cache. Numeric. Defaults to `0`.

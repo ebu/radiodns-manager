@@ -37,27 +37,27 @@ Now install the project dependencies:
     pip install .
 
 ### Configuration
-You can configure the app through environment variables:
+You can configure this docker image by providing the following environment variables:
 
-- DEBUG:                          Can be "True"|"False". Defaults to "True". If "True" we django app will run in debug mode. Otherwise it will runin production mode.
-- LPP_PORT:                       Stands for Lightweight PlugIt Proxy port. Numeric. Defaults to "4000". Defines the port where the app will listen.
-- PLUGIT_APP_URL:                 The location of the PlugIt backend. Default to `http://localhost:5000/`.
-- SECRET_KEY:                     Django secret (random string). To be defined in production.
-- ALLOWED_HOSTS:                  List of allowed hosts to connect to the django server. Defaults to ` 127.0.0.1,localhost`.
-- DATABASE_NAME:                  The name of the postgres database to connect to. Defaults to `lpp`.
-- DATABASE_USER:                  The username of the posgtres user that the application will use. Defaults to `root`.
-- DATABASE_PASSWORD:              The password of the posgtres user that the application will use. Defaults to empty string.
-- DATABASE_HOST:                  The database hostname/ip address that the application will connect to. Defaults to `127.0.0.1`.
-- DATABASE_PORT:                  The database port that the application will connect to. Defaults to `5432`.
-- PLUGIT_REMOTE_SERVER_SECRET:    Secret shared with the PlugIt Backend. Must be a random string. Defaults to `dev-secret`.
-- SU_NAME:                        Superuser name for the Django admin panel.
-- SU_EMAIL:                       Email for the superuser of Django admin panel.
-- SU_PASSWORD:                    Password for the superuser of Django admin panel.
-- DATABASE_CONNECTION_MERCY_TIME: Time to wait (in seconds) until each reset of the backoff database connection retry function. Default to 60.
+- **DEBUG**:  Can be `True`|`False`. Defaults to `True`. If `True` we django app will run in debug mode. Otherwise, it will run in production mode.
+- **LPP_PORT**: Stands for Lightweight PlugIt Proxy port. Numeric. Defaults to `4000`. Defines the port where the app will listen.
+- **PLUGIT_APP_URL**: The location of the PlugIt backend. Default to `http://localhost:5000/`. The app url must end with a `/`.
+- **SECRET_KEY**: Django secret (random string). To be defined in production.
+- **ALLOWED_HOSTS**: List of allowed hosts to connect to the django server separated by commas. Defaults to ` 127.0.0.1,localhost`.
+- **DATABASE_NAME**: The name of the postgres database to connect to. Defaults to `lpp`.
+- **DATABASE_USER**: The username of the posgtres user that the application will use. Defaults to `root`.
+- **DATABASE_PASSWORD**The password of the posgtres user that the application will use. Defaults to empty string.
+- **DATABASE_HOST**: The database hostname/ip address that the application will connect to. Defaults to `127.0.0.1`.
+- **DATABASE_PORT**: The database port that the application will connect to. Defaults to `5432`.
+- **PLUGIT_REMOTE_SERVER_SECRET**: Secret shared with the PlugIt Backend. Must be a random string. Defaults to `dev-secret`.
+- **SU_NAME**: Superuser name for the Django admin panel.
+- **SU_EMAIL**: Email for the superuser of Django admin panel.
+- **SU_PASSWORD**: Password for the superuser of Django admin panel.
+- **DATABASE_CONNECTION_MERCY_TIME**: Time to wait (in seconds) until each reset of the backoff database connection retry function. Default to 60.
 The application will wait an increasingly longer time for each failed database connection attempts. This is done in order to
 avoid having multiple apps connecting to a database at the same time but rather spread those connections so all app can reconnect smoothly.
-After X seconds (X being the time choosed for this parameter) the increasing time to wait between each attempts will be
-reset so an application doesnt take 300 seconds to reconnect to its database.
+After X seconds (X being the time chosen for this parameter) the increasing time to wait between each attempt will be
+reset so an application doesn't take 300 seconds to reconnect to its database.
 
 ## Running the tests
 The tests will create a local sqlite database. They do not require any networking setup.

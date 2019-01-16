@@ -54,15 +54,14 @@ RADIODNS_REQUIRED_IMAGESIZES = [(32, 32), (112, 32), (128, 128), (320, 240), (60
 # wherever to enable debug mode.
 DEBUG = "True" == os.environ.get('DEBUG', 'True')
 
-# wherever the stack run without external dependencies such as AWS, EBU.IO, etc. Mostly for local testing and
-# playing around.
+# wherever the app should run without external dependencies such as AWS, EBU.IO, etc. Mostly for local testing.
 STANDALONE = "True" == os.environ.get('STANDALONE', 'True')
 
 # The base URL for the PlugIi API - prefix url to access utilities of this server (e.g. /radiodns/ping).
-# In staging and production mode, that should be the API_SECRET.
+# In production mode, that should be the API_SECRET.
 PI_BASE_URL = os.environ.get('PI_BASE_URL', '/dev-secret/')
 
-# Allowed origin for this service.
+# Allowed hosts for this service. List of hosts commas separated.
 PI_ALLOWED_NETWORKS = os.environ.get('PI_ALLOWED_NETWORKS', '0.0.0.0/0').strip().split(',')
 
 # Flask Log
@@ -84,12 +83,12 @@ LOGO_INTERNAL_URL = os.environ.get('LOGO_INTERNAL_URL', 'http://127.0.0.1:8000/u
 # [Standalone mode only] Url of the docker host were the browser can access logos.
 LOGO_PUBLIC_URL = os.environ.get('LOGO_PUBLIC_URL', 'http://127.0.0.1:8000/uploads')
 
-# Time in seconds before reusing cache.
+# Time in seconds before discarding cache.
 XML_CACHE_TIMEOUT = safe_cast(os.environ.get('XML_CACHE_TIMEOUT', '0'), int)  # in seconds
 IMG_CACHE_TIMEOUT = safe_cast(os.environ.get('IMG_CACHE_TIMEOUT', '0'), int)  # in seconds
 
 # Time during the server will try to connect to the mysql server before giving up (in seconds).
 DATABASE_CONNECTION_MERCY_TIME = safe_cast(os.environ.get('DATABASE_CONNECTION_MERCY_TIME', '30'), int)
 
-# Endpoint to the VIS player of radiodns manager.
+# Endpoint to the VIS player of radiodns manager. Used by the HTML vis player.
 VIS_WEB_SOCKET_ENDPOINT_HOST = os.environ.get('VIS_WEB_SOCKET_ENDPOINT_HOST', '127.0.0.1')

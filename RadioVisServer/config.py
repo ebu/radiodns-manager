@@ -10,7 +10,7 @@ RABBITMQ_PORT = int(os.environ.get("RABBITMQ_PORT", 5672))
 RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
 RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "guest")
 RABBITMQ_VHOST = os.environ.get("RABBITMQ_VHOST", "/")
-RABBITMQ_DEBUG = "True" == os.environ.get("RABBITMQ_LOOPBACK", "True")
+RABBITMQ_DEBUG = "True" == os.environ.get("RABBITMQ_DEBUG", "True")
 RABBITMQ_EXCHANGE = os.environ.get("RABBITMQ_EXCHANGE", "amq.fanout")
 
 monitoring = {
@@ -23,10 +23,10 @@ monitoring = {
     "debug": "True" == os.environ.get("MONITORING_DEBUG", "True"),
     "exchange": os.environ.get("MONITORING_EXCHANGE", "monitoring.buffer"),
     "queue": os.environ.get("MONITORING_QUEUE", "radiovis"),
-    "server_id": os.environ.get("MONITORING_SERVER_ID", "rabbit@radiodnsrabbitmq"),
+    "server_id": os.environ.get("MONITORING_SERVER_ID", "rabbit@radiodnsrabbitmq").strip().split(','),
 }
 
-STOMP_IP = os.environ.get("STOMP_IP", "0.0.0.0")
+STOMP_IP = os.environ.get("STOMP_IP", "0.0.0.0").strip().split(',')
 STOMP_PORT = int(os.environ.get("STOMP_PORT", 61613))
 
 # RadioDns plugit API
@@ -46,7 +46,7 @@ FB_QUEUE = os.environ.get("FB_QUEUE", "fallbacklogs")
 
 # The time when we check for timeouted channels. (Each FB_FALLBACK_CHECK seconds)
 FB_FALLBACK_CHECK = int(os.environ.get("FB_FALLBACK_CHECK", 15))
-FB_FALLBACK_TIME = int(os.environ.get("FB_FALLBACK_TIME", 60))  # The time before a channel is consided dead
+FB_FALLBACK_TIME = int(os.environ.get("FB_FALLBACK_TIME", 60))  # The time before a channel is considered dead
 
 FB_IMAGE_LOCATIONS = os.environ.get("FB_IMAGE_LOCATIONS", "")  # Should be the public url of plugit
 

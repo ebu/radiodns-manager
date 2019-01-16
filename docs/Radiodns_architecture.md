@@ -24,12 +24,12 @@ and served by uWSGI. This behaviour will be corrected in the next iterations of 
 
 The vis service is hosted on a separated instance because of its scalability and instability issues.
 
-### RadioDns standalone mode
-The standalone mode can be run entirely in docker. 
+### RadioDns without EBU.io
+This mode can be run entirely in docker. 
 
 ![architecture_ebu.io.png](/docs/images/architecture_standalone.png)
 
-The diagram above explains the current state of the RadioDns stack for standalone mode. The LPP image is the LightweightPlugitProxy.
+The diagram above explains the current state of the RadioDns stack for this mode. The LPP image is the LightweightPlugitProxy.
 Its provides the PlugIt Bridge between the world and the RadioDns manager. It also manager users, organizations and authentication.
 
 ## DNS architecture

@@ -74,7 +74,7 @@ Then set your working directory to the tests folder and read its README for furt
 ## Deployment in production - EBU.io
 Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_EBU-IO.md).
 
-## Deployment in production - standalone
+## Deployment in production
 Deployment instructions on a production server without EBU.io are detailed in [the docs](/docs/Radiodns_manual_deployment.md).
 
 ## General architecture
