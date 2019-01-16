@@ -4,9 +4,6 @@ The Mock API serves as a local dev replacement for some AWS and ebu.io functiona
 Currently it provides image hosting and organisation api rest endpoint. 
 
 ## Setup
-
-Virtualenv is not mandatory but **STRONGLY** recommended.
-
 You need the following dependencies:
 - python 3.7
 - docker 18.06.1+
@@ -15,7 +12,7 @@ You need the following dependencies:
 
 Next you have to setup the virtualenv:
 
-    virtualenv --python=<your path to python3 binary> venv
+    virtualenv --python=$(which python3) venv
     source venv/bin/activate
     
 And then install the required PIP dependencies

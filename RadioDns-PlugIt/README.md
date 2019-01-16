@@ -28,7 +28,7 @@ To deactivate the running environment:
 
     deactivate
     
-### Running the PlugIt Server
+## Running the Server
 
     python server.py
     

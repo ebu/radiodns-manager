@@ -3,7 +3,7 @@
 The Lightweight PlugIt Proxy is a project meant to help PlugIt based app to
 decouple from EBU.io. 
 
-**Before doing anything with this repository**
+**Before doing anything with this project**
 Note that the PlugIt Technology is old and is in the process of being discarded.
 
 **DO NOT START A NEW PROJECT USING PLUGIT.**
@@ -57,7 +57,7 @@ You can configure the app through environment variables:
 The application will wait an increasingly longer time for each failed database connection attempts. This is done in order to
 avoid having multiple apps connecting to a database at the same time but rather spread those connections so all app can reconnect smoothly.
 After X seconds (X being the time choosed for this parameter) the increasing time to wait between each attempts will be
-reset so an application doesn't take 300 seconds to reconnect to its database.
+reset so an application doesnt take 300 seconds to reconnect to its database.
 
 ## Running the tests
 The tests will create a local sqlite database. They do not require any networking setup.
@@ -78,12 +78,9 @@ transmit/receive files/template to the PlugIt backend.
 
 The file `test_proxy_plugit.py` tests the general PlugIt proxy functionalities required to run a minimal PlugIt proxy.
 
-## CI
-Currently CI integration with CircleCI ensure that tests passes before submitting any pull requests.
-
 ## Deployment
 ### Building Docker image
-You can use the `ioannisnoukakis9390/platform-proxy.open.radio` docker image directly into you production stack. However
+You can use the `ebutech/platform-proxy.open.radio` docker image directly into you production stack. However
 if you wish to build the image yourself this can be achieved by running the following command:
 
     docker build -t <docker hub orga/account>/<name of the image>:<tag>

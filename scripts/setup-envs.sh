@@ -14,11 +14,11 @@ source venv/bin/activate &&
 pip install . &&
 deactivate &&
 
-# installing standalone proxy
-cd ../standalone_proxy &&
-virtualenv --python=$(which python2) venv &&
+# installing LightweightPlugitProxy
+cd ../LightweightPlugitProxy &&
+virtualenv --python=$(which python3) venv &&
 source venv/bin/activate &&
-pip install -r pip_requirements.txt &&
+pip install . &&
 deactivate &&
 
 # installing mockAPI

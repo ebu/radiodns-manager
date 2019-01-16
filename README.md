@@ -1,8 +1,6 @@
 RadioDNS-plugit
 ===============
 
-## /!\ THIS PROJECT IS UNDER HEAVY REFACTORING. IT IS ADVISED TO WAIT THE NEXT RELEASE AS IT WILL HAVE BREAKING CHANGES /!\
-
 This project gathers a web interface based on [plugit](https://github.com/ebu/plugit) to manage RadioDNS
 services ([RadioVIS, RadioEPG and ServiceFollowing](http://www.radiodns.org)). 
 
@@ -12,7 +10,7 @@ Check each folder for specifics README about each part.
 To start up a local instance
 
 ```
-docker-compose -f docker-compose-standalone.yml up --build -d
+docker-compose -f docker-compose-standalone-demo.yml up --build -d
 ```
 
 Then you may visit http://localhost:4000.
@@ -20,14 +18,15 @@ Then you may visit http://localhost:4000.
 To shut down the local instance
 
 ```
-docker-compose -f docker-compose-standalone.yml down
+docker-compose -f docker-compose-standalone-demo.yml down
 ```
 
 To remove the database and start afresh
 
 ```
-docker-volume rm radiodns-plugit_db_data
-docker-volume rm radiodns-plugit_mock_api_data
+docker-volume rm radiodns-manager_db_data
+docker-volume rm radiodns-manager_mock_api_data
+docker-volume rm radiodns-manager_pgdata
 ```
 
 ## Getting Started
@@ -45,11 +44,28 @@ To install automatically the python environment on an unix system use the `setup
 
 On windows you'll have to setup a virtual env for the following projects (create and activate the venv + installing pip 
 dependencies):
-- LightweightPlugitProxy (python2)
+- LightweightPlugitProxy (python3)
 - RadioDns-PlugIt (python2)
 - RadioVisServer (python2)
 - MockApi (python3)
 - tests (python3)
+
+### Running the dev stack
+Launch the dev databases with:
+
+    docker-compose -f docker-compose-dev.yml up -d
+    
+Then head to each following folders in order and follow their README.md:
+-LightweightPlugitProxy 
+-RadioDns
+-RadioVisServer 
+-MockApi 
+
+The default configuration of the services should be able to make the stack run for local development.
+
+To stop the dev databases run:
+
+    docker-compose -f docker-compose-dev.yml down
 
 ## How to run tests
 If you haven't already, run the `setup-envs.sh` (if you are on an unix based system, script located in the scripts folder).
