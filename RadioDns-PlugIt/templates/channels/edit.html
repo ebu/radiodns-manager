@@ -3,181 +3,265 @@
 
 {% block title %}Channels :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ ebuio_orga.name }} {% if station %}:: {{ station.name }} {% endif %}:: {% if object.id %}Edit a
+                channel{% else %}Add a channel {% endif %}
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+        </div>
+    {% endblock %}
 
-	<h3>Edit a channel</h3>
+    {% if errors %}
+        <div class="alert alert-error">
+            <ul>
+                {% for e in errors %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
-	{% if errors %}
-		<div class="alert alert-error">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
+    <form action="" method="POST" class="form-horizontal">
+        {% csrf_token %}
 
-	<form action="" method="POST">
-		{% csrf_token %}
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Station:</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="station" id="station_select" class="form-control">
+                    {% for s in stations %}
+                        <option value="{{ s.id }}"
+                                {% if object.id and object.station_id == s.id %}selected{% elif station and station.id == s.id %}selected{% endif %}
+                                data-stationserviceid="{{ s.service_identifier }}"
+                                data-stationfqdn="{{ s.fqdn }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-		<label>Station</label>
-		<select name="station">
-			{% for s in stations %}
-				<option value="{{s.id}}" {% if object.station_id == s.id %}selected{% endif %}>{{s.name}}</option>
-			{% endfor %}
-		</select>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Channel Name:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="name" value="{{ object.name }}">
+            </div>
+        </div>
 
-		<label>Name</label>
-		<input type="text" name="name" value="{{object.name}}">
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">(Optional) Client:</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="fk_client" id="clients_select" class="form-control">
+                    {% for c in clients %}
+                        <option
+                                value="{% if c.id != 0 %}{{ c.id }}{% endif %}"
+                                {% if object.fk_client == c.id %}selected{% endif %}
+                        >
+                            {{ c.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-		<label>Transmitter type</label>
-		<select name="type_id" id="type" onchange="update_display();">
-			{% for t in types_id %}
-				<option value="{{t.0}}" {% if object.type_id == t.0 %}selected{% endif %}>{{t.1}}</option>
-			{% endfor %}
-		</select>
+        <hr/>
 
-		<div class="opblk opblk_ecc_id">
-			<label>ECC</label>
-			<select name="ecc_id" id="ecc" cval="{{object.ecc_id}}">
-			</select>
-		</div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Transmitter type:</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="type_id" id="type" class="form-control" onchange="ChannelsModule.prototype.update_display();">
+                    {% for t in types_id %}
+                        <option value="{{ t.0 }}" {% if object.type_id == t.0 %}selected{% endif %}>{{ t.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-		<div class="opblk opblk_pi">
-			<label>PI</label>
-			<input type="text" name="pi" value="{{object.pi}}">
-			<small>Programme Identfcaton</small>
-		</div>
+        <hr/>
 
-		<div class="opblk opblk_frequency">
-			<label>Frequency</label>
-			<input type="text" name="frequency" value="{{object.frequency}}">
-			<small>wildcard * possible</small>
-		</div>
+        <div class="form-group opblk opblk_ecc_id">
+            <label class="col-sm-3 col-md-3 control-label">ECC:</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="ecc_id" class="form-control" id="ecc" cval="{{ object.ecc_id }}">
+                </select>
+                <small>Country Code</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_eid">
-			<label>EID</label>
-			<input type="text" name="eid" value="{{object.eid}}">
-			<small>Ensemble ID</small>
-		</div>
+        <div class="form-group opblk opblk_pi">
+            <label class="col-sm-3 col-md-3 control-label">PI:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="pi" value="{{ object.pi }}">
+                <small>Programme Identificaton</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_sid">
-			<label>SID</label>
-			<input type="text" name="sid" value="{{object.sid}}">
-			<small>Service ID</small>
-		</div>
+        <div class="form-group opblk opblk_frequency">
+            <label class="col-sm-3 col-md-3 control-label">Frequency:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" id="frequency" name="frequency" value="{{ object.frequency }}">
+                <small>wildcard * is possible, otherwise use 5 digits, 97.10 becomes 09710</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_scids">
-			<label>SCIDS</label>
-			<input type="text" name="scids" value="{{object.scids}}">
-			<small>Service Component Identifier</small>
-		</div>
+        <div class="form-group opblk opblk_eid">
+            <label class="col-sm-3 col-md-3 control-label">EID:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="eid" value="{{ object.eid }}">
+                <small>Ensemble ID (4 digit hex value like '43e1')</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_appty_uatype">
-			<label>appty-uatype</label>
-			<input type="text" name="appty_uatype" value="{{object.appty_uatype}}">
-			<small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
-		</div>
+        <div class="form-group opblk opblk_sid">
+            <label class="col-sm-3 col-md-3 control-label">SID:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="sid" value="{{ object.sid }}">
+                <small>Service ID (4 digit hex value like '4001')</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_pa">
-			<label>PA</label>
-			<input type="text" name="pa" value="{{object.pa}}">
-			<small>Packet Address</small>
-		</div>
+        <div class="form-group opblk opblk_scids">
+            <label class="col-sm-3 col-md-3 control-label">SCIDS:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="scids" value="{{ object.scids }}">
+                <small>Service Component Identifier (usually 0)</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_tx">
-			<label>TX</label>
-			<input type="text" name="tx" value="{{object.tx}}">
-			<small>Transmiter Identifier</small>
-		</div>
+        <div class="form-group opblk opblk_appty_uatype">
+            <label class="col-sm-3 col-md-3 control-label">appty-uatype (Optional):</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="appty_uatype" value="{{ object.appty_uatype }}">
+                <small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_cc">
-			<label>CC</label>
-			<select name="cc" id="cc" cval="{{object.cc}}">
+        <div class="form-group opblk opblk_pa">
+            <label class="col-sm-3 col-md-3 control-label">PA (Optional):</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="pa" value="{{ object.pa }}">
+                <small>Packet Address</small>
+            </div>
+        </div>
 
-			</select>
-			<small>Country Code</small>
-		</div>
+        <div class="form-group opblk opblk_tx">
+            <label class="col-sm-3 col-md-3 control-label">TX:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="tx" value="{{ object.tx }}">
+                <small>Transmiter Identifier</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_fqdn">
-			<label>FQDN</label>
-			<input type="text" name="fqdn" value="{{object.fqdn}}">
-			<small>Authoritative FQDN</small>
-		</div>
+        <div class="form-group opblk opblk_cc">
+            <label class="col-sm-3 col-md-3 control-label">CC:</label>
+            <div class="col-sm-9 col-md-7">
+                <select class="form-control" name="cc" id="cc" cval="{{ object.cc }}">
+                </select>
+                <small>Country Code</small>
+            </div>
+        </div>
 
-		<div class="opblk opblk_serviceIdentifier">
-			<label>serviceIdentifier</label>
-			<input type="text" name="serviceIdentifier" value="{{object.serviceIdentifier}}">
-			<small>Service Identifier</small>
-		</div>
+        <div class="form-group opblk opblk_stream_url">
+            <label class="col-sm-3 col-md-3 control-label">Stream Url:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="stream_url" id="stream_url"
+                       value="{{ object.stream_url }}">
+                <small>http://server/stream</small>
+            </div>
+        </div>
 
-		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Cancel</a>
-			<input type="submit" class="btn btn-primary" value="Save">
-		</span>
+        <div class="form-group opblk opblk_fqdn">
+            <label class="col-sm-3 col-md-3 control-label">FQDN:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="fqdn" id="fqdn" value="{{ object.fqdn }}">
+                <small>Authoritative FQDN</small>
+            </div>
+        </div>
 
-	</form>
+        <div class="form-group opblk opblk_serviceIdentifier">
+            <label class="col-sm-3 col-md-3 control-label">serviceIdentifier:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="serviceIdentifier" id="serviceIdentifier"
+                       value="{{ object.serviceIdentifier }}">
+                <small>Service Identifier</small>
+            </div>
+        </div>
 
-	<hr style="visibility: hidden; clear: both;">
+        <div class="form-group opblk opblk_mime_type">
+            <label class="col-sm-3 col-md-3 control-label">Mime Type:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" id="mime_type" name="mime_type" value="{{ object.mime_type }}">
+                <small id="id_mime_type"><a onclick="$('#mime_type').val('audio/mpeg');" class="btn btn-xs btn-default">audio/mpeg</a>
+                    or <a onclick="$('#mime_type').val('audio/aac');" class="btn btn-xs btn-default">audio/aac</a> etc.
+                </small>
+                <small id="dab_mime_type" style="display:hidden;"><a onclick="$('#mime_type').val('audio/mpeg');"
+                                                                     class="btn btn-xs btn-default">DAB (audio/mpeg)</a>
+                    or <a onclick="$('#mime_type').val('audio/aacp');" class="btn btn-xs btn-default">DAB+
+                        (audio/aacp)</a></small>
+            </div>
+        </div>
 
-	<script type="text/javascript">
+        <div class="form-group opblk opblk_bitrate">
+            <label class="col-sm-3 col-md-3 control-label">Bitrate:</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="bitrate" value="{{ object.bitrate }}">
+                <small>kbits/s</small>
+            </div>
+        </div>
 
-		function load_countries() {
-			$.ajax({
-				url: '{{ebuio_baseUrl}}ecc_list',
-				dataType: 'json',
-				success: function(data) {
-					cc_val = $('#cc').attr('cval');
-					cc_id = '';
+        <hr/>
 
-					$(data.list).each(function(_, el) {
-						opt = '<option value="' + el.id + '">' + el.name + ' (' + el.iso + ') [' + el.pi + el.ecc + ']</option>';
-
-						//Find cc id (as we store the cc and not the id to the country)
-						if (cc_val == (el.pi + el.ecc)){
-							cc_id = el.id;
-						}
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+                <a href="{% if station %}{{ ebuio_baseUrl }}stations/{{ station.id }}/channels
+                    {% else %}{{ ebuio_baseUrl }}channels/{% endif %}" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
 
 
-						$('#cc').append(opt);
-						$('#ecc').append(opt);
-					})
+    </form>
+    <script src='{{ ebuio_baseUrl }}media/js/channels.js'></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const module = ChannelsModule.prototype;
+            module.default_country = '{{ default_country }}';
 
-					$('#cc').val(cc_id);
-					$('#ecc').val($('#ecc').attr('cval'));
-				}
-			})
-		}
+            {% for t in types_id %}
+                module.typesIds.push([
+                    '{{ t.0 }}',
+                    '{{ t.1 }}',
+                    [],
+                ]);
+                {% for field_name in t.2 %}
+                    module.typesIds[module.typesIds.length - 1][2].push(
+                        '{{ field_name }}'
+                    );
+                {% endfor %}
+            {% endfor %}
+            module.update_display();
+            module.load_countries();
 
-		function update_display() {
-			$('.opblk').hide();
-
-			var cVal = $('#type').val();
-
-			{% for t in types_id %}
-				if (cVal == '{{t.0}}') {
-					{% for v in t.2 %}
-						$('.opblk_{{v}}').show();
-					{% endfor %}
-				}
-			{% endfor %}
-
-			$('.opblk').each(function(_, el) {
-
-				if ($(el).css('display') == 'none') {
-					$(el).find('input').val('');
-					$(el).find('select').val('');
-				}
-			});		
-
-		}
-
-		update_display();
-		load_countries();
-
-	</script>
+            // Automatic Frequency Transformation
+            $('#frequency').on('focusout', function () {
+                if ($(this).val() !== "" && $(this).val() !== "*") {
+                    var str = $(this).val();
+                    var result = '000000' + str.replace(/[. ]/g, '');
+                    $(this).val(result.substr(result.length - 5));
+                }
+            });
+        });
+    </script>
 
 {% endblock %}
 

@@ -1,26 +1,46 @@
-<div class="navbar mynavbar">
-<div class="navbar-inner">
-
-    <ul class="nav">
-        <li style="margin-top: 10px;"><span ><b>RadioDNS</b></span></li>
-        <li><a href="{{ebuio_baseUrl}}">Home</a></li>
-        <li><a href="{{ebuio_baseUrl}}stations/">Stations</a></li>
-        <li><a href="{{ebuio_baseUrl}}channels/">Channels</a></li>
-
-        <li class="divider-vertical"></li>
-
-        <li style="margin-top: 10px;"><span ><b>RadioVIS</b></span></li>
-        <li><a href="{{ebuio_baseUrl}}radiovis/gallery/">Gallery</a></li>
-        <li><a href="{{ebuio_baseUrl}}radiovis/channels/">Channels</a></li>
-
-        <li class="divider-vertical"></li>
-        <li style="margin-top: 10px;"><span ><b>RadioEPG</b></span></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/shows/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Shows</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Schedule</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/servicefollowing/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Service following</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/gallery/">Gallery</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/logos/">Logos</a></li>
+<div class="menu-section">
+    <h3>RadioDNS</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}stations/">My Stations</a></li>
+        <li><a href="{{ebuio_baseUrl}}channels/">My Channels</a></li>
+        <li><a href="{{ebuio_baseUrl}}clients/">My Clients</a></li>
+        <li><a href="{{ebuio_baseUrl}}serviceprovider/">Service Provider</a></li>
     </ul>
 </div>
+<div class="menu-section">
+    <h3>Service & Program Info</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}serviceprovider/images/">Logo Image Repository</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/logos/">Station Logos</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/servicefollowing/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Service following</a></li>
+        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Calendar & Schedule (EPG)</a></li>
+    </ul>
+</div>
+<div class="menu-section">
+    <h3>RadioVIS SlideShow</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}radiovis/gallery/">SlideShow Image Repository</a></li>
+        <li><a href="{{ebuio_baseUrl}}radiovis/channels/">RadioVIS Channel Images</a></li>
+        {#<li><a href="{{ebuio_baseUrl}}radioepg/gallery/">RadioEPG Gallery</a></li>#}
+    </ul>
 </div>
 
+{% if ebuio_u.ebuio_orga_admin %}
+<div class="menu-section">
+    <h3>System</h3>
+    <ul>
+        <li><a href="{{ebuio_baseUrl}}system/">System Status</a></li>
+    </ul>
+</div>
+{% endif %}
+
+<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/overrides.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="application/javascript">
+    const ebuio_baseUrl = "{{ebuio_baseUrl}}";
+</script>
+<div class="menu-section">
+    <h3><a href="{{ebuio_baseUrl}}terms/">Terms of Use</a></h3>
+</div>

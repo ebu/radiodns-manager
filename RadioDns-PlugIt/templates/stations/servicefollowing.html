@@ -1,0 +1,129 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Shows :: RadioEPG :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            {{ebuio_orga.name}} :: <a href="{{ebuio_baseUrl}}stations">Stations</a> :: {{station.name}} :: Service following
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">
+			{% block pagefunctions %}
+			{% if ebuio_u.ebuio_orga_admin %}
+
+				<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/edit/-?station_id={{station.id}}&backtostation=1" class="btn btn-primary">Add a new entry</a>
+
+			{% endif %}
+			{% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+	{% if nostations %}
+		No stations !
+	{% else %}
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}">Details</a></li>
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/channels"">Channels</a></li>
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radiovis/channels"><small>VIS</small> Channel Images</a></li>
+        <li role="presentation" class="active"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radioepg/servicefollowing"><small>EPG</small> Service Following</a></li>
+    </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="channels">
+
+		{% if saved %}
+			<div class="alert">
+				Entry has been saved
+			</div>
+		{% endif %}
+
+		{% if deleted %}
+			<div class="alert">
+				Entry has been deleted
+			</div>
+		{% endif %}
+
+		<div class="table-responsive">
+        <table id="radioepg-sf-table" class="display" cellspacing="0" width="100%">
+
+			<thead>
+				<tr>
+					<th>Channel name</th>
+					<th>Channel</th>
+					<th>Cost</th>
+					<th>Mime/type</th>
+					<th>Bitrate</th>
+					<th>Offset</th>
+					<th>On/Off</th>
+					<th style="width: 150px;"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for s in list %}
+					<tr class="{% if s.active %}text-success{% else %}{% endif %}">
+						<td>{{s.channel_name}}</td>
+						<td>{{s.uri}}</td>
+						<td>{{s.cost}}</td>
+						<td>{{s.mime_type}}</td>
+						<td>{{s.bitrate}}</td>
+						<td>{{s.offset}}</td>
+						<td>{{s.active|yesno:"On,Off"}}</td>
+						<td style="text-align: right;">
+							{% if ebuio_u.ebuio_orga_admin %}
+								{% if s.type == 'ip' %}<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/delete/{{s.id}}?station_id={{current_station_id}}&backtostation=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>{% endif %}
+								{% if s.active %}
+									<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/off/{{s.id}}?station_id={{current_station_id}}&backtostation=1" class="btn btn-sm btn-danger">Turn off</a>
+								{% else %}
+									<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/turn/on/{{s.id}}?station_id={{current_station_id}}&backtostation=1" class="btn btn-sm btn-success">Turn on</a>
+								{% endif %}
+
+								<a href="{{ebuio_baseUrl}}radioepg/servicefollowing/edit/{{s.id}}?station_id={{current_station_id}}&backtostation=1" class="btn btn-sm btn-primary">Edit</a>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+    </div>
+  </div>
+</div>
+    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
+    <script type="text/javascript">
+
+            $(document).ready(function() {
+                $('#radioepg-sf-table').DataTable( {
+                        "paging":   false,
+                        "ordering": true,
+                        "info":     true,
+                        columnDefs: [ { orderable: false, targets: [5,6] },
+                                        { "bSearchable": false, "aTargets": [5,6] }]
+                    } );
+            } );
+
+    </script>
+
+	{% endif %}
+
+
+
+{% endblock %}
+

@@ -1,1 +1,12 @@
 Generic single-database configuration.
+
+### Generate from Model
+```shell
+alembic revision --autogenerate -m '<description>'
+```
+
+### Upgrade and Downgrade db
+```shell
+alembic downgrade -1
+alembic upgrade head
+```

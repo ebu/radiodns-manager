@@ -3,6 +3,15 @@
 # Include main methods
 from main.actions import *
 
+# Include SPI methods
+from SPI.actions import *
+
+# Include system methods
+from system.actions import *
+
+# Include serviceprovider methods
+from serviceprovider.actions import *
+
 # Include stations methods
 from stations.actions import *
 
@@ -14,6 +23,9 @@ from radiovis.actions import *
 
 # Include radioepg methods
 from radioepg.actions import *
+
+# Include clients methods
+from clients.actions import *
 
 from plugit.utils import action
 

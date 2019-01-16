@@ -1,30 +1,17 @@
 # -*- coding: utf-8 -*-
 
 # Utils
-from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile, addressInNetwork, no_template
+from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, no_template
 
-from models import db, Station, Channel, Show, Ecc, LogEntry, Schedule, GenericServiceFollowingEntry, PictureForEPG
-
-import urlparse
-
-import os
-import sys
-import time
-
-from werkzeug import secure_filename
-from flask import abort
-
-from PIL import Image
-import imghdr
-
-import config
+from actions_utils import get_orga_service_provider
+from models import db, Station, Channel, Show, Schedule, GenericServiceFollowingEntry, LogoImage
 
 
 def stations_lists(orga):
     list = {}
     list_json = []
 
-    for elem in Station.query.filter_by(orga=orga).order_by(Station.name).all():
+    for elem in Station.query.filter_by(orga=orga, fk_client=None).order_by(Station.name).all():
         list_json.append(elem.json)
         list[elem.id] = elem
 
@@ -52,7 +39,8 @@ def radioepg_shows_home(request):
     saved = request.args.get('saved') == 'yes'
     deleted = request.args.get('deleted') == 'yes'
 
-    return {'list': list, 'saved': saved, 'deleted': deleted, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'list': list, 'saved': saved, 'deleted': deleted, 'current_station_id': current_station_id,
+            'current_station': current_station.json, 'stations': stations_json}
 
 
 @action(route="/radioepg/shows/edit/<id>", template="radioepg/shows/edit.html", methods=['POST', 'GET'])
@@ -66,7 +54,8 @@ def radioepg_shows_edit(request, id):
     errors = []
 
     if id != '-':
-        object = Show.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+        object = Show.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')),
+                                      id=int(id)).first()
 
     if request.method == 'POST':
 
@@ -104,8 +93,10 @@ def radioepg_shows_edit(request, id):
     if object:
         object = object.json
 
-    colors = [('Red', '#e41a1c'), ('Blue', '#377eb8'), ('Green', '#4daf4a'), ('Magenta', '#984ea3'), ('Orange', '#ff7f00'), ('Yellow', '#ffff33'), ('Brown', '#a65628'), ('Pink', '#f781bf'), ('Gray', '#999999')]
-    return {'object': object, 'colors': colors,  'errors': errors, 'current_station_id': station_id }
+    colors = [('Red', '#e41a1c'), ('Blue', '#377eb8'), ('Green', '#4daf4a'), ('Magenta', '#984ea3'),
+              ('Orange', '#ff7f00'), ('Yellow', '#ffff33'), ('Brown', '#a65628'), ('Pink', '#f781bf'),
+              ('Gray', '#999999')]
+    return {'object': object, 'colors': colors, 'errors': errors, 'current_station_id': station_id}
 
 
 @action(route="/radioepg/shows/delete/<id>")
@@ -129,6 +120,8 @@ def radioepg_shows_delete(request, id):
 def radioepg_schedule_home(request):
     """Show the schedule."""
 
+    _, sp = get_orga_service_provider(request)
+
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
     if not stations_json:
@@ -142,7 +135,8 @@ def radioepg_schedule_home(request):
     for elem in current_station.shows.order_by(Show.medium_name).all():
         list.append(elem.json)
 
-    return {'shows': list, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'shows': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
+            'stations': stations_json, 'serviceprovider': sp.json if sp else None}
 
 
 @action(route="/radioepg/schedule/<id>/events")
@@ -158,8 +152,9 @@ def radioepg_schedule_get_events(request, id):
     list = []
 
     for sche in object.schedules.all():
-        list.append(dict(id=sche.id, title=sche.show.medium_name, start=start_date+sche.seconds_from_base, end=start_date+sche.
-            seconds_from_base+sche.length*60, allDay=False, color=sche.show.color, textColor='#000'))
+        list.append(dict(id=sche.id, title=sche.show.medium_name, start=start_date + sche.seconds_from_base,
+                         end=start_date + sche.
+                         seconds_from_base + sche.length * 60, allDay=False, color=sche.show.color, textColor='#000'))
 
     return {'list': list}
 
@@ -243,7 +238,7 @@ def radioepg_schedule_xml(request, id):
 
     station = Station.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
 
-    import datetime, time
+    import datetime
 
     time_format = '%Y%m%dT%H%M%S'
 
@@ -257,13 +252,16 @@ def radioepg_schedule_xml(request, id):
         elem.start_date = start_date
         list.append(elem.json)
 
-    return {'schedules': list, 'start_time': start_date.strftime(time_format), 'end_time': end_date.strftime(time_format)}
+    return {'schedules': list, 'start_time': start_date.strftime(time_format),
+            'end_time': end_date.strftime(time_format)}
 
 
 @action(route="/radioepg/servicefollowing/", template="radioepg/servicefollowing/home.html")
 @only_orga_member_user()
 def radioepg_sf_home(request):
     """Show the list to manage service following."""
+
+    _, sp = get_orga_service_provider(request)
 
     (stations_json, stations) = stations_lists(int(request.args.get('ebuio_orgapk')))
 
@@ -284,10 +282,12 @@ def radioepg_sf_home(request):
     for elem in current_station.servicefollowingentries.order_by(GenericServiceFollowingEntry.channel_uri).all():
         list.append(elem.json)
 
-    return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json, 'stations': stations_json}
+    return {'list': list, 'current_station_id': current_station_id, 'current_station': current_station.json,
+            'stations': stations_json, 'serviceprovider': sp.json if sp else None}
 
 
-@action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html", methods=['POST', 'GET'])
+@action(route="/radioepg/servicefollowing/edit/<id>", template="radioepg/servicefollowing/edit.html",
+        methods=['POST', 'GET'])
 @only_orga_admin_user()
 def radioepg_servicefollowing_edit(request, id):
     """Edit a servicefollowing entry."""
@@ -309,7 +309,8 @@ def radioepg_servicefollowing_edit(request, id):
         else:
             station_to_test = object.channel.station
 
-        if station_to_test.id != int(station_id) or not station_to_test.orga == int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
+        if station_to_test.id != int(station_id) or not station_to_test.orga == int(
+                request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')):
             object = None
 
     if request.method == 'POST':
@@ -336,14 +337,17 @@ def radioepg_servicefollowing_edit(request, id):
 
             db.session.commit()
 
+            if request.args.get('backtostation') == '1':
+                return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
             return PlugItRedirect('radioepg/servicefollowing/?saved=yes')
 
     if object:
         object = object.json
 
-    dab_mime_types = [('audio/mpeg', 'DAB'), ('audio/aacp', 'DAB+')]
+    dab_mime_types = [('audio/mpeg', 'DAB (audio/mpeg)'), ('audio/aacp', 'DAB+ (audio/aacp)')]
 
-    return {'object': object, 'dab_mime_types': dab_mime_types, 'errors': errors, 'current_station_id': station_id}
+    return {'object': object, 'dab_mime_types': dab_mime_types, 'errors': errors, 'current_station_id': station_id,
+            'backtostation': request.args.get('backtostation') == '1'}
 
 
 @action(route="/radioepg/servicefollowing/delete/<id>")
@@ -366,13 +370,15 @@ def radioepg_servicefollowing_delete(request, id):
                 db.session.delete(object)
                 db.session.commit()
 
+    if request.args.get('backtostation') == '1':
+        return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
     return PlugItRedirect('radioepg/servicefollowing/?deleted=yes&station_id=' + station_id)
 
 
 @action(route="/radioepg/servicefollowing/turn/<mode>/<id>")
 @json_only()
 @only_orga_admin_user()
-def radioepg_servicefollowing_trun(request, mode, id):
+def radioepg_servicefollowing_turn(request, mode, id):
     """Turn on or off a servicefollowing entry."""
 
     object = GenericServiceFollowingEntry.query.filter_by(id=int(id)).first()
@@ -393,159 +399,165 @@ def radioepg_servicefollowing_trun(request, mode, id):
             object.active = mode == 'on'
             db.session.commit()
 
+    if request.args.get('backtostation') == '1':
+        return PlugItRedirect('stations/%s/radioepg/servicefollowing?saved=yes' % station_id)
     return PlugItRedirect('radioepg/servicefollowing/?turned=' + mode + '&station_id=' + station_id)
 
 
-@action(route="/radioepg/gallery/", template="radioepg/gallery/home.html")
-@only_orga_member_user()
-def radioep_gallery_home(request):
-    """Show the list of pictures."""
-
-    list = []
-
-    for elem in PictureForEPG.query.filter_by(orga = int(request.args.get('ebuio_orgapk'))).order_by(PictureForEPG.name).all():
-        list.append(elem.json)
-
-    saved = request.args.get('saved') == 'yes'
-    deleted = request.args.get('deleted') == 'yes'
-
-    return {'list': list, 'saved': saved, 'deleted': deleted}
-
-
-@action(route="/radioepg/gallery/edit/<id>", template="radioepg/gallery/edit.html", methods=['POST', 'GET'])
-@only_orga_admin_user()
-def radioep_gallery_edit(request, id):
-    """Edit a channel."""
-
-    object = None
-    errors = []
-
-    if id != '-':
-        object = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
-
-    if request.method == 'POST':
-
-        if not object:
-            object = PictureForEPG(int(request.form.get('ebuio_orgapk')))
-
-        object.name = request.form.get('name')
-        object.radiotext = request.form.get('radiotext')
-        object.radiolink = request.form.get('radiolink')
-
-        def add_unique_postfix(fn):
-            """__source__ = 'http://code.activestate.com/recipes/577200-make-unique-file-name/'"""
-            if not os.path.exists(fn):
-                return fn
-
-            path, name = os.path.split(fn)
-            name, ext = os.path.splitext(name)
-
-            make_fn = lambda i: os.path.join(path, '%s(%d)%s' % (name, i, ext))
-
-            for i in xrange(2, sys.maxint):
-                uni_fn = make_fn(i)
-                if not os.path.exists(uni_fn):
-                    return uni_fn
-
-            return None
-
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            full_path = add_unique_postfix('media/uploads/radioepg/gallery/' + filename)
-            file.save(full_path)
-            if object.filename:
-                try:
-                    os.unlink(object.filename)
-                except:
-                    pass
-            object.filename = full_path
-
-        # Check errors
-        if object.name == '':
-            errors.append("Please set a name")
-
-        if object.filename == '' or object.filename is None:
-            errors.append("Please upload an image")
-        else:
-
-            if imghdr.what(object.filename) not in ['jpeg', 'png']:
-                errors.append("Image is not an png or jpeg image")
-                os.unlink(object.filename)
-                object.filename = None
-
-        # If no errors, save
-        if not errors:
-
-            if not object.id:
-                db.session.add(object)
-            else:
-                import glob
-                for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
-                    os.unlink(f)
-
-            db.session.commit()
-
-            return PlugItRedirect('radioepg/gallery/?saved=yes')
-
-    if object:
-        object = object.json
-
-    return {'object': object, 'errors': errors}
-
-
-@action(route="/radioepg/gallery/delete/<id>")
-@json_only()
-@only_orga_admin_user()
-def radioep_gallery_delete(request, id):
-    """Delete a picture."""
-
-    object = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
-
-    os.unlink(object.filename)
-
-    import glob
-    for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
-        os.unlink(f)
-
-    db.session.delete(object)
-    db.session.commit()
-
-    return PlugItRedirect('radioepg/gallery/?deleted=yes')
+# @action(route="/radioepg/gallery/", template="radioepg/gallery/home.html")
+# @only_orga_member_user()
+# def radioep_gallery_home(request):
+#     """Show the list of pictures."""
+#
+#     list = []
+#
+#     for elem in PictureForEPG.query.filter_by(orga = int(request.args.get('ebuio_orgapk'))).order_by(PictureForEPG.name).all():
+#         list.append(elem.json)
+#
+#     saved = request.args.get('saved') == 'yes'
+#     deleted = request.args.get('deleted') == 'yes'
+#
+#     return {'list': list, 'saved': saved, 'deleted': deleted}
+#
+#
+# @action(route="/radioepg/gallery/edit/<id>", template="radioepg/gallery/edit.html", methods=['POST', 'GET'])
+# @only_orga_admin_user()
+# def radioep_gallery_edit(request, id):
+#     """Edit a channel."""
+#
+#     object = None
+#     errors = []
+#
+#     if id != '-':
+#         object = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk')), id=int(id)).first()
+#
+#     if request.method == 'POST':
+#
+#         if not object:
+#             object = PictureForEPG(int(request.form.get('ebuio_orgapk')))
+#
+#         object.name = request.form.get('name')
+#         object.radiotext = request.form.get('radiotext')
+#         object.radiolink = request.form.get('radiolink')
+#
+#         def add_unique_postfix(fn):
+#             """__source__ = 'http://code.activestate.com/recipes/577200-make-unique-file-name/'"""
+#             if not os.path.exists(fn):
+#                 return fn
+#
+#             path, name = os.path.split(fn)
+#             name, ext = os.path.splitext(name)
+#
+#             make_fn = lambda i: os.path.join(path, '%s(%d)%s' % (name, i, ext))
+#
+#             for i in xrange(2, sys.maxint):
+#                 uni_fn = make_fn(i)
+#                 if not os.path.exists(uni_fn):
+#                     return uni_fn
+#
+#             return None
+#
+#         file = request.files['file']
+#         if file:
+#             filename = secure_filename(file.filename)
+#             full_path = add_unique_postfix('media/uploads/radioepg/gallery/' + filename)
+#             file.save(full_path)
+#             if object.filename:
+#                 try:
+#                     os.unlink(object.filename)
+#                 except:
+#                     pass
+#             object.filename = full_path
+#
+#         # Check errors
+#         if object.name == '':
+#             errors.append("Please set a name")
+#
+#         if object.filename == '' or object.filename is None:
+#             errors.append("Please upload an image")
+#         else:
+#
+#             if imghdr.what(object.filename) not in ['jpeg', 'png']:
+#                 errors.append("Image is not an png or jpeg image")
+#                 os.unlink(object.filename)
+#                 object.filename = None
+#
+#         # If no errors, save
+#         if not errors:
+#
+#             if not object.id:
+#                 db.session.add(object)
+#             else:
+#                 import glob
+#                 for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
+#                     os.unlink(f)
+#
+#             db.session.commit()
+#
+#             return PlugItRedirect('radioepg/gallery/?saved=yes')
+#
+#     if object:
+#         object = object.json
+#
+#     return {'object': object, 'errors': errors}
+#
+#
+# @action(route="/radioepg/gallery/delete/<id>")
+# @json_only()
+# @only_orga_admin_user()
+# def radioep_gallery_delete(request, id):
+#     """Delete a picture."""
+#
+#     object = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(id)).first()
+#
+#     os.unlink(object.filename)
+#
+#     import glob
+#     for f in glob.glob('media/uploads/radioepg/cache/*_L%s.png' % (object.id,)):
+#         os.unlink(f)
+#
+#     db.session.delete(object)
+#     db.session.commit()
+#
+#     return PlugItRedirect('radioepg/gallery/?deleted=yes')
 
 
 @action(route="/radioepg/logos/", template="radioepg/logos/logos.html")
 @only_orga_member_user()
 def radioepg_logos_home(request):
     """Show the list of stations to edit current logo."""
+    _, sp = get_orga_service_provider(request)
 
     list = []
 
-    for elem in Station.query.filter(Station.orga==int(request.args.get('ebuio_orgapk'))).order_by(Station.name).all():
+    for elem in Station.query.filter(Station.orga == int(request.args.get('ebuio_orgapk'))).order_by(
+            Station.name).all():
         list.append(elem.json)
 
     pictures = []
 
-    for elem in PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(PictureForEPG.name).all():
-        pictures.append(elem.json)
+    if sp:
+        for elem in LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk'))).order_by(
+                LogoImage.name).all():
+            pictures.append(elem.json)
 
-    return {'list': list, 'pictures': pictures}
+    return {'list': list, 'pictures': pictures, 'serviceprovider': sp.json if sp else None}
 
 
-@action(route="/radioepg/logos/set/<id>/<pictureid>")
+@action(route="/radioepg/logos/set/<id>/<imageid>")
 @only_orga_admin_user()
 @json_only()
-def radioepg_logos_set(request, id, pictureid):
+def radioepg_logos_set(request, id, imageid):
     """Set a default value for a station"""
 
-    object = Station.query.filter(Station.id == int(id), Station.orga==int(request.args.get('ebuio_orgapk'))).first()
+    object = Station.query.filter(Station.id == int(id), Station.orga == int(request.args.get('ebuio_orgapk'))).first()
 
-    picture = PictureForEPG.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(pictureid)).first()
+    image = LogoImage.query.filter_by(orga=int(request.args.get('ebuio_orgapk')), id=int(imageid)).first()
 
-    if picture:
-        object.epg_picture_id = picture.id
+    if image:
+        object.default_logo_image_id = image.id
     else:
-        object.epg_picture_id = None
+        object.default_logo_image_id = None
 
     db.session.commit()
 
