@@ -6,6 +6,7 @@ setup(name='RadioDNSTests',
       packages=[''],
       install_requires=[
           'pytest==3.8.0',
+          'pytest-ordering==0.6',
           'selenium==3.14.0',
           'requests==2.19.1',
           'SQLAlchemy==1.2.11',

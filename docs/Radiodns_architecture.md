@@ -1,8 +1,4 @@
 # Architecture
-**Note**
-
-Currently this architecture is subject to change as RadioDns will include in the future a ebu.io free mode.
-
 ## Stacks architecture
 ### RadioDns with EBU.io
 Currently EBU.io provides the user and organisation management. That means that the PlugIt Proxy from EBU.io will provide
@@ -33,20 +29,30 @@ The diagram above explains the current state of the RadioDns stack for this mode
 Its provides the PlugIt Bridge between the world and the RadioDns manager. It also manager users, organizations and authentication.
 
 ## DNS architecture
-All DNS architecture is hosted in amazon web services inn route53.
+All DNS architecture is hosted in amazon web services in route53.
 Currently, the RadioDns hostname is radio.ebu.io.
 
-radio.ebu.io contains in its an A record pointing to the RadioDns instance. Every service provider's codops is a
-subdomain of radio.ebu.io. For example the sp having 'zzebu' as codops has a registered hosted name of zzebu.radio.ebu.io.
-So every service provider has its own hosted zone and in the radio.ebu.io hosted zone there is the delegation of their
-subdomain to their hosted zone.
+radio.ebu.io contains in its hosted zone an A record pointing to the RadioDns instance. Every service provider's codops is a
+subdomain of radio.ebu.io. For example the service provider having 'zzebu' as codops has a registered hosted name of zzebu.radio.ebu.io.
+So every service provider has its own hosted zone in the radio.ebu.io hosted zone.
 
-radio.ebu.io also contains CNAME records to map the service providers services (EPG, SPI, VIS, EPGI) to the radio.ebu.io
-services. 
+The service providers hosted zones contains SRV records for the discovery of their services per station (EPG, SPI, VIS, TAG).
+Theses SRV records points on CNAMEs located in the radio.ebu.io hosted zone.
 
-The service providers hosted zone contains SRV records for the discovery of their services per station (EPG, SPI, VIS, EPGI).
-Currently as there is no station filtering in RadioDns EPG/SPI XML generation. This feature will either be removed in the
-next iterations of the application or fully implemented.
+radio.ebu.io's hosted zone contains CNAME records to map the service providers services (EPG, SPI, VIS, TAG) to the radio.ebu.io
+services.
+
+An example of the full chain would be:
+
+===== SERVICE PROVIDER HOSTED ZONE =====
+
+    SRV: _radioepg._tcp.demofm.zzebu.radio.ebu.io. -> 0 100 443 zzebu.spi.radio.ebu.io.
+
+===== radio.ebu.io HOSTED ZONE =====
+
+    CNAME: zzebu.spi.radio.ebu.io. -> spi.radio.ebu.io.
+    CNAME: spi.radio.ebu.io. -> radio.ebu.io.
+    A: radio.ebu.io. -> `<INSTANCE IP>`
 
 ## HTTPS considerations
 It is the system admin's responsibility to ensure HTTPS certificates renewal. Currently

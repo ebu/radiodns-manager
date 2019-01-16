@@ -1,4 +1,5 @@
 # Tests for RadioDNS
+This project hosts the integration tests with automated browser testing for the RadioDns manager.
 
 ## Setup
 
@@ -15,7 +16,7 @@ You also need the following dependencies:
 
 Next you have to setup the virtualenv:
 
-    virtualenv --python=<your path to python3 binary> venv
+    virtualenv --python=$(which python3) venv
     source venv/bin/activate
     
 And then install the required PIP dependencies
@@ -33,6 +34,13 @@ along with their dependencies:
 - MockApi
 - RadioDns-PlugIt
 - LightweightPlugitProxy
+
+## Configuration
+You can set the following environment variables:
+
+- **TEST_BROWSER**: Sets the tests browser. Can be `chrome` or `firefox`. Defaults to `chrome`.
+- **HEADLESS**: If `True` the browser will run in a headless mode. If `False` you will be able to see the browser being
+controlled.
 
 ## Run
 First make sure you activated the correct virtual env (Ignore the deactivate error if any).

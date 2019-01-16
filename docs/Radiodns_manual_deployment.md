@@ -1,8 +1,6 @@
-**Notes**
+**Note**
 
-This documents covers the deployment of the application on an EC2 amazon ubuntu instance.
-
-**THIS DOCUMENT ONLY COVERS DEPLOYMENT IN AN STANDARD AWS ENVIRONMENT!**
+This documents covers the deployment of the application on an EC2 amazon ubuntu instance in AWS.
 
 # AWS Configuration 
 Running on an AWS EC2 instance is mandatory.

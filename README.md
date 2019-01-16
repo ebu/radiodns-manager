@@ -7,13 +7,18 @@ services ([RadioVIS, RadioEPG and ServiceFollowing](http://www.radiodns.org)).
 Check each folder for specifics README about each part.
 
 ## How to run in local without installing dependencies
-To start up a local instance
+To start up a local demo instance
 
 ```
 docker-compose -f docker-compose-standalone-demo.yml up --build -d
 ```
 
 Then you may visit http://localhost:4000.
+
+Your login credentials as admin are
+
+    admin
+    1234
 
 To shut down the local instance
 
@@ -24,9 +29,9 @@ docker-compose -f docker-compose-standalone-demo.yml down
 To remove the database and start afresh
 
 ```
-docker-volume rm radiodns-manager_db_data
-docker-volume rm radiodns-manager_mock_api_data
-docker-volume rm radiodns-manager_pgdata
+docker volume rm radiodns-manager_db_data
+docker volume rm radiodns-manager_mock_api_data
+docker volume rm radiodns-manager_pgdata
 ```
 
 ## Getting Started
