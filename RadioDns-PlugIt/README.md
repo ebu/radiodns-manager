@@ -91,13 +91,13 @@ The api url must end with a `/`.
 - **XSISERVING_DOMAIN**: Domain where the EPG and SPI services will be served. Defaults to `127.0.0.1:5000`. In doubt, give
 to this parameter the same value as the **DOMAIN** parameter.
 - **RADIOVIS_DNS**: Domain name where the VIS service will be accessible. Defaults to `127.0.0.1`. In doubt, give
-to this parameter the same value as the **DOMAIN** parameter.
+to this parameter the following value: `vis.DOMAIN`.
 - **RADIOEPG_DNS**: Domain name where the EPG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
-to this parameter the same value as the **DOMAIN** parameter.
+to this parameter the following value: `epg.DOMAIN`.
 - **RADIOTAG_DNS**: Domain name where the TAG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
-to this parameter the same value as the **DOMAIN** parameter.
+to this parameter the following value: `tag.DOMAIN`.
 - **RADIOSPI_DNS**: Domain name where the SPI service will be accessible. Defaults to `127.0.0.1`. In doubt, give
-to this parameter the same value as the **DOMAIN** parameter.
+to this parameter the following value: `spi.DOMAIN`.
 - **RADIOVIS_PORT**: Port where the VIS service will be accessible. Defaults to `61613`.
 - **RADIOEPG_PORT**: Port where the EPG service will be accessible. Defaults to `5000`.
 - **RADIOTAG_PORT**: Port where the TAG service will be accessible. Defaults to `5000`.

@@ -193,11 +193,4 @@ To build and deploy the containers
 To stop the containers
 
     docker-compose -f docker-compose-radiovis-prod.yml down
-    
- 
-## Backup and restore database
-### Backup
-    docker exec <name_of_docker_container> /usr/bin/mysqldump -u root --password=<database_passowrd> <database_name> > backup.sql
 
-### Restore
-    cat backup.sql | docker exec -i <name_of_docker_container> /usr/bin/mysql -u root --password=<database_passowrd> <database_name>

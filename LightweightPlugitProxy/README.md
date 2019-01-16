@@ -59,6 +59,17 @@ avoid having multiple apps connecting to a database at the same time but rather 
 After X seconds (X being the time chosen for this parameter) the increasing time to wait between each attempt will be
 reset so an application doesn't take 300 seconds to reconnect to its database.
 
+## Running the app
+On the first run, run the following commands to initialize the database and the super user:
+
+    source venv/bin/activate
+    python manage.py migrate --noinput
+    python manage.py createsuperuser
+
+To run the the app:
+
+    python manage.py runserver 4000
+
 ## Running the tests
 The tests will create a local sqlite database. They do not require any networking setup.
 Instead every http call is mocked.

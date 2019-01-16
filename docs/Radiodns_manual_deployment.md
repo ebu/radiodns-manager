@@ -134,8 +134,8 @@ You need to install docker 18.06.1 or higher (install docker [here](https://docs
 You also need certbot with route53 plugin installed in order to use the HTTPS features.
 
 ## RadioDns Manager Configuration 
-For your convenience a `.env.example` containing the various configurations for the docker images has been provided.
-You must copy it or rename it to `.env` (`cp .env.example .env`). The project wont be able to work if the file named
+For your convenience a `.env.standalone.example` containing the various configurations for the docker images has been provided.
+You must copy it or rename it to `.env` (`cp .env.standalone.example .env`). The project wont be able to work if the file named
 `.env` is missing.
 
 You must edit the `.env` and fill the fields that have as value <CHANGE_ME>.
@@ -183,9 +183,16 @@ To shut down:
 To remove the database and start afresh
 
     docker-compose down
-    docker volume rm radiodns-docker-demo_db_data
-    docker volume rm radiodns-docker-demo_pgdata
+    docker volume rm radiodns-manager_db_data
+    docker volume rm radiodns-manager_pgdata
     docker-compose up --build -d
+    
+## Backup and restore database
+### Backup
+    docker exec <name_of_docker_container> /usr/bin/mysqldump -u root --password=<database_passowrd> <database_name> > backup.sql
+
+### Restore
+    cat backup.sql | docker exec -i <name_of_docker_container> /usr/bin/mysql -u root --password=<database_passowrd> <database_name>
 
 # Services
 ## RadioDns Manager
