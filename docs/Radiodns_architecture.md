@@ -25,14 +25,12 @@ and served by uWSGI. This behaviour will be corrected in the next iterations of 
 The vis service is hosted on a separated instance because of its scalability and instability issues.
 
 ### RadioDns standalone mode
-The standalone mode can be run as a demonstration (DO NOT USE IN PRODUCTION!) entirely in docker. 
+The standalone mode can be run entirely in docker. 
 
 ![architecture_ebu.io.png](/docs/images/architecture_standalone.png)
 
-The diagram above explains the current state of the RadioDns stack for standalone mode. Currently the PlugIt Proxy
-only mocks data. It provides only one service provider and a quick way to become any user for demonstration purposes.
-In this mode, the DNS part of the application doesn't work but the services do (EPG, SPI, VIS, EPGI). A container named
-Mock Api handles the logo hosting and organisation REST endpoint.
+The diagram above explains the current state of the RadioDns stack for standalone mode. The LPP image is the LightweightPlugitProxy.
+Its provides the PlugIt Bridge between the world and the RadioDns manager. It also manager users, organizations and authentication.
 
 ## DNS architecture
 All DNS architecture is hosted in amazon web services inn route53.

@@ -56,10 +56,10 @@ Launch the dev databases with:
     docker-compose -f docker-compose-dev.yml up -d
     
 Then head to each following folders in order and follow their README.md:
--LightweightPlugitProxy 
--RadioDns
--RadioVisServer 
--MockApi 
+- LightweightPlugitProxy 
+- RadioDns
+- RadioVisServer 
+- MockApi 
 
 The default configuration of the services should be able to make the stack run for local development.
 
