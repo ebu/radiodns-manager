@@ -1,22 +1,29 @@
-# -*- coding: utf-8 -*-
-
-"""Utils and decorators"""
+import requests
 
 import config
-import os
-import sys
 
-# Database: This loads the DB differently depending on what we are
-# running (plugit/flask server or standalone)
 
-if 'plugit' in sys.modules:
-    # We are running in the plugit server. Import its DB
-    from plugit import db
-else:
-    # Create db here
-    from flask.ext.sqlalchemy import SQLAlchemy
-    from flask import Flask
-    # FIXME this is just a hack
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_URL
-    db = SQLAlchemy(app)
+def safe_cast(val, target_type, default=None):
+    """
+    Tries to cast a value to a specific target value. Return None or specified
+     default value if casting failed.
+
+    :param val: Value to be cast.
+    :param target_type: Target type (int, float, string, etc).
+    :param default: Must be of the expected type. Default value if cast failed.
+    :return: Casted value if success, default value otherwise.
+    """
+    try:
+        return target_type(val)
+    except (ValueError, TypeError):
+        return default
+
+
+def send_image_to_mock_api(image, size_prefix=""):
+    """
+    Standalone function allowing to send an image to any mock api server.
+
+    :param image: the image to send. For example: {name: open(full_path, 'rb')}
+    :param size_prefix: the size (in pixels) of the image. For example: "32x32".
+    """
+    requests.post(config.LOGO_INTERNAL_URL + ("" if size_prefix == "" else "/") + size_prefix, files=image)

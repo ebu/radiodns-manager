@@ -1,0 +1,51 @@
+version: '3.7'
+
+# THIS STACK IS ONLY FOR DEMONSTRATION AND SHOULD NOT BE USED IN PRODUCTION.
+
+services:
+
+    database:
+        image: postgres
+        volumes:
+        - pgdata:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_USER: ${DATABASE_USER}
+            POSTGRES_DB: ${DATABASE_NAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+        ports:
+        - "5432:5432"
+
+    lpp:
+        build: .
+        restart: always
+        depends_on:
+        - database
+        environment:
+            DEBUG: ${DEBUG}
+            LPP_PORT: ${LPP_PORT}
+            PLUGIT_APP_URL: ${PLUGIT_APP_URL}
+            SECRET_KEY: ${SECRET_KEY}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+            LPP_PREFIX: ${LPP_PREFIX}
+            DATABASE_NAME: ${DATABASE_NAME}
+            DATABASE_USER: ${DATABASE_USER}
+            DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+            DATABASE_HOST: ${DATABASE_HOST}
+            DATABASE_PORT: ${DATABASE_PORT}
+            PLUGIT_REMOTE_SERVER_SECRET: ${PLUGIT_REMOTE_SERVER_SECRET}
+            SU_NAME: ${SU_NAME}
+            SU_EMAIL: ${SU_EMAIL}
+            SU_PASSWORD: ${SU_PASSWORD}
+            DATABASE_CONNECTION_MERCY_TIME: ${DATABASE_CONNECTION_MERCY_TIME}
+
+    reverse_proxy:
+        build: Nginx-example/.
+        restart: always
+        ports:
+        - "80:80"
+        depends_on:
+        - lpp
+
+volumes:
+    pgdata:

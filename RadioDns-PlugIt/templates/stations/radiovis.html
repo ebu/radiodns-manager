@@ -1,0 +1,220 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Channels :: RadioVIS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            {{ebuio_orga.name}} :: <a href="{{ebuio_baseUrl}}stations">Stations</a> :: {{station.name}} :: RadioVIS Channels
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}">Details</a></li>
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/channels"">Channels</a></li>
+        <li role="presentation" class="active"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radiovis/channels"><small>VIS</small> Channel Images</a></li>
+        <li role="presentation"><a href="{{ebuio_baseUrl}}stations/{{station.id}}/radioepg/servicefollowing"><small>EPG</small> Service Following</a></li>
+    </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="channels">
+
+	<div class="table-responsive">
+	<table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
+
+		<thead>
+			<tr>
+				<th>Station</th>
+                <th>Type</th>
+				<th>Name</th>
+				<th>Topic</th>
+                <th></th>
+				<th style="width: 180px;">Default image</th>
+				<th style="width: 130px;"></th>
+			</tr>
+		</thead>
+
+		<tbody>
+                <tr style="background:#aaaaff;">
+					<td><strong>ALL CHANNELS</strong></td>
+                    <td></td>
+					<td></td>
+					<td>Set for all channels at once</td>
+                    <td><img id="channel-img-all" height="24" width="32" src="" /></td>
+					<td>
+						{% if ebuio_u.ebuio_orga_admin %}
+                            <div class="form-inline">
+                                <input type="hidden" id="currentvalue-all" value="{{c.default_picture_data.id}}" />
+							<select class="form-control" style="margin-bottom: 0px;" id="select-all" onchange="toggle_button('all');">
+								<option value="0" {% if not c.default_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
+								{% for p in pictures %}
+									<option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_picture_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
+								{% endfor %}
+							</select>
+                            <button class="btn btn-primary" style="display:none;" id="button-all" onclick="switch_default('all');"><i class="ion-code-download"></i></button>
+                            </div>
+						{% else %}
+							{{c.default_picture_data.name|default:"<i>Disabled</i>"}}
+						{% endif %}
+					</td>
+					<td>
+
+					</td>
+				</tr>
+			{% for c in list %}
+				<tr>
+					<td><strong>{{c.station_name}}</strong></td>
+                    <td>{{c.type_id}}</td>
+					<td>{{c.name}}</td>
+					<td><small>{{c.topic}}</small></td>
+                    <td><img id="channel-img-{{c.id}}" height="24" width="32" src="{{c.default_picture_data.public_url}}" /></td>
+					<td>
+						{% if ebuio_u.ebuio_orga_admin %}
+                            <div class="form-inline">
+                                <input type="hidden" id="currentvalue-{{c.id}}" value="{{c.default_picture_data.id}}" />
+							<select class="form-control channel_vischange" style="margin-bottom: 0px;" id="select-{{c.id}}" onchange="toggle_button({{c.id}});">
+								<option value="0" {% if not c.default_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
+								{% for p in pictures %}
+									<option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_picture_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
+								{% endfor %}
+							</select>
+                            <button class="btn btn-primary" style="display:none;" id="button-{{c.id}}" onclick="switch_default({{c.id}});"><i class="ion-code-download"></i></button>
+                            </div>
+						{% else %}
+							{{c.default_picture_data.name|default:"<i>Disabled</i>"}}
+						{% endif %}
+					</td>
+					<td style="text-align:right;">
+						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class="btn btn-default btn-sm" title="Logs"><i class="ion-ios-list"></i> Logs</a>
+                        <a href="#" onclick="play_topic('{{c.topic_no_slash}}', '{{c.station_name}}', '{{c.name}}' );" class="btn btn-default btn-sm" title="Ajax player"><i class="ion-play"></i>  Player</a>
+
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+    <div id="player_modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">RadioVIS player</h4>
+          </div>
+          <div id="player_modal_body" class="modal-body">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+</div>
+    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
+	<script type="text/javascript">
+        function toggle_button(id) {
+            var nval = $('#select-'+id).val();
+            var cval = $('#currentvalue-'+id).val();
+            if(nval != cval) {
+                $('#button-'+id).show();
+            } else {
+                $('#button-'+id).hide();
+            }
+        }
+		function switch_default(id) {
+		    var val = $('#select-'+id).val();
+		    if(id == "all") {
+		        update_image(id, val);
+		        // Do for all channels
+		        $( '.channel_vischange' ).each(function() {
+                    $( this ).val(val);
+                    switch_default($( this ).attr('id').replace('select-', ''));
+                });
+		        // Switch Dropdown
+		        // Update Ajax
+		    } else {
+                $.ajax({
+                    url: '{{ebuio_baseUrl}}radiovis/channels/set/' + id + '/' + val,
+                    success: function() {
+                        update_image(id, val);
+                    }
+                })
+			}
+		}
+		function update_image(id, val) {
+		    var elemToBlink = $('#select-'+id);
+            $('#currentvalue-'+id).val(val);
+            elemToBlink.css('backgroundColor', 'green');
+            elemToBlink.css('opacity', '0.25');
+            elemToBlink.animate({ opacity: 1 }, 500, function() {
+                elemToBlink.css('backgroundColor', '#ffffff');
+            } );
+            toggle_button(id);
+            // Update inline image
+            if(val == 0) {
+                $('#channel-img-'+id).hide();
+            } else {
+                $('#channel-img-'+id).show();
+                var selected = elemToBlink.find('option:selected');
+                var new_public_url = selected.data('public_url');
+                $('#channel-img-'+id).attr("src", new_public_url);
+            }
+		}
+
+        function play_topic(topic, stationname, channel) {
+            if(false) {
+                var popupUrl = "//ebu.io{{ebuio_baseUrl}}radiovis/channels/player/?topic="+topic+"&stationname="+stationname+"&name="+channel;
+                play_popup(popupUrl);
+            } else {
+                var modalUrl = "{{ebuio_baseUrl}}radiovis/channels/playermodal/?topic="+topic+"&stationname="+stationname+"&name="+channel;
+                $.ajax({
+                    url: modalUrl
+                }).success(function (data) {
+                    $('#player_modal').html(data);
+                    $('#player_modal').modal('show');
+                });
+            }
+        }
+        function play_popup(url) {
+            newwindow=window.open(url,'name','height=400,width=450');
+            if (window.focus) {newwindow.focus()}
+            return false;
+        }
+
+        function closetopic(data) {
+            $('#player_modal').modal('hide');
+        }
+
+        $(document).ready(function() {
+            $('#radiodns-channel-table').DataTable( {
+                    "paging":   false,
+                    "ordering": true,
+                    "info":     true,
+                    columnDefs: [ { orderable: false, targets: [4,5,6] },
+                                    { "bSearchable": false, "aTargets": [ 4,5,6 ] }]
+                } );
+        } );
+
+	</script>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

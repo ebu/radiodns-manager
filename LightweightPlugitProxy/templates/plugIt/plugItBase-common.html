@@ -1,0 +1,137 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} :: PlugIt -Standalone mode</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block css %}
+        {#  CSS used on a specific page. #}
+        {#  use {{ block.super }} to avoid overwriting #}
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/ionicons.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/plugIt-standalone.css' %}" rel="stylesheet" media="screen">
+    {% endblock %}
+
+    {% block javascript %}
+        {#  Javascript used on a specific page. #}
+        {#  use {{ block.super }} to avoid overwriting #}
+        <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
+
+    {% block extra_head %}{% endblock %}
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+    function ebuio_setUser(mode) {
+        $.ajax({
+            url: "{{context.ebuio_baseUrl}}ebuio_setUser?mode=" + mode,
+        }).done(function () {
+            location.reload();
+        });
+    }
+
+    function ebuio_setOrga(name, pk) {
+        $.ajax({
+            url: "{{context.ebuio_baseUrl}}ebuio_setOrga?name=" + name + "&pk=" + pk,
+        }).done(function () {
+            location.reload();
+        });
+    }
+</script>
+
+{% block nav_block %}
+    <div class="container">
+    <nav class="navbar navbar-inverse">
+{% endblock %}
+<div class="container-fluid">
+
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ context.ebuio_baseUrl }}">RadioDNS Manager 4.0</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li>
+                {% if ebuio_u and ebuio_u.username != '' %}
+                    <a href="{% url 'logout' %}">Welcome {{ ebuio_u.username }}. Logout ?</a>
+                {% else %}
+                    <a href="{% url 'login' %}"> Not logged. Login ?</a>
+                {% endif %}
+            </li>
+
+            {% if ebuio_u and ebuio_u.is_superuser %}
+                <li>
+                    <a href="/admin/">Administration panel</a>
+                </li>
+            {% endif %}
+
+            {% if context.ebuio_orgamode %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {% trans "Organization" %}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li {% if context.ebuio_orga.pk == '-1' %}class="active"{% endif %}><a href="#"
+                                                                                               onclick="ebuio_setOrga('EBU', '-1');">{% trans "EBU" %}</a>
+                        </li>
+                        <li {% if context.ebuio_orga.pk == '-2' %}class="active"{% endif %}><a href="#"
+                                                                                               onclick="ebuio_setOrga('RTS', '-2');">{% trans "RTS" %}</a>
+                        </li>
+                        <li {% if context.ebuio_orga.pk == '-3' %}class="active"{% endif %}><a href="#"
+                                                                                               onclick="ebuio_setOrga('BBC', '-3');">{% trans "BBC" %}</a>
+                        </li>
+                        <li {% if context.ebuio_orga.pk == '-4' %}class="active"{% endif %}><a href="#"
+                                                                                               onclick="ebuio_setOrga('CNN', '-4');">{% trans "CNN" %}</a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://www.ebu.ch/home" target="_blank" rel="noopener noreferrer" class="text-info">About EBU</a></li>
+        </ul>
+
+    </div>
+</div>
+</nav>
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            {% block content %}
+                {{ plugit_content|safe }}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <hr/>
+            <div class="footer">
+                <p>&copy; EBU 2013 - 2017</p>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+<script type="text/javascript">
+    $('[data-toggle="tooltip"]').tooltip();
+</script>
+</body>
+</html>

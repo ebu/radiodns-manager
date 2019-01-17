@@ -3,20 +3,34 @@
 
 {% block title %}Channels :: RadioDNS{% endblock %}
 
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
 {% block content %}
 
-	{% plugitInclude "menubar" %}
-
-	<h3>Export to zone file</h3>
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            Export to zone file
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">
+            {% block pagefunctions %}
+                <a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Back to the list</a>
+        		<a href="{{ebuio_baseUrl}}channels/export/?to=file" class="btn btn-primary">Download to file</a>
+            {% endblock %}
+        </div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
 
 	<pre class="pre">{{retour}}</pre>
 
-	<span style="float: right;">
-		<a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Back to the list</a>
-		<a href="{{ebuio_baseUrl}}channels/export/?to=file" class="btn btn-primary">Download to file</a>
-	</span>
 
-	<hr style="visibility: hidden; clear: both;">
 
 {% endblock %}
 

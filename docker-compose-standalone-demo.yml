@@ -1,0 +1,129 @@
+version: '3.7'
+
+services:
+
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+    - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: radiodns
+      MYSQL_ROOT_PASSWORD: 1234
+
+  lpp_database:
+    image: postgres
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: lpp
+      POSTGRES_PASSWORD: 1234
+
+  lpp:
+    build: LightweightPlugitProxy/.
+    environment:
+      DEBUG: "False"
+      LPP_PORT: 4000
+      PLUGIT_APP_URL: http://dns_server:5000/
+      SECRET_KEY: dev-secret
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+      LPP_PREFIX: plugit
+      DATABASE_NAME: lpp
+      DATABASE_USER: root
+      DATABASE_PASSWORD: 1234
+      DATABASE_HOST: lpp_database
+      DATABASE_PORT: 5432
+      PLUGIT_REMOTE_SERVER_SECRET: dev-secret
+      SU_NAME: admin
+      SU_EMAIL: admin@admin.com
+      SU_PASSWORD: 1234
+      DATABASE_CONNECTION_MERCY_TIME: 60
+
+  mock_api:
+    build: MockApi/.
+    volumes:
+    - mock_api_data:/opt/app/uploads
+    ports:
+    - "8000:8000"
+    environment:
+      DEBUG: "False"
+
+  dns_server:
+    build: RadioDns-PlugIt/.
+    depends_on:
+    - lpp
+    - database
+    - mock_api
+    environment:
+      RADIO_DNS_PORT: 5000
+      SQLALCHEMY_URL: mysql://root:1234@database:3306/radiodns
+      PI_BASE_URL: /dev-secret/
+      APfI_SECRET: dev-secret
+      LOGO_INTERNAL_URL: http://mock_api:8000/uploads
+      LOGO_PUBLIC_URL: http://127.0.0.1:8000/uploads
+      API_URL: http://mock_api:8000/
+      DEBUG: "False"
+      XML_CACHE_TIMEOUT: 10
+      IMG_CACHE_TIMEOUT: 10
+
+  reverse_proxy:
+    build:
+      context: Nginx/.
+      dockerfile: Dockerfile.dev
+    ports:
+    - "4000:4000"
+    - "5000:5000"
+    depends_on:
+    - lpp
+    - dns_server
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-management-alpine
+    hostname: radiodnsrabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+
+  memcached:
+    image: memcached:1.5.12-alpine
+    ports:
+    - "11211:11211"
+
+  vis_server:
+    build: RadioVisServer/.
+    command: server.py
+    depends_on:
+    - rabbitmq
+    - dns_server
+    - memcached
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      MONITORING_HOST: rabbitmq
+      RADIODNS_API_URL: http://reverse_proxy:5000/dev-secret/action/radiovis/api/dev-secret/
+      MEMCACHED_HOST: memcached
+    ports:
+    - "61613:61613"
+
+  fallback:
+    build: RadioVisServer/.
+    command: fallback.py
+    depends_on:
+    - rabbitmq
+    - vis_server
+    - dns_server
+    - memcached
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RADIODNS_API_URL: http://reverse_proxy:5000/dev-secret/action/radiovis/api/dev-secret/
+      MEMCACHED_HOST: memcached
+
+volumes:
+  db_data:
+  mock_api_data:
+  pgdata:
+

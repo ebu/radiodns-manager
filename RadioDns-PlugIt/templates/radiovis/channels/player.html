@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>RadioDNS Manager - RadioVis HTML5 Player</title>
+
+        <link rel="stylesheet" href="{{ebuio_baseUrl}}media/css/radiovis-html5player.css">
+		<style>
+			body{
+				font-family: verdana;
+				font-size:13px;
+			}
+
+			.radiovis-main {
+                border: 1px #C5C5C2 solid;
+                width:321px;
+            }
+
+            .radiovis-mainframe {
+                box-shadow: 1px 1px 4px 0px #CFCFCF;
+            }
+            .radiovis-outtertext {
+                border-top: 1px #C5C5C2 solid;
+            }
+
+			.frame {
+				float: left;
+				margin: 15px;
+			}
+		</style>
+
+		<script src="{{ebuio_baseUrl}}media/js/jquery-1.10.2.min.js"></script>
+		<script src="{{ebuio_baseUrl}}media/js/radiovis-html5player.js"></script>
+
+	</head>
+	<body>
+		<script>
+				$(document).ready(function(){
+					$('#frame1').radiovisplayer('{{topic}}', '{{ ws_endpoint }}', '{{ secure }}' === 'True' );
+				});
+		</script>
+
+        <div style="margin:10px auto; width:350px;">
+            {% if name %}
+            {% if stationname %}
+            <h3>{{stationname}}, <small>{{name}}</small></h3>
+            {% else %}
+            <h3>{{name}}</h3>
+            {% endif %}
+            <address>{{topic}}</address>
+            {% else %}
+            <h3>{{topic}}</h3>
+            {% endif %}
+            <div id="frame1" class="frame"></div>
+        </div>
+
+
+	</body>
+</html>

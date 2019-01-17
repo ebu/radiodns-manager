@@ -1,0 +1,191 @@
+{% extends "plugIt/base.html" %}
+{% load plugit_tags %}
+
+{% block title %}Service Provider :: RadioDNS{% endblock %}
+
+{% block menubar %}
+    {% plugitInclude "menubar" %}
+{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            {{ebuio_orga.name}} :: Service Provider Configuration
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+
+	{% if errors %}
+		<div class="alert alert-error">
+			<ul>
+				{% for e in errors %}
+					<li>{{e}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
+	<form action="" method="POST" class="form-horizontal">
+		{% csrf_token %}
+
+        <h2>Names</h2>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Short Name (8 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="short_name" class="form-control" value="{{object.short_name}}" maxlength="8">
+            </div>
+        </div>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Medium Name (16 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="medium_name" class="form-control" value="{{object.medium_name}}" maxlength="16">
+            </div>
+        </div>
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Long Name (128 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="long_name" class="form-control" value="{{object.long_name}}" maxlength="128">
+            </div>
+        </div>
+
+        <hr />
+
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="short_description" class="form-control" value="{{object.short_description}}" maxlength="180">
+            </div>
+        </div>
+
+        {% comment %}
+		<div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="long_description" class="form-control" value="{{object.long_description}}" maxlength="1200">
+            </div>
+        </div>
+        {% endcomment %}
+
+        <hr />
+
+        <h2>Language</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Language</label>
+            <div class="col-sm-9 col-md-7">
+                <select name="default_language" class="form-control" id="default_language" cval="{{object.default_language}}">
+                    <option value=""></option><option value="af">Afrikaans</option><option value="ak">Akan</option><option value="an">aragonés</option><option value="ar">عربي</option><option value="as">অসমীয়া</option><option value="ast">Asturianu</option><option value="az">Azərbaycanca</option><option value="be">Беларуская</option><option value="bg">Български</option><option value="br">Brezhoneg</option><option value="ca">Català</option><option value="cs">Čeština</option><option value="csb">Kaszëbsczi</option><option value="cy">Cymraeg</option><option value="da">Dansk</option><option value="de">Deutsch</option><option value="dsb">Dolnoserbšćina</option><option value="el">Ελληνικά</option><option value="en-GB">English (British)</option><option value="en-US">English (US)</option><option value="eo">Esperanto</option><option value="es-AR">Español (de Argentina)</option><option value="es-CL">Español (de Chile)</option><option value="es-ES">Español (de España)</option><option value="es-MX">Español (de México)</option><option value="et">Eesti keel</option><option value="eu">Euskara</option><option value="fa">فارسی</option><option value="ff">Pulaar-Fulfulde</option><option value="fi">suomi</option><option value="fr">Français</option><option value="fy-NL">Frysk</option><option value="ga-IE">Gaeilge</option><option value="gd">Gàidhlig</option><option value="gl">Galego</option><option value="he">עברית</option><option value="hi-IN">हिन्दी (भारत)</option><option value="hr">Hrvatski</option><option value="hsb">Hornjoserbsce</option><option value="hu">magyar</option><option value="hy-AM">Հայերեն</option><option value="id">Bahasa Indonesia</option><option value="is">íslenska</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ka">ქართული</option><option value="kk">Қазақ</option><option value="km">ខ្មែរ</option><option value="ko">한국어</option><option value="ku">Kurdî</option><option value="lg">Luganda</option><option value="lij">Ligure</option><option value="lt">lietuvių kalba</option><option value="lv">Latviešu</option><option value="mk">Македонски</option><option value="ml">മലയാളം</option><option value="mr">मराठी</option><option value="ms">Melayu</option><option value="my">မြန်မာဘာသာ</option><option value="nb-NO">Norsk bokmål</option><option value="nl">Nederlands</option><option value="nso">Sepedi</option><option value="oc">occitan (lengadocian)</option><option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option><option value="pl">Polski</option><option value="pt-BR">Português (do Brasil)</option><option value="pt-PT">Português (Europeu)</option><option value="rm">rumantsch</option><option value="ro">română</option><option value="ru">Русский</option><option value="sk">slovenčina</option><option value="sl">Slovenščina</option><option value="son">Soŋay</option><option value="sq">Shqip</option><option value="sr">Српски</option><option value="sv-SE">Svenska</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="ur">اُردو</option><option value="vi">Tiếng Việt</option><option value="xh">isiXhosa</option><option value="zh-CN">中文 (简体)</option><option value="zh-TW">正體中文 (繁體)</option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <h2>Links</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Default Url</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="url_default" class="form-control" value="{{object.url_default}}" maxlength="255">
+            </div>
+        </div>
+
+
+
+        <hr />
+
+        <h2>Address</h2>
+
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="postal_name" id="postal_name" value="{{object.postal_name}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Street</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="street" id="street" value="{{object.street}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
+            <div class="col-sm-9 col-md-7">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{{object.zipcode}}"/>
+                    </div>
+                    <div class="col-lg-8">
+                    <input type="text" class="form-control" name="city" id="city" value="{{object.city}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Country</label>
+            <div class="col-sm-9 col-md-7">
+                <select class="form-control" name="location_country" id="location_country" cval="{{object.location_country}}">
+				</select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{object.phone_number}}"/>
+                <small>Format: +41-22-7172745</small>
+            </div>
+        </div>
+
+
+        <hr />
+
+        <div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+                <a href="{{ebuio_baseUrl}}serviceprovider/" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+
+
+	</form>
+
+	<script type="text/javascript">
+
+		function load_countries() {
+			$.ajax({
+				url: '{{ebuio_baseUrl}}ecc_list',
+				dataType: 'json',
+				success: function(data) {
+
+					$(data.list).each(function(_, el) {
+						opt = '<option value="' + el.iso.toLowerCase() + '">' + el.name + ' (' + el.iso + ')</option>';
+
+						$('#location_country').append(opt);
+					})
+
+					$('#location_country').val($('#location_country').attr('cval'));
+				}
+			})
+		}
+		load_countries();
+
+		$('#default_language').val($('#default_language').attr('cval'));
+
+
+	</script>
+
+	<hr style="visibility: hidden; clear: both;">
+
+{% endblock %}
+

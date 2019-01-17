@@ -1,18 +1,22 @@
-from haigha.connection import Connection
-
 import logging
+import sys
 import time
 
-import config
-import sys
-
+from haigha.connection import Connection
 from haigha.message import Message
+
+import config
+from radiodns import RadioDns
+
 
 class RabbitConnexion():
     """Manage connexion to Rabbit"""
 
-    def __init__(self, LAST_MESSAGES, watchdog = None):
+    def __init__(self, LAST_MESSAGES, monitoring=None, watchdog=None):
         self.logger = logging.getLogger('radiovisserver.rabbitmq')
+
+        # RadioDNS
+        self.radioDns = RadioDns()
 
         # List of stompservers
         self.stompservers = []
@@ -20,11 +24,20 @@ class RabbitConnexion():
         # Save LAST_MESSAGES
         self.LAST_MESSAGES = LAST_MESSAGES
 
+        self.monitoring = monitoring
+
         # Save the watchdog
         self.watchdog = watchdog
 
+        # The global gauge
+
+        # Initialize RadioDNS Caches
+        self.radioDns.update_channel_topics()
+
+        self.cox = None
+
     def consumer(self, msg):
-        """Called when a rabbitmq message arrive"""
+        """Called when a rabbitmq message arrives"""
 
         try:
             headers = msg.properties['application_headers']
@@ -37,17 +50,19 @@ class RabbitConnexion():
 
                 # Get the list of extras headers (eg: link, trigger-time)
                 for name in headers:
-                    if name == 'topic':  #Internal header
+                    if name == 'topic':  # Internal header
                         continue
                     bonusHeaders.append((name, headers[name]))
 
                 self.logger.info("Got message on topic %s: %s (headers: %s)" % (topic, body, bonusHeaders))
 
                 # Save the message as the last one
-                self.LAST_MESSAGES[topic] = (body, bonusHeaders)
+                converted_topic = self.radioDns.convert_fm_topic_to_gcc(topic)
+                self.LAST_MESSAGES[converted_topic] = (body, bonusHeaders)
 
                 # Broadcast message to all clients
                 for c in self.stompservers:
+                    time.sleep(0)  # Switch context
                     c.new_message(topic, body, bonusHeaders)
 
                 # Inform the watchdog
@@ -55,9 +70,9 @@ class RabbitConnexion():
                     self.watchdog.new_message(topic, body, bonusHeaders, int(headers['when']))
 
             else:
-                self.logger.warning("Got message without topic: %s" % (msg, ))
+                self.logger.warning("Got message without topic: %s" % (msg,))
         except Exception as e:
-            self.logger.error("Error in consumer: %s", (e, ))
+            self.logger.error("Error in consumer: %s", (e,))
 
     def run(self):
         """Thread with connection to rabbitmq"""
@@ -66,12 +81,15 @@ class RabbitConnexion():
             self.logger.warning("Looopback mode: No connection, waiting for ever...")
             while True:
                 time.sleep(1)
-        
+
         while True:
             try:
                 time.sleep(1)
-                self.logger.debug("Connecting to RabbitMQ (user=%s,host=%s,port=%s,vhost=%s)" % (config.RABBITMQ_USER, config.RABBITMQ_HOST, config.RABBITMQ_PORT, config.RABBITMQ_VHOST))
-                self.cox = Connection(user=config.RABBITMQ_USER, password=config.RABBITMQ_PASSWORD, vhost=config.RABBITMQ_VHOST, host=config.RABBITMQ_HOST, port=config.RABBITMQ_PORT, debug=config.RABBITMQ_DEBUG)
+                self.logger.debug("Connecting to RabbitMQ (user=%s,host=%s,port=%s,vhost=%s)" % (
+                    config.RABBITMQ_USER, config.RABBITMQ_HOST, config.RABBITMQ_PORT, config.RABBITMQ_VHOST))
+                self.cox = Connection(user=config.RABBITMQ_USER, password=config.RABBITMQ_PASSWORD,
+                                      vhost=config.RABBITMQ_VHOST, host=config.RABBITMQ_HOST, port=config.RABBITMQ_PORT,
+                                      debug=config.RABBITMQ_DEBUG)
 
                 self.logger.debug("Creating the channel")
                 self.ch = self.cox.channel()
@@ -81,7 +99,7 @@ class RabbitConnexion():
                 queue_name = None
 
                 def queue_qb(queue, msg_count, consumer_count):
-                    self.logger.debug("Created queue %s" % (queue, ))
+                    self.logger.debug("Created queue %s" % (queue,))
                     global queue_name
                     queue_name = queue
 
@@ -104,7 +122,7 @@ class RabbitConnexion():
                     self.logger.warning("Queue creation timeout !")
                     raise Exception("Cannot create queue !")
 
-                self.logger.debug("Binding the exchange %s" % (config.RABBITMQ_EXCHANGE, ))
+                self.logger.debug("Binding the exchange %s" % (config.RABBITMQ_EXCHANGE,))
                 self.ch.queue.bind(queue_name, config.RABBITMQ_EXCHANGE, '')
 
                 self.logger.debug("Binding the comsumer")
@@ -112,16 +130,17 @@ class RabbitConnexion():
 
                 self.logger.debug("Ready, waiting for events !")
                 while True:
-                    if not hasattr(self.ch, 'channel') or (hasattr(self.ch.channel, '_closed') and self.ch.channel._closed):
+                    if not hasattr(self.ch, 'channel') or (
+                            hasattr(self.ch.channel, '_closed') and self.ch.channel._closed):
                         self.logger.warning("Channel is closed")
                         raise Exception("Connexion or channel closed !")
                     self.cox.read_frames()
-                        
 
             except Exception as e:
-                self.logger.error("Error in run: %s" % (e, ))
+                self.logger.error("Error in run: %s" % (e,))
             finally:
-                self.cox.close()
+                if self.cox is not None:
+                    self.cox.close()
 
     def send_message(self, headers, message):
         """Send a message to the queue"""
@@ -142,12 +161,19 @@ class RabbitConnexion():
             self.consumer(FalseMsg(message, headers))
 
         else:
-            self.ch.basic.publish( Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '' )
+            self.ch.basic.publish(Message(message, application_headers=headers), config.RABBITMQ_EXCHANGE, '')
 
     def add_stomp_server(self, s):
         """Handle a new stomp server"""
         self.stompservers.append(s)
+        self.update_stats()
 
     def remove_stomp_server(self, s):
         """Stop handeling a stomp server"""
         self.stompservers.remove(s)
+        self.update_stats()
+
+    def update_stats(self):
+        """Update stats"""
+        # self.gauge.send(config.STATS_GAUGE_NB_CLIENTS, len(self.stompservers))
+        pass

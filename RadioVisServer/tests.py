@@ -23,7 +23,6 @@ class Main():
         """Initialize values"""
         self.incomingData = ''
 
-
     def tcp_connect(self):
         self.socket = socket.socket()
         self.socket.connect(('127.0.0.1', 61424))
@@ -56,7 +55,7 @@ class Main():
         for x in frame_split[1:]:
             if x == '' and headerMode:  # Switch from headers to body
                 headerMode = False
-            elif headerMode:  # Add header to the lsit 
+            elif headerMode:  # Add header to the lsit
                 key, value = x.split(':', 1)
                 headers.append((key, value))
             else:  # Compute the body
@@ -68,17 +67,23 @@ class Main():
         # Return everything
         return (command, headers, body)
 
+    def build_frame(self, command, headers, body):
+        """Build a stom frame"""
+
+        message = command + '\n'
+
+        for (header, value) in headers:
+            message += header + ':' + value + '\n'
+
+        message += '\n'
+        message += body
+        message += '\x00'
+
+        return message
+
     def send_frame(self, command, headers, body):
         """Send a frame to the SERVER"""
-        self.socket.send(command + '\n')
-        for (header, value) in headers:
-            self.socket.send(header + ':' + value + '\n')
-
-        self.socket.send('\n')
-
-        self.socket.send(body)
-
-        self.socket.send('\x00')
+        self.socket.send(self.build_frame(command, headers, body))
 
     def send_connect(self, args):
         self.send_frame('CONNECT', args, '')
@@ -87,7 +92,6 @@ class Main():
         watchdogsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         watchdogsock.bind(('127.0.0.1', 61422))
         return watchdogsock
-
 
     def __del__(self):
         """Delete the socket when we're done"""
@@ -101,10 +105,10 @@ class MainTests(unittest.TestCase):
     @classmethod
     def setup_class(cls):
         """Setup the testcase"""
-        cls.subp = subprocess.Popen(['python', 'server.py', '--test'])
+        cls.subp = subprocess.Popen(['python2', 'server.py', '--test'])
         cls.proc = psutil.Process(cls.subp.pid)
 
-        cls.subpWD = subprocess.Popen(['python',  'fallback.py', '--test'])
+        cls.subpWD = subprocess.Popen(['python2',  'fallback.py', '--test'])
         cls.procWD = psutil.Process(cls.subpWD.pid)
 
         time.sleep(2)
@@ -126,7 +130,7 @@ class MainTests(unittest.TestCase):
         m = Main()
         m.tcp_connect()
         m.send_connect({})
-        m.get_frame() # Cox frame
+        m.get_frame()  # Cox frame
 
         m.socket.send(frame)
 
@@ -159,7 +163,6 @@ class MainTests(unittest.TestCase):
         m.send_frame("_TEST_NOCOMMAND", [], '')
         (result, headers, body) = m.get_frame()
         eq_(result, 'ERROR')
-
 
     @timed(2)
     def test_cox_stomp_with_nothing(self):
@@ -483,6 +486,42 @@ class MainTests(unittest.TestCase):
         eq_(body, msg)
         eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
 
+    @timed(2)
+    def test_message_then_subscrible_cc_to_gcc(self):
+        """Test if we get the last message when we subscrible, mixing CC and GCC"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '3.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_ECC_TOPIC_CC)], msg)
+        time.sleep(0.5)
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_ECC_TOPIC_GCC)], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_ECC_TOPIC_GCC)
+
+    @timed(2)
+    def test_message_then_subscrible_gcc_to_cc(self):
+        """Test if we get the last message when we subscrible, mixing CC and GCC"""
+        m = Main()
+        m.tcp_connect()
+        m.send_connect([('login', '3.test'), ('passcode', 'test')])
+        m.get_frame()  # Connected frame
+
+        msg = str(uuid.uuid4())
+
+        m.send_frame('SEND', [('destination', config.TEST_ECC_TOPIC_GCC)], msg)
+        time.sleep(0.5)
+        m.send_frame('SUBSCRIBE', [('destination', config.TEST_ECC_TOPIC_CC)], '')
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_ECC_TOPIC_CC)
+
     @raises(socket.timeout)  # Test must fail :)
     @timed(2)
     def test_subscrible_other_message(self):
@@ -628,6 +667,71 @@ class MainTests(unittest.TestCase):
 
         m.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
 
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'message-id'), message_id)
+
+    @timed(2)
+    def test_message_flooding_is_ok(self):
+        """Test if multiple messages are send in one frame, it's ok."""
+        m = Main()
+        m.tcp_connect()
+
+        connect_frame = m.build_frame('CONNECT', [], '')
+        subscrible_frame_1 = m.build_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.send(connect_frame + subscrible_frame_1)
+
+        # Send a frame, we should be subscribled.
+        msg = str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
+
+        m2 = Main()
+        m2.tcp_connect()
+        m2.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m2.get_frame()  # Connected frame
+        m2.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
+
+        # Connect frame should be here
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'CONNECTED')
+
+        # And the message
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'MESSAGE')
+        eq_(body, msg)
+        eq_(get_header_value(headers, 'destination'), config.TEST_TOPICS[0])
+        eq_(get_header_value(headers, 'message-id'), message_id)
+
+    @timed(2)
+    def test_message_flooding_with_slashn_is_ok(self):
+        """Test if multiple messages are send in one frame, with a \n return between, it's ok."""
+        m = Main()
+        m.tcp_connect()
+
+        connect_frame = m.build_frame('CONNECT', [], '')
+        subscrible_frame_1 = m.build_frame('SUBSCRIBE', [('destination', config.TEST_TOPICS[0]), ('x-ebu-nofastreply', 'yes')], '')
+
+        m.socket.send(connect_frame + '\n' + subscrible_frame_1)
+        m.socket.settimeout(3)
+
+        # Send a frame, we should be subscribled.
+        msg = str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
+
+        m2 = Main()
+        m2.tcp_connect()
+        m2.send_connect([('login', '1.test'), ('passcode', 'test')])
+        m2.get_frame()  # Connected frame
+        m2.send_frame('SEND', [('destination', config.TEST_TOPICS[0]), ('message-id', message_id)], msg)
+
+        # Connect frame should be here
+        (result, headers, body) = m.get_frame()
+        eq_(result, 'CONNECTED')
+
+        # And the message
         (result, headers, body) = m.get_frame()
         eq_(result, 'MESSAGE')
         eq_(body, msg)
@@ -1038,5 +1142,3 @@ class MainTests(unittest.TestCase):
         eq_(body, 'TEXT ' + config.TEST_CHANNEL_DEFAULT['radiotext'])
         eq_(get_header_value(headers, 'trigger-time'), 'NOW')
         eq_(get_header_value(headers, 'link'), config.TEST_CHANNEL_DEFAULT['radiolink'])
-
-

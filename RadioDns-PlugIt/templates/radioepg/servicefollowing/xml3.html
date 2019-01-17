@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceInformation xmlns="http://www.worlddab.org/schemas/spi/31" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.worlddab.org/schemas/spi/31 spi_31.xsd"
+                    creationTime="{{ creation_time }}" originator="EBU.io RadioDNS Services v3"
+                    xml:lang="{{ service_provider.default_language }}">
+
+    <services>
+        {% if service_provider %}
+            <serviceProvider>
+                {% if service_provider.short_name %}
+                    <shortName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_name }}</shortName>
+                {% endif %}
+                {% if service_provider.medium_name %}
+                    <mediumName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.medium_name }}</mediumName>
+                {% endif %}
+                {% if service_provider.long_name %}
+                    <longName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.long_name }}</longName>
+                {% endif %}
+                {% if service_provider.short_description %}
+                    <shortDescription
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_description }}</shortDescription>
+                {% endif %}
+                {% if service_provider.url_default %}
+                    <link url="{{ service_provider.url_default }}" mimeValue="text/html"
+                          description="{{ service_provider.short_name }} Webpage"
+                          xml:lang="{{ service_provider.default_language }}"/>
+                {% endif %}
+                {% if service_provider.keywords %}
+                    <keywords>{{ service_provider.keywords }}</keywords>
+                {% endif %}
+                {% if service_provider.epg_postal %}
+                    <link uri="{{ service_provider.epg_postal }}"/>
+                {% endif %}
+                {% if service_provider.epg_phone_number %}
+                    <link uri="{{ service_provider.epg_phone_number }}"/>
+                {% endif %}
+
+                <mediaDescription>
+                    <multimedia type="logo_colour_square" width="32" height="32"
+                                url="{{ service_provider.default_logo_image_data.public_32x32_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia type="logo_colour_rectangle" width="112" height="32"
+                                url="{{ service_provider.default_logo_image_data.public_112x32_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia type="logo_unrestricted" width="128" height="128"
+                                url="{{ service_provider.default_logo_image_data.public_128x128_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia type="logo_unrestricted" width="320" height="240"
+                                url="{{ service_provider.default_logo_image_data.public_320x240_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia type="logo_unrestricted" width="600" height="600"
+                                url="{{ service_provider.default_logo_image_data.public_600x600_url }}"/>
+                </mediaDescription>
+                <geolocation>
+                    {% if service_provider.location_country %}
+                        <country>{{ service_provider.location_country }}</country>
+                    {% endif %}
+                </geolocation>
+            </serviceProvider>
+        {% endif %}
+        {% for station in stations %}
+            <service>
+                {% if station.0.short_name %}
+                    <shortName>{{ station.0.short_name }}</shortName>
+                {% endif %}
+                {% if station.0.medium_name %}
+                    <mediumName>{{ station.0.medium_name }}</mediumName>
+                {% endif %}
+                {% if station.0.long_name %}
+                    <longName>{{ station.0.long_name }}</longName>
+                {% endif %}
+                {% if station.0.short_description %}
+                    <shortDescription xml:lang="fr">{{ station.0.short_description }}</shortDescription>
+                {% endif %}
+                {% if station.0.url_default %}
+                    <link url="{{ station.0.url_default }}" mimeValue="text/html"
+                          xml:lang="{{ service_provider.default_language }}"/>
+                {% endif %}
+                {% if station.0.keywords %}
+                    <keywords>{{ station.0.keywords }}</keywords>
+                {% endif %}
+                {% if station.0.epg_postal %}
+                    <link uri="{{ station.0.epg_postal }}"/>
+                {% endif %}
+                {% if station.0.epg_phone_number %}
+                    <link uri="{{ station.0.epg_phone_number }}"/>
+                {% endif %}
+                {% if station.0.epg_sms %}
+                    <link description="{{ station.0.sms_description }}" uri="{{ station.0.epg_sms }}"/>
+                {% endif %}
+                {% if station.0.epg_email %}
+                    <link description="{{ station.0.email_description }}" uri="{{ station.0.epg_email }}"/>
+                {% endif %}
+
+                <radiodns fqdn="{{ station.0.fqdn.rstrip('.') }}"
+                          serviceIdentifier="{{ station.0.service_identifier }}"/>
+
+                {% for entry in station.1 %}
+                    <bearer
+                            id="{{ entry.uri }}"
+                            {% if entry.cost %}
+                                cost="{{ entry.cost }}"
+                            {% endif %}
+                            {% if entry.offset %}
+                                offset="{{ entry.offset }}"
+                            {% endif %}
+                            {% if entry.mime_type %}
+                                mimeValue="{{ entry.mime_type }}"
+                            {% endif %}
+                            {% if entry.bitrate %}
+                                bitrate="{{ entry.bitrate }}"
+                            {% endif %}/>
+                {% endfor %}
+
+                <mediaDescription>
+                    <multimedia height="32" width="32" type="logo_colour_square"
+                                url="{{ station.0.default_logo_image_data.public_32x32_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia height="32" width="112" type="logo_colour_rectangle"
+                                url="{{ station.0.default_logo_image_data.public_112x32_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia height="128" width="128" type="logo_unrestricted"
+                                url="{{ station.0.default_logo_image_data.public_128x128_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia height="240" width="320" type="logo_unrestricted"
+                                url="{{ station.0.default_logo_image_data.public_320x240_url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <multimedia height="600" width="600" type="logo_unrestricted"
+                                url="{{ station.0.default_logo_image_data.public_600x600_url }}"/>
+                </mediaDescription>
+
+                {% for genre in station.0.genres_list %}
+                    <genre href="{{ genre.href }}">{{ genre.name }}</genre>
+                {% endfor %}
+            </service>
+        {% endfor %}
+
+    </services>
+</serviceInformation>
+        

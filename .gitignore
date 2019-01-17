@@ -35,3 +35,17 @@ nosetests.xml
 .pydevproject
 
 RadioDns-PlugIt/config.py
+
+.ropeproject
+
+# Logfiles for VIS
+*.log
+
+# IDEA Pycharm and IntelliJ ignore
+.idea
+
+# Virtual Environment
+venv
+.DS_Store
+/.env
+/Nginx/blockips.conf

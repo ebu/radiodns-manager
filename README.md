@@ -1,43 +1,105 @@
-radiodns-plugit
+RadioDNS-plugit
 ===============
 
-An implementation of a RadioDns server (Using plugit) and a RadioVis server (without commet support).
+This project gathers a web interface based on [plugit](https://github.com/ebu/plugit) to manage RadioDNS
+services ([RadioVIS, RadioEPG and ServiceFollowing](http://www.radiodns.org)). 
 
-You can find the plugit client inside `RadioDns-PlugIt`, the RadioVis server inside `RadioVisServer` and deployments scripts inside `Deployment`. Check each folder for specifics README about each part.
+Check each folder for specifics README about each part.
+
+## How to run in local without installing dependencies
+To start up a local demo instance
+
+```
+docker-compose -f docker-compose-standalone-demo.yml up --build -d
+```
+
+Then you may visit http://localhost:4000.
+
+Your login credentials as admin are
+
+    admin
+    1234
+
+To shut down the local instance
+
+```
+docker-compose -f docker-compose-standalone-demo.yml down
+```
+
+To remove the database and start afresh
+
+```
+docker volume rm radiodns-manager_db_data
+docker volume rm radiodns-manager_mock_api_data
+docker volume rm radiodns-manager_pgdata
+```
+
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and
+testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+### Prerequisites
+- python 2.7 and 3.7
+- docker 18.06.1+
+- virtualenv 16.0.0+
+- docker-compose 1.23.2+
+
+### Installing
+To install automatically the python environment on an unix system use the `setup-envs.sh` script (in the scripts folder).
+
+On windows you'll have to setup a virtual env for the following projects (create and activate the venv + installing pip 
+dependencies):
+- LightweightPlugitProxy (python3)
+- RadioDns-PlugIt (python2)
+- RadioVisServer (python2)
+- MockApi (python3)
+- tests (python3)
+
+### Running the dev stack
+Launch the dev databases with:
+
+    docker-compose -f docker-compose-dev.yml up -d
+    
+Then head to each following folders in order and follow their README.md:
+- LightweightPlugitProxy 
+- RadioDns
+- RadioVisServer 
+- MockApi 
+
+The default configuration of the services should be able to make the stack run for local development.
+
+To stop the dev databases run:
+
+    docker-compose -f docker-compose-dev.yml down
+
+## How to run tests
+If you haven't already, run the `setup-envs.sh` (if you are on an unix based system, script located in the scripts folder).
+Then set your working directory to the tests folder and read its README for further instructions.
+    
+## Deployment in production - EBU.io
+Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_EBU-IO.md).
+
+## Deployment in production
+Deployment instructions on a production server without EBU.io are detailed in [the docs](/docs/Radiodns_manual_deployment.md).
 
 ## General architecture
+Architecture is described in [the docs](/docs/Radiodns_architecture.md)
 
-![Image](architecture-radiodns.png?raw=true)
+## Contributing
+- Always fix version of dependencies.
+- Any new module that can be written in python 3 must be written in python 3.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## License (BSD)
-
-Copyright (c) 2013, EBU
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the EBU nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-### Exceptions
-
-Contact the EBU (Michael Barroco, barroco@ebu.ch) if you are in need of special licence terms/ distribution rights different from the BSD 3.0.
-
-Dependencies and theirs licenses can be found in specifics READMEs in sub folders.
-
-## Project lead
-
-* Michael Barroco [@barroco](https://github.com/barroco)
-
-## Core contributors
-
-* Maximilien Cuony [@the-glu](https://github.com/the-glu)
+## Contact
+Contact the EBU (Ben Poor poor@ebu.ch) if you need more information about RadioDNS and its associated developments.
 
 ## Contributors
-
+* Maximilien Cuony [@the-glu](https://github.com/the-glu)
 * Malik Bougacha [@gcmalloc](https://github.com/gcmalloc)
+* Michael Barroco [@barroco](https://github.com/barroco)
+* Mathieu Habegger [@mhabegger](https://github.com/mhabegger)
+* Ioannis Noukakis [@inoukakis](https://github.com/ioannisNoukakis)
+
+
+## Copyright & License
+The code is under GPLv3 License. (see LICENSE.txt)

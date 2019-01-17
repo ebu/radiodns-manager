@@ -1,69 +1,125 @@
 RadioDns - PlugIt
 =================
 
-This folder contains the PlugIt server API. It has to run in OrgaMode (see PlugIt README for details).
+This folder contains the RadioDns API server. The API is also called by the RadioVisServer.
 
-The API is also called by the RadioVisServer.
+# Getting Started
 
-# Features
+These instructions will get you a copy of the project up and running on your local machine for development and
+testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## RadioDns
+### Prerequisites
+- python 2.7
+- docker 18.06.1+
+- virtualenv 16.0.0+
+- docker-compose 1.23.2+
 
-The API allow the management of stations and channels.
+### Installing
+#### Preparing the `venv`
 
-## RadioVis
+    virtualenv --python=$(which python2) venv
+    source venv/bin/activate
+    
+Install the required PIP dependencies:
 
-The API allow management of defaults medias, and store logs about messages sent on different topics.
+    pip install .
+    
+To deactivate the running environment:
 
-# Tools used
+    deactivate
+    
+## Running the Server
 
-The server is written in Python.
+    python server.py
+    
+Remember that you must have a running PlugIt Proxy in order to test the service.
 
-## Dependencies
+### Extra steps for mac users
 
-The python dependencies are:
+You need the mysql connector
 
-* flask (BSD license)
-* sqlalchemy (MIT license)
-* Flask-SQLAlchemy (BSD license)
-* alembic (MIT license)
-* dnspython (BSD-style license)
-* requests (Apache2 license)
+    brew install mysql-connector-c
+    
+Then you must edit the mysql_config file located in ```/usr/local/bin/mysql_config```
 
-You can install them using `pip install _package_`
+You must edit those lines
 
-## Core
+    # Create options 
+    libs="-L$pkglibdir"
+    libs="$libs -l "
+    
+To
 
-The core of the API is a flask server. It can be ran (for development) using `python server.py` or (for production) using the `wsgi.py` wsgi script.
+    # Create options 
+    libs="-L$pkglibdir"
+    libs="$libs -lmysqlclient -lssl -lcrypto"
+    
+Finally you have to add those lines to your .bash_profile (in your home directory)(If this file dosen't exist just create it).
 
-All PlugIt actions are in the `actions.py` file. All details are available in the PlugIt documentation (everything is based from the _Simple Flask server_),
+    LDFLAGS:  -L/usr/local/opt/openssl/lib
+    CPPFLAGS: -I/usr/local/opt/openssl/include
+
+## Test
+Tests are available in the tests folder of the root folder.
 
 ## Database
-
 Sqlalchemy is used for database access. Models are defined inside the `models.py` file.
 
 ## Database migrations
+For easy model upgrade, alembic is used. When a model is modified it's possible to run the command
+`alembic revision --autogenerate -m 'message'` to create a new revision of the database.
+`alembic upgrade head` is used to apply changes, upgrading the database to the latest version.
+Details are available in the official documentation of alembic.
 
-For easy model upgrade, alembic is used. When a model is modified it's possible to run the command `alembic revision --autogenerate -m 'message'` to create a new revision of the database. `alembic upgrade head` is used to apply changes, upgrading the database to the latest version. Details are available in the official documentation of alembic.
+Migrations are done automatically by the server at startup if needed.
 
-# Config
+# Configuration
+The configuration is stored inside `config.py`. You can change it by setting environment variables corresponding to the config parameters.
 
-The configuration is stored inside `config.py`, who can be created from `config.py.dist`.
+Here is a list of the options you can configure through environment variables:
+- **RADIO_DNS_PORT**: Port where the app will listen to. Numeric. Defaults to `4000`.
+- **API_URL**: Url to the PlugIt Proxy (either EBU.io or Lightweight Plugit Proxy (LPP)). Defaults to `http://127.0.0.1:4000/`.
+The api url must end with a `/`.
+- **SQLALCHEMY_URL**: Url of the following scheme: `mysql://<msql_user>:<password>@<host>:<port>/<database_name>`. Defaults to
+`mysql://root:<password>@127.0.0.1:3306/radiodns`.
+- **API_SECRET**: Random string defined by hand. Defaults to `dev-secret`.
+- **AWS_ACCESS_KEY**: AWS access key, in case the apps needs to use AWS resources.
+- **AWS_SECRET_KEY**: AWS secret key, in case the apps needs to use AWS resources.
+- **DOMAIN**: Domain name base for all services. Defaults to `radio.ebu.io`.
+- **RADIOTAG_ENABLED**: TAG service switch. Can be `True|False`. Defaults to `True`.
+- **XSISERVING_ENABLED**: EPG and SPI services switch. Can be `True|False`. Defaults to `True`.
+- **XSISERVING_DOMAIN**: Domain where the EPG and SPI services will be served. Defaults to `127.0.0.1:5000`. In doubt, give
+to this parameter the same value as the **DOMAIN** parameter.
+- **RADIOVIS_DNS**: Domain name where the VIS service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the following value: `vis.DOMAIN`.
+- **RADIOEPG_DNS**: Domain name where the EPG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the following value: `epg.DOMAIN`.
+- **RADIOTAG_DNS**: Domain name where the TAG service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the following value: `tag.DOMAIN`.
+- **RADIOSPI_DNS**: Domain name where the SPI service will be accessible. Defaults to `127.0.0.1`. In doubt, give
+to this parameter the following value: `spi.DOMAIN`.
+- **RADIOVIS_PORT**: Port where the VIS service will be accessible. Defaults to `61613`.
+- **RADIOEPG_PORT**: Port where the EPG service will be accessible. Defaults to `5000`.
+- **RADIOTAG_PORT**: Port where the TAG service will be accessible. Defaults to `5000`.
+- **RADIOSPI_PORT**: Port where the SPI service will be accessible. Defaults to `5000`.
+- **DEBUG**: Can be True|False. Defaults to True. If True we Flask app will run in debug mode. Otherwise, it will run in production mode.
+- **STANDALONE**: Wherever the app should run without external dependencies such as AWS, EBU.IO, etc.
+Mostly for local testing.
+- **PI_BASE_URL**: The base URL for the PlugIi API - prefix url to access utilities of this server (e.g. <PI_BASE_URL>/radiodns/ping).
+In staging and production mode, that should be the **API_SECRET** parameter. Defaults to `dev-secret`.
+- **PI_ALLOWED_NETWORKS**: Allowed hosts for this service. List of hosts commas separated. Defaults to `0.0.0.0/0`.
+- **PI_API_VERSION**: Version of this service. 
+- **PI_API_NAME**: Name of this service.
+- **XML_CACHE_TIMEOUT**: Time in seconds before discarding XML cache. Numeric. Defaults to `0`.
+- **DATABASE_CONNECTION_MERCY_TIME**: Time to wait (in seconds) until each reset of the backoff database connection retry 
+function. Numeric. Default to `60`. The application will wait an increasingly longer time for each failed database connection attempts.
+This is done in order to avoid having multiple apps connecting to a database at the same time but rather spread those
+connections so all app can reconnect smoothly. After X seconds (X being the time chosen for this parameter) the increasing
+ time to wait between each attempt will be reset so an application doesn't take 300 seconds to reconnect to its database.
+- **VIS_WEB_SOCKET_ENDPOINT_HOST**: Endpoint to the VIS player of RadioDns manager. Used by the HTML vis player. Defaults to
+`127.0.0.1`.
 
-#### API_URL
-The URL to call the PlugIt client
-
-#### SQLALCHEMY_URL
-The connection string to MYSQL for SqlAlchemy
-
-#### API_SECRET
-A secret, shared with the RadioVisServer to access specials calls.
-
-#### DEBUG
-Set this to True to launch flask in debug mode.
-
-#### PI_BASE_URL
-The base URL for the PlugIi API (Check PlugIt documentation)
-
-#### PI_ALLOWED_NETWORKS
-Clients allowed to use the PlugIt API (Check PlugIt documentation)
+** STANDALONE OPTIONS **
+- **LOGO_INTERNAL_URL**: Logo upload url. This has to point to the MockApi inside the docker network. Defaults to `http://127.0.0.1:8000/uploads`.
+- **LOGO_PUBLIC_URL**: Url of the docker host were the browser can access logos. Defaults to `http://127.0.0.1:8000/uploads`.
+- **IMG_CACHE_TIMEOUT**: Time in seconds before discarding images cache. Numeric. Defaults to `0`.
