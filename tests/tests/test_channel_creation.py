@@ -14,13 +14,13 @@ CHANNELS_MSQL_QUERY = "SELECT name, cc, ecc_id, eid, fqdn, frequency, pi, scids,
 
 CHANNELS_HTML_TR = [
     'Station Client Type Name RadioDNS entry / Url DNS Authoritative FQDN Services',
+    'Classical Station default fm CS_VHF_FM 00917.c00f.fe1.fm.radiodns.org. classicalstation.standalone.radio.ebu.ioEPG standalone.ebu.ioSPI standalone.ebu.ioEdit Delete',
     'Classical Station default amss CS_AMSS 4001.amss.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default dab CS_DAB 0.4001.43e1.fe1.dab.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default drm CS_DRM 4001.drm.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
-    'Classical Station default fm CS_VHF_FM 00917.c00f.fe1.fm.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
-    'Classical Station default hd CS_HD_RADIO 0eaff.9e0.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
+    'Classical Station default hd CS_HD_RADIO 0eaff.031.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default id CS_IP http://server/stream classicalstation.standalone.radio.ebu.io Edit Delete',
-    'Classical Station CNN id CS_IP_2 http://server/stream/ouiiiiii classicalstation.standalone.radio.ebu.io Edit Delete'
+    'Classical Station CNN id CS_IP_2 http://server/stream/ouiiiiii classicalstation.standalone.radio.ebu.io Edit Delete',
 ]
 
 CHANNELS_MYSQL_TR = [
@@ -28,7 +28,7 @@ CHANNELS_MYSQL_TR = [
     ' '.join(['CS_DAB', 'None', '81', '43e1', 'None', 'None', 'None', '0', 'None', '4001', 'None', 'dab', 'None', 'audio/mpeg', 'None', 'None']),
     ' '.join(['CS_DRM', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '4001', 'None', 'drm', 'None', 'None', 'None', 'None']),
     ' '.join(['CS_AMSS', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '4001', 'None', 'amss', 'None', 'None', 'None', 'None']),
-    ' '.join(['CS_HD_RADIO', '9E0', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '0EAFF', 'hd', 'None', 'None', 'None', 'None']),
+    ' '.join(['CS_HD_RADIO', '031', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '0EAFF', 'hd', 'None', 'None', 'None', 'None']),
     ' '.join(['CS_IP', 'None', 'None', 'None', 'classicalstation.standalone.radio.ebu.io', 'None', 'None', 'None', 'ebu1standalone', 'None', 'None', 'id', '200', 'audio/mpeg', 'http://server/stream', 'None']),
     ' '.join(['CS_IP_2', 'None', 'None', 'None', 'classicalstation.standalone.radio.ebu.io', 'None', 'None', 'None', 'ebu1standalone', 'None', 'None', 'id', '200', 'audio/mpeg', 'http://server/stream/ouiiiiii', '2']),
 ]
@@ -43,6 +43,7 @@ def test_create_channel(stack_setup, browser_setup):
     driver.get(TEST_PROXY_URL + "channels/edit/-")
     driver.find_element_by_name("name").send_keys("CS_VHF_FM")
     driver.find_element_by_id("type").find_element_by_css_selector("option[value=fm]").click()
+    driver.find_element_by_id("ecc").find_element_by_css_selector("option[value='81']").click()
     driver.find_element_by_name("pi").send_keys("C00F")
     driver.find_element_by_name("frequency").send_keys("00917")
     driver.find_element_by_css_selector("input[type=submit][value=Save]").click()
@@ -51,6 +52,7 @@ def test_create_channel(stack_setup, browser_setup):
     driver.get(TEST_PROXY_URL + "channels/edit/-")
     driver.find_element_by_name("name").send_keys("CS_DAB")
     driver.find_element_by_id("type").find_element_by_css_selector("option[value=dab]").click()
+    driver.find_element_by_id("ecc").find_element_by_css_selector("option[value='81']").click()
     driver.find_element_by_name("eid").send_keys("43e1")
     driver.find_element_by_name("sid").send_keys("4001")
     driver.find_element_by_name("scids").send_keys("0")
@@ -76,7 +78,7 @@ def test_create_channel(stack_setup, browser_setup):
     driver.find_element_by_name("name").send_keys("CS_HD_RADIO")
     driver.find_element_by_id("type").find_element_by_css_selector("option[value=hd]").click()
     driver.find_element_by_name("tx").send_keys("0EAFF")
-    driver.find_element_by_id("cc").find_element_by_css_selector("option[value='1']").click()
+    driver.find_element_by_id("cc").find_element_by_css_selector("option[value='031']").click()
     driver.find_element_by_css_selector("input[type=submit][value=Save]").click()
 
     # Fill inputs for IP Radio
@@ -124,7 +126,7 @@ def test_create_channel(stack_setup, browser_setup):
     assert bearers[1].attrib["mimeValue"] == "audio/mpeg"
     assert bearers[2].attrib["id"] == "drm:4001"
     assert bearers[2].attrib["cost"] == "100"
-    assert bearers[3].attrib["id"] == "hd:9e0.0eaff"
+    assert bearers[3].attrib["id"] == "hd:031.0eaff"
     assert bearers[3].attrib["cost"] == "100"
     assert bearers[4].attrib["id"] == "http://server/stream"
     assert bearers[4].attrib["cost"] == "100"

@@ -3,7 +3,7 @@
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
 
-from models import db, Station, Channel, Ecc, ServiceProvider, Clients
+from models import db, Station, Channel, Ecc, ServiceProvider, Clients, CountryCode
 import re
 
 import config
@@ -90,11 +90,6 @@ def channels_edit(request, id):
             val = request.form.get(x)
             if val == '':
                 val = None
-
-            # Secial case : CC
-            if x == 'cc' and val is not None:
-                cc_obj = Ecc.query.filter_by(id=val).first()
-                val = cc_obj.pi + cc_obj.ecc
 
             setattr(channel, x, val)
 
@@ -205,7 +200,7 @@ def channels_edit(request, id):
     if orga.codops:
         sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
         if sp:
-            cc_obj = Ecc.query.filter_by(iso=sp.location_country).first()
+            cc_obj = CountryCode.query.filter_by(iso=sp.location_country).first()
             if cc_obj:
                 default_country = cc_obj.id
 

@@ -21,7 +21,7 @@ setup(
         'haigha==0.9.0',
         'gevent==1.3.7',
         'greenlet==0.4.15',
-        'requests==2.20.1',
+        'requests==2.21.0',
         'beaker==1.10.0',
         'nose==1.3.7',
         'psutil==5.4.8',

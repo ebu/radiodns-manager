@@ -22,7 +22,7 @@ setup(
         'Flask-SQLAlchemy==2.3.2',
         'alembic==1.0.0',
         'dnspython==1.15.0',
-        'requests==2.19.1',
+        'requests==2.21.0',
         'raven==6.9.0',
         'boto==2.43.0',
         'Pillow==5.2.0',

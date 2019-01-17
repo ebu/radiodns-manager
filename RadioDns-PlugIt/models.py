@@ -387,6 +387,21 @@ class Ecc(db.Model):
         return to_json(self, self.__class__)
 
 
+class CountryCode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    iso = db.Column(db.String(2), index=True)
+    cc = db.Column(db.String(3))
+    __tablename__ = "country_code"
+
+    def __repr__(self):
+        return '<Cc %r>' % self.name
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)
+
+
 class Clients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(500))
