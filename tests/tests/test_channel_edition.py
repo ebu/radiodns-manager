@@ -17,7 +17,7 @@ CHANNELS_HTML_TR = [
     'Classical Station default dab CS_DAB 0.4001.43e1.fe1.dab.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default drm CS_DRM 4001.drm.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default dab CS_DAB_NEW 2.4002.43e2.fe1.dab.radiodns.org. classicalstation.standalone.radio.ebu.ioEPG standalone.ebu.ioSPI standalone.ebu.ioEdit Delete',
-    'Classical Station default hd CS_HD_RADIO 0eaff.9e0.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
+    'Classical Station default hd CS_HD_RADIO 0eaff.031.hd.radiodns.org. classicalstation.standalone.radio.ebu.io\nEPG standalone.ebu.io\nSPI standalone.ebu.io\nEdit Delete',
     'Classical Station default id CS_IP http://server/stream classicalstation.standalone.radio.ebu.io Edit Delete',
     'Classical Station CNN id CS_IP_2 http://server/stream/ouiiiiii classicalstation.standalone.radio.ebu.io Edit Delete'
 ]
@@ -27,7 +27,7 @@ CHANNELS_MYSQL_TR = [
     ' '.join(['CS_DAB', 'None', '81', '43e1', 'None', 'None', 'None', '0', 'None', '4001', 'None', 'dab', 'None', 'audio/mpeg', 'None', 'None']),
     ' '.join(['CS_DRM', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '4001', 'None', 'drm', 'None', 'None', 'None', 'None']),
     ' '.join(['CS_AMSS', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '4001', 'None', 'amss', 'None', 'None', 'None', 'None']),
-    ' '.join(['CS_HD_RADIO', '9E0', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '0EAFF', 'hd', 'None', 'None', 'None', 'None']),
+    ' '.join(['CS_HD_RADIO', '031', 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', '0EAFF', 'hd', 'None', 'None', 'None', 'None']),
     ' '.join(['CS_IP', 'None', 'None', 'None', 'classicalstation.standalone.radio.ebu.io', 'None', 'None', 'None', 'ebu1standalone', 'None', 'None', 'id', '200', 'audio/mpeg', 'http://server/stream', 'None']),
     ' '.join(['CS_IP_2', 'None', 'None', 'None', 'classicalstation.standalone.radio.ebu.io', 'None', 'None', 'None', 'ebu1standalone', 'None', 'None', 'id', '200', 'audio/mpeg', 'http://server/stream/ouiiiiii', '2']),
 ]
@@ -85,7 +85,7 @@ def test_channel_edition(stack_setup, browser_setup):
     assert bearers[2].attrib["mimeValue"] == "audio/aac"
     assert bearers[3].attrib["id"] == "drm:4001"
     assert bearers[3].attrib["cost"] == "100"
-    assert bearers[4].attrib["id"] == "hd:9e0.0eaff"
+    assert bearers[4].attrib["id"] == "hd:031.0eaff"
     assert bearers[4].attrib["cost"] == "100"
     assert bearers[5].attrib["id"] == "http://server/stream"
     assert bearers[5].attrib["cost"] == "100"

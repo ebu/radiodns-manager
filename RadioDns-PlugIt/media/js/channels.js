@@ -12,28 +12,33 @@ ChannelsModule.prototype.load_countries = function () {
         url: `${ebuio_baseUrl}ecc_list`,
         dataType: 'json',
         success: function (data) {
-            let cc = $('#cc');
-            let eec = $('#ecc');
-            let cc_val = cc.attr('cval');
-            let cc_id = '';
+            let ecc = $('#ecc');
 
             $(data.list).each(function (_, el) {
                 const opt = '<option value="' + el.id + '">' + el.name + ' (' + el.iso + ') [' + el.pi + el.ecc + ']</option>';
-
-                //Find cc id (as we store the cc and not the id to the country)
-                if (cc_val === (el.pi + el.ecc)) {
-                    cc_id = el.id;
-                }
-
-                cc.append(opt);
-                eec.append(opt);
+                ecc.append(opt);
             });
 
-            cc.val(cc_id);
-            let default_country = eec.attr('cval');
+            let default_country = ecc.attr('cval');
             if (!default_country)
                 default_country = ChannelsModule.prototype.default_country;
-            eec.val(default_country);
+            ecc.val(default_country);
+        }
+    });
+
+    $.ajax({
+        url: `${ebuio_baseUrl}cc_list`,
+        dataType: 'json',
+        success: function (data) {
+            let cc = $('#cc');
+            let cc_val = cc.attr('cval');
+
+            $(data.list).each(function (_, el) {
+                const opt = '<option value="' + el.cc + '">' + el.name + ' (' + el.iso + ') [' + el.cc + ']</option>';
+                cc.append(opt);
+            });
+
+            cc.val(cc_val || cc);
         }
     })
 };
