@@ -8,6 +8,7 @@ import uuid
 from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
+from flask import abort
 from werkzeug.utils import secure_filename
 
 import config
@@ -65,7 +66,10 @@ def serviceprovider_edit(request, id):
     orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
 
     if id != '-':
-        object = ServiceProvider.query.filter_by(id=id).first()
+        object = ServiceProvider.query.filter_by(id=id, codops=orga.codops).first()
+
+    if not object and id != '-':
+        abort(404)
 
     if request.method == 'POST':
 
