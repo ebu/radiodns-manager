@@ -79,7 +79,7 @@ def retrieve_spi_data(client):
         sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
         stations = Station.query.filter_by(radioepg_enabled=True)
 
-    if not sp and not config.STANDALONE:
+    if not sp and not config.DEBUG and not config.STANDALONE:
         abort(404)
 
     result = []

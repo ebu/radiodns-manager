@@ -20,6 +20,8 @@ Your login credentials as admin are
     admin
     1234
 
+Once you have configured the services you may test the generated metadata at http://localhost:5000/radiodns/spi/3.1/SI.xml.
+
 To shut down the local instance
 
 ```

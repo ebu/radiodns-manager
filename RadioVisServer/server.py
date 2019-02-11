@@ -90,7 +90,6 @@ if __name__ == '__main__':
         server = StreamServer((config.STOMP_IP, config.STOMP_PORT), stomp_client)
         logger.debug('Starting stomp server on %s:%s' % (config.STOMP_IP, config.STOMP_PORT))
 
-    logger.info('RadioVis server started !')
-
     server.serve_forever()
+    logger.info('RadioVis server started !')
 
