@@ -1,10 +1,11 @@
 dist: xenial
 language: python
 python:
-    - "3.7"
+    - "2.7"
 before_install:
     - pip install awscli==1.15.50
 script:
+    - [[ $TRAVIS_BRANCH = "master" ]] && export DOCKER_REPOSITORY="ebutech" || export DOCKER_REPOSITORY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
     - echo REVISION = \"$TRAVIS_COMMIT\" >> RadioDns-PlugIt/config.py
     - docker build -t ebutech/platform.open.radio RadioDns-PlugIt/.
     - docker build -t ebutech/vis.open.radio RadioVisServer/.
