@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
-# installing tests
-cd tests &&
-virtualenv --python=$(which python3) venv &&
+# installing RadioDns-PlugIt
+cd RadioDns-PlugIt/ &&
+echo $(which python2) &&
+virtualenv --python=$(which python2) venv &&
 source venv/bin/activate &&
 pip install . &&
 deactivate &&
 
-# installing RadioDns-PlugIt
-cd ../RadioDns-PlugIt/ &&
-virtualenv --python=$(which python2) venv &&
+# installing tests
+cd ../tests &&
+virtualenv --python=$(which python3) venv &&
 source venv/bin/activate &&
 pip install . &&
 deactivate &&

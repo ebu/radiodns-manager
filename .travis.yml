@@ -5,11 +5,11 @@ python:
 before_install:
     - pip install awscli==1.15.50
 script:
-    - [[ $TRAVIS_BRANCH = "master" ]] && export DOCKER_REPOSITORY="ebutech" || export DOCKER_REPOSITORY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+    - if [[ $TRAVIS_BRANCH = "master" ]]; then export DOCKER_REPOSITORY="ebutech"; else export DOCKER_REPOSITORY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"; fi
     - echo REVISION = \"$TRAVIS_COMMIT\" >> RadioDns-PlugIt/config.py
-    - docker build -t ebutech/platform.open.radio RadioDns-PlugIt/.
-    - docker build -t ebutech/vis.open.radio RadioVisServer/.
-    - docker build -t ebutech/platform-proxy.open.radio LightweightPlugitProxy/.
+    - docker build -t $DOCKER_REPOSITORY/platform.open.radio RadioDns-PlugIt/.
+    - docker build -t $DOCKER_REPOSITORY/vis.open.radio RadioVisServer/.
+    - docker build -t $DOCKER_REPOSITORY/platform-proxy.open.radio LightweightPlugitProxy/.
 deploy:
     provider: script
     script: bash scripts/docker_push.sh
