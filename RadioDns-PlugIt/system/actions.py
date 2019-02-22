@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import plugit
 from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_admin_user, json_only
@@ -29,3 +29,9 @@ def system_check(request):
     """Check AWS State for Service Provider."""
 
     return awsutils.check_mainzone()
+
+
+@plugit.app.route('/')
+@json_only()
+def system_info():
+    return {'app': 'RadioDNS SPI/EPG server', 'revision': config.REVISION}

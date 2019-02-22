@@ -92,3 +92,6 @@ DATABASE_CONNECTION_MERCY_TIME = safe_cast(os.environ.get('DATABASE_CONNECTION_M
 
 # Endpoint to the VIS player of radiodns manager. Used by the HTML vis player.
 VIS_WEB_SOCKET_ENDPOINT_HOST = os.environ.get('VIS_WEB_SOCKET_ENDPOINT_HOST', '127.0.0.1')
+
+# Current Revision.
+REVISION = "dev-local"

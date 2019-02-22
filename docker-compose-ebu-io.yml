@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   dns_server:
-    build: RadioDns-PlugIt/.
+    image: ${DOCKER_REPOSITORY}/platform.open.radio
     restart: always
     environment:
       RADIO_DNS_PORT: ${RADIO_DNS_PORT}

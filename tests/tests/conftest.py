@@ -91,7 +91,7 @@ def stack_setup():
     env["API_URL"] = """http://127.0.0.1:{port}/""".format(port=TEST_MOCK_API_PORT)
     env["MOCK_API_PORT"] = str(TEST_MOCK_API_PORT)
     env["RADIO_DNS_PORT"] = str(TEST_RADIO_DNS_PORT)
-    env["DATABASE_PORT"] = str(os.environ.get('DATABASE_PORT', '5432'))
+    env["DATABASE_PORT"] = str(os.environ.get('DATABASE_PORT', '5433'))
     env["SU_NAME"] = "admin"
     env["SU_EMAIL"] = "admin@test.com"
     env["SU_PASSWORD"] = "1234"
@@ -127,8 +127,8 @@ def stack_setup():
     for number_of_attempts in range(1, TEST_MAX_TRIES_TO_DOCKER_TO_BOOT + 1):
         try:
             mock_api_request = requests.get(TEST_MOCK_API_URL)
-            plugit_backend = requests.get(env["PLUGIT_APP_URL"] + "/stations")
             proxy_request = requests.get(TEST_PROXY_URL)
+            plugit_backend = requests.get(env["PLUGIT_APP_URL"] + "/stations")
             if proxy_request.status_code == 403\
                 and mock_api_request.status_code == 200\
                 and plugit_backend.status_code == 404:
