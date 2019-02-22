@@ -1,0 +1,9 @@
+
+/tests/venv/
+/tests/.idea/
+/RadioVisServer/venv/
+/RadioVisServer/.idea/
+/RadioDns-PlugIt/venv/
+/RadioDns-PlugIt/.idea/
+/LightweightPlugitProxy/venv/
+/LightweightPlugitProxy/.idea/
