@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import plugit
+from flask import jsonify
 from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_admin_user, json_only
@@ -34,4 +35,4 @@ def system_check(request):
 @plugit.app.route('/')
 @json_only()
 def system_info():
-    return {'app': 'RadioDNS SPI/EPG server', 'revision': config.REVISION}
+    return jsonify({'app': 'RadioDNS SPI/EPG server', 'revision': config.REVISION})

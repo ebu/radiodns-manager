@@ -16,7 +16,7 @@ services:
     image: memcached:1.5.12-alpine
 
   vis_server:
-    build: RadioVisServer/.
+    image: ${DOCKER_REPOSITORY}/vis.open.radio
     command: server.py
     restart: always
     depends_on:
@@ -58,7 +58,7 @@ services:
     - "61613:61613"
 
   fallback:
-    build: RadioVisServer/.
+    image: ${DOCKER_REPOSITORY}/vis.open.radio
     command: fallback.py
     restart: always
     depends_on:

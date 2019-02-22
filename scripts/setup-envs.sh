@@ -2,7 +2,6 @@
 
 # installing RadioDns-PlugIt
 cd RadioDns-PlugIt/ &&
-echo $(which python2) &&
 virtualenv --python=$(which python2) venv &&
 source venv/bin/activate &&
 pip install . &&
