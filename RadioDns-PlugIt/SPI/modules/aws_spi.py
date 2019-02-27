@@ -38,22 +38,23 @@ class AWSSPI(BaseSPI):
             self.delete_spi_file(service_provider_meta["codops"], "3")
 
     def on_request_epg_1(self, codops, client):
-        return redirect(AWSSPI.get_bucket_endpoint(self.bucket, codops, "1", client), code=304)
+        return redirect(AWSSPI.get_bucket_endpoint(codops, "1", client), code=304)
 
     def on_request_epg_3(self, codops, client):
-        return redirect(AWSSPI.get_bucket_endpoint(self.bucket, codops, "3", client), code=304)
+        return redirect(AWSSPI.get_bucket_endpoint(codops, "3", client), code=304)
 
     @staticmethod
     def get_bucket_name(service_provider_codops, version, client):
         return service_provider_codops + "." + version + "." + (str(client.id) if client else "default") + ".xml"
 
     @staticmethod
-    def get_bucket_endpoint(bucket, codops, version, client):
-        return "http://" + get_website_endpoint(bucket) + "/" + AWSSPI.get_bucket_name(codops, version, client)
+    def get_bucket_endpoint(codops, version, client):
+        return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_bucket_name(codops, version, client)
 
     def upload_spi_file(self, service_provider, client, version, contents):
         key = self.bucket.new_key(AWSSPI.get_bucket_name(service_provider.codops, version, client))
-        key.set_contents_from_string(contents, policy='public-read')
+        key.content_type = 'text/xml'
+        key.set_contents_from_string(contents)
 
     def delete_spi_file(self, service_provider_meta, version):
         bucket_name = AWSSPI.get_bucket_name(service_provider_meta["codops"], version, None)

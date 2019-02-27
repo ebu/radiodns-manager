@@ -100,3 +100,5 @@ SPI_BUCKET_NAME = os.environ.get('SPI_BUCKET_NAME', 'SPISTATIC').lower()
 
 # Number of seconds between each generation of spi file if any is to be made.
 SPI_GENERATION_INTERVAL = int(os.environ.get('SPI_GENERATION_INTERVAL', '5'))
+
+SPI_CLOUDFRONT_DOMAIN = os.environ.get("SPI_CLOUDFRONT_DOMAIN", "d1jzn5xo0i9jh4.cloudfront.net")
