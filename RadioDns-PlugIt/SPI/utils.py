@@ -1,11 +1,14 @@
 import copy
+import datetime
 import re
 
-from flask import abort, request as Request
+import plugit
+from flask import abort, request as Request, render_template
 from sqlalchemy import or_, text
 
 import config
-from models import Station, LogoImage
+from models import Station, LogoImage, ServiceProvider, Channel, Ecc, Clients, GenericServiceFollowingEntry
+from server import SPI_handler
 from stations.utils import station_fields
 
 
@@ -53,34 +56,38 @@ def make_xsi3_hostname_cache_key(*args, **kwargs):
     return (hostname + '_xsi3_' + args).encode('utf-8')
 
 
-def retrieve_spi_data(client):
-    """
-    Retrieves data for the xml spi generation.
-    :param client: The client if the request wants a station override.
-    :return: The resulting data: (List<station>, ServiceProvider)
-    """
-    from models import Station, Channel, GenericServiceFollowingEntry, Ecc, ServiceProvider
-
-    sp = None
-    stations = None
-
+def get_codops_from_request():
     regex = re.compile('((?P<provider>[^\.]+?)\.).+\.' + config.XSISERVING_DOMAIN)
     r = regex.search(Request.host)
     if r:
-        provider = r.groupdict()['provider']
+        return r.groupdict()['provider']
+    return None
 
-        if provider:
-            # We have a station based query
-            sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
-            if sp:
-                stations = Station.query.filter_by(service_provider_id=sp.id,
-                                                   radioepg_enabled=True)  # , fqdn_prefix=station)
+
+def get_service_provider_from_codops(codops):
+    if codops:
+        # We have a station based query
+        sp = ServiceProvider.query.filter_by(codops=codops).first()
     else:
-        sp = ServiceProvider.query.filter_by(codops="EBU").order_by(ServiceProvider.codops).first()
-        stations = Station.query.filter_by(radioepg_enabled=True)
+        sp = ServiceProvider.query.filter_by(codops="EBU").first()
+    return sp
+
+
+def generate_spi_data(sp, client):
+    """
+    Retrieves data for the xml spi generation.
+    :param sp: The service provider.
+    :param client: The client if the request wants a station override.
+    :return: The resulting data: (List<station>, ServiceProvider)
+    """
 
     if not sp and not config.DEBUG and not config.STANDALONE:
         abort(404)
+
+    if sp:
+        stations = Station.query.filter_by(service_provider_id=sp.id, radioepg_enabled=True)  # , fqdn_prefix=station)
+    else:
+        stations = Station.query.filter_by(radioepg_enabled=True)
 
     result = []
 
@@ -131,3 +138,39 @@ def retrieve_spi_data(client):
             result.append([station.json, json_channels])
 
     return result, sp
+
+
+def generate_spi_file(service_provider, client, template_uri):
+    with plugit.app.app_context():
+        time_format = '%Y-%m-%dT%H:%M:%S%z'
+
+        data, sp = generate_spi_data(service_provider, client)
+
+        return render_template(template_uri, stations=data, service_provider=sp,
+                                      creation_time=datetime.datetime.now().strftime(time_format))
+
+
+EVENT_SPI_UPDATED = "UPDATE"
+EVENT_SPI_DELETED = "DELETE"
+
+
+def spi_event_emitter(service_provider_meta, event_name, client=None):
+    """
+    Emits an event to all spi file handler listener.
+
+    :param service_provider: The service provider responsible for this spi file.
+    :param event_name: Can be 'UPDATE' or 'DELETE'.
+    :param client: Optional. Specifies a client override rather than the original resource.
+    :return:
+    """
+    SPI_handler.on_event_epg_1(event_name, service_provider_meta, client)
+    SPI_handler.on_event_epg_3(event_name, service_provider_meta, client)
+
+
+def spi_changed(service_provider_meta, client=None):
+    spi_event_emitter(service_provider_meta, EVENT_SPI_UPDATED, client)
+
+
+def spi_deleted(service_provider_meta, client=None):
+    spi_event_emitter(service_provider_meta, EVENT_SPI_DELETED, client)
+

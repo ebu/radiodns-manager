@@ -133,16 +133,17 @@ def client_delete(_, client, id):
 @with_json_validated_and_decoded(client_schema)
 @with_model_from_db(Clients, ['id'])
 @error_boundary(IntegrityError, client_or_identifier_already_exists_handler)
-def client_update(_, decoded, client, id):
+def client_update(request, decoded, client, id):
     """
     REST endpoint to update a client.
 
-    :param _: [UNUSED] the flask request.
+    :param request: The flask request.
     :param decoded: The decoded json value from the with_json decorator.
     :param client: the client returned from the with_model_from_db decorator.
     :param id: the id of the client.
     :return: json of the updated client.
     """
+    orga = int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
     client.email = decoded['email']
     client.name = decoded['name']
     client.identifier = decoded['identifier']

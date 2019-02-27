@@ -33,7 +33,8 @@ setup(
         'backoff==1.6.0',
         'jsonschema==2.6.0',
         'simplejson==3.16.0',
-        'logging==0.4.9.6'
+        'logging==0.4.9.6',
+        'Pykka==1.2.1'
     ],
     include_package_data=True,
 )

@@ -7,9 +7,10 @@ from flask import abort, send_from_directory, request as Request
 from plugit.utils import cache
 
 import config
-from SPI.utils import make_xsi1_hostname_cache_key, retrieve_spi_data, make_xsi3_hostname_cache_key, \
-    make_pi1_hostname_cache_key
+from SPI.utils import make_xsi1_hostname_cache_key, make_xsi3_hostname_cache_key, \
+    make_pi1_hostname_cache_key, get_codops_from_request
 from actions_utils import with_client_identification
+from server import SPI_handler
 
 
 @plugit.app.route('/radiodns/epg/XSI.xml')
@@ -19,15 +20,7 @@ def epg_1_xml(client):
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
 
     if config.XSISERVING_ENABLED:
-        from flask import render_template, Response
-        import datetime
-        time_format = '%Y-%m-%dT%H:%M:%S%z'
-
-        data, sp = retrieve_spi_data(client)
-
-        return Response(render_template('radioepg/servicefollowing/xml1.html', stations=data, service_provider=sp,
-                                        creation_time=datetime.datetime.now().strftime(time_format)),
-                        mimetype='text/xml')
+        return SPI_handler.on_request_epg_1(get_codops_from_request(), client)
 
     # Else
     abort(404)
@@ -44,15 +37,7 @@ def epg_3_xml(client):
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
 
     if config.XSISERVING_ENABLED:
-        from flask import render_template, Response
-        import datetime
-        time_format = '%Y-%m-%dT%H:%M:%S%z'
-
-        data, sp = retrieve_spi_data(client)
-
-        return Response(render_template('radioepg/servicefollowing/xml3.html', stations=data, service_provider=sp,
-                                        creation_time=datetime.datetime.now().strftime(time_format)),
-                        mimetype='text/xml')
+        return SPI_handler.on_request_epg_3(get_codops_from_request(), client)
 
     # Else
     abort(404)

@@ -409,8 +409,14 @@ class Clients(db.Model):
     identifier = db.Column(db.String(128))
     email = db.Column(db.String(255))
 
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __hash__(self):
+        return self.id
+
     def __repr__(self):
-        return '<Ecc %r>' % self.name
+        return '<Client %r #%r>' % self.name, self.id
 
     @property
     def json(self):

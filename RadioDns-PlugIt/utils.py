@@ -3,22 +3,6 @@ import requests
 import config
 
 
-def safe_cast(val, target_type, default=None):
-    """
-    Tries to cast a value to a specific target value. Return None or specified
-     default value if casting failed.
-
-    :param val: Value to be cast.
-    :param target_type: Target type (int, float, string, etc).
-    :param default: Must be of the expected type. Default value if cast failed.
-    :return: Casted value if success, default value otherwise.
-    """
-    try:
-        return target_type(val)
-    except (ValueError, TypeError):
-        return default
-
-
 def send_image_to_mock_api(image, size_prefix=""):
     """
     Standalone function allowing to send an image to any mock api server.

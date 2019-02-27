@@ -13,10 +13,14 @@ from sqlalchemy.exc import OperationalError
 
 import actions
 import config
+from SPI.modules.aws_spi import AWSSPI
+from SPI.modules.standalone_spi import StandaloneSPI
+
+SPI_handler = StandaloneSPI() if config.STANDALONE else AWSSPI()
 
 
 @backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
-def establishConnection(sqlalchemy_engine):
+def establish_connection(sqlalchemy_engine):
     """
     Tries to establish a connection with the database. Give up after 30 seconds.
     :param sqlalchemy_engine: The sqlalchemy engine configured for the desired database.
@@ -33,7 +37,7 @@ def db_setup():
     while conn is None:
         try:
             logging.info("Trying connection...")
-            conn = establishConnection(engine)
+            conn = establish_connection(engine)
         except OperationalError:
             logging.warning("""Couldn't connect to the server in {time} seconds to the database."""
                             .format(time=config.DATABASE_CONNECTION_MERCY_TIME))
