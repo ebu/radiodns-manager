@@ -16,7 +16,7 @@ import config
 from SPI.modules.aws_spi import AWSSPI
 from SPI.modules.standalone_spi import StandaloneSPI
 
-SPI_handler = StandaloneSPI() if config.STANDALONE else AWSSPI()
+SPI_handler = AWSSPI() if config.USES_CDN else StandaloneSPI()
 
 
 @backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)

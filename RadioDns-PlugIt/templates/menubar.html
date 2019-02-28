@@ -1,46 +1,85 @@
 <div class="menu-section">
     <h3>RadioDNS</h3>
     <ul>
-        <li><a href="{{ebuio_baseUrl}}stations/">My Stations</a></li>
-        <li><a href="{{ebuio_baseUrl}}channels/">My Channels</a></li>
-        <li><a href="{{ebuio_baseUrl}}clients/">My Clients</a></li>
-        <li><a href="{{ebuio_baseUrl}}serviceprovider/">Service Provider</a></li>
+        <li><a href="{{ ebuio_baseUrl }}stations/">My Stations</a></li>
+        <li><a href="{{ ebuio_baseUrl }}channels/">My Channels</a></li>
+        <li><a href="{{ ebuio_baseUrl }}clients/">My Clients</a></li>
+        <li><a href="{{ ebuio_baseUrl }}serviceprovider/">Service Provider</a></li>
     </ul>
 </div>
 <div class="menu-section">
     <h3>Service & Program Info</h3>
     <ul>
-        <li><a href="{{ebuio_baseUrl}}serviceprovider/images/">Logo Image Repository</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/logos/">Station Logos</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/servicefollowing/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Service following</a></li>
-        <li><a href="{{ebuio_baseUrl}}radioepg/schedule/{% if current_station_id %}?station_id={{current_station_id}}{% endif %}">Calendar & Schedule (EPG)</a></li>
+        <li><a href="{{ ebuio_baseUrl }}serviceprovider/images/">Logo Image Repository</a></li>
+        <li><a href="{{ ebuio_baseUrl }}radioepg/logos/">Station Logos</a></li>
+        <li>
+            <a href="{{ ebuio_baseUrl }}radioepg/servicefollowing/{% if current_station_id %}?station_id={{ current_station_id }}{% endif %}">Service
+                following</a></li>
+        <li>
+            <a href="{{ ebuio_baseUrl }}radioepg/schedule/{% if current_station_id %}?station_id={{ current_station_id }}{% endif %}">Calendar
+                & Schedule (EPG)</a></li>
     </ul>
 </div>
 <div class="menu-section">
     <h3>RadioVIS SlideShow</h3>
     <ul>
-        <li><a href="{{ebuio_baseUrl}}radiovis/gallery/">SlideShow Image Repository</a></li>
-        <li><a href="{{ebuio_baseUrl}}radiovis/channels/">RadioVIS Channel Images</a></li>
+        <li><a href="{{ ebuio_baseUrl }}radiovis/gallery/">SlideShow Image Repository</a></li>
+        <li><a href="{{ ebuio_baseUrl }}radiovis/channels/">RadioVIS Channel Images</a></li>
         {#<li><a href="{{ebuio_baseUrl}}radioepg/gallery/">RadioEPG Gallery</a></li>#}
+    </ul>
+</div>
+<div class="menu-section">
+    <h3>SPI file handling</h3>
+    <ul>
+        <li>
+            <button
+                    id="re-generate"
+                    class="btn btn-xs btn-primary"
+                    onclick="reGenerateSPIFiles(false)"
+            >
+                generate spi file
+            </button>
+        </li>
+        {% if ebuio_u.ebuio_orga_admin %}
+            <div class="menu-section">
+                <li>
+                    <button
+                            id="re-generate-all"
+                            class="btn btn-xs btn-primary"
+                            onclick="reGenerateSPIFiles(true)"
+                    >
+                        Generate all spi files
+                    </button>
+                    <p id="re-generate-text-info"></p></li>
+            </div>
+        {% endif %}
+        <p id="re-generate-text-info"></p>
     </ul>
 </div>
 
 {% if ebuio_u.ebuio_orga_admin %}
-<div class="menu-section">
-    <h3>System</h3>
-    <ul>
-        <li><a href="{{ebuio_baseUrl}}system/">System Status</a></li>
-    </ul>
-</div>
+    <div class="menu-section">
+        <h3>System</h3>
+        <ul>
+            <li><a href="{{ ebuio_baseUrl }}system/">System Status</a></li>
+        </ul>
+    </div>
 {% endif %}
 
-<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/overrides.css">
+<link rel="stylesheet" type="text/css" href="{{ ebuio_baseUrl }}media/js/">
+<link rel="stylesheet" type="text/css" href="{{ ebuio_baseUrl }}media/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="{{ ebuio_baseUrl }}media/css/overrides.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='{{ ebuio_baseUrl }}media/js/utilities.js'></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="application/javascript">
     const ebuio_baseUrl = "{{ebuio_baseUrl}}";
+
+    function reGenerateSPIFiles(all) {
+        UtilitiesModule.prototype.request(`${ebuio_baseUrl}spi_generate${all ? "_all" : ""}`, 'GET');
+        $("#re-generate-text-info").text("Command sent to worker!");
+    }
 </script>
 <div class="menu-section">
-    <h3><a href="{{ebuio_baseUrl}}terms/">Terms of Use</a></h3>
+    <h3><a href="{{ ebuio_baseUrl }}terms/">Terms of Use</a></h3>
 </div>

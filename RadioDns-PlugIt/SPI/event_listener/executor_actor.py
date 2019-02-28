@@ -40,10 +40,7 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                     station = Station.query.filter_by(id=channel.station_id).first(),
                     service_provider_id = station[0].service_provider_id
                     clients = [channel.client]
-                elif msg["subject"] == "ecc":
-                    affected_resources = select_all()
-                    break
-                elif msg["subject"] == "country_code":
+                elif msg["subject"] == "ecc" or msg["subject"] == "country_code" or msg["subject"] == "all":
                     affected_resources = select_all()
                     break
                 elif msg["subject"] == "clients":
@@ -85,6 +82,10 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         service_provider_id = logo_image.service_provider.id
                         clients = [station.client]
                         affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
+                elif msg["subject"] == "reload":
+                    service_provider_id = msg["id"]
+                    orga = Station.query.filter_by(service_provider_id=msg["id"]).first().orga
+                    clients = [None] + Clients.query.filter_by(orga=orga).all()
 
                 affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
 
@@ -105,7 +106,7 @@ class SPIGeneratorManager:
         self.spi_generator_actor = SPIGeneratorActor.start()
 
     def tell_to_actor(self, msg):
-        if not self.spi_generator_actor.is_alive():
+        if not self.spi_generator_actor.is_alive() and not config.STANDALONE:
             self.spi_generator_actor = SPIGeneratorActor.start()
         self.spi_generator_actor.tell(msg)
 
@@ -125,9 +126,11 @@ def select_all():
     affected_resources = {}
 
     for service_provider in service_providers:
-        orga = Station.query.filter_by(service_provider_id=service_provider.id).first().orga
-        clients = [None] + Clients.query.filter_by(orga=orga).all()
-        affected_resources[service_provider.id] = {"sp_id": service_provider.id, "clients": set(clients)}
+        station = Station.query.filter_by(service_provider_id=service_provider.id).first()
+        if station:
+            orga = station.orga
+            clients = [None] + Clients.query.filter_by(orga=orga).all()
+            affected_resources[service_provider.id] = {"sp_id": service_provider.id, "clients": set(clients)}
     return affected_resources
 
 

@@ -16,11 +16,11 @@ from server import SPI_handler
 @plugit.app.route('/radiodns/epg/XSI.xml')
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 @with_client_identification
-def epg_1_xml(client):
+def epg_1_xml(client_identifier):
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
 
     if config.XSISERVING_ENABLED:
-        return SPI_handler.on_request_epg_1(get_codops_from_request(), client)
+        return SPI_handler.on_request_epg_1(get_codops_from_request(), client_identifier)
 
     # Else
     abort(404)
@@ -33,11 +33,11 @@ epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 @plugit.app.route('/radiodns/spi/3.1/SI.xml')
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 @with_client_identification
-def epg_3_xml(client):
+def epg_3_xml(client_identifier):
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
 
     if config.XSISERVING_ENABLED:
-        return SPI_handler.on_request_epg_3(get_codops_from_request(), client)
+        return SPI_handler.on_request_epg_3(get_codops_from_request(), client_identifier)
 
     # Else
     abort(404)

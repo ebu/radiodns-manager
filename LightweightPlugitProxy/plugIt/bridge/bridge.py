@@ -9,6 +9,8 @@ from django.core.cache import cache
 from requests import Response
 from requests_toolbelt import MultipartEncoder
 
+from lpp.settings import DEBUG
+
 
 class PlugItRedirect:
     """Object to perform a redirection"""
@@ -196,7 +198,7 @@ class Bridge:
         meta = cache.get(media_key, None)
 
         # Nothing found -> Retrieve it from the server and cache it
-        if not meta:
+        if not meta or DEBUG:
             response = self.do_query('meta/' + uri)
 
             if response.status_code == 200:  # Get the content if there is not problem. Otherwise the template will stay to None
@@ -229,7 +231,7 @@ class Bridge:
 
             meta = cache.get(meta_key, None)
 
-            if not meta:
+            if not meta or DEBUG:
                 meta = self.get_meta(uri)
                 cache.set(meta_key, meta, 15)
 
@@ -240,7 +242,7 @@ class Bridge:
         template = cache.get(template_key, None)
 
         # Nothing found -> Retrieve it from the server and cache it
-        if not template:
+        if not template or DEBUG:
             response = self.do_query('template/' + uri)
 
             if response.status_code == 200:  # Get the content if there is not problem. If there is, template will stay to None

@@ -1,13 +1,13 @@
 class BaseSPI:
 
-    def on_event_epg_1(self, event_name, service_provider_meta, client=None):
+    def on_event_epg_1(self, event_name, service_provider_meta, client):
         pass
 
     def on_event_epg_3(self, event_name, service_provider_meta, client=None):
         pass
 
-    def on_request_epg_1(self, codops, client):
+    def on_request_epg_1(self, codops, client_identifier):
         pass
 
-    def on_request_epg_3(self, codops, client):
+    def on_request_epg_3(self, codops, client_identifier):
         pass

@@ -95,6 +95,9 @@ VIS_WEB_SOCKET_ENDPOINT_HOST = os.environ.get('VIS_WEB_SOCKET_ENDPOINT_HOST', '1
 # Current Revision.
 REVISION = "dev-local"
 
+# If you want to use the aws cloudfront integration to deliver spi files.
+USES_CDN = "True" == os.environ.get('USES_CDN', 'False')
+
 # Name of the aws bucket that will serve static SPI files.
 SPI_BUCKET_NAME = os.environ.get('SPI_BUCKET_NAME', 'SPISTATIC').lower()
 

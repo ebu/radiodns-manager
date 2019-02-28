@@ -156,14 +156,7 @@ def with_client_identification(f):
             return make_response("Invalid/missing authentication scheme.",
                                  401, {"WWW-Authenticate": "ClientIdentifier"})
 
-        client = Clients.query \
-            .filter_by(identifier=identifier.replace('ClientIdentifier ', '')) \
-            .first()
-
-        if client is None:
-            return make_response("Invalid authentication credentials.", 403)
-
-        return f(client)
+        return f(identifier.replace('ClientIdentifier ', ''))
 
     return decorator
 
