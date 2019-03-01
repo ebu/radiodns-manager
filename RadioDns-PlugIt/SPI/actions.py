@@ -7,10 +7,10 @@ from flask import abort, send_from_directory, request as Request
 from plugit.utils import cache
 
 import config
+import server
 from SPI.utils import make_xsi1_hostname_cache_key, make_xsi3_hostname_cache_key, \
     make_pi1_hostname_cache_key, get_codops_from_request
 from actions_utils import with_client_identification
-from server import SPI_handler
 
 
 @plugit.app.route('/radiodns/epg/XSI.xml')
@@ -20,7 +20,7 @@ def epg_1_xml(client_identifier):
     """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
 
     if config.XSISERVING_ENABLED:
-        return SPI_handler.on_request_epg_1(get_codops_from_request(), client_identifier)
+        return server.SPI_handler.on_request_epg_1(get_codops_from_request(), client_identifier)
 
     # Else
     abort(404)
@@ -37,7 +37,7 @@ def epg_3_xml(client_identifier):
     """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
 
     if config.XSISERVING_ENABLED:
-        return SPI_handler.on_request_epg_3(get_codops_from_request(), client_identifier)
+        return server.SPI_handler.on_request_epg_3(get_codops_from_request(), client_identifier)
 
     # Else
     abort(404)

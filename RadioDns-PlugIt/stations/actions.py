@@ -5,7 +5,6 @@ from plugit.api import PlugItAPI
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
 
 import config
-from SPI.event_listener.update_hooks import station_update_hook
 from actions_utils import get_orga_service_provider
 from aws import awsutils
 from models import db, Station, ServiceProvider, LogoImage, Channel, GenericServiceFollowingEntry, Picture

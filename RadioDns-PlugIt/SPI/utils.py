@@ -7,8 +7,7 @@ from flask import abort, request as Request, render_template
 from sqlalchemy import or_, text
 
 import config
-from models import Station, LogoImage, ServiceProvider, Channel, Ecc, Clients, GenericServiceFollowingEntry
-from server import SPI_handler
+from models import Station, LogoImage, ServiceProvider, Channel, Ecc, GenericServiceFollowingEntry
 from stations.utils import station_fields
 
 
@@ -57,6 +56,10 @@ def make_xsi3_hostname_cache_key(*args, **kwargs):
 
 
 def get_codops_from_request():
+    """
+    Tries to read a service provider's codops from the implicit request context.
+    :return: the codops if any or None.
+    """
     regex = re.compile('((?P<provider>[^\.]+?)\.).+\.' + config.XSISERVING_DOMAIN)
     r = regex.search(Request.host)
     if r:
@@ -65,6 +68,12 @@ def get_codops_from_request():
 
 
 def get_service_provider_from_codops(codops):
+    """
+    Returns a service provider from a codops.
+
+    :param codops: the service provider codops.
+    :return: The service provider if any else the default service provider if any else None.
+    """
     if codops:
         # We have a station based query
         sp = ServiceProvider.query.filter_by(codops=codops).first()
@@ -141,36 +150,18 @@ def generate_spi_data(sp, client):
 
 
 def generate_spi_file(service_provider, client, template_uri):
+    """
+    Renders the template for this SPI file.
+
+    :param service_provider: The service provider holding the information for the SPI file.
+    :param client: The client if the file contains client overrides or None.
+    :param template_uri: The template uri.
+    :return: The rendered XML file.
+    """
     with plugit.app.app_context():
         time_format = '%Y-%m-%dT%H:%M:%S%z'
 
         data, sp = generate_spi_data(service_provider, client)
 
         return render_template(template_uri, stations=data, service_provider=sp,
-                                      creation_time=datetime.datetime.now().strftime(time_format))
-
-
-EVENT_SPI_UPDATED = "UPDATE"
-EVENT_SPI_DELETED = "DELETE"
-
-
-def spi_event_emitter(service_provider_meta, event_name, client=None):
-    """
-    Emits an event to all spi file handler listener.
-
-    :param service_provider: The service provider responsible for this spi file.
-    :param event_name: Can be 'UPDATE' or 'DELETE'.
-    :param client: Optional. Specifies a client override rather than the original resource.
-    :return:
-    """
-    SPI_handler.on_event_epg_1(event_name, service_provider_meta, client)
-    SPI_handler.on_event_epg_3(event_name, service_provider_meta, client)
-
-
-def spi_changed(service_provider_meta, client=None):
-    spi_event_emitter(service_provider_meta, EVENT_SPI_UPDATED, client)
-
-
-def spi_deleted(service_provider_meta, client=None):
-    spi_event_emitter(service_provider_meta, EVENT_SPI_DELETED, client)
-
+                               creation_time=datetime.datetime.now().strftime(time_format))

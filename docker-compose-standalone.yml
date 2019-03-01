@@ -101,6 +101,10 @@ services:
             IMG_CACHE_TIMEOUT: ${IMG_CACHE_TIMEOUT}
             DATABASE_CONNECTION_MERCY_TIME: ${DATABASE_CONNECTION_MERCY_TIME}
             VIS_WEB_SOCKET_ENDPOINT_HOST: ws.vis.${MAIN_DOMAIN}
+            USES_CDN: ${USES_CDN}
+            SPI_BUCKET_NAME: ${SPI_BUCKET_NAME}
+            SPI_GENERATION_INTERVAL: ${SPI_GENERATION_INTERVAL}
+            SPI_CLOUDFRONT_DOMAIN: ${SPI_CLOUDFRONT_DOMAIN}
 
     # ========================== VIS SERVERS ==========================
     rabbitmq:

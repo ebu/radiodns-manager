@@ -16,12 +16,11 @@ def get_or_create_bucket(bucket_name):
     """
     Returns the bucket or creates a new one according the provided bucket name.
     :param bucket_name: The string of the bucket name.
-    :return:
+    :return: The bucket and a boolean flag stating that this bucket is new or not.
     """
     s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,
                          host=config.AWS_ZONE + '.amazonaws.com',
                          calling_format=OrdinaryCallingFormat())  # host='s3-eu-central-1.amazonaws.com')
-    bucket = None
     try:
         bucket = s3.get_bucket(bucket_name)
         return bucket, False

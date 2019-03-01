@@ -6,7 +6,7 @@ from plugit.api import PlugItAPI
 from plugit.utils import action, only_orga_admin_user, json_only, only_orga_member_user
 
 import config
-from SPI.event_listener.update_hooks import spi_generator_manager
+from SPI.event_listener.ORM_events_listeners import spi_generator_manager
 from actions_utils import get_orga_service_provider
 from aws import awsutils
 

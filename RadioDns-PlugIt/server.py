@@ -18,7 +18,6 @@ from SPI.modules.standalone_spi import StandaloneSPI
 
 SPI_handler = AWSSPI() if config.USES_CDN else StandaloneSPI()
 
-
 @backoff.on_exception(backoff.fibo, OperationalError, max_time=config.DATABASE_CONNECTION_MERCY_TIME)
 def establish_connection(sqlalchemy_engine):
     """
