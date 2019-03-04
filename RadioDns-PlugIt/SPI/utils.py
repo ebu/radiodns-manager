@@ -82,7 +82,7 @@ def get_service_provider_from_codops(codops):
     return sp
 
 
-def generate_spi_data(sp, client):
+def generate_si_data(sp, client):
     """
     Retrieves data for the xml spi generation.
     :param sp: The service provider.
@@ -149,7 +149,7 @@ def generate_spi_data(sp, client):
     return result, sp
 
 
-def generate_spi_file(service_provider, client, template_uri):
+def generate_si_file(service_provider, client, template_uri):
     """
     Renders the template for this SPI file.
 
@@ -161,7 +161,116 @@ def generate_spi_file(service_provider, client, template_uri):
     with plugit.app.app_context():
         time_format = '%Y-%m-%dT%H:%M:%S%z'
 
-        data, sp = generate_spi_data(service_provider, client)
+        data, sp = generate_si_data(service_provider, client)
 
         return render_template(template_uri, stations=data, service_provider=sp,
+                               creation_time=datetime.datetime.now().strftime(time_format))
+
+
+def generate_pi_data(path, date):
+
+    from models import Station, Channel, Ecc, ServiceProvider
+    channels = None
+
+    # Find out what stations to serve if by codops or station
+    regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
+    r = regex.search(Request.host)
+    if r:
+
+        station = r.groupdict()['station']
+        provider = r.groupdict()['provider']
+
+        if provider:
+            # We have a station based query
+            sp = ServiceProvider.query.filter_by(codops=provider).order_by(ServiceProvider.codops).first()
+            if sp:
+                channels = Channel.query.join(Station).filter(Station.service_provider_id == sp.id,
+                                                              Station.radioepgpi_enabled).all()
+
+        if station and channels:
+            # TODO FIX Filtering by property does not workin in SQLAlchemy, thus using regular python to filter
+            channels = filter(lambda x: x.station.fqdn_prefix == station, channels)
+
+    else:
+        channels = Channel.query.join(Station).filter(Station.radioepgpi_enabled).all()
+
+    if not channels:
+        abort(404)
+
+    station = None
+    topiced_path = '/topic/' + path
+    station_channel = filter(lambda x: x.topic_no_slash == topiced_path, channels)
+    if not station_channel:
+        # Check for country code if FM
+        csplitter = path.split('/')
+        eccstr = ''
+        if csplitter[0] == 'fm':
+            # Find correct ECC
+            ecc = Ecc.query.filter_by(iso=csplitter[1].upper()).first()
+            if ecc:
+                eccstr = ('%s%s' % (ecc.pi, ecc.ecc)).lower()
+                csplitter[1] = eccstr
+                topiced_ecc_path = '/'.join(csplitter)
+                station_channel = filter(lambda x: x.topic_no_slash == topiced_ecc_path, channels)
+            else:
+                eccstr = csplitter[1]
+
+        if not station_channel:
+            # Still no station so check with wildcard as well
+            splitter = path.split('/')
+            if eccstr:
+                splitter[1] = eccstr
+            splitter[3] = '*'
+            wild_ecc_path = '/topic/' + '/'.join(splitter)
+            station_channel = filter(lambda x: x.topic_no_slash == wild_ecc_path, channels)
+
+        if not station_channel:
+            # Choose first with same PI
+            psplitter = path.split('/')
+            psplitter[3] = ''
+            if eccstr:
+                psplitter[1] = eccstr
+            best_path = '/topic/' + '/'.join(psplitter)
+            station_channel = filter(lambda x: x.topic_no_slash.startswith(best_path), channels)
+
+    if station_channel:
+        # Found station
+        station = station_channel[0].station
+
+        import datetime
+
+        today = datetime.date.today()
+        start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
+
+        # Filter by date
+        date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
+        real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
+        real_end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
+
+        json_schedules = []
+
+        for schedule in station.schedules.all():
+            schedule.start_date = start_date
+
+            if schedule.date_of_start_time.date() == date_to_filter:
+                json_schedules.append(schedule.json)
+
+        return json_schedules, real_start_date, real_end_date
+
+    return None
+
+
+def generate_pi_file(path, date):
+    data = generate_pi_data(path, date)
+    if not data:
+        return None
+
+    json_schedules = data[0]
+    real_start_date = data[1]
+    real_end_date = data[2]
+    time_format = '%Y-%m-%dT%H:%M:%S%z'
+    with plugit.app.app_context():
+        return render_template('radioepg/schedule/xml1.html', schedules=json_schedules,
+                               start_time=real_start_date.strftime(time_format),
+                               end_time=real_end_date.strftime(time_format),
                                creation_time=datetime.datetime.now().strftime(time_format))

@@ -96,8 +96,6 @@ def client_create(request, decoded):
     """
     orga = int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
 
-    Clients.query.filter_by(identifier=decoded['identifier'])
-
     client = Clients()
     client.orga = orga
     client.email = decoded['email']
@@ -143,7 +141,6 @@ def client_update(request, decoded, client, id):
     :param id: the id of the client.
     :return: json of the updated client.
     """
-    orga = int(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
     client.email = decoded['email']
     client.name = decoded['name']
     client.identifier = decoded['identifier']

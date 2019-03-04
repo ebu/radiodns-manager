@@ -5,9 +5,10 @@ import pykka
 
 import config
 import server
-from SPI.modules.base_spi import EVENT_SPI_UPDATED, EVENT_SPI_DELETED
+from SPI.modules.base_spi import EVENT_SI_PI_UPDATED, EVENT_SI_PI_DELETED
+from db_utils import db
 from models import Station, Clients, ServiceProvider, Channel, Picture, Show, Schedule, GenericServiceFollowingEntry, \
-    PictureForEPG, LogoImage
+    LogoImage
 
 
 class SPIGeneratorActor(pykka.ThreadingActor):
@@ -22,8 +23,11 @@ class SPIGeneratorActor(pykka.ThreadingActor):
     class.
     """
 
-    def on_start(self):
+    def __init__(self):
+        super(SPIGeneratorActor, self).__init__()
         self.queue = []
+
+    def on_start(self):
         self.actor_ref.tell({"type": "execute"})
 
     def on_receive(self, message):
@@ -56,92 +60,131 @@ class SPIGeneratorActor(pykka.ThreadingActor):
         if message["type"] == "add":
             self.queue.append(message)
         elif message["type"] == "execute":
-            affected_resources = {}
 
-            for msg in self.queue:
-                service_provider_id = None
-                clients = []
+            for i in range(0, 2):
+                affected_si_resources = {}
+                affected_pi_resources = {}
+                current_action = "delete" if i == 0 else "update"
 
-                if msg["subject"] == "service_provider":
-                    service_provider_id = msg["id"]
-                    station = Station.query.filter_by(service_provider_id=service_provider_id).first()
-                    clients = [None]
-                    if station:
-                        orga = station.orga
-                        clients = [None] + Clients.query.filter_by(orga=orga).all()
-                    if msg["action"] == "delete":
-                        spi_deleted(generate_service_provider_meta(
-                            ServiceProvider.query.filter_by(id=service_provider_id).first()))
-                        continue
-                elif msg["subject"] == "station":
-                    station = Station.query.filter_by(id=msg["id"]).first()
-                    service_provider_id = station.service_provider_id
-                    clients = [station.client]
-                elif msg["subject"] == "channel":
-                    channel = Channel.query.filter_by(id=msg["id"]).first()
-                    station = Station.query.filter_by(id=channel.station_id).first(),
-                    service_provider_id = station[0].service_provider_id
-                    clients = [channel.client]
-                elif msg["subject"] == "ecc" or msg["subject"] == "country_code" or msg["subject"] == "all":
-                    affected_resources = select_all()
-                    break
-                elif msg["subject"] == "clients":
-                    client = Clients.query.filter_by(id=msg["id"]).first()
-                    station = Station.query.filter_by(orga=client.orga).first()
-                    if station:
+                for msg in list(filter(lambda m: m["action"] == current_action, self.queue)):
+                    service_provider_id = None
+                    clients = []
+                    delete_flag = False
+
+                    if msg["subject"] == "service_provider":
+                        service_provider_id = msg["id"]
+                        station = Station.query.filter_by(service_provider_id=service_provider_id).first()
+                        clients = [None]
+                        if station:
+                            orga = station.orga
+                            clients += Clients.query.filter_by(orga=orga).all()
+                        if msg["action"] == "delete":
+                            service_provider = ServiceProvider.query.filter_by(id=service_provider_id).first()
+                            server.SPI_handler.on_si_resource_changed(EVENT_SI_PI_DELETED,
+                                                                      {"id": msg["id"],
+                                                                       "codops": service_provider.codops})
+                            continue
+
+                    elif msg["subject"] == "station":
+                        station = db.session.query(Station).filter_by(id=msg["id"]).first()
                         service_provider_id = station.service_provider_id
-                        clients = [client]
-                elif msg["subject"] == "picture":
-                    picture = Picture.query.filter_by(id=msg["id"]).first()
-                    for channel in picture.channels:
-                        station = Station.query.filter_by(id=channel.station_id).first(),
-                        service_provider_id = station[0].service_provider_id
-                        clients = [channel.client]
-                        affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
-                elif msg["subject"] == "show":
-                    show = Show.query.filter_by(id=msg["id"]).first()
-                    stations = Station.query.filter(Station.id.in_(map(lambda x: x.station_id, show.schedules))).all()
-                    for station in stations:
-                        service_provider_id = station.service_provider_id
-                        clients = [station.client],
-                        affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
-                elif msg["subject"] == "schedule":
-                    schedule = Schedule.query.filter_by(id=msg["id"]).first()
-                    station = Station.query.filter_by(id=schedule.station_id).first(),
-                    service_provider_id = station[0].service_provider_id
-                    clients = [station[0].client]
-                elif msg["subject"] == "gsfe":
-                    gsfe = GenericServiceFollowingEntry.query.filter_by(id=msg["id"]).first()
-                    if gsfe.station_id:
-                        station = Station.query.filter_by(id=gsfe.station_id).first(),
-                        service_provider_id = station[0].service_provider_id
-                        clients = [station[0].client]
-                elif msg["subject"] == "picture_epg":
-                    picture_peg = PictureForEPG.query.filter_by(id=msg["id"]).first()
-                    service_provider_id = Station.query.filter_by(orga=picture_peg.orga).first().service_provider_id
-                    clients = [None] + Clients.query.filter_by(orga=picture_peg.orga).all()
-                elif msg["subject"] == "logo_image":
-                    logo_image = LogoImage.query.filter_by(id=msg["id"]).first()
-                    for station in logo_image.stations:
-                        service_provider_id = logo_image.service_provider.id
                         clients = [station.client]
-                        affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
-                elif msg["subject"] == "reload":
-                    station = Station.query.filter_by(service_provider_id=msg["id"]).first()
-                    service_provider_id = msg["id"]
-                    clients = [None]
-                    if station:
-                        orga = station.orga
-                        clients = [None] + Clients.query.filter_by(orga=orga).all()
 
-                affected_resources = add_to_affected_resources(affected_resources, service_provider_id, clients)
+                        if current_action == "delete":
+                            affected_pi_resources = add_to_affected_pi_resources(
+                                affected_pi_resources,
+                                station.id,
+                                msg["action"])
 
-            for _, value in affected_resources.iteritems():
-                for client in list(value["clients"]):
-                    spi_changed(
-                        generate_service_provider_meta(ServiceProvider.query.filter_by(id=value["sp_id"]).first()),
-                        client,
-                    )
+                    elif msg["subject"] == "channel":
+                        channel = Channel.query.filter_by(id=msg["id"]).first()
+                        station = Station.query.filter_by(id=channel.station_id).first()
+                        service_provider_id = station.service_provider_id
+                        clients = [channel.client]
+                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources, station,
+                                                                             "update")
+
+                    elif msg["subject"] == "ecc" or msg["subject"] == "country_code" or msg["subject"] == "all":
+                        affected_si_resources = select_all_si()
+                        affected_pi_resources = select_all_pi()
+                        break
+
+                    elif msg["subject"] == "clients":
+                        client = Clients.query.filter_by(id=msg["id"]).first()
+                        station = Station.query.filter_by(orga=client.orga).first()
+                        if station:
+                            service_provider_id = station.service_provider_id
+                            clients = [client if current_action == "update" else client.identifier]
+                            delete_flag = current_action == "delete"
+
+                    elif msg["subject"] == "picture":
+                        picture = Picture.query.filter_by(id=msg["id"]).first()
+                        for channel in picture.channels:
+                            station = Station.query.filter_by(id=channel.station_id).first()
+                            service_provider_id = station.service_provider_id
+                            clients = [channel.client]
+                            affected_si_resources = add_to_affected_si_resources(affected_si_resources,
+                                                                                 service_provider_id, clients)
+
+                    elif msg["subject"] == "show":
+                        show = Show.query.filter_by(id=msg["id"]).first()
+                        station = Station.query.filter_by(id=show.station_id).first()
+                        if station:
+                            service_provider_id = station.service_provider_id
+                            clients = [None]
+                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources, station,
+                                                                                 "update")
+
+                    elif msg["subject"] == "schedule":
+                        schedule = Schedule.query.filter_by(id=msg["id"]).first()
+                        station = Station.query.filter_by(id=schedule.station_id).first()
+                        if station:
+                            service_provider_id = station.service_provider_id
+                            clients = [None]
+                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                                 station, "update")
+
+                    elif msg["subject"] == "gsfe":
+                        gsfe = GenericServiceFollowingEntry.query.filter_by(id=msg["id"]).first()
+                        if gsfe.station_id:
+                            station = Station.query.filter_by(id=gsfe.station_id).first()
+                            service_provider_id = station.service_provider_id
+                            clients = [station.client]
+
+                    # elif msg["subject"] == "picture_epg":
+                    #     picture_peg = PictureForEPG.query.filter_by(id=msg["id"]).first()
+                    #     service_provider_id = Station.query.filter_by(orga=picture_peg.orga).first().service_provider_id
+                    #     clients = [None] + Clients.query.filter_by(orga=picture_peg.orga).all()
+
+                    elif msg["subject"] == "logo_image":
+                        logo_image = LogoImage.query.filter_by(id=msg["id"]).first()
+                        for station in logo_image.stations:
+                            service_provider_id = station.service_provider_id
+                            clients = [station.client]
+                            affected_si_resources = add_to_affected_si_resources(affected_si_resources,
+                                                                                 service_provider_id,
+                                                                                 clients)
+
+                    elif msg["subject"] == "reload":
+                        station = Station.query.filter_by(service_provider_id=msg["id"]).first()
+                        service_provider_id = msg["id"]
+                        clients = [None]
+                        if station:
+                            orga = station.orga
+                            clients += Clients.query.filter_by(orga=orga).all()
+
+                    affected_si_resources = add_to_affected_si_resources(affected_si_resources, service_provider_id,
+                                                                         clients, delete_flag)
+
+                if current_action == "delete" and len(self.queue) != 0:
+                    db.session.commit()
+
+                for _, value in affected_si_resources.iteritems():
+                    for client in list(value["clients"]):
+                        server.SPI_handler.on_si_resource_changed(value["action"], value["sp"], client)
+
+                for _, value in affected_pi_resources.iteritems():
+                    server.SPI_handler.on_pi_resource_changed(value["action"], value["station"])
             self.queue = []
             time.sleep(config.SPI_GENERATION_INTERVAL)
             self.actor_ref.tell({"type": "execute"})
@@ -170,27 +213,39 @@ class SPIGeneratorManager:
         self.spi_generator_actor.stop(timeout=100)
 
 
-def add_to_affected_resources(affected_resources, service_provider_id, clients):
+def add_to_affected_si_resources(affected_resources, service_provider_id, clients, delete_flag=False):
     """
     Adds to the affected resources map a changed SPI file represented by a service provider's id and a list of client.
     The goal of this data structure is to get a list a global list of service providers along with their clients
     overrides that have changed.
 
-    :param affected_resources: the current affected resources. A dict of the shape {"sp_id": integer, "clients": set(clients)}
+    :param affected_resources: the current affected resources. A dict of the shape {"sp": ServiceProvider, "clients": set(clients)}
     :param service_provider_id: the service provider that had one of its resources changed.
     :param clients: the clients of the service provider that have an override that has changed.
     :return: the updated affected resources dict.
     """
+    if service_provider_id is None:
+        return affected_resources
     try:
         affected_resources[service_provider_id]["clients"] \
             = affected_resources[service_provider_id]["clients"] | set(clients)
     except KeyError:
-        affected_resources[service_provider_id] = {"sp_id": service_provider_id, "clients": set(clients)}
+        affected_resources[service_provider_id] = {
+            "sp": ServiceProvider.query.filter_by(id=service_provider_id).first(),
+            "action": EVENT_SI_PI_DELETED if delete_flag else EVENT_SI_PI_UPDATED,
+            "clients": set(clients)
+        }
     finally:
         return affected_resources
 
 
-def select_all():
+def add_to_affected_pi_resources(affected_resources, station, action):
+    affected_resources[station.id if isinstance(station, Station) else station] = {"station": station,
+                                      "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED}
+    return affected_resources
+
+
+def select_all_si():
     """
     Selects all SPI files and marks them as affected resources.
 
@@ -200,45 +255,26 @@ def select_all():
     affected_resources = {}
 
     for service_provider in service_providers:
+        clients = [None]
         station = Station.query.filter_by(service_provider_id=service_provider.id).first()
         if station:
             orga = station.orga
-            clients = [None] + Clients.query.filter_by(orga=orga).all()
-            affected_resources[service_provider.id] = {"sp_id": service_provider.id, "clients": set(clients)}
+            clients += Clients.query.filter_by(orga=orga).all()
+        affected_resources[service_provider.id] = {"sp": service_provider, "clients": set(clients),
+                                                   "action": EVENT_SI_PI_UPDATED}
+    return affected_resources
+
+
+def select_all_pi():
+    service_providers = ServiceProvider.query.all()
+    affected_resources = {}
+
+    for service_provider in service_providers:
+        stations = Station.query.filter_by(service_provider_id=service_provider.id).all()
+        for station in stations:
+            affected_resources = add_to_affected_pi_resources(affected_resources, station, "update")
     return affected_resources
 
 
 def generate_service_provider_meta(service_provider):
     return {"id": service_provider.id, "codops": service_provider.codops}
-
-
-def spi_event_emitter(service_provider_meta, event_name, client=None):
-    """
-    Emits an event to all spi file handler listener.
-
-    :param service_provider_meta: c
-    :param event_name: Can be 'UPDATE' or 'DELETE'.
-    :param client: The client if the file contains client overrides or None.
-    """
-    a = server.SPI_handler
-    server.SPI_handler.on_event_epg_1(event_name, service_provider_meta, client)
-    server.SPI_handler.on_event_epg_3(event_name, service_provider_meta, client)
-
-
-def spi_changed(service_provider_meta, client=None):
-    """
-    Shortcut to signal that an SPI file has changed.
-    :param service_provider_meta:  a dict containing the metadata of a service provider.
-        The dict is of shape: {"id": integer, "codops": string}
-    :param client: The client if the file contains client overrides or None.
-    """
-    spi_event_emitter(service_provider_meta, EVENT_SPI_UPDATED, client)
-
-
-def spi_deleted(service_provider_meta):
-    """
-    Shortcut to signal that an SPI file has changed.
-    :param service_provider_meta:  a dict containing the metadata of a service provider.
-        The dict is of shape: {"id": integer, "codops": string}
-    """
-    spi_event_emitter(service_provider_meta, EVENT_SPI_DELETED, None)

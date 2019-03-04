@@ -17,30 +17,27 @@ class AWSSPI(BaseSPI):
         bucket, _ = get_or_create_bucket(config.SPI_BUCKET_NAME)
         self.bucket = bucket
 
-    def on_event_epg_1(self, event_name, service_provider_meta, client=None):
-        if event_name == SPI.modules.base_spi.EVENT_SPI_UPDATED:
-            service_provider = ServiceProvider.query.filter_by(id=service_provider_meta["id"]).first()
-            self.upload_spi_file(
+    def on_si_resource_changed(self, event_name, service_provider, client=None):
+        if event_name == SPI.modules.base_spi.EVENT_SI_PI_UPDATED:
+            self.upload_si_file(
                 service_provider,
                 client,
                 "1",
-                SPI.utils.generate_spi_file(service_provider, client, "radioepg/servicefollowing/xml1.html")
+                SPI.utils.generate_si_file(service_provider, client, "radioepg/servicefollowing/xml1.html")
             )
-        elif event_name == SPI.modules.base_spi.EVENT_SPI_DELETED:
-            self.delete_spi_file(service_provider_meta["codops"], "1")
-
-    def on_event_epg_3(self, event_name, service_provider_meta, client=None):
-        if event_name == SPI.modules.base_spi.EVENT_SPI_UPDATED:
-            service_provider = ServiceProvider.query.filter_by(id=service_provider_meta["id"]).first()
-            self.upload_spi_file(
+            self.upload_si_file(
                 service_provider,
                 client,
                 "3",
-                SPI.utils.generate_spi_file(service_provider, client, "radioepg/servicefollowing/xml3.html")
+                SPI.utils.generate_si_file(service_provider, client, "radioepg/servicefollowing/xml3.html")
             )
-        elif event_name == SPI.modules.base_spi.EVENT_SPI_DELETED:
-            self.delete_spi_file(service_provider_meta["codops"], "3")
-
+        elif event_name == SPI.modules.base_spi.EVENT_SI_PI_DELETED:
+            self.delete_si_file(service_provider["codops"], "1")
+            self.delete_si_file(service_provider["codops"], "3")
+            
+    def on_pi_resource_changed(self, event_name, station):
+        pass
+            
     def on_request_epg_1(self, codops, client_identifier):
         return redirect(AWSSPI.get_file_url(codops, "1", client_identifier), code=304)
 
@@ -48,7 +45,7 @@ class AWSSPI(BaseSPI):
         return redirect(AWSSPI.get_file_url(codops, "3", client_identifier), code=304)
 
     @staticmethod
-    def get_spi_bucket_filename(service_provider_codops, version, client_identifier):
+    def get_static_bucket_si_filename(service_provider_codops, version, client_identifier):
         """
         Returns the name of an SPI file that is hosted in the s3 bucket.
 
@@ -72,9 +69,9 @@ class AWSSPI(BaseSPI):
         :param client_identifier: The client identifier or None.
         :return: The full url of the SPI file.
         """
-        return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_spi_bucket_filename(codops, version, client_identifier)
+        return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_static_bucket_si_filename(codops, version, client_identifier)
 
-    def upload_spi_file(self, service_provider, client, version, contents):
+    def upload_si_file(self, service_provider, client, version, contents):
         """
         Uploads a file to the s3 bucket.
 
@@ -83,11 +80,11 @@ class AWSSPI(BaseSPI):
         :param version: The version of the file ("1" or "3").
         :param contents: string contents of the file
         """
-        key = self.bucket.new_key(AWSSPI.get_spi_bucket_filename(service_provider.codops, version, client.identifier if client else "default"))
+        key = self.bucket.new_key(AWSSPI.get_static_bucket_si_filename(service_provider.codops, version, client.identifier if client else "default"))
         key.content_type = 'text/xml'
         key.set_contents_from_string(contents)
 
-    def delete_spi_file(self, service_provider_meta, version):
+    def delete_si_file(self, service_provider_meta, version):
         """
         Deletes a file that is hosted on a s3 bucket.
 
@@ -95,6 +92,6 @@ class AWSSPI(BaseSPI):
         The dict is of shape: {"id": integer, "codops": string}
         :param version: The version of the file ("1" or "3").
         """
-        bucket_name = AWSSPI.get_spi_bucket_filename(service_provider_meta["codops"], version, None)
+        bucket_name = AWSSPI.get_static_bucket_si_filename(service_provider_meta["codops"], version, None)
         for key in [key for key in self.bucket.get_all_keys() if key.startswith(bucket_name)]:
             self.bucket.delete_key(key)

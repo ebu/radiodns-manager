@@ -7,20 +7,24 @@ from models import Clients
 
 class StandaloneSPI(BaseSPI):
     """
-    Implements BaseSPI by generating and serving the SPI file for each request. Useful for debug.
+    Implements BaseSPI by generating and serving the si/PI files for each request. Useful for debug.
     """
-    def on_event_epg_1(self, event_name, service_provider_meta, client=None):
+
+    def on_si_resource_changed(self, event_name, service_provider, client=None):
         pass
 
-    def on_event_epg_3(self, event_name, service_provider_meta, client=None):
+    def on_pi_resource_changed(self, event_name, station):
         pass
 
     def on_request_epg_1(self, codops, client_identifier):
         client = Clients.query.filter_by(identifier=client_identifier).first()
-        return Response(SPI.utils.generate_spi_file(SPI.utils.get_service_provider_from_codops(codops), client,
+        return Response(SPI.utils.generate_si_file(SPI.utils.get_service_provider_from_codops(codops), client,
                                                     "radioepg/servicefollowing/xml1.html"), mimetype='text/xml')
 
     def on_request_epg_3(self, codops, client_identifier):
         client = Clients.query.filter_by(identifier=client_identifier).first()
-        return Response(SPI.utils.generate_spi_file(SPI.utils.get_service_provider_from_codops(codops), client,
+        return Response(SPI.utils.generate_si_file(SPI.utils.get_service_provider_from_codops(codops), client,
                                                     "radioepg/servicefollowing/xml3.html"), mimetype='text/xml')
+
+    def on_request_schedule_1(self, path, date):
+        return Response(SPI.utils.generate_pi_file(path, date), mimetype='text/xml')

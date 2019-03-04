@@ -9,16 +9,21 @@ import SPI
 import SPI.actions
 import SPI.event_listener.ORM_events_listeners
 import config
+from db_utils import db
 from server import db_setup
-from tests.SPI_generator.utils import create_handler
+from tests.utils import create_handler
+
+
+def create_mocks_manually():
+    on_si_changed = mock.Mock()
+    on_pi_changed = mock.Mock()
+    create_handler(on_si_changed, on_pi_changed)
+    return on_si_changed, on_pi_changed
 
 
 @pytest.fixture()
 def create_mocks():
-    version_1 = mock.Mock()
-    version_3 = mock.Mock()
-    create_handler(version_1, version_3)
-    return version_1, version_3
+    return create_mocks_manually()
 
 
 def teardown_db():
@@ -27,9 +32,9 @@ def teardown_db():
 
 @pytest.fixture(scope="session")
 def actor_setup():
-    config.SPI_GENERATION_INTERVAL = 0.05
+    config.SPI_GENERATION_INTERVAL = 0.2
     time.sleep(5)
-    return SPI.event_listener.ORM_events_listeners.spi_generator_manager
+    yield SPI.event_listener.ORM_events_listeners.spi_generator_manager
 
 
 @pytest.fixture(scope="session")
@@ -39,6 +44,6 @@ def setup_db():
     os.chdir("../")
     db_setup()
     os.chdir("tests")
-    yield None
+    yield db.session
     teardown_db()
     SPI.event_listener.ORM_events_listeners.spi_generator_manager.stop()
