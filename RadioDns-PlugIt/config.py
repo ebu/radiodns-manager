@@ -16,7 +16,7 @@ API_SECRET = os.environ.get('API_SECRET', 'dev-secret')
 # Amazon AWS
 AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY', '')
 AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', '')
-AWS_ZONE = os.environ.get('AWS_ZONE', 's3-eu-west-1')
+AWS_ZONE = os.environ.get('AWS_ZONE', 'eu-west-1')
 
 if AWS_ACCESS_KEY == '':
     logging.warning('AWS_ACCESS_KEY is empty.')
@@ -104,4 +104,4 @@ SPI_BUCKET_NAME = os.environ.get('SPI_BUCKET_NAME', 'SPISTATIC').lower()
 # Number of seconds between each generation of spi file if any is to be made.
 SPI_GENERATION_INTERVAL = int(os.environ.get('SPI_GENERATION_INTERVAL', '5'))
 
-SPI_CLOUDFRONT_DOMAIN = os.environ.get("SPI_CLOUDFRONT_DOMAIN", "d1jzn5xo0i9jh4.cloudfront.net")
+SPI_CLOUDFRONT_DOMAIN = os.environ.get("SPI_CLOUDFRONT_DOMAIN", "CHANGEME.cloudfront.net")

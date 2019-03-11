@@ -76,6 +76,7 @@ services:
             APfI_SECRET: ${API_SECRET}
             AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
             AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+            AWS_ZONE: ${AWS_ZONE}
             DOMAIN: ${MAIN_DOMAIN}
             XSISERVING_ENABLED: ${XSISERVING_ENABLED}
             XSISERVING_DOMAIN: ${MAIN_DOMAIN}

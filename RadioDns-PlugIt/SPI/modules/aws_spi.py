@@ -4,12 +4,12 @@ import SPI.utils
 import config
 from SPI.modules.base_spi import BaseSPI
 from aws.awsutils import get_or_create_bucket
-from models import ServiceProvider, Channel
+from models import Channel
 
 
 class AWSSPI(BaseSPI):
     """
-    Implements BaseSPI for AWS cloudfront integration. On event will upload/delete the file to an s3 bucket and
+    Implements BaseSPI for AWS CloudFront integration. On event will upload/delete the SI/PI files to an s3 bucket and
     on request will redirect with a 304 to the bucket.
     """
 
@@ -57,7 +57,7 @@ class AWSSPI(BaseSPI):
                     except AttributeError as e:
                         print("[WARN][AWS] in pi resource changed handler", e)
         elif event_name == SPI.modules.base_spi.EVENT_SI_PI_DELETED:
-            for key in [key for key in self.bucket.get_all_keys() if key.get_metadata("station_id") == station.id]:
+            for key in [key for key in self.bucket.get_all_keys() if key.get_metadata("x-amz-meta-station_id") == station.id]:
                 self.bucket.delete_key(key)
 
     def on_request_epg_1(self, codops, client_identifier):
@@ -72,14 +72,20 @@ class AWSSPI(BaseSPI):
         return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=304)
 
     @staticmethod
-    def get_file_url(options, type="si"):
+    def get_file_url(data, type="si"):
+        """
+        Returns public endpoint to get the SI/PI file.
+        :param data: Data specific to the type url.
+        :param type: Can either be "si" or "pi".
+        :return: The endpoint if the type is supported. Otherwise None.
+        """
         if type == "si":
             return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_static_bucket_si_filename(
-                options["codops"], options["version"], options["client_identifier"])
+                data["codops"], data["version"], data["client_identifier"])
         elif type == "pi":
             return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_static_bucket_pi_filename(
-                options["path"],
-                options["date"],
+                data["path"],
+                data["date"],
             )
         else:
             return None
@@ -87,7 +93,7 @@ class AWSSPI(BaseSPI):
     @staticmethod
     def get_static_bucket_si_filename(service_provider_codops, version, client_identifier):
         """
-        Returns the name of an SPI file that is hosted in the s3 bucket.
+        Returns the name of a SI file that is hosted in the s3 bucket.
 
         The scheme of the name is the following: <codops>.<verison>.<client_identifier>.xml
         The <client_identifier> is optional. If there is no client the value will be "default".
@@ -95,30 +101,51 @@ class AWSSPI(BaseSPI):
         :param service_provider_codops: The service provider codops.
         :param version: The version of the file ("1" or "3").
         :param client_identifier: The client identifier or None.
-        :return: The full filename of the SPI file.
+        :return: The full filename of the SI file.
         """
         return service_provider_codops + "." + version + "." + (
             client_identifier if client_identifier else "default") + ".xml"
 
     @staticmethod
     def get_static_bucket_pi_filename(path, date):
+        """
+        Returns the name of a PI file that is hosted in the s3 bucket.
+
+        The scheme of the name is the following: schedule/<service_identifier>/<date>.xml
+
+        :param path: The path or <service_identifier> is described here:
+            https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
+            Currently <service_identifier> supports only fm and dab schemes.
+        :param date: The <date> is of the shape <YEAR><MONTH><DAY>.
+            - <YEAR> is a four digit number representing the current year, eg: 2019
+            - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+            - <DAY> is a two digit number representing the current day in the current month, eg: 01
+        :return: The full filename and path of the PI file.
+        """
         return ("schedule/" + path + "/" + date + ".xml").lower()
 
     def upload_file(self, file_key, contents, station_id=None):
+        """
+        Uploads a file to the s3 bucket.
+
+        :param file_key: The name/path of the file.
+        :param contents: The contents of the file.
+        :param station_id: (optional) The station id with which the file is associated.
+        """
         key = self.bucket.new_key(file_key)
         key.content_type = 'text/xml'
         if station_id:
-            key.set_metadata('station_id', station_id)
+            key.set_metadata("x-amz-meta-station_id", station_id)
         key.set_contents_from_string(contents)
 
     def delete_si_file(self, service_provider_meta, version):
-        """q
+        """
         Deletes a file that is hosted on a s3 bucket.
 
         :param service_provider_meta: a dict containing the metadata of a service provider.
         The dict is of shape: {"id": integer, "codops": string}
         :param version: The version of the file ("1" or "3").
         """
-        bucket_name = AWSSPI.get_static_bucket_si_filename(service_provider_meta["codops"], version, None)
+        bucket_name = service_provider_meta["codops"] + "." + version
         for key in [key for key in self.bucket.get_all_keys() if key.startswith(bucket_name)]:
             self.bucket.delete_key(key)

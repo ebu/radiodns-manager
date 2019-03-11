@@ -7,7 +7,7 @@ from models import Clients
 
 class StandaloneSPI(BaseSPI):
     """
-    Implements BaseSPI by generating and serving the si/PI files for each request. Useful for debug.
+    Implements BaseSPI by generating and serving the SI/PI files for each request. Useful for debug.
     """
 
     def on_si_resource_changed(self, event_name, service_provider, client=None):

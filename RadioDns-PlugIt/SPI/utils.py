@@ -57,8 +57,8 @@ def make_xsi3_hostname_cache_key(*args, **kwargs):
 
 def get_codops_from_request():
     """
-    Tries to read a service provider's codops from the implicit request context.
-    :return: the codops if any or None.
+    Tries to read a service provider's codops from the Flask request context.
+    :return: the codops or None.
     """
     regex = re.compile('((?P<provider>[^\.]+?)\.).+\.' + config.XSISERVING_DOMAIN)
     r = regex.search(Request.host)
@@ -84,7 +84,8 @@ def get_service_provider_from_codops(codops):
 
 def generate_si_data(sp, client):
     """
-    Retrieves data for the xml spi generation.
+    Retrieves data for the xml SI generation.
+
     :param sp: The service provider.
     :param client: The client if the request wants a station override.
     :return: The resulting data: (List<station>, ServiceProvider)
@@ -151,9 +152,9 @@ def generate_si_data(sp, client):
 
 def generate_si_file(service_provider, client, template_uri):
     """
-    Renders the template for this SPI file.
+    Renders the template for this SI file.
 
-    :param service_provider: The service provider holding the information for the SPI file.
+    :param service_provider: The service provider.
     :param client: The client if the file contains client overrides or None.
     :param template_uri: The template uri.
     :return: The rendered XML file.
@@ -168,6 +169,16 @@ def generate_si_file(service_provider, client, template_uri):
 
 
 def generate_pi_data(station, date):
+    """
+    Retrieves data for the xml PI generation.
+
+    :param station: The station.
+    :param date: the requested date. The date is of the shape <YEAR><MONTH><DAY>.
+    - <YEAR> is a four digit number representing the current year, eg: 2019
+    - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+    - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :return: The resulting data: (List(string), date, date)
+    """
     import datetime
 
     today = datetime.date.today()
@@ -191,6 +202,17 @@ def generate_pi_data(station, date):
 
 
 def extract_pi_data_from_path(path, date):
+    """
+    Retrieves data for the xml PI generation from a specified path.
+
+    :param path: the service identifier of the requested file. The service identifier is described here:
+        https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
+    :param date: the requested date. The date is of the shape <YEAR><MONTH><DAY>.
+    - <YEAR> is a four digit number representing the current year, eg: 2019
+    - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+    - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :return: The resulting data: (List(string), date, date)
+    """
 
     from models import Station, Channel, Ecc, ServiceProvider
     channels = None
@@ -264,6 +286,23 @@ def extract_pi_data_from_path(path, date):
 
 
 def generate_pi_file(date, path=None, station=None):
+    """
+    Renders a PI file.
+
+    Note: You can only provide a path or a station not both at the same time and not none of both.
+
+    :param date: the requested date. The date is of the shape <YEAR><MONTH><DAY>.
+    - <YEAR> is a four digit number representing the current year, eg: 2019
+    - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+    - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :param path: (Optional) The requested path or service identifier of the requested file. If provided, the
+    generation will extract the requested station scheduling from the path.
+    The path or service identifier is described here:
+        https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
+    :param station: (Optional) The station that holds the requested scheduling.
+
+    :return: The rendered XML file.
+    """
     if path is None:
         data = generate_pi_data(station, date)
     else:

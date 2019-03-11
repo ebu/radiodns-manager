@@ -63,13 +63,12 @@ def reload_pi_files():
 
 if __name__ == "__main__":
     logging.info("Starting server...")
-    db_setup()
-
     scheduler = BackgroundScheduler()
-    scheduler.add_job(reload_pi_files, "interval", week=1)
+    scheduler.add_job(reload_pi_files, "cron", day_of_week="mon")
     scheduler.start()
 
     atexit.register(lambda: scheduler.shutdown())
+    db_setup()
 
     plugit.load_actions(actions)
     plugit.app.run(host="0.0.0.0", debug=config.DEBUG, port=config.RADIO_DNS_PORT, threaded=True)

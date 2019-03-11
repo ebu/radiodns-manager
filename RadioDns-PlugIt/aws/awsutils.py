@@ -19,13 +19,13 @@ def get_or_create_bucket(bucket_name):
     :return: The bucket and a boolean flag stating that this bucket is new or not.
     """
     s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,
-                         host=config.AWS_ZONE + '.amazonaws.com',
+                         host="s3-" + config.AWS_ZONE + '.amazonaws.com',
                          calling_format=OrdinaryCallingFormat())  # host='s3-eu-central-1.amazonaws.com')
     try:
         bucket = s3.get_bucket(bucket_name)
         return bucket, False
     except boto.exception.S3ResponseError:
-        bucket = s3.create_bucket(bucket_name, location='eu-west-1')
+        bucket = s3.create_bucket(bucket_name, location=config.AWS_ZONE)
         set_rights_for_bucket(bucket)
         return bucket, True
     except Exception as e:

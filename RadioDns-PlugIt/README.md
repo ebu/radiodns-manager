@@ -99,6 +99,7 @@ The api url must end with a `/`.
 - **API_SECRET**: Random string defined by hand. Defaults to `dev-secret`.
 - **AWS_ACCESS_KEY**: AWS access key, in case the apps needs to use AWS resources.
 - **AWS_SECRET_KEY**: AWS secret key, in case the apps needs to use AWS resources.
+- **AWS_ZONE**: AWS zone. Defaults to `eu-west-1`.
 - **DOMAIN**: Domain name base for all services. Defaults to `radio.ebu.io`.
 - **RADIOTAG_ENABLED**: TAG service switch. Can be `True|False`. Defaults to `True`.
 - **XSISERVING_ENABLED**: EPG and SPI services switch. Can be `True|False`. Defaults to `True`.
@@ -133,7 +134,15 @@ connections so all app can reconnect smoothly. After X seconds (X being the time
 - **VIS_WEB_SOCKET_ENDPOINT_HOST**: Endpoint to the VIS player of RadioDns manager. Used by the HTML vis player. Defaults to
 `127.0.0.1`.
 
-** STANDALONE OPTIONS **
+**STANDALONE OPTIONS**
 - **LOGO_INTERNAL_URL**: Logo upload url. This has to point to the MockApi inside the docker network. Defaults to `http://127.0.0.1:8000/uploads`.
 - **LOGO_PUBLIC_URL**: Url of the docker host were the browser can access logos. Defaults to `http://127.0.0.1:8000/uploads`.
 - **IMG_CACHE_TIMEOUT**: Time in seconds before discarding images cache. Numeric. Defaults to `0`.
+
+**CDN OPTIONS**
+- **USES_CDN**: If you want to use the aws cloudfront integration to deliver spi files. String. Defaults to `False`.
+- **SPI_BUCKET_NAME**: name of the bucket that will hold the SPI files. String. Please ensure that this name follow this set of rules:
+https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
+- **SPI_GENERATION_INTERVAL**: The SPI file generator executor will batch SPI file updates in order to be more efficient.
+Here you can specify how much time shall pass between each updates. Numeric. In seconds. Defaults to `5`.
+- **SPI_CLOUDFRONT_DOMAIN**: The cloudfront domain that will serve the SPI files. String.

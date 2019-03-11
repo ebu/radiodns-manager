@@ -13,14 +13,14 @@ from models import Station, Clients, ServiceProvider, Channel, Picture, Show, Sc
 
 class SPIGeneratorActor(pykka.ThreadingActor):
     """
-    Actor (Thread) that handles the SPI file generation and upload to the AWS cloudfront CDN (file itself is stored
-    on a s3 bucket).
+    Thread (actor) that handles the SPI file generation and uploads to the AWS CloudFront CDN (the file itself is stored
+    on an s3 bucket).
 
-    For performance reasons this actor will batch updates and execute the said batch every x seconds, x being the
-    time configured from the config.SPI_GENERATION_INTERVAL variable.
+    For performance reasons this actor will batch updates and execute the said batch every x seconds, x being the time
+    configured from the config.SPI_GENERATION_INTERVAL variable.
 
     It is highly advised to no use this class directly but rather interact with this actor trough the SPIGeneratorManager
-    class.
+    class, so you have the guarantee of having at all time a living thread to talk to.
     """
 
     def __init__(self):
@@ -32,28 +32,35 @@ class SPIGeneratorActor(pykka.ThreadingActor):
 
     def on_receive(self, message):
         """
-        Receive method.
+        Receive method of this actor.
 
         :param message: This actors accepts messages that are dictionary containing at least one key named "type".
 
         The messages can be of two types:
             - "add": This message is of shape
-            {
-                "type": "add",
-                "subject": "service_provider" | "station" | "channel" | "ecc" | "country_code" | "clients" | "picture" | "show" | "schedule" | "gsfe" | "picture_epg" | "logo_image" | "reload" | "all",
-                "id": integer,
-                (optional)"action": "update" | "delete",
-            }
+                {
+                    "type": "add",
+                    "subject": "service_provider" | "station" | "channel" | "ecc" | "country_code" | "clients" | "picture"
+                        | "show" | "schedule" | "gsfe" | "logo_image" | "reload" | "all",
+                    "id": integer,
+                    "action": "update" | "delete",
+                }
 
-            The message structure is as follow:
-                - The type of the message states that this is an "add" message.
-                - The subject of the message indicates what has changed.
-                - The id of the message is the database primary key of the object that has changed.
+                The message structure is as follow:
+                    - The type of the message states that this is an "add" message.
+                    - The subject of the message indicates what has changed.
+                    - The id of the message is the database primary key of the object that has changed.
+                    - The actions of the messages states what happened to the object that has changed.
 
-            The message of type "add" adds to this executor queue the resource that was either updated or deleted. The
-            executor will then determine from the changed resources which spi file must be deleted or updated.
+                The message of type "add" adds to this executor queue the resource that was either updated or deleted. The
+                executor will then determine from the changed resources which SI/PI file must be deleted or updated.
 
-            - "execute": Flush the executor queue and triggers the generation/deletion of the affected SPI files.
+            - "execute": This message is of shape
+                {
+                    "type": "execute",
+                }
+
+                This message flush the executor queue and triggers the generation/deletion of the affected SPI files.
         """
         if "type" not in message:
             return
@@ -69,7 +76,9 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                 for msg in list(filter(lambda m: m["action"] == current_action, self.queue)):
                     service_provider_id = None
                     clients = []
-                    delete_flag = False
+                    station = None
+                    delete_si_flag = False
+                    delete_pi_flag = False
 
                     if msg["subject"] == "service_provider":
                         service_provider_id = msg["id"]
@@ -83,6 +92,9 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                             server.SPI_handler.on_si_resource_changed(EVENT_SI_PI_DELETED,
                                                                       {"id": msg["id"],
                                                                        "codops": service_provider.codops})
+                            for station in Station.query.filter_by(service_provider_id=service_provider.id).all():
+                                affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                                     station.id, "delete")
                             continue
 
                     elif msg["subject"] == "station":
@@ -90,19 +102,15 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         service_provider_id = station.service_provider_id
                         clients = [station.client]
 
-                        if current_action == "delete":
-                            affected_pi_resources = add_to_affected_pi_resources(
-                                affected_pi_resources,
-                                station.id,
-                                msg["action"])
+                        delete_pi_flag = current_action == "delete"
+                        if delete_pi_flag:
+                            station = station.id
 
                     elif msg["subject"] == "channel":
                         channel = Channel.query.filter_by(id=msg["id"]).first()
                         station = Station.query.filter_by(id=channel.station_id).first()
                         service_provider_id = station.service_provider_id
                         clients = [channel.client]
-                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources, station,
-                                                                             "update")
 
                     elif msg["subject"] == "ecc" or msg["subject"] == "country_code" or msg["subject"] == "all":
                         affected_si_resources = select_all_si()
@@ -115,7 +123,7 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         if station:
                             service_provider_id = station.service_provider_id
                             clients = [client if current_action == "update" else client.identifier]
-                            delete_flag = current_action == "delete"
+                            delete_si_flag = current_action == "delete"
 
                     elif msg["subject"] == "picture":
                         picture = Picture.query.filter_by(id=msg["id"]).first()
@@ -132,8 +140,6 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         if station:
                             service_provider_id = station.service_provider_id
                             clients = [None]
-                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources, station,
-                                                                                 "update")
 
                     elif msg["subject"] == "schedule":
                         schedule = Schedule.query.filter_by(id=msg["id"]).first()
@@ -141,8 +147,6 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         if station:
                             service_provider_id = station.service_provider_id
                             clients = [None]
-                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
-                                                                                 station, "update")
 
                     elif msg["subject"] == "gsfe":
                         gsfe = GenericServiceFollowingEntry.query.filter_by(id=msg["id"]).first()
@@ -150,11 +154,6 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                             station = Station.query.filter_by(id=gsfe.station_id).first()
                             service_provider_id = station.service_provider_id
                             clients = [station.client]
-
-                    # elif msg["subject"] == "picture_epg":
-                    #     picture_peg = PictureForEPG.query.filter_by(id=msg["id"]).first()
-                    #     service_provider_id = Station.query.filter_by(orga=picture_peg.orga).first().service_provider_id
-                    #     clients = [None] + Clients.query.filter_by(orga=picture_peg.orga).all()
 
                     elif msg["subject"] == "logo_image":
                         logo_image = LogoImage.query.filter_by(id=msg["id"]).first()
@@ -175,7 +174,12 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                                                                                  station, "update")
 
                     affected_si_resources = add_to_affected_si_resources(affected_si_resources, service_provider_id,
-                                                                         clients, delete_flag)
+                                                                         clients, delete_si_flag)
+
+                    if station:
+                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                             station,
+                                                                             "delete" if delete_pi_flag else "update")
 
                 if current_action == "delete" and len(self.queue) != 0:
                     db.session.commit()
@@ -201,14 +205,21 @@ class SPIGeneratorManager:
     """
 
     def __init__(self):
-        self.spi_generator_actor = SPIGeneratorActor.start()
+        if config.USES_CDN:
+            self.spi_generator_actor = SPIGeneratorActor.start()
 
     def tell_to_actor(self, msg):
         """
         Sends a message to a SPIGeneratorActor instance. Please refer to the on_receive method of the SPIGeneratorActor
         class for more information about the messages that can be send.
+
+        Note that no message will be sent if the CDN feature isn't activated.
+
         :param msg: The message to send.
         """
+        if not config.USES_CDN:
+            return
+
         if not self.spi_generator_actor.is_alive():
             self.spi_generator_actor = SPIGeneratorActor.start()
         self.spi_generator_actor.tell(msg)
@@ -217,43 +228,56 @@ class SPIGeneratorManager:
         self.spi_generator_actor.stop(timeout=100)
 
 
-def add_to_affected_si_resources(affected_resources, service_provider_id, clients, delete_flag=False):
+def add_to_affected_si_resources(affected_si_resources, service_provider_id, clients, delete_flag=False):
     """
-    Adds to the affected resources map a changed SPI file represented by a service provider's id and a list of client.
-    The goal of this data structure is to get a list a global list of service providers along with their clients
-    overrides that have changed.
+    Adds to the map of changed resources a SI file that needs to be re-generated or deleted. The SI file is represented
+    by a service provider id for all types of events and a list of client model instance for create/update events
+    if the change affects clients override.
 
-    :param affected_resources: the current affected resources. A dict of the shape {"sp": ServiceProvider, "clients": set(clients)}
-    :param service_provider_id: the service provider that had one of its resources changed.
-    :param clients: the clients of the service provider that have an override that has changed.
-    :return: the updated affected resources dict.
+    :param affected_si_resources: The currently affected resources.
+    :param service_provider_id: The service provider id.
+    :param clients: The clients overrides affected by the change. Use None to point to the default file (SI file without
+    client overrides).
+    :param delete_flag: If True the file will be marked as "to be deleted". Otherwise it will be updated.
+    :return: the new affected si resources map.
     """
     if service_provider_id is None:
-        return affected_resources
+        return affected_si_resources
     try:
-        affected_resources[service_provider_id]["clients"] \
-            = affected_resources[service_provider_id]["clients"] | set(clients)
+        affected_si_resources[service_provider_id]["clients"] \
+            = affected_si_resources[service_provider_id]["clients"] | set(clients)
     except KeyError:
-        affected_resources[service_provider_id] = {
+        affected_si_resources[service_provider_id] = {
             "sp_id": service_provider_id,
             "action": EVENT_SI_PI_DELETED if delete_flag else EVENT_SI_PI_UPDATED,
             "clients": set(clients)
         }
     finally:
-        return affected_resources
+        return affected_si_resources
 
 
-def add_to_affected_pi_resources(affected_resources, station, action):
-    affected_resources[station.id if isinstance(station, Station) else station] = {"station": station,
-                                                                                   "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED}
-    return affected_resources
+def add_to_affected_pi_resources(affected_pi_resources, station, action):
+    """
+    Adds to the map of changed resources a PI file that needs to be re-generated or deleted. The PI file is represented
+    by a station model instance for create/update events and a station id for delete events.
+
+    :param affected_pi_resources: The currently affected resources.
+    :param station: Station model instance or station id.
+    :param action: Action to apply. Can either be "update" or "delete".
+    :return: the new affected pi resources map.
+    """
+    affected_pi_resources[station.id if isinstance(station, Station) else station] = {
+        "station": station,
+        "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED
+    }
+    return affected_pi_resources
 
 
 def select_all_si():
     """
-    Selects all SPI files and marks them as affected resources.
+    Selects all SI files and marks them as affected resources to be updated.
 
-    :return: the updated affected resources dict.
+    :return: the new affected si resources map.
     """
     service_providers = ServiceProvider.query.all()
     affected_resources = {}
@@ -270,6 +294,11 @@ def select_all_si():
 
 
 def select_all_pi():
+    """
+    Selects all PI files and marks them as affected resources to be updated.
+
+    :return: the new affected pi resources map.
+    """
     service_providers = ServiceProvider.query.all()
     affected_resources = {}
 
@@ -278,7 +307,3 @@ def select_all_pi():
         for station in stations:
             affected_resources = add_to_affected_pi_resources(affected_resources, station, "update")
     return affected_resources
-
-
-def generate_service_provider_meta(service_provider):
-    return {"id": service_provider.id, "codops": service_provider.codops}

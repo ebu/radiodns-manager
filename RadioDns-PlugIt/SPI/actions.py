@@ -1,9 +1,8 @@
 # For Caching
-import re
 
 # For SqlAlchemy
 import plugit
-from flask import abort, send_from_directory, request as Request
+from flask import abort, send_from_directory
 from plugit.utils import cache
 
 import config
@@ -17,7 +16,13 @@ from actions_utils import with_client_identification
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 @with_client_identification
 def epg_1_xml(client_identifier):
-    """Special call for EPG XSI v1.1 2013.10 RadioDNS"""
+    """
+    Route for EPG XSI v1.1 2013.10 RadioDNS.
+
+    :param client_identifier: The client identifier if any.
+    :return: The requested file or its location if the SI/PI service is enabled. 404 if the requested resource was
+     not found. 501 otherwise.
+    """
 
     if not config.XSISERVING_ENABLED:
         abort(501)
@@ -32,7 +37,13 @@ epg_1_xml.make_cache_key = make_xsi1_hostname_cache_key
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 @with_client_identification
 def epg_3_xml(client_identifier):
-    """Special call for EPG SI vV3.1.1 2015.01 ETSI xml"""
+    """
+    Route for SPI SI vV3.1.1 2015.01 ETSI xml.
+
+    :param client_identifier: The client identifier if any.
+    :return: The requested file or its location if the SI/PI service is enabled. 404 if the requested resource was
+     not found. 501 otherwise.
+    """
 
     if not config.XSISERVING_ENABLED:
         abort(501)
@@ -73,26 +84,31 @@ def logo(id, w, h):
     return send_from_directory(".", dest_file)
 
 
-# FIXME - BROKEN
+# FIXME - BROKEN, see issue #121 of the github repository.
 @plugit.app.route('/radiodns/epg/<path:path>/<int:date>_PI.xml')
 @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
 def epg_sch_1_xml(path, date):
-    """Special call for EPG scheduling xml"""
+    """
+    Route for SPI/EPG scheduling xml.
 
-    #        chrts.epg.radio.ebu.io >> XSI for all CHRTS Channels
-    # la1ere.chrts.epg.radio.ebu.io >> XSI for La1ere only in CHRTS
+    :param path: The specified path of the requested resource.
+    It is of the shape /radiodns/epg/service_identifier>/<date>_PI.xml.
+    - The <service_identifier> is defined in this specification:
+        https://www.etsi.org/deliver/etsi_ts/103200_103299/103270/01.02.01_60/ts_103270v010201p.pdf
 
-    a = config.XSISERVING_ENABLED
+    :param date: The date is of the shape <YEAR><MONTH><DAY>.
+    - <YEAR> is a four digit number representing the current year, eg: 2019
+    - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+    - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :return: The requested file or its location if the SI/PI service is enabled. 404 if the requested resource was
+     not found. 501 otherwise.
+    """
+
     if not config.XSISERVING_ENABLED:
         abort(501)
 
     return server.SPI_handler.on_request_schedule_1(path, date)
 
+
 # Override Cache Key for PI 1
 epg_sch_1_xml.make_cache_key = make_pi1_hostname_cache_key
-
-# @plugit.app.route('/radiodns/spi/3.1/<path:service_identifier>/<int:date>_PI.xml')
-# @plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
-# def epg_sch_1_xml(service_identifier, date):
-#
-#

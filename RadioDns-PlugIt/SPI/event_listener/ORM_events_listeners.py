@@ -10,6 +10,14 @@ spi_generator_manager = SPIGeneratorManager()
 
 @models_committed.connect_via(plugit.app)
 def sqlalchemy_signal_event_listener(*args, **kwargs):
+    """
+    Signal receiver for Flask Signals. Handles the signals from the SQLAlchemy ORM that are emitted when a model was
+    committed to the database. Theses events will be reported to the executor_actor that handle the SI/PI file generation
+    and publishing.
+
+    :param args: not used.
+    :param kwargs: dict containing the tuple of operated changes when the commit happened.
+    """
     for operation in kwargs["changes"]:
         obj = operation[0]
         op_name = operation[1]
@@ -36,7 +44,5 @@ def sqlalchemy_signal_event_listener(*args, **kwargs):
             spi_generator_manager.tell_to_actor({"type": "add", "action": op_name, "subject": "schedule", "id": obj.id})
         elif isinstance(obj, GenericServiceFollowingEntry):
             spi_generator_manager.tell_to_actor({"type": "add", "action": op_name, "subject": "gsfe", "id": obj.id})
-        # elif isinstance(obj, PictureForEPG):
-        #     spi_generator_manager.tell_to_actor({"type": "add", "subject": "picture_epg", "id": obj.id})
         elif isinstance(obj, LogoImage):
             spi_generator_manager.tell_to_actor({"type": "add", "action": op_name, "subject": "logo_image", "id": obj.id})

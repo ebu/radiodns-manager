@@ -32,6 +32,7 @@ def teardown_db():
 
 @pytest.fixture(scope="session")
 def actor_setup():
+    config.USES_CDN = True
     config.SPI_GENERATION_INTERVAL = 0.2
     time.sleep(5)
     yield SPI.event_listener.ORM_events_listeners.spi_generator_manager

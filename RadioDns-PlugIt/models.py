@@ -844,32 +844,6 @@ class GenericServiceFollowingEntry(db.Model):
         return to_json(self, self.__class__, ['channel_name', 'uri', 'type', 'channel_type'])
 
 
-# class PictureForEPG(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     orga = db.Column(db.Integer)
-#     name = db.Column(db.String(80))
-#     filename = db.Column(db.String(255))
-#
-#     # stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
-#
-#     def __init__(self, orga):
-#         self.orga = orga
-#
-#     def __repr__(self):
-#         return '<PictureForEPG %r[%s]>' % (self.name, self.orga)
-#
-#     @property
-#     def clean_filename(self):
-#         if not self.filename:
-#             return ''
-#
-#         return self.filename.split('/')[-1]
-#
-#     @property
-#     def json(self):
-#         return to_json(self, self.__class__, ['clean_filename'])
-
-
 class LogoImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orga = db.Column(db.Integer)

@@ -77,6 +77,12 @@ To stop the dev databases run:
 ## How to run tests
 If you haven't already, run the `setup-envs.sh` (if you are on an unix based system, script located in the scripts folder).
 Then set your working directory to the tests folder and read its README for further instructions.
+
+The following projects also have unit tests:
+- RadioDns-PlugIt
+- LightweightPlugitProxy
+
+Please refer to their respective README for further instructions.
     
 ## Deployment in production - EBU.io
 Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_EBU-IO.md).
