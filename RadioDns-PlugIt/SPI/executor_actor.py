@@ -166,12 +166,13 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                                                                                  clients)
 
                     elif msg["subject"] == "reload":
-                        station = Station.query.filter_by(service_provider_id=msg["id"]).first()
+                        stations = Station.query.filter_by(service_provider_id=msg["id"]).all()
                         service_provider_id = msg["id"]
                         clients = [None]
-                        if station:
-                            orga = station.orga
-                            clients += Clients.query.filter_by(orga=orga).all()
+                        for station in stations:
+                            clients += Clients.query.filter_by(orga=station.orga).all()
+                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                                 station, "update")
 
                     affected_si_resources = add_to_affected_si_resources(affected_si_resources, service_provider_id,
                                                                          clients, delete_flag)
@@ -181,7 +182,10 @@ class SPIGeneratorActor(pykka.ThreadingActor):
 
                 for _, value in affected_si_resources.iteritems():
                     for client in list(value["clients"]):
-                        server.SPI_handler.on_si_resource_changed(value["action"], value["sp"], client)
+                        server.SPI_handler.on_si_resource_changed(
+                            value["action"],
+                            ServiceProvider.query.filter_by(id=value["sp_id"]).first(),
+                            client)
 
                 for _, value in affected_pi_resources.iteritems():
                     server.SPI_handler.on_pi_resource_changed(value["action"], value["station"])
@@ -231,7 +235,7 @@ def add_to_affected_si_resources(affected_resources, service_provider_id, client
             = affected_resources[service_provider_id]["clients"] | set(clients)
     except KeyError:
         affected_resources[service_provider_id] = {
-            "sp": ServiceProvider.query.filter_by(id=service_provider_id).first(),
+            "sp_id": service_provider_id,
             "action": EVENT_SI_PI_DELETED if delete_flag else EVENT_SI_PI_UPDATED,
             "clients": set(clients)
         }
@@ -241,7 +245,7 @@ def add_to_affected_si_resources(affected_resources, service_provider_id, client
 
 def add_to_affected_pi_resources(affected_resources, station, action):
     affected_resources[station.id if isinstance(station, Station) else station] = {"station": station,
-                                      "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED}
+                                                                                   "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED}
     return affected_resources
 
 
@@ -260,7 +264,7 @@ def select_all_si():
         if station:
             orga = station.orga
             clients += Clients.query.filter_by(orga=orga).all()
-        affected_resources[service_provider.id] = {"sp": service_provider, "clients": set(clients),
+        affected_resources[service_provider.id] = {"sp_id": service_provider.id, "clients": set(clients),
                                                    "action": EVENT_SI_PI_UPDATED}
     return affected_resources
 

@@ -2,7 +2,7 @@ import time
 
 import config
 from SPI.modules.base_spi import EVENT_SI_PI_UPDATED
-from models import Channel, Clients, ServiceProvider
+from models import Channel, Clients, ServiceProvider, Station
 from tests.conftest import create_mocks_manually
 
 
@@ -15,6 +15,11 @@ def test_create_channel(setup_db, actor_setup, create_mocks):
         EVENT_SI_PI_UPDATED,
         ServiceProvider.query.filter_by(id=2).first(),
         None
+    )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=1).first()
     )
     session.close()
 
@@ -30,6 +35,11 @@ def test_create_channel_with_client(setup_db, actor_setup, create_mocks):
         ServiceProvider.query.filter_by(id=2).first(),
         client
     )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=3).first()
+    )
     session.close()
 
 
@@ -42,6 +52,11 @@ def test_update_channel(setup_db, actor_setup, create_mocks):
         EVENT_SI_PI_UPDATED,
         ServiceProvider.query.filter_by(id=2).first(),
         None
+    )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=1).first()
     )
     session.close()
 
@@ -56,6 +71,11 @@ def test_update_channel_with_client(setup_db, actor_setup, create_mocks):
         EVENT_SI_PI_UPDATED,
         ServiceProvider.query.filter_by(id=2).first(),
         client
+    )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=3).first()
     )
     session.close()
 
@@ -73,6 +93,11 @@ def test_delete_channel_with_client(setup_db, actor_setup):
         EVENT_SI_PI_UPDATED,
         ServiceProvider.query.filter_by(id=2).first(),
         client
+    )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=3).first()
     )
     session.close()
 

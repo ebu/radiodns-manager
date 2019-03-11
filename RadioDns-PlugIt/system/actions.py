@@ -46,7 +46,7 @@ def system_info():
 def spi_generate(request):
     try:
         _, sp = get_orga_service_provider(request)
-        spi_generator_manager.tell_to_actor({"type": "add", "subject": "reload", "id": sp.id})
+        spi_generator_manager.tell_to_actor({"type": "add", "subject": "reload", "id": sp.id, "action": "update"})
     except Exception as e:
         print(e)
     finally:
@@ -57,5 +57,5 @@ def spi_generate(request):
 @json_only()
 @only_orga_admin_user()
 def spi_generate_all(request):
-    spi_generator_manager.tell_to_actor({"type": "add", "subject": "all"})
+    spi_generator_manager.tell_to_actor({"type": "add", "subject": "all", "action": "update"})
     return {"ok": "ok"}

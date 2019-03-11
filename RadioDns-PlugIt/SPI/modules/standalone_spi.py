@@ -27,4 +27,4 @@ class StandaloneSPI(BaseSPI):
                                                     "radioepg/servicefollowing/xml3.html"), mimetype='text/xml')
 
     def on_request_schedule_1(self, path, date):
-        return Response(SPI.utils.generate_pi_file(path, date), mimetype='text/xml')
+        return Response(SPI.utils.generate_pi_file(date, path), mimetype='text/xml')

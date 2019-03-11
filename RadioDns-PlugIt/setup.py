@@ -39,6 +39,7 @@ setup(
         'mock==2.0.0',
         'blinker==1.4',
         'pytest-ordering==0.6',
+        'APScheduler==3.5.3'
     ],
     include_package_data=True,
 )

@@ -531,8 +531,17 @@ class Channel(db.Model):
         return object
 
     @property
+    def service_identifier(self):
+        ecc = Ecc.query.filter_by(id=self.ecc_id).first()
+        gcc = ecc.pi + ecc.ecc
+        if self.type_id == "fm":
+            return "fm/{}/{}/{}".format(gcc, self.pi, self.frequency)
+        elif self.type_id == "dab":
+            return "dab/{}/{}/{}/{}".format(gcc, self.eid, self.sid, self.scids)
+
+    @property
     def topic(self):
-        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1]) + '/'
+        return self.topic_no_slash + '/'
 
     @property
     def topic_no_slash(self):

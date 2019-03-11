@@ -7,7 +7,7 @@ from flask import abort, request as Request, render_template
 from sqlalchemy import or_, text
 
 import config
-from models import Station, LogoImage, ServiceProvider, Channel, Ecc, GenericServiceFollowingEntry
+from models import Station, LogoImage, ServiceProvider, Channel, Ecc, GenericServiceFollowingEntry, Schedule
 from stations.utils import station_fields
 
 
@@ -167,7 +167,30 @@ def generate_si_file(service_provider, client, template_uri):
                                creation_time=datetime.datetime.now().strftime(time_format))
 
 
-def generate_pi_data(path, date):
+def generate_pi_data(station, date):
+    import datetime
+
+    today = datetime.date.today()
+    start_of_the_week = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
+
+    # Filter by date
+    date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
+    real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
+    end_of_the_week = start_of_the_week + datetime.timedelta(hours=23, minutes=59, seconds=59)
+
+    json_schedules = []
+
+    for schedule in Schedule.query.filter_by(station_id=station.id).all():
+        # for schedule in station.schedules.all():
+        schedule.start_date = start_of_the_week
+
+        if schedule.date_of_start_time.date() == date_to_filter:
+            json_schedules.append(schedule.json)
+
+    return json_schedules, real_start_date, end_of_the_week
+
+
+def extract_pi_data_from_path(path, date):
 
     from models import Station, Channel, Ecc, ServiceProvider
     channels = None
@@ -235,34 +258,17 @@ def generate_pi_data(path, date):
 
     if station_channel:
         # Found station
-        station = station_channel[0].station
-
-        import datetime
-
-        today = datetime.date.today()
-        start_date = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()), datetime.time())
-
-        # Filter by date
-        date_to_filter = datetime.datetime.strptime(str(date), "%Y%m%d").date()
-        real_start_date = datetime.datetime.combine(date_to_filter, datetime.time())
-        real_end_date = start_date + datetime.timedelta(days=6, hours=23, minutes=59, seconds=59)
-
-        json_schedules = []
-
-        for schedule in station.schedules.all():
-            schedule.start_date = start_date
-
-            if schedule.date_of_start_time.date() == date_to_filter:
-                json_schedules.append(schedule.json)
-
-        return json_schedules, real_start_date, real_end_date
+        return generate_pi_data(station_channel[0].station, date)
 
     return None
 
 
-def generate_pi_file(path, date):
-    data = generate_pi_data(path, date)
-    if not data:
+def generate_pi_file(date, path=None, station=None):
+    if path is None:
+        data = generate_pi_data(station, date)
+    else:
+        data = extract_pi_data_from_path(path, date)
+    if not data or len(data[0]) <= 0:
         return None
 
     json_schedules = data[0]

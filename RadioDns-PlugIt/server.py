@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import atexit
 import logging
 import subprocess
 
@@ -8,11 +9,13 @@ import plugit
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
+from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 import actions
 import config
+from SPI.event_listener.ORM_events_listeners import spi_generator_manager
 from SPI.modules.aws_spi import AWSSPI
 from SPI.modules.standalone_spi import StandaloneSPI
 
@@ -54,9 +57,19 @@ def db_setup():
     conn.close()
 
 
+def reload_pi_files():
+    spi_generator_manager.tell_to_actor({"type": "add", "subject": "all", "action": "update"})
+
+
 if __name__ == "__main__":
     logging.info("Starting server...")
     db_setup()
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(reload_pi_files, "interval", week=1)
+    scheduler.start()
+
+    atexit.register(lambda: scheduler.shutdown())
 
     plugit.load_actions(actions)
     plugit.app.run(host="0.0.0.0", debug=config.DEBUG, port=config.RADIO_DNS_PORT, threaded=True)

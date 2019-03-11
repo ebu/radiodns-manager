@@ -60,7 +60,21 @@ Finally you have to add those lines to your .bash_profile (in your home director
     CPPFLAGS: -I/usr/local/opt/openssl/include
 
 ## Test
-Tests are available in the tests folder of the root folder.
+Integration tests are available in the tests folder of the root folder.
+
+Unit testing for XML publishing feature can be found within the `tests` folder of this project.
+
+##3 Running the tests
+
+In order to run theses tests you'll need to ensure that docker is up and running and that nothing runs on port `3306`.
+Then you may use the tests run script to starts the tests:
+
+    source venv/bin/activate
+    cd tests
+    python run.py
+    
+In this revision (11.03.2019) the tests cover the XML publishing aggregator part. Unit testing for AWS will come
+with the upcoming migration to boto3.
 
 ## Database
 Sqlalchemy is used for database access. Models are defined inside the `models.py` file.
