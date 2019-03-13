@@ -144,5 +144,5 @@ connections so all app can reconnect smoothly. After X seconds (X being the time
 - **SPI_BUCKET_NAME**: name of the bucket that will hold the SPI files. String. Please ensure that this name follow this set of rules:
 https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
 - **SPI_GENERATION_INTERVAL**: The SPI file generator executor will batch SPI file updates in order to be more efficient.
-Here you can specify how much time shall pass between each updates. Numeric. In seconds. Defaults to `5`.
+Here you can specify how much time shall pass between each updates. Numeric. In seconds. Defaults to `300`.
 - **SPI_CLOUDFRONT_DOMAIN**: The cloudfront domain that will serve the SPI files. String.

@@ -40,6 +40,7 @@ class AWSSPI(BaseSPI):
             today = datetime.date.today()
             start_of_the_week = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()),
                                                           datetime.time())
+
             for i in range(0, 7):
                 start_date = (start_of_the_week + datetime.timedelta(days=i)).strftime("%Y%m%d")
                 contents = SPI.utils.generate_pi_file(start_date, station=station)
@@ -48,28 +49,35 @@ class AWSSPI(BaseSPI):
 
                 filtered = Channel.query.filter(Channel.station_id == station.id and Channel.type_id in ["fm", "dab"])
                 for channel in filtered:
-                    try:
-                        self.upload_file(
-                            AWSSPI.get_static_bucket_pi_filename(channel.service_identifier, start_date),
-                            contents,
-                            station.id,
-                        )
-                    except AttributeError as e:
-                        print("[WARN][AWS] in pi resource changed handler", e)
+                    for w in range(0, 2):
+                        try:
+                            self.upload_file(
+                                AWSSPI.get_static_bucket_pi_filename(
+                                    channel.service_identifier,
+                                    (start_of_the_week + datetime.timedelta(weeks=w, days=i)).strftime("%Y%m%d")
+                                ),
+                                contents,
+                                station.id,
+                            )
+                        except AttributeError as e:
+                            print("[WARN][AWS] in pi resource changed handler", e)
         elif event_name == SPI.modules.base_spi.EVENT_SI_PI_DELETED:
-            for key in [key for key in self.bucket.get_all_keys() if key.get_metadata("x-amz-meta-station_id") == station.id]:
-                self.bucket.delete_key(key)
+            for key in [key for key in self.bucket.get_all_keys() if key.get_metadata("x-amz-meta-station_id") == station]:
+                try:
+                    self.bucket.delete_key(key)
+                except Exception as e:
+                    print("[WARN][AWS] in pi resource deleted handler", e)
 
     def on_request_epg_1(self, codops, client_identifier):
         return redirect(AWSSPI.get_file_url({"codops": codops, "version": "1", "client_identifier": client_identifier}),
-                        code=304)
+                        code=301)
 
     def on_request_epg_3(self, codops, client_identifier):
         return redirect(AWSSPI.get_file_url({"codops": codops, "version": "3", "client_identifier": client_identifier}),
-                        code=304)
+                        code=301)
 
     def on_request_schedule_1(self, path, date):
-        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=304)
+        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=301)
 
     @staticmethod
     def get_file_url(data, type="si"):

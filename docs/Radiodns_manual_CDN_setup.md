@@ -76,7 +76,7 @@ Finally hit the "CREATE DISTRIBUTION" button.
 
 Now you can fill the SPI_CLOUDFRONT_DOMAIN key of your .env file with your CloudFront domain name.
 
-### Generate all SI/PI files at once
+### Generate all SI/PI files for the first time
 **THIS STEP IS A  MANDATORY PART OF THE SETUP**
 
 In the RadioDNS manager, click in the left pane the "Generate all spi files" button. In a short time, your SI/PI

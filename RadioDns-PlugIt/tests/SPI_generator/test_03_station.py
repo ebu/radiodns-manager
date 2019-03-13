@@ -18,6 +18,10 @@ def test_station_create(setup_db, actor_setup):
         sp,
         None,
     )
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=1).first(),
+    )
     session.close()
 
 
@@ -31,6 +35,11 @@ def test_station_update(setup_db, actor_setup, create_mocks):
         EVENT_SI_PI_UPDATED,
         ServiceProvider.query.filter_by(id=2).first(),
         None,
+    )
+
+    on_pi_changed.assert_called_with(
+        EVENT_SI_PI_UPDATED,
+        Station.query.filter_by(id=1).first(),
     )
     session.close()
 
@@ -63,6 +72,7 @@ def create_station(session, service_provider_id, name="TestStation", no_commit=F
     station.medium_name = name[:16]
     station.long_name = name[:64]
     station.short_description = name[:128]
+    station.radioepgpi_enabled = True
     session.add(station)
     if not no_commit:
         session.commit()

@@ -76,9 +76,7 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                 for msg in list(filter(lambda m: m["action"] == current_action, self.queue)):
                     service_provider_id = None
                     clients = []
-                    station = None
                     delete_si_flag = False
-                    delete_pi_flag = False
 
                     if msg["subject"] == "service_provider":
                         service_provider_id = msg["id"]
@@ -101,16 +99,20 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         station = db.session.query(Station).filter_by(id=msg["id"]).first()
                         service_provider_id = station.service_provider_id
                         clients = [station.client]
-
-                        delete_pi_flag = current_action == "delete"
-                        if delete_pi_flag:
-                            station = station.id
+                        if current_action == "delete":
+                            a = 10
+                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                             station.id if current_action == "delete" else station,
+                                                                             current_action)
 
                     elif msg["subject"] == "channel":
                         channel = Channel.query.filter_by(id=msg["id"]).first()
                         station = Station.query.filter_by(id=channel.station_id).first()
                         service_provider_id = station.service_provider_id
                         clients = [channel.client]
+                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                             station,
+                                                                             "update")
 
                     elif msg["subject"] == "ecc" or msg["subject"] == "country_code" or msg["subject"] == "all":
                         affected_si_resources = select_all_si()
@@ -140,6 +142,9 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         if station:
                             service_provider_id = station.service_provider_id
                             clients = [None]
+                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                                 station,
+                                                                                 "update")
 
                     elif msg["subject"] == "schedule":
                         schedule = Schedule.query.filter_by(id=msg["id"]).first()
@@ -147,6 +152,9 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                         if station:
                             service_provider_id = station.service_provider_id
                             clients = [None]
+                            affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
+                                                                                 station,
+                                                                                 "update")
 
                     elif msg["subject"] == "gsfe":
                         gsfe = GenericServiceFollowingEntry.query.filter_by(id=msg["id"]).first()
@@ -176,11 +184,6 @@ class SPIGeneratorActor(pykka.ThreadingActor):
                     affected_si_resources = add_to_affected_si_resources(affected_si_resources, service_provider_id,
                                                                          clients, delete_si_flag)
 
-                    if station:
-                        affected_pi_resources = add_to_affected_pi_resources(affected_pi_resources,
-                                                                             station,
-                                                                             "delete" if delete_pi_flag else "update")
-
                 if current_action == "delete" and len(self.queue) != 0:
                     db.session.commit()
 
@@ -205,8 +208,12 @@ class SPIGeneratorManager:
     """
 
     def __init__(self):
-        if config.USES_CDN:
+        self.spi_generator_actor = None
+
+    def get_instance(self):
+        if self.spi_generator_actor is None or not self.spi_generator_actor.is_alive():
             self.spi_generator_actor = SPIGeneratorActor.start()
+        return self.spi_generator_actor
 
     def tell_to_actor(self, msg):
         """
@@ -217,15 +224,13 @@ class SPIGeneratorManager:
 
         :param msg: The message to send.
         """
-        if not config.USES_CDN:
-            return
-
-        if not self.spi_generator_actor.is_alive():
-            self.spi_generator_actor = SPIGeneratorActor.start()
-        self.spi_generator_actor.tell(msg)
+        self.get_instance().tell(msg)
 
     def stop(self):
-        self.spi_generator_actor.stop(timeout=100)
+        self.get_instance().stop(timeout=100)
+
+    def start(self):
+        self.get_instance().start()
 
 
 def add_to_affected_si_resources(affected_si_resources, service_provider_id, clients, delete_flag=False):
@@ -266,10 +271,11 @@ def add_to_affected_pi_resources(affected_pi_resources, station, action):
     :param action: Action to apply. Can either be "update" or "delete".
     :return: the new affected pi resources map.
     """
-    affected_pi_resources[station.id if isinstance(station, Station) else station] = {
-        "station": station,
-        "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED
-    }
+    if (isinstance(station, Station) and station.radioepgpi_enabled) or isinstance(station, long):
+        affected_pi_resources[station.id if isinstance(station, Station) else station] = {
+            "station": station,
+            "action": EVENT_SI_PI_DELETED if action == "delete" else EVENT_SI_PI_UPDATED
+        }
     return affected_pi_resources
 
 

@@ -28,34 +28,6 @@
         {#<li><a href="{{ebuio_baseUrl}}radioepg/gallery/">RadioEPG Gallery</a></li>#}
     </ul>
 </div>
-<div class="menu-section">
-    <h3>SPI file handling</h3>
-    <ul>
-        <li>
-            <button
-                    id="re-generate"
-                    class="btn btn-xs btn-primary"
-                    onclick="reGenerateSPIFiles(false)"
-            >
-                generate spi file
-            </button>
-        </li>
-        {% if ebuio_u.ebuio_orga_admin %}
-            <div class="menu-section">
-                <li>
-                    <button
-                            id="re-generate-all"
-                            class="btn btn-xs btn-primary"
-                            onclick="reGenerateSPIFiles(true)"
-                    >
-                        Generate all spi files
-                    </button>
-                    <p id="re-generate-text-info"></p></li>
-            </div>
-        {% endif %}
-        <p id="re-generate-text-info"></p>
-    </ul>
-</div>
 
 {% if ebuio_u.ebuio_orga_admin %}
     <div class="menu-section">
@@ -71,15 +43,6 @@
 <link rel="stylesheet" type="text/css" href="{{ ebuio_baseUrl }}media/css/overrides.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='{{ ebuio_baseUrl }}media/js/utilities.js'></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script type="application/javascript">
-    const ebuio_baseUrl = "{{ebuio_baseUrl}}";
-
-    function reGenerateSPIFiles(all) {
-        UtilitiesModule.prototype.request(`${ebuio_baseUrl}spi_generate${all ? "_all" : ""}`, 'GET');
-        $("#re-generate-text-info").text("Command sent to worker!");
-    }
-</script>
 <div class="menu-section">
     <h3><a href="{{ ebuio_baseUrl }}terms/">Terms of Use</a></h3>
 </div>

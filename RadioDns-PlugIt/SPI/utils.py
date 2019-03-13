@@ -307,7 +307,7 @@ def generate_pi_file(date, path=None, station=None):
         data = generate_pi_data(station, date)
     else:
         data = extract_pi_data_from_path(path, date)
-    if not data or len(data[0]) <= 0:
+    if not data:
         return None
 
     json_schedules = data[0]

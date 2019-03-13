@@ -102,6 +102,6 @@ USES_CDN = "True" == os.environ.get('USES_CDN', 'False')
 SPI_BUCKET_NAME = os.environ.get('SPI_BUCKET_NAME', 'SPISTATIC').lower()
 
 # Number of seconds between each generation of spi file if any is to be made.
-SPI_GENERATION_INTERVAL = int(os.environ.get('SPI_GENERATION_INTERVAL', '5'))
+SPI_GENERATION_INTERVAL = int(os.environ.get('SPI_GENERATION_INTERVAL', '300'))
 
 SPI_CLOUDFRONT_DOMAIN = os.environ.get("SPI_CLOUDFRONT_DOMAIN", "CHANGEME.cloudfront.net")
