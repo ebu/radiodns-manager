@@ -90,33 +90,45 @@ def build_context(data, request, orga):
 
 
 def check_permissions(request, target_meta, data):
+    meta_codops = data['ebu_codops'] if 'ebu_codops' in data else "default"
+    user_codops = None
+
+    if request.user.is_authenticated:
+        user_codops = "default" if not request.user.organization else request.user.organization.codops
+
     # User must be logged ?
     if target_meta \
             and 'only_logged_user' in target_meta \
             and not request.user.is_authenticated:
-        return gen403('only_logged_user')
+        return 'only_logged_user'
 
     # User must be member of the orga ?
     if target_meta \
             and 'only_orga_member_user' in target_meta \
-            and not request.user.is_staff \
-            and (not request.user.is_authenticated or 'ebu_codops' in data and data['ebu_codops'] !=
-                                                                                    request.user.organization.codops):
-        return gen403('only_orga_member_user')
+            and (
+                not request.user.is_authenticated
+                or not user_codops == meta_codops
+            ):
+        return 'only_orga_member_user'
 
     # User must be administrator of the orga ?
     if target_meta \
             and 'only_orga_admin_user' in target_meta \
-            and not request.user.is_authenticated \
-            and not request.user.is_staff:
-        return gen403('only_orga_admin_user')
+            and (
+                not request.user.is_authenticated
+                or not (request.user.is_staff or request.user.is_superuser)
+                or not user_codops == meta_codops
+            ):
+        return 'only_orga_admin_user'
 
     # Remote IP must be in range ?
     if target_meta \
             and 'address_in_networks' in target_meta \
-            and not request.user.is_authenticated \
-            and not is_request_address_in_networks(request, target_meta['address_in_networks']):
-        return gen403('address_in_networks')
+            and (
+                not request.user.is_authenticated
+                or not is_request_address_in_networks(request, target_meta['address_in_networks'])
+            ):
+        return 'address_in_networks'
     return None
 
 
