@@ -1,10 +1,11 @@
-from flask import redirect
+from flask import redirect, abort
 
 import SPI.utils
 import config
 from SPI.modules.base_spi import BaseSPI
 from aws.awsutils import get_or_create_bucket
 from models import Channel
+import hashlib
 
 
 class AWSSPI(BaseSPI):
@@ -62,7 +63,8 @@ class AWSSPI(BaseSPI):
                         except AttributeError as e:
                             print("[WARN][AWS] in pi resource changed handler", e)
         elif event_name == SPI.modules.base_spi.EVENT_SI_PI_DELETED:
-            for key in [key for key in self.bucket.get_all_keys() if key.get_metadata("x-amz-meta-station_id") == station]:
+            for key in [key for key in self.bucket.get_all_keys() if
+                        key.get_metadata("x-amz-meta-station_id") == station]:
                 try:
                     self.bucket.delete_key(key)
                 except Exception as e:
@@ -111,8 +113,9 @@ class AWSSPI(BaseSPI):
         :param client_identifier: The client identifier or None.
         :return: The full filename of the SI file.
         """
-        return service_provider_codops + "." + version + "." + (
-            client_identifier if client_identifier else "default") + ".xml"
+        name = (str(service_provider_codops) + str(version) + str(config.API_SECRET) + str(
+            client_identifier if client_identifier else "default")).encode("utf").lower().strip()
+        return hashlib.sha256(name).hexdigest() + ".xml"
 
     @staticmethod
     def get_static_bucket_pi_filename(path, date):

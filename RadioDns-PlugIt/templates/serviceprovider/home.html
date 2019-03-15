@@ -28,8 +28,7 @@
                         >
                             Re-publish all
                         </button>
-                        <a href="{{ ebuio_baseUrl }}serviceprovider/edit/
-                                {{ serviceprovider.id }}{% if not s %}-{% endif %}"
+                        <a href="{{ ebuio_baseUrl }}serviceprovider/edit/{{ serviceprovider.id }}{% if not s %}-{% endif %}"
                            class="btn btn-primary">Edit</a>
                     {% endif %}
                 {% endblock %}
@@ -303,7 +302,6 @@
             </script>
             <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
             <script type="application/javascript">
-                const ebuio_baseUrl = "{{ebuio_baseUrl}}";
 
                 function reGenerateSPIFiles() {
                     if (window.confirm("This operation may take a long time (more than 5 minutes) to complete. " +

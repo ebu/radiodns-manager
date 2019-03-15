@@ -26,7 +26,11 @@ def epg_1_xml(client_identifier):
 
     if not config.XSISERVING_ENABLED:
         abort(501)
-    return server.SPI_handler.on_request_epg_1(get_codops_from_request(), client_identifier)
+
+    codops = get_codops_from_request()
+    if not codops and not config.DEBUG:
+        abort(404)
+    return server.SPI_handler.on_request_epg_1(codops, client_identifier)
 
 
 # Override Cache Key for XSI 1
@@ -47,7 +51,11 @@ def epg_3_xml(client_identifier):
 
     if not config.XSISERVING_ENABLED:
         abort(501)
-    return server.SPI_handler.on_request_epg_3(get_codops_from_request(), client_identifier)
+
+    codops = get_codops_from_request()
+    if not codops and not config.DEBUG:
+        abort(404)
+    return server.SPI_handler.on_request_epg_3(codops, client_identifier)
 
 
 # Override Cache Key for XSI 3
