@@ -62,3 +62,30 @@ in the future RadioDns would be something that will be deployable by everyone an
 
 If you want/require automated certificate renewal within the NGINX docker container, feel free to use a custom one.
 In the future, an example container with letsencrypt.org certificates auto renewal will be made.
+
+## XML Publishing
+RadioDNS supports the publishing of the SI/PI files to a CDN. The feature is event based with a possibility of manually triggering the
+generation of the said XML files for the current service provider or for all service providers.
+
+### Event driven
+Every database modification that would make a change in an SI/PI file will trigger an ORM event that will signal to
+the app that a specific resource needs to be re-generated. Theses changes are batched and will be executed by a threaded
+executor. 
+
+The said executor will then aggregate, generate and push the changes to and AWS s3 Bucket.
+The said bucket will be the source of an AWS CloudFront distribution that will handle the distribution of the
+published XML SI/PI files.
+
+Every request for a specific PI/SI resource will then be redirected with a 304 by the flask app to the corresponding CDN path.
+
+### Two files driven by two database tables
+A service provider is the root element for an SI file. Any modified resource that impacts a data linked to this service
+provider file will modify its SI file. A deletion of a service provider will delete the file. 
+
+The same happens for a PI file though the main element here is a station.
+
+### s3 bucket PI files lifecycle
+PI files are generated every sunday at midnight. They have a lifetime of 28 day before they will be deleted by the s3 lifecycle
+rule.
+
+![AWS_XML_publishing.png](/docs/images/AWS_XML_publishing.png)

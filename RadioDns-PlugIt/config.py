@@ -1,9 +1,7 @@
 import logging
 import os
 
-from utils import safe_cast
-
-RADIO_DNS_PORT = safe_cast(os.environ.get('RADIO_DNS_PORT', '5000'), int, 5000)
+RADIO_DNS_PORT = int(os.environ.get('RADIO_DNS_PORT', '5000'))
 
 # Url to the ebu.io API.
 API_URL = os.environ.get('API_URL', 'http://127.0.0.1:4000/')
@@ -18,6 +16,7 @@ API_SECRET = os.environ.get('API_SECRET', 'dev-secret')
 # Amazon AWS
 AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY', '')
 AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY', '')
+AWS_ZONE = os.environ.get('AWS_ZONE', 'eu-west-1')
 
 if AWS_ACCESS_KEY == '':
     logging.warning('AWS_ACCESS_KEY is empty.')
@@ -66,7 +65,7 @@ PI_ALLOWED_NETWORKS = os.environ.get('PI_ALLOWED_NETWORKS', '0.0.0.0/0').strip()
 
 # Flask Log
 FLASK_LOG_PATH = os.environ.get('FLASK_LOG_PATH', '/opt/app/flask.log')
-FLASK_LOG_SIZE = safe_cast(os.environ.get('FLASK_LOG_SIZE', '10485764'), int)  # 1MB
+FLASK_LOG_SIZE = int(os.environ.get('FLASK_LOG_SIZE', '10485764'))  # 1MB
 
 # Url to the Sentry DNS service.
 SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
@@ -84,14 +83,25 @@ LOGO_INTERNAL_URL = os.environ.get('LOGO_INTERNAL_URL', 'http://127.0.0.1:8000/u
 LOGO_PUBLIC_URL = os.environ.get('LOGO_PUBLIC_URL', 'http://127.0.0.1:8000/uploads')
 
 # Time in seconds before discarding cache.
-XML_CACHE_TIMEOUT = safe_cast(os.environ.get('XML_CACHE_TIMEOUT', '0'), int)  # in seconds
-IMG_CACHE_TIMEOUT = safe_cast(os.environ.get('IMG_CACHE_TIMEOUT', '0'), int)  # in seconds
+XML_CACHE_TIMEOUT = int(os.environ.get('XML_CACHE_TIMEOUT', '0'))  # in seconds
+IMG_CACHE_TIMEOUT = int(os.environ.get('IMG_CACHE_TIMEOUT', '0'))  # in seconds
 
 # Time during the server will try to connect to the mysql server before giving up (in seconds).
-DATABASE_CONNECTION_MERCY_TIME = safe_cast(os.environ.get('DATABASE_CONNECTION_MERCY_TIME', '30'), int)
+DATABASE_CONNECTION_MERCY_TIME = int(os.environ.get('DATABASE_CONNECTION_MERCY_TIME', '30'))
 
 # Endpoint to the VIS player of radiodns manager. Used by the HTML vis player.
 VIS_WEB_SOCKET_ENDPOINT_HOST = os.environ.get('VIS_WEB_SOCKET_ENDPOINT_HOST', '127.0.0.1')
 
 # Current Revision.
 REVISION = "dev-local"
+
+# If you want to use the aws cloudfront integration to deliver spi files.
+USES_CDN = "True" == os.environ.get('USES_CDN', 'False')
+
+# Name of the aws bucket that will serve static SPI files.
+SPI_BUCKET_NAME = os.environ.get('SPI_BUCKET_NAME', 'SPISTATIC').lower()
+
+# Number of seconds between each generation of spi file if any is to be made.
+SPI_GENERATION_INTERVAL = int(os.environ.get('SPI_GENERATION_INTERVAL', '300'))
+
+SPI_CLOUDFRONT_DOMAIN = os.environ.get("SPI_CLOUDFRONT_DOMAIN", "CHANGEME.cloudfront.net")

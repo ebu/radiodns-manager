@@ -209,7 +209,6 @@ def stations_edit(request, id):
             'default_radiotag_service': default_radiotag,
             'default_radiospi_service': default_radiospi,
             'RADIOTAG_ENABLED': config.RADIOTAG_ENABLED,
-
             }
 
 

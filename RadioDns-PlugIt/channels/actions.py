@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import StringIO
+import re
+
+from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only, PlugItSendFile
 
-from models import db, Station, Channel, Ecc, ServiceProvider, Clients, CountryCode
-import re
-
 import config
-
-from plugit.api import PlugItAPI
-
-import StringIO
-
+from models import db, Station, Channel, Ecc, ServiceProvider, Clients, CountryCode
 from stations.utils import gen_default_client
 
 
@@ -28,7 +25,7 @@ def channels_home(request):
 
     sp = None
     if orga.codops:
-        sp = ServiceProvider.query.filter_by(codops=orga.codops).order_by(ServiceProvider.codops).first()
+        sp = ServiceProvider.query.filter_by(codops=orga.codops).first()
         if sp:
             expected_fqdn = sp.fqdn
 
@@ -249,19 +246,19 @@ def channels_import(request):
 
                 errors = []
                 # Extract data
-                object = string_to_channel(line, station_id)
+                channel = string_to_channel(line, station_id)
 
                 # Check errors
-                if object is None:
+                if channel is None:
                     errors.append("Could not convert text line to channel for line " + line)
                 else:
-                    if object.name == '' or object.name is None:
+                    if channel.name == '' or channel.name is None:
                         errors.append("Please set a name")
 
                     # Set to '' useless values, and check if values needed are present
                     list_props = None
                     for (type_id, _, type_props) in Channel.TYPE_ID_CHOICES:
-                        if type_id == object.type_id:
+                        if type_id == channel.type_id:
                             list_props = type_props
 
                     if list_props is None:
@@ -273,77 +270,77 @@ def channels_import(request):
                                   'fqdn', 'stream_url', 'mime_type', 'bitrate', 'serviceIdentifier']:
                             if x in list_props:  # Want it ? Keep it !
                                 if x != 'appty_uatype' and x != 'pa':  # Exception
-                                    if getattr(object, x) is None or getattr(object, x) == '':
+                                    if getattr(channel, x) is None or getattr(channel, x) == '':
                                         errors.append(x + " cannot be empty")
                             else:
-                                setattr(object, x, None)
+                                setattr(channel, x, None)
 
                     # Check each prop
-                    if object.pi is not None:
-                        if not re.match(r"^[a-fA-F0-9]{4}$", object.pi):
+                    if channel.pi is not None:
+                        if not re.match(r"^[a-fA-F0-9]{4}$", channel.pi):
                             errors.append("pi must be 4 characters in hexadecimal for line " + line)
 
-                    if object.frequency is not None:
-                        if not re.match(r"^[0-9]{5}$", object.frequency) and object.frequency != '*':
+                    if channel.frequency is not None:
+                        if not re.match(r"^[0-9]{5}$", channel.frequency) and channel.frequency != '*':
                             errors.append("frequency must be 5 digits or *")
 
-                    if object.eid is not None:
-                        if not re.match(r"^[a-fA-F0-9]{4}$", object.eid):
+                    if channel.eid is not None:
+                        if not re.match(r"^[a-fA-F0-9]{4}$", channel.eid):
                             errors.append("eid must be 4 characters in hexadecimal for line " + line)
 
-                    if object.sid is not None:
-                        if not re.match(r"^[a-fA-F0-9]{4}([a-fA-F0-9]{4})?$", object.sid):
+                    if channel.sid is not None:
+                        if not re.match(r"^[a-fA-F0-9]{4}([a-fA-F0-9]{4})?$", channel.sid):
                             errors.append("sid must be 4 or 8 characters in hexadecimal for line " + line)
 
-                    if object.scids is not None:
-                        if not re.match(r"^[a-fA-F0-9]([a-fA-F0-9]{2})?$", object.scids):
+                    if channel.scids is not None:
+                        if not re.match(r"^[a-fA-F0-9]([a-fA-F0-9]{2})?$", channel.scids):
                             errors.append("scids must be 1 or 3 characters in hexadecimal for line " + line)
 
-                    if object.appty_uatype is not None:
-                        if not re.match(r"^[a-fA-F0-9]{2}\-[a-fA-F0-9]{3}$", object.appty_uatype):
+                    if channel.appty_uatype is not None:
+                        if not re.match(r"^[a-fA-F0-9]{2}\-[a-fA-F0-9]{3}$", channel.appty_uatype):
                             errors.append(
                                 "appty_uatype must be 2 char hexadecimal, hyphen, 3 char hexadecimal for line " + line)
 
-                    if object.pa is not None:
-                        if object.pa < 1 or object.pa > 1023:
+                    if channel.pa is not None:
+                        if channel.pa < 1 or channel.pa > 1023:
                             errors.append("pa must be between 1 and 1023 for line " + line)
 
-                    if object.tx is not None:
-                        if not re.match(r"^[a-fA-F0-9]{5}$", object.tx):
+                    if channel.tx is not None:
+                        if not re.match(r"^[a-fA-F0-9]{5}$", channel.tx):
                             errors.append("tx must be 5 characters in hexadecimal for line " + line)
 
-                    if object.cc is not None:
-                        if not re.match(r"^[a-fA-F0-9]{3}$", object.cc):
+                    if channel.cc is not None:
+                        if not re.match(r"^[a-fA-F0-9]{3}$", channel.cc):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
-                    if object.fqdn is not None:
+                    if channel.fqdn is not None:
                         if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)",
-                                        object.fqdn):
+                                        channel.fqdn):
                             errors.append("fqdn must be a domain name for line " + line)
 
-                    if object.serviceIdentifier is not None:
-                        if not re.match(r"^[a-z0-9]{,16}$", object.serviceIdentifier):
+                    if channel.serviceIdentifier is not None:
+                        if not re.match(r"^[a-z0-9]{,16}$", channel.serviceIdentifier):
                             errors.append(
                                 "serviceIdentifier must be up to 16 characters in hexadecimal, lowercase for line " + line)
 
-                    if object.mime_type is not None:
-                        if not re.match(r"^\w+\/\w+$", object.mime_type):
+                    if channel.mime_type is not None:
+                        if not re.match(r"^\w+\/\w+$", channel.mime_type):
                             errors.append("mime_type must be of format string/string " + line)
 
-                    if object.bitrate is not None:
-                        if not re.match(r"^[0-9]+$", object.bitrate):
+                    if channel.bitrate is not None:
+                        if not re.match(r"^[0-9]+$", channel.bitrate):
                             errors.append("bitrate must be digits")
 
                     # Check station
-                    sta = Station.query.filter_by(id=object.station_id).first()
+                    sta = Station.query.filter_by(id=channel.station_id).first()
                     if not sta or sta.orga != int(request.form.get('ebuio_orgapk')):
                         errors.append("Please set a station")
 
                 # If no errors, save
                 if not errors:
 
-                    if not object.id:
-                        db.session.add(object)
+                    if not channel.id:
+                        db.session.add(channel)
                         new_channels_count += 1
 
                     db.session.commit()

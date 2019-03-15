@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import plugit
+from flask import jsonify
 from plugit.api import PlugItAPI
 # Utils
-from plugit.utils import action, only_orga_admin_user, json_only
+from plugit.utils import action, only_orga_admin_user, json_only, only_orga_member_user
 
 import config
+from SPI.event_listener.ORM_events_listeners import spi_generator_manager
+from actions_utils import get_orga_service_provider
 from aws import awsutils
 
 
@@ -34,4 +37,25 @@ def system_check(request):
 @plugit.app.route('/')
 @json_only()
 def system_info():
-    return {'app': 'RadioDNS SPI/EPG server', 'revision': config.REVISION}
+    return jsonify({'app': 'RadioDNS SPI/EPG server', 'revision': config.REVISION})
+
+
+@action(route="/spi_generate", methods=['GET'])
+@json_only()
+@only_orga_member_user()
+def spi_generate(request):
+    try:
+        _, sp = get_orga_service_provider(request)
+        spi_generator_manager.tell_to_actor({"type": "add", "subject": "reload", "id": sp.id, "action": "update"})
+    except Exception as e:
+        print(e)
+    finally:
+        return {"ok": "ok"}
+
+
+@action(route="/spi_generate_all", methods=['GET'])
+@json_only()
+@only_orga_admin_user()
+def spi_generate_all(request):
+    spi_generator_manager.tell_to_actor({"type": "add", "subject": "all", "action": "update"})
+    return {"ok": "ok"}

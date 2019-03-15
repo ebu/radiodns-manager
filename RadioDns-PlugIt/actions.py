@@ -27,6 +27,8 @@ from radioepg.actions import *
 # Include clients methods
 from clients.actions import *
 
+from SPI.event_listener.ORM_events_listeners import *
+
 from plugit.utils import action
 
 
