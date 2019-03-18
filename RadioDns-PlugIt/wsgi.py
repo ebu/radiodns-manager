@@ -1,9 +1,18 @@
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
 from plugit import app as application, routes
 
 import actions
 import config
+from SPI.event_listener.ORM_events_listeners import spi_generator_manager
 from server import db_setup
 from werkzeug.contrib.fixers import ProxyFix
+
+
+def reload_pi_files():
+    spi_generator_manager.tell_to_actor({"type": "add", "subject": "all", "action": "update"})
+
 
 if not config.DEBUG:
     import logging
@@ -17,4 +26,9 @@ if not config.DEBUG:
 routes.load_routes(application, actions)
 application.wsgi_app = ProxyFix(application.wsgi_app)
 db_setup()
+reload_pi_files()
+scheduler = BackgroundScheduler()
+scheduler.add_job(reload_pi_files, "cron", day_of_week="mon")
+scheduler.start()
 
+atexit.register(lambda: scheduler.shutdown())

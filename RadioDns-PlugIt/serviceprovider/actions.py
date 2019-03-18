@@ -5,6 +5,7 @@ import os
 import sys
 import uuid
 
+from flask import abort
 from plugit.api import PlugItAPI
 # Utils
 from plugit.utils import action, only_orga_member_user, only_orga_admin_user, PlugItRedirect, json_only
@@ -58,57 +59,60 @@ def serviceprovider_check(request):
 def serviceprovider_edit(request, id):
     """Edit a serviceprovider."""
 
-    object = None
+    service_provider = None
     errors = []
 
     plugitapi = PlugItAPI(config.API_URL)
     orga = plugitapi.get_orga(request.args.get('ebuio_orgapk') or request.form.get('ebuio_orgapk'))
 
     if id != '-':
-        object = ServiceProvider.query.filter_by(id=id).first()
+        service_provider = ServiceProvider.query.filter_by(id=id, codops=orga.codops).first()
+
+    if not service_provider and id != '-':
+        abort(404)
 
     if request.method == 'POST':
 
-        if not object:
-            object = ServiceProvider(int(request.form.get('ebuio_orgapk')))
+        if not service_provider:
+            service_provider = ServiceProvider(int(request.form.get('ebuio_orgapk')))
 
-        object.codops = orga.codops
-        object.short_name = request.form.get('short_name')
-        object.medium_name = request.form.get('medium_name')
-        object.long_name = request.form.get('long_name')
-        object.short_description = request.form.get('short_description')
-        object.long_description = request.form.get('long_description')
-        object.url_default = request.form.get('url_default')
-        object.default_language = request.form.get('default_language')
-        object.location_country = request.form.get('location_country')
+        service_provider.codops = orga.codops
+        service_provider.short_name = request.form.get('short_name')
+        service_provider.medium_name = request.form.get('medium_name')
+        service_provider.long_name = request.form.get('long_name')
+        service_provider.short_description = request.form.get('short_description')
+        service_provider.long_description = request.form.get('long_description')
+        service_provider.url_default = request.form.get('url_default')
+        service_provider.default_language = request.form.get('default_language')
+        service_provider.location_country = request.form.get('location_country')
 
-        object.postal_name = request.form.get('postal_name')
-        object.street = request.form.get('street')
-        object.city = request.form.get('city')
-        object.zipcode = request.form.get('zipcode')
-        object.phone_number = request.form.get('phone_number')
-        object.keywords = request.form.get('keywords')
+        service_provider.postal_name = request.form.get('postal_name')
+        service_provider.street = request.form.get('street')
+        service_provider.city = request.form.get('city')
+        service_provider.zipcode = request.form.get('zipcode')
+        service_provider.phone_number = request.form.get('phone_number')
+        service_provider.keywords = request.form.get('keywords')
 
         # Check errors
-        if object.medium_name == '':
+        if service_provider.medium_name == '':
             errors.append("Please set a medium name")
-        if object.short_description == '':
+        if service_provider.short_description == '':
             errors.append("Please set a short description")
 
         # If no errors, save
         if not errors:
 
-            if not object.id:
-                db.session.add(object)
+            if not service_provider.id:
+                db.session.add(service_provider)
 
             db.session.commit()
 
             return PlugItRedirect('serviceprovider/?saved=yes')
 
-    if object:
-        object = object.json
+    if service_provider:
+        service_provider = service_provider.json
 
-    return {'object': object, 'errors': errors}
+    return {'object': service_provider, 'errors': errors}
 
 
 @action(route="/serviceprovider/delete/<id>")

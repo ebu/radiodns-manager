@@ -18,7 +18,7 @@ setup(
     long_description_content_type='',
     install_requires=[
         'flask==1.0.2',
-        'sqlalchemy==1.2.11',
+        'sqlalchemy==1.2.18',
         'Flask-SQLAlchemy==2.3.2',
         'alembic==1.0.0',
         'dnspython==1.15.0',
@@ -33,6 +33,13 @@ setup(
         'backoff==1.6.0',
         'jsonschema==2.6.0',
         'simplejson==3.16.0',
+        'logging==0.4.9.6',
+        'Pykka==1.2.1',
+        'pytest==4.3.0',
+        'mock==2.0.0',
+        'blinker==1.4',
+        'pytest-ordering==0.6',
+        'APScheduler==3.5.3'
     ],
     include_package_data=True,
 )

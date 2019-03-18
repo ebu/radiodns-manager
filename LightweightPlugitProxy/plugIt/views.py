@@ -1,17 +1,17 @@
 import json
 
+import requests
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Template, RequestContext
 from django.views.decorators.cache import cache_control
 
-from lpp import settings
 from lpp.settings import PLUGIT_APP_URL
-from lpp_core.models import Organization, LppUser
+from lpp_core.models import Organization
 from plugIt.bridge.bridge import Bridge
 from plugIt.bridge.query_string_parameters import build_parameters
 from plugIt.bridge.utilities import gen500, build_context, check_permissions, check_special_cases, \
-    build_additional_headers, get_current_session, update_session
+    build_additional_headers, get_current_session, update_session, gen403
 
 
 def main(request, query):
@@ -52,7 +52,7 @@ def main(request, query):
     # ================ AUTHORIZATION ================
     check_result = check_permissions(request, target_meta, data)
     if check_result is not None:
-        return check_result
+        return gen403(check_result)
 
     # ================ RENDER PLUGIT TEMPLATE =======
     target_template = bridge.get_template(query, target_meta)

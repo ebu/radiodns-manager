@@ -20,11 +20,20 @@ body {
   font-size: 11px;
   padding-left: 25px;
 }
+
 .menu-section ul {
-  list-style-type: none;
-  margin-bottom: 0;
-  margin-top: 15px;
-  padding-left: 25px;
+    list-style-type: none;
+    margin-bottom: 0;
+    margin-top: 15px;
+    padding-left: 25px;
+}
+
+.menu-section button {
+  margin-left: 25px;
+}
+
+.menu-section p {
+  margin-left: 25px;
 }
 
 .menubar {

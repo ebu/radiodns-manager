@@ -12,25 +12,34 @@ import config
 
 # BUCKETS AND FILES
 
-def get_or_create_bucket(service_provider):
-    """Returns the bucket or creates a new one according to service_provider"""
+def get_or_create_bucket(bucket_name):
+    """
+    Returns the bucket or creates a new one according the provided bucket name.
+    :param bucket_name: The string of the bucket name.
+    :return: The bucket and a boolean flag stating that this bucket is new or not.
+    """
     s3 = boto.connect_s3(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY,
-                         host='s3-eu-west-1.amazonaws.com',
+                         host="s3-" + config.AWS_ZONE + '.amazonaws.com',
                          calling_format=OrdinaryCallingFormat())  # host='s3-eu-central-1.amazonaws.com')
-    bucket = None
-    bucket_name = "static.%s" % (service_provider.fqdn.lower().rstrip('.'))
-
     try:
         bucket = s3.get_bucket(bucket_name)
-        return bucket
+        return bucket, False
     except boto.exception.S3ResponseError:
-        bucket = s3.create_bucket(bucket_name, location='eu-west-1')
-        set_right_bucket(bucket)
-        endpoint = get_website_endpoint(bucket)
-        update_or_create_provider_cname("static", service_provider, endpoint)
-        return bucket
+        bucket = s3.create_bucket(bucket_name, location=config.AWS_ZONE)
+        set_rights_for_bucket(bucket)
+        return bucket, True
     except Exception as e:
         print(e)
+
+
+def get_or_create_bucket_spi(service_provider):
+    """Returns the bucket or creates a new one according to service_provider"""
+    bucket_name = "static.%s" % (service_provider.fqdn.lower().rstrip('.'))
+    bucket, is_new_bucket = get_or_create_bucket(bucket_name)
+    if is_new_bucket:
+        endpoint = get_website_endpoint(bucket)
+        update_or_create_provider_cname("static", service_provider, endpoint)
+    return bucket
 
 
 def get_website_endpoint(bucket):
@@ -39,7 +48,7 @@ def get_website_endpoint(bucket):
     return endpoint  # .replace("us-east-1", "eu-west-1") works with spec connection
 
 
-def set_right_bucket(bucket):
+def set_rights_for_bucket(bucket):
     """Sets the rights and website access on the bucket"""
     bucket.set_acl('public-read')
     bucket.configure_website("index.html")
@@ -49,7 +58,7 @@ def set_right_bucket(bucket):
 def upload_public_image(service_provider, filename, filepath):
     """upload image to service_provider bucket"""
 
-    bucket = get_or_create_bucket(service_provider)
+    bucket = get_or_create_bucket_spi(service_provider)
     newFile = Key(bucket)
     newFile.key = filename
     newFile.set_contents_from_filename(filepath)
@@ -61,7 +70,7 @@ def upload_public_image(service_provider, filename, filepath):
 def delete_public_image(service_provider, filename):
     """Upload image to service_provider bucket"""
 
-    bucket = get_or_create_bucket(service_provider)
+    bucket = get_or_create_bucket_spi(service_provider)
     bucket.delete_key(filename)
 
     return filename
@@ -416,7 +425,8 @@ def check_mainzone():
     isvalid = visserver and epgserver and spiserver and tagserver
 
     return {'isvalid': isvalid, 'name': mainzone.name, 'mainzone': {'zone': mainzone.name, 'ns': mainns},
-            'parentns': {'entry': "Parent zone.", 'value': "Parent zone is now located in the main AWS account of EBU.io"},
+            'parentns': {'entry': "Parent zone.",
+                         'value': "Parent zone is now located in the main AWS account of EBU.io"},
             'services': {'vis': {'name': config.RADIOVIS_DNS, 'ip': visserver},  # 'wildcard': viswildcard},
                          'epg': {'name': config.RADIOEPG_DNS, 'ip': epgserver},  # 'wildcard': epgwildcard},
                          'spi': {'name': config.RADIOSPI_DNS, 'ip': spiserver},  # 'wildcard': spiwildcard},
@@ -433,7 +443,7 @@ def check_serviceprovider(sp):
         nsisvalid = set(parentns) == set(zonens)
 
         # Bucket
-        bucket = get_or_create_bucket(sp)
+        bucket = get_or_create_bucket_spi(sp)
         staticcname = get_provider_cname('static', sp, zone)
         staticcnamename = staticcname.name
         staticnamerecord = staticcname.resource_records[0].rstrip('.')

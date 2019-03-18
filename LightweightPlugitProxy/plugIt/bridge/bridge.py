@@ -6,7 +6,10 @@ import requests
 from dateutil import parser
 from dateutil.tz import tzutc
 from django.core.cache import cache
+from requests import Response
 from requests_toolbelt import MultipartEncoder
+
+from lpp.settings import DEBUG
 
 
 class PlugItRedirect:
@@ -78,52 +81,57 @@ class Bridge:
         :return: The Request's result.
         """
 
-        # Build headers
-        headers = {}
+        try:
+            # Build headers
+            headers = {}
 
-        for key, value in (additional_headers or {}).items():
-            # Fixes #197 for values with utf-8 chars to be passed into plugit
-            headers['X-Plugit-' + key] = value.encode('utf-8') if isinstance(value, str) else value
+            for key, value in (additional_headers or {}).items():
+                # Fixes #197 for values with utf-8 chars to be passed into plugit
+                headers['X-Plugit-' + key] = value.encode('utf-8') if isinstance(value, str) else value
 
-        for key, value in (session or {}).items():
-            headers['X-Plugitsession-' + key] = value
-            if 'Cookie' not in headers:
-                headers['Cookie'] = ''
-            headers['Cookie'] += key + '=' + str(value) + '; '
+            for key, value in (session or {}).items():
+                headers['X-Plugitsession-' + key] = value
+                if 'Cookie' not in headers:
+                    headers['Cookie'] = ''
+                headers['Cookie'] += key + '=' + str(value) + '; '
 
-        if method == 'POST':
-            body = body or {}
-            if files:
-                data = []
+            if method == 'POST':
+                body = body or {}
+                if files:
+                    data = []
 
-                # Add the rest of the body.
-                for key, value in body.items():
-                    if type(value) is int:
-                        body[key] = str(value)
+                    # Add the rest of the body.
+                    for key, value in body.items():
+                        if type(value) is int:
+                            body[key] = str(value)
 
-                    if isinstance(body[key], list):
-                        for elem in body[key]:
-                            data.append((key, elem))
-                    else:
-                        data.append((key, body[key]))
+                        if isinstance(body[key], list):
+                            for elem in body[key]:
+                                data.append((key, elem))
+                        else:
+                            data.append((key, body[key]))
 
-                # Add buffered readers for files.
-                for key, f in files.items():
-                    data.append((key, (f.name, open(f.temporary_file_path(), 'rb'), 'application/octet-stream')))
+                    # Add buffered readers for files.
+                    for key, f in files.items():
+                        data.append((key, (f.name, open(f.temporary_file_path(), 'rb'), 'application/octet-stream')))
 
-                # Multipart body construction.
-                body = MultipartEncoder(fields=data)
+                    # Multipart body construction.
+                    body = MultipartEncoder(fields=data)
 
-                # Set correct Content-Type for multipart query.
-                headers['Content-Type'] = body.content_type
-            response = requests.post(self.base_uri + '/' + url, params=query_string, data=body, stream=True,
-                                     headers=headers)
-        else:
-            # Call the function based on the method.
-            response = requests.request(method.upper(), self.base_uri + '/' + url, params=query_string, stream=True,
-                                        headers=headers, allow_redirects=True)
+                    # Set correct Content-Type for multipart query.
+                    headers['Content-Type'] = body.content_type
+                response = requests.post(self.base_uri + '/' + url, params=query_string, data=body, stream=True,
+                                         headers=headers)
+            else:
+                # Call the function based on the method.
+                response = requests.request(method.upper(), self.base_uri + '/' + url, params=query_string, stream=True,
+                                            headers=headers, allow_redirects=True)
 
-        return response
+            return response
+        except requests.exceptions.ConnectionError:
+            response = Response()
+            response.status_code = 500
+            return response
 
     def ping(self):
         """Return true if the server successfully pinged"""
@@ -190,7 +198,7 @@ class Bridge:
         meta = cache.get(media_key, None)
 
         # Nothing found -> Retrieve it from the server and cache it
-        if not meta:
+        if not meta or DEBUG:
             response = self.do_query('meta/' + uri)
 
             if response.status_code == 200:  # Get the content if there is not problem. Otherwise the template will stay to None
@@ -223,7 +231,7 @@ class Bridge:
 
             meta = cache.get(meta_key, None)
 
-            if not meta:
+            if not meta or DEBUG:
                 meta = self.get_meta(uri)
                 cache.set(meta_key, meta, 15)
 
@@ -234,7 +242,7 @@ class Bridge:
         template = cache.get(template_key, None)
 
         # Nothing found -> Retrieve it from the server and cache it
-        if not template:
+        if not template or DEBUG:
             response = self.do_query('template/' + uri)
 
             if response.status_code == 200:  # Get the content if there is not problem. If there is, template will stay to None

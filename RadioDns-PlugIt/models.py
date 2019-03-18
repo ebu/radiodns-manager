@@ -71,8 +71,8 @@ class ServiceProvider(db.Model):
     def __init__(self, codops):
         self.codops = codops
 
-    def __repr__(self):
-        return '<ServiceProvider %r[%s]>' % (self.short_name, self.codops)
+    def __eq__(self, other):
+        return other is not None and self.id == other.id
 
     def check_aws(self):
         return awsutils.check_serviceprovider(self)
@@ -247,6 +247,9 @@ class Station(db.Model):
     def __getitem__(self, item):
         return getattr(self, item)
 
+    def __eq__(self, other):
+        return other is not None and self.id == other.id
+
     def escape_slash_rfc3986(self, value):
         if value:
             return value.replace('/', '%2F')
@@ -331,9 +334,6 @@ class Station(db.Model):
         self.orga = orga
         self.name = name
 
-    def __repr__(self):
-        return '<Station %r[%s]>' % (self.name, self.orga)
-
     @property
     def ascii_name(self):
         return unicodedata.normalize('NFKD', self.name if self.name else u'').encode('ascii', 'ignore')
@@ -409,8 +409,11 @@ class Clients(db.Model):
     identifier = db.Column(db.String(128))
     email = db.Column(db.String(255))
 
-    def __repr__(self):
-        return '<Ecc %r>' % self.name
+    def __eq__(self, other):
+        return other is not None and self.id == other.id
+
+    def __hash__(self):
+        return self.id
 
     @property
     def json(self):
@@ -528,8 +531,17 @@ class Channel(db.Model):
         return object
 
     @property
+    def service_identifier(self):
+        ecc = Ecc.query.filter_by(id=self.ecc_id).first()
+        gcc = ecc.pi + ecc.ecc
+        if self.type_id == "fm":
+            return "fm/{}/{}/{}".format(gcc, self.pi, self.frequency)
+        elif self.type_id == "dab":
+            return "dab/{}/{}/{}/{}".format(gcc, self.eid, self.sid, self.scids)
+
+    @property
     def topic(self):
-        return '/topic/' + '/'.join(self.dns_entry.split('.')[::-1]) + '/'
+        return self.topic_no_slash + '/'
 
     @property
     def topic_no_slash(self):
@@ -760,7 +772,7 @@ class Schedule(db.Model):
         """Return the start time as a date, assuming start_date has been set as a reference"""
         import datetime
 
-        return (self.start_date + datetime.timedelta(days=self.day, hours=self.start_hour, minutes=self.start_minute))
+        return self.start_date + datetime.timedelta(days=self.day, hours=self.start_hour, minutes=self.start_minute)
 
     @property
     def start_time(self):
@@ -830,32 +842,6 @@ class GenericServiceFollowingEntry(db.Model):
     @property
     def json(self):
         return to_json(self, self.__class__, ['channel_name', 'uri', 'type', 'channel_type'])
-
-
-class PictureForEPG(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    orga = db.Column(db.Integer)
-    name = db.Column(db.String(80))
-    filename = db.Column(db.String(255))
-
-    # stations = db.relationship('Station', backref='epg_picture', lazy='dynamic')
-
-    def __init__(self, orga):
-        self.orga = orga
-
-    def __repr__(self):
-        return '<PictureForEPG %r[%s]>' % (self.name, self.orga)
-
-    @property
-    def clean_filename(self):
-        if not self.filename:
-            return ''
-
-        return self.filename.split('/')[-1]
-
-    @property
-    def json(self):
-        return to_json(self, self.__class__, ['clean_filename'])
 
 
 class LogoImage(db.Model):

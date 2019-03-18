@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   dns_server:
-    build: RadioDns-PlugIt/.
+    image: ${DOCKER_REPOSITORY}/platform.open.radio
     restart: always
     environment:
       RADIO_DNS_PORT: ${RADIO_DNS_PORT}
@@ -12,6 +12,7 @@ services:
       API_SECRET: ${API_SECRET}
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_ZONE: ${AWS_ZONE}
       DOMAIN: ${DOMAIN}
       XSISERVING_ENABLED: ${XSISERVING_ENABLED}
       XSISERVING_DOMAIN: ${XSISERVING_DOMAIN}
@@ -37,6 +38,10 @@ services:
       IMG_CACHE_TIMEOUT: ${IMG_CACHE_TIMEOUT}
       DATABASE_CONNECTION_MERCY_TIME: ${DATABASE_CONNECTION_MERCY_TIME}
       VIS_WEB_SOCKET_ENDPOINT_HOST: ${VIS_WEB_SOCKET_ENDPOINT_HOST}
+      USES_CDN: ${USES_CDN}
+      SPI_BUCKET_NAME: ${SPI_BUCKET_NAME}
+      SPI_GENERATION_INTERVAL: ${SPI_GENERATION_INTERVAL}
+      SPI_CLOUDFRONT_DOMAIN: ${SPI_CLOUDFRONT_DOMAIN}
 
   reverse_proxy:
     build:
