@@ -25,7 +25,7 @@ Click on your newly created bucket.
 
 Select the "Management" tab. Click on the "ADD LIFECYCLE RULE" button.
 
-Enter a rule name, and as prefix type "schedule/". The type of the filter must be a "prefix/tag".
+Enter a rule name, and as prefix enter "schedule/". The type of the filter must be of type "prefix".
 
 You don't need to configure anything in step 2 and can press next.
 
@@ -79,5 +79,5 @@ Now you can fill the SPI_CLOUDFRONT_DOMAIN key of your .env file with your Cloud
 ### Generate all SI/PI files for the first time
 **THIS STEP IS A  MANDATORY PART OF THE SETUP**
 
-In the RadioDNS manager, click in the left pane the "Generate all spi files" button. In a short time, your SI/PI
+In the RadioDNS manager, under the "System Status" tab, click the "Re-generate all files" button. In a short time, your SI/PI
 files will be generated and uploaded to AWS S3 and CloudFront services.
