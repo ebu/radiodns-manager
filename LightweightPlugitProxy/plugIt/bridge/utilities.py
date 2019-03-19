@@ -90,11 +90,6 @@ def build_context(data, request, orga):
 
 
 def check_permissions(request, target_meta, data):
-    meta_codops = data['ebu_codops'] if 'ebu_codops' in data else "default"
-    user_codops = None
-
-    if request.user.is_authenticated:
-        user_codops = "default" if not request.user.organization else request.user.organization.codops
 
     # User must be logged ?
     if target_meta \
@@ -107,7 +102,7 @@ def check_permissions(request, target_meta, data):
             and 'only_orga_member_user' in target_meta \
             and (
                 not request.user.is_authenticated
-                or not user_codops == meta_codops
+                or (not request.user.is_staff and not request.user.is_superuser)
             ):
         return 'only_orga_member_user'
 
@@ -116,8 +111,7 @@ def check_permissions(request, target_meta, data):
             and 'only_orga_admin_user' in target_meta \
             and (
                 not request.user.is_authenticated
-                or not (request.user.is_staff or request.user.is_superuser)
-                or not user_codops == meta_codops
+                or not request.user.is_superuser
             ):
         return 'only_orga_admin_user'
 
