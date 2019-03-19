@@ -24,11 +24,11 @@ services:
   lpp:
     build: LightweightPlugitProxy/.
     environment:
-      DEBUG: "False"
+      DEBUG: "True"
       LPP_PORT: 4000
       PLUGIT_APP_URL: http://dns_server:5000/
       SECRET_KEY: dev-secret
-      ALLOWED_HOSTS: 127.0.0.1,localhost
+      ALLOWED_HOSTS: 127.0.0.1,localhost,dns_server,lpp
       LPP_PREFIX: plugit
       DATABASE_NAME: lpp
       DATABASE_USER: root
@@ -63,7 +63,7 @@ services:
       APfI_SECRET: dev-secret
       LOGO_INTERNAL_URL: http://mock_api:8000/uploads
       LOGO_PUBLIC_URL: http://127.0.0.1:8000/uploads
-      API_URL: http://mock_api:8000/
+      API_URL: http://lpp:4000/
       DEBUG: "True"
       XML_CACHE_TIMEOUT: 10
       IMG_CACHE_TIMEOUT: 10
