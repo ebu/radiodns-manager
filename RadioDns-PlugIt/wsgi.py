@@ -28,7 +28,7 @@ application.wsgi_app = ProxyFix(application.wsgi_app)
 db_setup()
 reload_pi_files()
 scheduler = BackgroundScheduler()
-scheduler.add_job(reload_pi_files, "cron", day_of_week="mon")
+scheduler.add_job(reload_pi_files, "cron", day="1")
 scheduler.start()
 
 atexit.register(lambda: scheduler.shutdown())
