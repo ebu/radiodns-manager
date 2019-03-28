@@ -4,15 +4,12 @@ import {GoogleMap} from "@react-google-maps/api";
 import React from 'react';
 import {connect} from "react-redux";
 import {API_KEY} from "../../config";
-import {addGeoInfos, deleteGeoInfos, GeographicInfo, setEditing,} from "../../reducers/map-reducer";
+import {setGoogleMap} from "../../reducers/map-reducer";
 import {RootReducerState} from "../../reducers/root-reducer";
-import {uuidv4} from "../../utilities";
-import {getCurrentPosition} from "../../utilities/geolocation";
+import {getCurrentPosition} from "../../geolocation/geolocation";
 import withRoot from "../../WithRoot";
 import {CustomLoader} from "./CustomLoader";
-import {MapPickerModuleType} from "./MapPickerModule";
-import {MapPickerTypeSelector} from "./MapPickerTypeSelector";
-import {PolygonModule} from "./PolygonModule";
+import {DialogsHolder} from "./dialogs/DialogsHolder";
 import {MapPickerToolbox} from "./toolbox/MapPickerToolbox";
 
 const styles: StyleRulesCallback<any> = (theme) => ({
@@ -49,22 +46,17 @@ const styles: StyleRulesCallback<any> = (theme) => ({
 });
 
 interface Props extends StyledComponentProps {
-    editing?: boolean;
-    addGeoInfos?: (uuid: string, geoInfo: GeographicInfo) => void;
-    deleteGeoInfos?: (uuid: string) => void;
-    setEditing?: (editing: boolean) => void;
+    setGoogleMap?: (map: google.maps.Map) => void;
 }
 
 interface State {
     pos: google.maps.LatLngLiteral | null;
-    map: google.maps.Map | null;
 }
 
 class UnstyledMapPicker extends React.Component<Props, State> {
 
     public readonly state: State = {
         pos: null,
-        map: null,
     };
 
     public async componentWillMount() {
@@ -79,10 +71,7 @@ class UnstyledMapPicker extends React.Component<Props, State> {
 
         return (
             <div className={classes.main}>
-                <MapPickerTypeSelector
-                    open={this.props.editing!}
-                    onClose={this.handleOnCloseDialog}
-                />
+                <DialogsHolder />
                 <Paper className={classes.paper}>
                     <CustomLoader
                         id="script_loader"
@@ -107,20 +96,8 @@ class UnstyledMapPicker extends React.Component<Props, State> {
     }
 
     private handleMapLoadEvent = (map: google.maps.Map) => {
-        this.setState({map});
+        this.props.setGoogleMap!(map);
     };
-
-    private handleOnCloseDialog = (type: MapPickerModuleType | null) => {
-        if (type && this.state.map) {
-            const uuid = uuidv4();
-            this.props.addGeoInfos!(uuid, {
-                id: uuid,
-                type: type,
-                module: new PolygonModule().init(this.state.map),
-            });
-        }
-        this.props.setEditing!(false);
-    }
 }
 
 export const MapPicker = connect(
@@ -129,8 +106,6 @@ export const MapPicker = connect(
         geoInfos: state.map.geoInfos,
     }),
     (dispatch) => ({
-        setEditing: (editing: boolean) => dispatch(setEditing(editing)),
-        addGeoInfos: (uuid: string, geoInfo: GeographicInfo) => dispatch(addGeoInfos(uuid, geoInfo)),
-        deleteGeoInfos: (uuid: string) => dispatch(deleteGeoInfos(uuid)),
+        setGoogleMap: (map: google.maps.Map) => dispatch(setGoogleMap(map))
     })
 )(withRoot(withStyles(styles)(UnstyledMapPicker)));
