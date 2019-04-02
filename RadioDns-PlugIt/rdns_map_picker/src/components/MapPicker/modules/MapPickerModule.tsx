@@ -31,7 +31,7 @@ export const mapPickerTypeToIconAndText = (data: MapPickerModuleType) => {
 
 
 export interface MapPickerModuleOpts {
-    map: google.maps.Map;
+    map?: google.maps.Map;
     editable: boolean;
     draggable: boolean;
     noClick: boolean;
@@ -44,21 +44,25 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
     protected opts: T;
 
     constructor(opts: T) {
-        const {map, noClick} = opts;
         this.opts = opts;
+    }
+
+    public init() {
+        const {map, noClick, setActive} = this.opts;
 
         if (noClick) {
             this.item = this.spawnItem();
-            this.onStartEdit();
-        } else {
+        } else if (map) {
             const evtListener = map.addListener("click", (e) => {
                 const latLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
                 this.item = this.spawnItem(latLng);
                 evtListener.remove();
-                this.onStartEdit();
             });
+            setActive();
+        } else {
+            throw"Map object creation failed: No default map was provided for the selected spawn type: \"Click\".";
         }
-        opts.setActive();
+        return this;
     }
 
     public onStartEdit(): void {
@@ -68,6 +72,7 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
             this.item.set("editable", this.opts.editable);
             this.item.set("draggable", this.opts.draggable);
         }
+        this.updateItemZIndex(1000);
     }
 
     public onEditingStopped(): void {
@@ -77,9 +82,28 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
             this.item.set("editable", false);
             this.item.set("draggable", false);
         }
+        this.updateItemZIndex(100);
+    }
+
+    public onDelete() {
+        if (this.item) {
+            this.item.setMap(null);
+        }
+    };
+
+    public setMap(map: google.maps.Map) {
+        if (this.item) {
+            this.item.setMap(map);
+        }
     }
 
     public abstract returnPoints(): google.maps.LatLngLiteral[][];
 
     protected abstract spawnItem(latLng?: google.maps.LatLngLiteral): google.maps.Polygon | google.maps.Marker;
+
+    private updateItemZIndex(zIndex: number) {
+        if (this.item) {
+            this.item.set("zIndex", zIndex);
+        }
+    }
 }

@@ -19,10 +19,10 @@ interface Props {
 
     addGeoInfos?: (uuid: string, geoInfo: GeographicInfo) => void;
     setActiveDialog?: (activeDialog: Dialogs | null) => void;
-    setCurrentlyEdited?: (currentlyEditedUuid: string) =>  void;
+    setCurrentlyEdited?: (currentlyEditedUuid: string) => void;
 }
 
-const getDataKey = (data: GEOJsonFeature) => data.properties.ADMIN;
+const getDataKey = (data: GEOJsonFeature) => data.properties.ADMIN || "";
 
 const renderData = (data: GEOJsonFeature) => {
     return (
@@ -34,20 +34,38 @@ const CountrySelectorContainer: React.FunctionComponent<Props> = (props) => {
     const handleOnClose = (geojson: GEOJsonFeature | null) => {
         if (geojson && props.map) {
             const uuid = uuidv4();
-            const paths = geojson.geometry.type === "Polygon"
-                ? geojson.geometry.coordinates[0].map((pointTuple) => ({lat: pointTuple[1], lng: pointTuple[0]}))
-                : geojson.geometry.coordinates.flatMap((n1) => n1.map((n2) => n2.map((pointTuple) => ({lat: pointTuple[1], lng: pointTuple[0]}))));
+            let paths = null;
+            switch (geojson.geometry.type) {
+                case "MultiPolygon":
+                    paths = geojson.geometry.coordinates
+                        .flatMap((n1) => n1
+                            .map((n2) => n2
+                                .map((pointTuple) => ({lat: pointTuple[1], lng: pointTuple[0]}))));
+                    break;
+                case "Polygon":
+                    paths = geojson.geometry.coordinates[0].map((pointTuple) => ({
+                        lat: pointTuple[1],
+                        lng: pointTuple[0]
+                    }));
+                    break;
+                default:
+                    paths = [{
+                        lat: geojson.geometry.coordinates[1],
+                        lng: geojson.geometry.coordinates[0]
+                    }];
+            }
             props.addGeoInfos!(uuid, {
                 id: uuid,
                 type: MapPickerModuleType.Country,
-                module:  new PolygonModule({
+                module: new PolygonModule({
                     map: props.map,
-                    paths, noClick: true,
+                    paths,
+                    noClick: true,
                     setActive: () => props.setCurrentlyEdited!(uuid),
                     editable: false,
                     draggable: false,
                     openDeleteMenu: () => {},
-                }),
+                }).init(),
             });
         }
         props.setActiveDialog!(null);

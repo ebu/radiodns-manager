@@ -6,7 +6,7 @@ import MenuItem from "@material-ui/core/es/MenuItem";
 import {MoreVert} from "@material-ui/icons";
 import * as React from "react";
 import {connect} from "react-redux";
-import {setCurrentlyEdited} from "../../../reducers/map-reducer";
+import {deleteGeoInfos, setCurrentlyEdited} from "../../../reducers/map-reducer";
 import {RootReducerState} from "../../../reducers/root-reducer";
 import {MapPickerModuleType, mapPickerTypeToIconAndText} from "../modules/MapPickerModule";
 
@@ -27,6 +27,9 @@ interface Props extends StyledComponentProps {
     uuid: string;
     className?: string;
     type: MapPickerModuleType;
+
+    // injected
+    deleteGeoInfos?: () => void;
 }
 
 interface InjectedProps extends Props {
@@ -35,8 +38,8 @@ interface InjectedProps extends Props {
 }
 
 const options = [
+    "Set Label",
     "Delete",
-    "Export",
 ];
 
 const ITEM_HEIGHT = 48;
@@ -49,7 +52,10 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
         setAnchorEl(event.currentTarget);
     }
 
-    function handleClose() {
+    function handleClose(option?: string) {
+        if (option === "Delete") {
+            props.deleteGeoInfos!();
+        }
         setAnchorEl(null);
     }
 
@@ -77,7 +83,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
                 id="long-menu"
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
+                onClose={() => handleClose()}
                 PaperProps={{
                     style: {
                         maxHeight: ITEM_HEIGHT * 4.5,
@@ -86,7 +92,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
                 }}
             >
                 {options.map(option => (
-                    <MenuItem key={option} onClick={handleClose}>
+                    <MenuItem key={option} onClick={() => handleClose(option)}>
                         {option}
                     </MenuItem>
                 ))}
@@ -99,6 +105,7 @@ export const GeoButton = connect((state: RootReducerState) => ({
         currentlyEditedUuid: state.map.currentlyEditedUuid,
     }),
     ((dispatch, ownProps: Props) => ({
-        setCurrentlyEdited: () => dispatch(setCurrentlyEdited(ownProps.uuid))
+        setCurrentlyEdited: () => dispatch(setCurrentlyEdited(ownProps.uuid)),
+        deleteGeoInfos: () => dispatch(deleteGeoInfos(ownProps.uuid)),
     }))
 )(withStyles(styles)(GeoButtonContainer));

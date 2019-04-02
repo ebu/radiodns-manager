@@ -3,21 +3,23 @@ import {MapPickerModule, MapPickerModuleType} from "../components/MapPicker/modu
 import {MarkerModuleOpts} from "../components/MapPicker/modules/MarkerModule";
 import {PolygonModuleOpts} from "../components/MapPicker/modules/PolygonModule";
 import {GEOJsonFeature} from "../geolocation/GEOJson";
+import {objectWithoutProperties} from "../utilities";
+
 // Types
-const SET_EDITING = "radiodns-manager/map/SET_EDITING";
 const SET_CURRENTLY_EDITED = "radiodns-manager/map/SET_CURRENTLY_EDITED";
 const ADD_GEOINFO = "radiodns-manager/map/ADD_GEOINFO";
+const ADD_GEOINFO_BULK = "radiodns-manager/map/ADD_GEOINFO_BULK";
 const DELETE_GEOINFO = "radiodns-manager/map/DELETE_GEOINFO";
 const SET_GEOJSON = "radiodns-manager/map/SET_GEOJSON";
 const SET_GOOGLE_MAP = "radiodns-manager/map/SET_GOOGLE_MAP";
 
-interface SetEditingAction extends Action<typeof SET_EDITING> {
-    editing: boolean;
-}
-
 interface AddGeoInfosAction extends Action<typeof ADD_GEOINFO> {
     uuid: string;
     geoInfo: GeographicInfo;
+}
+
+interface AddGeoInfosBulkAction extends Action<typeof ADD_GEOINFO_BULK> {
+    geoInfos: { [uuid: string]: GeographicInfo }
 }
 
 interface DeleteGeoInfosAction extends Action<typeof DELETE_GEOINFO> {
@@ -37,12 +39,12 @@ interface SetGoogleMapAction extends Action<typeof SET_GOOGLE_MAP> {
 }
 
 type MapActions =
-    SetEditingAction
     | SetGoogleMapAction
     | SetGEOJSONAction
     | DeleteGeoInfosAction
     | SetCurrentlyEditedAction
-    | AddGeoInfosAction;
+    | AddGeoInfosAction
+    | AddGeoInfosBulkAction;
 
 export interface GeographicInfo {
     id: string;
@@ -56,7 +58,6 @@ export interface GeoJsonData {
 }
 
 export interface MapReducerState {
-    editing: boolean;
     geoInfos: { [uuid: string]: GeographicInfo };
     currentlyEditedUuid: string;
     geoJson: GeoJsonData;
@@ -65,7 +66,6 @@ export interface MapReducerState {
 
 // Reducer
 export const MAP_REDUCER_DEFAULT_STATE: MapReducerState = {
-    editing: false,
     geoInfos: {},
     currentlyEditedUuid: "",
     geoJson: {
@@ -76,15 +76,23 @@ export const MAP_REDUCER_DEFAULT_STATE: MapReducerState = {
 };
 
 const refreshCurrentlyEdited = (newState: MapReducerState) => {
-    Object.values(newState.geoInfos).forEach((geoInfo) =>
-        geoInfo.id === newState.currentlyEditedUuid ? geoInfo.module.onStartEdit() : geoInfo.module.onEditingStopped());
+    let geoInfos: GeographicInfo[] = Object.values(newState.geoInfos)
+        .filter((geoInfo) => geoInfo.id !== newState.currentlyEditedUuid);
+
+    const first = Object.values(newState.geoInfos).find((geoInfo) => geoInfo.id === newState.currentlyEditedUuid);
+    if (first) {
+        geoInfos = [first, ...geoInfos];
+    }
+
+    geoInfos.forEach((geoInfo) =>
+        geoInfo.id === newState.currentlyEditedUuid
+            ? geoInfo.module.onStartEdit()
+            : geoInfo.module.onEditingStopped());
     return newState;
 };
 
 export function reducer(state: MapReducerState = MAP_REDUCER_DEFAULT_STATE, action: MapActions): MapReducerState {
     switch (action.type) {
-        case SET_EDITING:
-            return {...state, editing: action.editing};
         case SET_CURRENTLY_EDITED: {
             return refreshCurrentlyEdited({...state, currentlyEditedUuid: action.currentlyEditedUuid});
         }
@@ -94,12 +102,21 @@ export function reducer(state: MapReducerState = MAP_REDUCER_DEFAULT_STATE, acti
                 geoInfos: {...state.geoInfos, [action.uuid]: action.geoInfo},
                 currentlyEditedUuid: action.uuid,
             };
+
+        case ADD_GEOINFO_BULK: {
+            return {
+                ...state,
+                geoInfos: {...state.geoInfos, ...action.geoInfos}
+            };
+        }
+        case DELETE_GEOINFO: {
+            const newState = {...state};
+            newState.geoInfos[action.uuid].module.onDelete();
+            newState.geoInfos = objectWithoutProperties(newState.geoInfos, [action.uuid]);
+            return newState;
+        }
         case SET_GEOJSON:
             return {...state, geoJson: action.geoJson};
-        case DELETE_GEOINFO: {
-            const {[action.uuid]: _, ...newState} = state;
-            return newState as MapReducerState;
-        }
         case SET_GOOGLE_MAP:
             return {...state, map: action.map};
         default:
@@ -108,10 +125,6 @@ export function reducer(state: MapReducerState = MAP_REDUCER_DEFAULT_STATE, acti
 }
 
 // Action creators
-export const setEditing: (editing: boolean) => SetEditingAction = (editing) => ({
-    type: SET_EDITING,
-    editing,
-});
 
 export const setCurrentlyEdited: (currentlyEditedUuid: string) => SetCurrentlyEditedAction = (currentlyEditedUuid) => ({
     type: SET_CURRENTLY_EDITED,
@@ -122,6 +135,11 @@ export const addGeoInfos: (uuid: string, geoInfo: GeographicInfo) => AddGeoInfos
     type: ADD_GEOINFO,
     uuid,
     geoInfo,
+});
+
+export const addGeoInfosBulk: (geoInfos: { [uuid: string]: GeographicInfo }) => AddGeoInfosBulkAction = (geoInfos) => ({
+    type: ADD_GEOINFO_BULK,
+    geoInfos,
 });
 
 export const deleteGeoInfos: (uuid: string) => DeleteGeoInfosAction = (uuid) => ({

@@ -1,6 +1,5 @@
 import Paper from '@material-ui/core/Paper';
 import withStyles, {StyledComponentProps, StyleRulesCallback} from '@material-ui/core/styles/withStyles';
-import {GoogleMap} from "@react-google-maps/api";
 import React from 'react';
 import {connect} from "react-redux";
 import {API_KEY} from "../../config";
@@ -8,9 +7,9 @@ import {setGoogleMap} from "../../reducers/map-reducer";
 import {RootReducerState} from "../../reducers/root-reducer";
 import {getCurrentPosition} from "../../geolocation/geolocation";
 import withRoot from "../../WithRoot";
-import {CustomLoader} from "./CustomLoader";
 import {DialogsHolder} from "./dialogs/DialogsHolder";
 import {MapPickerToolbox} from "./toolbox/MapPickerToolbox";
+import GoogleMapReact from "google-map-react";
 
 const styles: StyleRulesCallback<any> = (theme) => ({
     main: {
@@ -71,41 +70,34 @@ class UnstyledMapPicker extends React.Component<Props, State> {
 
         return (
             <div className={classes.main}>
-                <DialogsHolder />
+                <DialogsHolder/>
                 <Paper className={classes.paper}>
-                    <CustomLoader
-                        id="script_loader"
-                        googleMapsApiKey={API_KEY}
+                    <GoogleMapReact
+                        bootstrapURLKeys={{key: API_KEY}}
+                        defaultCenter={this.state.pos}
+                        defaultZoom={5}
+                        yesIWantToUseGoogleMapApiInternals
+                        onGoogleApiLoaded={this.handleMapLoadEvent}
                     >
-                        <GoogleMap
-                            id='rdns_map_picker'
-                            center={this.state.pos}
-                            zoom={5}
-                            mapTypeId="terrain"
-                            onLoad={this.handleMapLoadEvent}
-                            mapContainerStyle={{width: "100%", height: "100%"}}
-                        >
-                        </GoogleMap>
-                    </CustomLoader>
+                    </GoogleMapReact>
                 </Paper>
                 <div className={classes.paper2}>
                     <MapPickerToolbox/>
                 </div>
             </div>
-        );
+    );
     }
 
-    private handleMapLoadEvent = (map: google.maps.Map) => {
-        this.props.setGoogleMap!(map);
+    private handleMapLoadEvent = (opts: {map: google.maps.Map, maps: any}) => {
+        this.props.setGoogleMap!(opts.map);
     };
-}
+    }
 
-export const MapPicker = connect(
+    export const MapPicker = connect(
     (state: RootReducerState) => ({
-        editing: state.map.editing,
         geoInfos: state.map.geoInfos,
     }),
     (dispatch) => ({
         setGoogleMap: (map: google.maps.Map) => dispatch(setGoogleMap(map))
     })
-)(withRoot(withStyles(styles)(UnstyledMapPicker)));
+    )(withRoot(withStyles(styles)(UnstyledMapPicker)));

@@ -1,7 +1,7 @@
 import {MapPickerModule, MapPickerModuleOpts} from "./MapPickerModule";
 import blueDot from "./marker-icons/blue-dot.png"
 
-export interface MarkerModuleOpts extends MapPickerModuleOpts{
+export interface MarkerModuleOpts extends MapPickerModuleOpts {
     position?: google.maps.LatLngLiteral | google.maps.LatLng,
     circleRadius?: number,
 }
@@ -50,6 +50,27 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         ? [[{lat: this.marker.getPosition().lat(), lng: this.marker.getPosition().lng()}]]
         : [[]];
 
+    public onDelete(): void {
+        super.onDelete();
+        if (this.circle) {
+            this.circle.setMap(null);
+        }
+    }
+
+    public setMap(map: google.maps.Map) {
+        super.setMap(map);
+        if (this.circle) {
+            this.circle.setMap(map);
+        }
+    }
+
+    public getCircleRadius() {
+        if (this.circle) {
+            return this.circle.getRadius();
+        }
+        return 0;
+    }
+
     protected spawnItem(latLng: google.maps.LatLngLiteral): google.maps.Polygon | google.maps.Marker {
         const {map, position, setActive, circleRadius} = this.opts;
         this.spawnMarker(map, position || latLng, setActive);
@@ -57,7 +78,7 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         return this.marker!;
     }
 
-    private spawnMarker = (map: google.maps.Map, position: google.maps.LatLngLiteral | google.maps.LatLng, setActive: () => void) => {
+    private spawnMarker = (map: google.maps.Map | undefined, position: google.maps.LatLngLiteral | google.maps.LatLng, setActive: () => void) => {
         this.marker = new google.maps.Marker({
             position,
             map,
@@ -66,7 +87,7 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         this.marker.addListener("click", setActive);
     };
 
-    private spawnCircle = (map: google.maps.Map, center: google.maps.LatLngLiteral | google.maps.LatLng, radius: number | undefined,  setActive: () => void) => {
+    private spawnCircle = (map: google.maps.Map | undefined, center: google.maps.LatLngLiteral | google.maps.LatLng, radius: number | undefined, setActive: () => void) => {
         if (!radius || !this.marker) {
             return;
         }
