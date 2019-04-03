@@ -7,9 +7,10 @@ export interface MarkerModuleOpts extends MapPickerModuleOpts {
 }
 
 export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
-    private marker: google.maps.Marker | null = null;
     private circle: google.maps.Circle | null = null;
     private circleEventListener: google.maps.MapsEventListener | null = null;
+    private activeEventListener: google.maps.MapsEventListener | null = null;
+    private marker: google.maps.Marker | null = null;
 
     public onStartEdit = () => {
         super.onStartEdit();
@@ -71,24 +72,31 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         return 0;
     }
 
-    protected spawnItem(latLng: google.maps.LatLngLiteral): google.maps.Polygon | google.maps.Marker {
+    public getItem() {
+        return this.item;
+    }
+
+    protected spawnItem(latLng: google.maps.LatLngLiteral): google.maps.Marker {
         const {map, position, setActive, circleRadius} = this.opts;
-        this.spawnMarker(map, position || latLng, setActive);
-        this.spawnCircle(map, position || latLng, circleRadius, setActive);
-        return this.marker!;
+        const marker = this.spawnMarker(map, position || latLng, setActive);
+        this.spawnCircle(marker, map, position || latLng, circleRadius, setActive);
+        return marker;
     }
 
     private spawnMarker = (map: google.maps.Map | undefined, position: google.maps.LatLngLiteral | google.maps.LatLng, setActive: () => void) => {
-        this.marker = new google.maps.Marker({
+        const item = new google.maps.Marker({
             position,
             map,
-            draggable: true,
+            draggable: this.opts.draggable,
         });
-        this.marker.addListener("click", setActive);
+        item.addListener("click", setActive);
+        this.marker = item;
+        return item;
     };
 
-    private spawnCircle = (map: google.maps.Map | undefined, center: google.maps.LatLngLiteral | google.maps.LatLng, radius: number | undefined, setActive: () => void) => {
-        if (!radius || !this.marker) {
+    private spawnCircle = (marker: google.maps.Marker, map: google.maps.Map | undefined,
+                           center: google.maps.LatLngLiteral | google.maps.LatLng, radius: number | undefined, setActive: () => void) => {
+        if (!radius || !marker) {
             return;
         }
         this.circle = new google.maps.Circle({
@@ -98,11 +106,29 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
             fillColor: '#FF0000',
             fillOpacity: 0.35,
             map,
-            center: this.marker.getPosition(),
+            center: marker.getPosition(),
             radius,
             editable: true,
             draggable: false,
         });
-        this.circle.addListener("click", setActive);
+        this.activeEventListener = this.circle.addListener("click", setActive);
+    };
+
+    public returnCenter(): google.maps.LatLngLiteral | null {
+        return this.marker
+            ? {lat: this.marker.getPosition().lat(), lng: this.marker.getPosition().lng()}
+            : null;
+    }
+
+    public enableActiveListener(): void {
+        if (this.circle) {
+            this.activeEventListener = this.circle.addListener("click", this.opts.setActive);
+        }
+    }
+
+    public disableActiveListener(): void {
+        if (this.activeEventListener) {
+            this.activeEventListener.remove();
+        }
     }
 }

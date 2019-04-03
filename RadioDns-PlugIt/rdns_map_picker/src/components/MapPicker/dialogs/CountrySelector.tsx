@@ -64,7 +64,6 @@ const CountrySelectorContainer: React.FunctionComponent<Props> = (props) => {
                     setActive: () => props.setCurrentlyEdited!(uuid),
                     editable: false,
                     draggable: false,
-                    openDeleteMenu: () => {},
                 }).init(),
             });
         }

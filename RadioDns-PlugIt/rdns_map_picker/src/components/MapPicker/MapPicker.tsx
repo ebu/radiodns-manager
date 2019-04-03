@@ -3,13 +3,14 @@ import withStyles, {StyledComponentProps, StyleRulesCallback} from '@material-ui
 import React from 'react';
 import {connect} from "react-redux";
 import {API_KEY} from "../../config";
-import {setGoogleMap} from "../../reducers/map-reducer";
+import {GeographicInfo, setGoogleMap} from "../../reducers/map-reducer";
 import {RootReducerState} from "../../reducers/root-reducer";
 import {getCurrentPosition} from "../../geolocation/geolocation";
 import withRoot from "../../WithRoot";
 import {DialogsHolder} from "./dialogs/DialogsHolder";
 import {MapPickerToolbox} from "./toolbox/MapPickerToolbox";
 import GoogleMapReact from "google-map-react";
+import {InfoWindow} from "../map/InfoWindow";
 
 const styles: StyleRulesCallback<any> = (theme) => ({
     main: {
@@ -45,6 +46,8 @@ const styles: StyleRulesCallback<any> = (theme) => ({
 });
 
 interface Props extends StyledComponentProps {
+    // injected
+    geoInfos?: { [uuid: string]: GeographicInfo };
     setGoogleMap?: (map: google.maps.Map) => void;
 }
 
@@ -79,25 +82,36 @@ class UnstyledMapPicker extends React.Component<Props, State> {
                         yesIWantToUseGoogleMapApiInternals
                         onGoogleApiLoaded={this.handleMapLoadEvent}
                     >
+                        {this.props.geoInfos && Object.values(this.props.geoInfos).map((geoInfo) => {
+                            const center: google.maps.LatLngLiteral = geoInfo.module.returnCenter() || this.state.pos!;
+                            return (
+                                <InfoWindow
+                                    lat={center.lat}
+                                    lng={center.lng}
+                                    key={geoInfo.id}
+                                    geoInfo={geoInfo}
+                                />
+                            )
+                        })}
                     </GoogleMapReact>
                 </Paper>
                 <div className={classes.paper2}>
                     <MapPickerToolbox/>
                 </div>
             </div>
-    );
+        );
     }
 
-    private handleMapLoadEvent = (opts: {map: google.maps.Map, maps: any}) => {
+    private handleMapLoadEvent = (opts: { map: google.maps.Map, maps: any }) => {
         this.props.setGoogleMap!(opts.map);
     };
-    }
+}
 
-    export const MapPicker = connect(
+export const MapPicker = connect(
     (state: RootReducerState) => ({
         geoInfos: state.map.geoInfos,
     }),
     (dispatch) => ({
-        setGoogleMap: (map: google.maps.Map) => dispatch(setGoogleMap(map))
+        setGoogleMap: (map: google.maps.Map) => dispatch(setGoogleMap(map)),
     })
-    )(withRoot(withStyles(styles)(UnstyledMapPicker)));
+)(withRoot(withStyles(styles)(UnstyledMapPicker)));

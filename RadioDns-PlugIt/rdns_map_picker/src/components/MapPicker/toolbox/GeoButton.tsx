@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {deleteGeoInfos, setCurrentlyEdited} from "../../../reducers/map-reducer";
 import {RootReducerState} from "../../../reducers/root-reducer";
 import {MapPickerModuleType, mapPickerTypeToIconAndText} from "../modules/MapPickerModule";
+import {Dialogs, setActiveDialog} from "../../../reducers/dialog-reducer";
 
 const styles = createStyles({
     menuButtonContainer: {
@@ -35,10 +36,11 @@ interface Props extends StyledComponentProps {
 interface InjectedProps extends Props {
     currentlyEditedUuid?: string;
     setCurrentlyEdited?: () => void;
+    setActiveDialog: (dialog: Dialogs | null) => void;
 }
 
 const options = [
-    "Set Label",
+    "Add / Set Label",
     "Delete",
 ];
 
@@ -53,8 +55,14 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
     }
 
     function handleClose(option?: string) {
-        if (option === "Delete") {
-            props.deleteGeoInfos!();
+        switch (option) {
+            case "Delete":
+                props.deleteGeoInfos!();
+                break;
+            case "Add / Set Label":
+                props.setCurrentlyEdited!();
+                props.setActiveDialog!(Dialogs.MarkerEdit);
+                break;
         }
         setAnchorEl(null);
     }
@@ -107,5 +115,6 @@ export const GeoButton = connect((state: RootReducerState) => ({
     ((dispatch, ownProps: Props) => ({
         setCurrentlyEdited: () => dispatch(setCurrentlyEdited(ownProps.uuid)),
         deleteGeoInfos: () => dispatch(deleteGeoInfos(ownProps.uuid)),
+        setActiveDialog: (dialog: Dialogs | null) => dispatch(setActiveDialog(dialog)),
     }))
 )(withStyles(styles)(GeoButtonContainer));

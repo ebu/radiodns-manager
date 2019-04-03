@@ -4,6 +4,7 @@ import {Dialogs} from "../../../reducers/dialog-reducer";
 import {RootReducerState} from "../../../reducers/root-reducer";
 import {CountrySelector} from "./CountrySelector";
 import {TypeSelector} from "./TypeSelector";
+import {MarkerEditDialog} from "./MarkerEditDialog";
 
 interface Props {
     // injected
@@ -13,11 +14,12 @@ interface Props {
 const DialogsHolderContainer: React.FunctionComponent<Props> = (props) => (
     <>
         <TypeSelector
-            open={props.activeDialog !== null && props.activeDialog! === Dialogs.TypeSelector}
+            open={props.activeDialog! === Dialogs.TypeSelector}
         />
         <CountrySelector
-            open={props.activeDialog !== null && props.activeDialog! === Dialogs.CountrySelector}
+            open={props.activeDialog! === Dialogs.CountrySelector}
         />
+        {props.activeDialog! === Dialogs.MarkerEdit && <MarkerEditDialog/>}
     </>
 );
 

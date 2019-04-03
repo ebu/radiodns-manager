@@ -33,7 +33,9 @@ export interface GEOJsonFeature {
         rdnsCircleInfo?: {
             circleRadius: number;
             circleUnit: string;
-        }
+        };
+        rdnsLabel?: string;
+        rdnsTextInfo?: string;
     }
 }
 
@@ -88,6 +90,8 @@ export const saveToGeoJson: (geoInfos: { [uuid: string]: GeographicInfo }) => GE
                     rdnsCircleInfo: geoInfo.type === MapPickerModuleType.Channel
                         ? {circleRadius: (geoInfo.module as MarkerModule).getCircleRadius(), circleUnit: "meters"}
                         : undefined,
+                    rdnsLabel: geoInfo.module.getOptions().label,
+                    rdnsTextInfo: geoInfo.module.getOptions().textInfo,
                 }
             })),
     });
@@ -97,7 +101,6 @@ const toMapPickerModule = (
     feature: GEOJsonFeature,
     map: google.maps.Map,
     setActive: (uuid: string) => () => void,
-    openDeleteMenu: () => void
 ) => {
     switch (feature.properties.rdnsType!) {
         case MapPickerModuleType.Country:
@@ -114,8 +117,9 @@ const toMapPickerModule = (
                 draggable: MapPickerModuleType.Station === feature.properties.rdnsType!,
                 noClick: true,
                 setActive: setActive(uuid),
-                openDeleteMenu,
                 paths,
+                label: feature.properties.rdnsLabel,
+                textInfo: feature.properties.rdnsTextInfo,
             }).init();
         case MapPickerModuleType.Headquarters:
         case MapPickerModuleType.Channel:
@@ -124,8 +128,9 @@ const toMapPickerModule = (
                 editable: true,
                 draggable: true,
                 noClick: true,
+                label: feature.properties.rdnsLabel,
+                textInfo: feature.properties.rdnsTextInfo,
                 setActive: setActive(uuid),
-                openDeleteMenu,
                 position: {
                     lat: (feature.geometry as GeometryPoint).coordinates[1],
                     lng: (feature.geometry as GeometryPoint).coordinates[0]
@@ -143,7 +148,7 @@ export const importFromGeoJson: (
     setActive: (uuid: string) => () => void,
     openDeleteMenu: () => void
 ) => GeoJSONParsedResult
-    = (geoJson, map, setActive, openDeleteMenu) => {
+    = (geoJson, map, setActive) => {
     const warnings: string[] = [];
 
     if (!GJV.valid(geoJson)) {
@@ -186,7 +191,6 @@ export const importFromGeoJson: (
                         feature,
                         map,
                         setActive,
-                        openDeleteMenu,
                     ),
                 }
             }

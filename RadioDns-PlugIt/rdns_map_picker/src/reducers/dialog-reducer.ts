@@ -3,6 +3,7 @@ import {Action} from "redux";
 export enum Dialogs {
     CountrySelector,
     TypeSelector,
+    MarkerEdit,
 }
 
 // Types

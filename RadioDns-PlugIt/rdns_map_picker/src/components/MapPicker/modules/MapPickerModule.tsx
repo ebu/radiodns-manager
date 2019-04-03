@@ -31,17 +31,21 @@ export const mapPickerTypeToIconAndText = (data: MapPickerModuleType) => {
 
 
 export interface MapPickerModuleOpts {
-    map?: google.maps.Map;
+    map: google.maps.Map;
     editable: boolean;
     draggable: boolean;
     noClick: boolean;
+    label?: string;
+    textInfo?: string;
     setActive: () => void;
-    openDeleteMenu: () => void;
 }
 
-export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
-    protected item: google.maps.Polygon | google.maps.Marker | null =  null;
+type ModuleType = google.maps.Marker | google.maps.Polygon;
+
+export abstract class MapPickerModule<T extends MapPickerModuleOpts, > {
+    protected item: ModuleType | null = null;
     protected opts: T;
+    public modifiedFlag: boolean = false;
 
     constructor(opts: T) {
         this.opts = opts;
@@ -97,13 +101,28 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
         }
     }
 
+    public getOptions() {
+        return this.opts;
+    }
+
+    public getItem() {
+        return this.item;
+    }
+
     public abstract returnPoints(): google.maps.LatLngLiteral[][];
 
-    protected abstract spawnItem(latLng?: google.maps.LatLngLiteral): google.maps.Polygon | google.maps.Marker;
+    public abstract returnCenter(): google.maps.LatLngLiteral | null;
+
+    public abstract enableActiveListener(): void;
+
+    public abstract disableActiveListener(): void;
+
+    protected abstract spawnItem(latLng?: google.maps.LatLngLiteral): ModuleType;
 
     private updateItemZIndex(zIndex: number) {
         if (this.item) {
             this.item.set("zIndex", zIndex);
         }
     }
+
 }

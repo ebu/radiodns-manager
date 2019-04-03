@@ -60,7 +60,6 @@ const TypeSelectorContainer: React.FunctionComponent<Props> = (props) => {
                             setActive: () => props.setCurrentlyEdited!(uuid),
                             draggable: true,
                             editable: true,
-                            openDeleteMenu: () => {},
                             noClick: false,
                         }).init(),
                     });
@@ -75,7 +74,6 @@ const TypeSelectorContainer: React.FunctionComponent<Props> = (props) => {
                             editable: true,
                             draggable: true,
                             setActive: () => props.setCurrentlyEdited!(uuid),
-                            openDeleteMenu: () => {},
                             noClick: false,
                         }).init(),
                     });
