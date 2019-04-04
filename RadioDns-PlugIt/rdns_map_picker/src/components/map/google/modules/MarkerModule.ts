@@ -4,6 +4,7 @@ import blueDot from "./marker-icons/blue-dot.png"
 export interface MarkerModuleOpts extends MapPickerModuleOpts {
     position?: google.maps.LatLngLiteral | google.maps.LatLng,
     circleRadius?: number,
+    updateGeoInfosPoint: (uuid: string, center: google.maps.LatLngLiteral, radius: number) => void;
 }
 
 export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
@@ -24,8 +25,8 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         }
 
         if (this.circle) {
-            this.circle.set("fillColor", '#FF0000');
-            this.circle.set("strokeColor", '#FF0000');
+            this.circle.set("fillColor", "#FF0000");
+            this.circle.set("strokeColor", "#FF0000");
             this.circle.setEditable(true);
         }
     };
@@ -37,8 +38,8 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         }
 
         if (this.circle) {
-            this.circle.set("strokeColor", '#9E9E9E');
-            this.circle.set("fillColor", '#9E9E9E');
+            this.circle.set("strokeColor", "#9E9E9E");
+            this.circle.set("fillColor", "#9E9E9E");
             this.circle.setEditable(false);
         }
 
@@ -65,15 +66,41 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         }
     }
 
-    public getCircleRadius() {
-        if (this.circle) {
-            return this.circle.getRadius();
-        }
-        return 0;
-    }
-
     public getItem() {
         return this.item;
+    }
+
+    public returnCenter(): google.maps.LatLngLiteral | null {
+        return this.marker
+            ? {lat: this.marker.getPosition().lat(), lng: this.marker.getPosition().lng()}
+            : null;
+    }
+
+    public enableActiveListener(): void {
+        if (this.circle) {
+            this.activeEventListener = this.circle.addListener("click", this.opts.setActive);
+        }
+    }
+
+    public disableActiveListener(): void {
+        if (this.activeEventListener) {
+            this.activeEventListener.remove();
+        }
+    }
+
+    public update(): void {
+        if (!this.marker) {
+            return;
+        }
+
+        this.opts.updateGeoInfosPoint(
+            this.opts.uuid,
+            {
+                lat: this.marker.getPosition().lat(),
+                lng: this.marker.getPosition().lng(),
+            },
+            this.circle ? this.circle.getRadius() : 0,
+        );
     }
 
     protected spawnItem(latLng: google.maps.LatLngLiteral): google.maps.Marker {
@@ -100,10 +127,10 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
             return;
         }
         this.circle = new google.maps.Circle({
-            strokeColor: '#FF0000',
+            strokeColor: "#FF0000",
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#FF0000',
+            fillColor: "#FF0000",
             fillOpacity: 0.35,
             map,
             center: marker.getPosition(),
@@ -113,22 +140,4 @@ export class MarkerModule extends MapPickerModule<MarkerModuleOpts> {
         });
         this.activeEventListener = this.circle.addListener("click", setActive);
     };
-
-    public returnCenter(): google.maps.LatLngLiteral | null {
-        return this.marker
-            ? {lat: this.marker.getPosition().lat(), lng: this.marker.getPosition().lng()}
-            : null;
-    }
-
-    public enableActiveListener(): void {
-        if (this.circle) {
-            this.activeEventListener = this.circle.addListener("click", this.opts.setActive);
-        }
-    }
-
-    public disableActiveListener(): void {
-        if (this.activeEventListener) {
-            this.activeEventListener.remove();
-        }
-    }
 }

@@ -6,10 +6,10 @@ import MenuItem from "@material-ui/core/es/MenuItem";
 import {MoreVert} from "@material-ui/icons";
 import * as React from "react";
 import {connect} from "react-redux";
-import {deleteGeoInfos, setCurrentlyEdited} from "../../../reducers/map-reducer";
-import {RootReducerState} from "../../../reducers/root-reducer";
-import {MapPickerModuleType, mapPickerTypeToIconAndText} from "../modules/MapPickerModule";
 import {Dialogs, setActiveDialog} from "../../../reducers/dialog-reducer";
+import {deleteGeoInfos, RdnsType, setCurrentlyEdited} from "../../../reducers/map-reducer";
+import {RootReducerState} from "../../../reducers/root-reducer";
+import {mapPickerTypeToIconAndText} from "../../map/google/modules/MapPickerModule";
 
 const styles = createStyles({
     menuButtonContainer: {
@@ -21,13 +21,13 @@ const styles = createStyles({
     menu: {
         marginLeft: "5px",
         padding: "0px",
-    }
+    },
 });
 
 interface Props extends StyledComponentProps {
     uuid: string;
     className?: string;
-    type: MapPickerModuleType;
+    type: RdnsType;
 
     // injected
     deleteGeoInfos?: () => void;
@@ -54,7 +54,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
         setAnchorEl(event.currentTarget);
     }
 
-    function handleClose(option?: string) {
+    const handleClose = (option?: string) => () => {
         switch (option) {
             case "Delete":
                 props.deleteGeoInfos!();
@@ -65,7 +65,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
                 break;
         }
         setAnchorEl(null);
-    }
+    };
 
     return (
         <div key={props.uuid} className={props.classes!.menuButtonContainer}>
@@ -81,7 +81,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
             <IconButton
                 className={props.classes!.menu}
                 aria-label="More"
-                aria-owns={open ? 'long-menu' : undefined}
+                aria-owns={open ? "long-menu" : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
             >
@@ -91,7 +91,7 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
                 id="long-menu"
                 anchorEl={anchorEl}
                 open={open}
-                onClose={() => handleClose()}
+                onClose={handleClose()}
                 PaperProps={{
                     style: {
                         maxHeight: ITEM_HEIGHT * 4.5,
@@ -99,8 +99,8 @@ const GeoButtonContainer: React.FunctionComponent<InjectedProps> = (props) => {
                     },
                 }}
             >
-                {options.map(option => (
-                    <MenuItem key={option} onClick={() => handleClose(option)}>
+                {options.map((option) => (
+                    <MenuItem key={option} onClick={handleClose(option)}>
                         {option}
                     </MenuItem>
                 ))}
@@ -116,5 +116,5 @@ export const GeoButton = connect((state: RootReducerState) => ({
         setCurrentlyEdited: () => dispatch(setCurrentlyEdited(ownProps.uuid)),
         deleteGeoInfos: () => dispatch(deleteGeoInfos(ownProps.uuid)),
         setActiveDialog: (dialog: Dialogs | null) => dispatch(setActiveDialog(dialog)),
-    }))
+    })),
 )(withStyles(styles)(GeoButtonContainer));

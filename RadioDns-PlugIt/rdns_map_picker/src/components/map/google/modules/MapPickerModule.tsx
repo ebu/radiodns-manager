@@ -1,27 +1,21 @@
 import {Home, Radio, RssFeed, Terrain} from "@material-ui/icons";
 import * as React from "react";
+import {RdnsType} from "../../../../reducers/map-reducer";
 
-export enum MapPickerModuleType {
-    Headquarters = "Headquarters",
-    Station = "Station",
-    Channel = "Channel",
-    Country = "Country",
-}
-
-export const mapPickerTypeToIconAndText = (data: MapPickerModuleType) => {
+export const mapPickerTypeToIconAndText = (data: RdnsType) => {
     let icon = <Home/>;
     let text = "Headquarters";
 
     switch (data) {
-        case MapPickerModuleType.Station:
+        case RdnsType.Station:
             icon = <Radio/>;
             text = "Station";
             break;
-        case MapPickerModuleType.Channel:
+        case RdnsType.Channel:
             icon = <RssFeed/>;
             text = "Channel";
             break;
-        case MapPickerModuleType.Country:
+        case RdnsType.Country:
             icon = <Terrain/>;
             text = "Country";
             break;
@@ -29,8 +23,8 @@ export const mapPickerTypeToIconAndText = (data: MapPickerModuleType) => {
     return {icon, text};
 };
 
-
 export interface MapPickerModuleOpts {
+    uuid: string;
     map: google.maps.Map;
     editable: boolean;
     draggable: boolean;
@@ -42,10 +36,10 @@ export interface MapPickerModuleOpts {
 
 type ModuleType = google.maps.Marker | google.maps.Polygon;
 
-export abstract class MapPickerModule<T extends MapPickerModuleOpts, > {
+export abstract class MapPickerModule<T extends MapPickerModuleOpts> {
     protected item: ModuleType | null = null;
     protected opts: T;
-    public modifiedFlag: boolean = false;
+    private evtListener: google.maps.MapsEventListener | null = null;
 
     constructor(opts: T) {
         this.opts = opts;
@@ -56,33 +50,38 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts, > {
 
         if (noClick) {
             this.item = this.spawnItem();
+            this.onEditingStopped();
         } else if (map) {
             const evtListener = map.addListener("click", (e) => {
                 const latLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
                 this.item = this.spawnItem(latLng);
                 evtListener.remove();
+                this.onStartEdit();
             });
             setActive();
         } else {
-            throw"Map object creation failed: No default map was provided for the selected spawn type: \"Click\".";
+            throw new Error("Map object creation failed: No default map was provided for the selected spawn rdnsType: \"Click\".");
         }
         return this;
     }
 
     public onStartEdit(): void {
         if (this.item) {
-            this.item.set("strokeColor", '#FF0000');
-            this.item.set("fillColor", '#FF0000');
+            this.item.set("strokeColor", "#FF0000");
+            this.item.set("fillColor", "#FF0000");
             this.item.set("editable", this.opts.editable);
             this.item.set("draggable", this.opts.draggable);
+            if (this.opts.draggable && this.evtListener === null) {
+                this.evtListener = this.item.addListener("dragend", () => this.update())
+            }
         }
         this.updateItemZIndex(1000);
     }
 
     public onEditingStopped(): void {
         if (this.item) {
-            this.item.set("strokeColor", '#9E9E9E');
-            this.item.set("fillColor", '#9E9E9E');
+            this.item.set("strokeColor", "#9E9E9E");
+            this.item.set("fillColor", "#9E9E9E");
             this.item.set("editable", false);
             this.item.set("draggable", false);
         }
@@ -108,6 +107,8 @@ export abstract class MapPickerModule<T extends MapPickerModuleOpts, > {
     public getItem() {
         return this.item;
     }
+
+    public abstract update(): void;
 
     public abstract returnPoints(): google.maps.LatLngLiteral[][];
 

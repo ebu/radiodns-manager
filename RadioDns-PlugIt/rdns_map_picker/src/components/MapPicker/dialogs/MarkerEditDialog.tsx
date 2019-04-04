@@ -1,20 +1,20 @@
-import * as React from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import Divider from "@material-ui/core/Divider";
 import {StyledComponentProps, StyleRulesCallback, TextField} from "@material-ui/core/es";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import Slide from "@material-ui/core/Slide";
+import {withStyles} from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import * as React from "react";
 import {connect} from "react-redux";
-import {RootReducerState} from "../../../reducers/root-reducer";
 import {Dialogs, setActiveDialog} from "../../../reducers/dialog-reducer";
 import {addGeoInfos, GeographicInfo} from "../../../reducers/map-reducer";
+import {RootReducerState} from "../../../reducers/root-reducer";
 
 const styles: StyleRulesCallback = (theme) => ({
     appBar: {
@@ -24,8 +24,8 @@ const styles: StyleRulesCallback = (theme) => ({
         flex: 1,
     },
     container: {
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: "flex",
+        flexWrap: "wrap",
     },
     textField: {
         marginLeft: theme.spacing.unit,
@@ -40,11 +40,11 @@ const Transition: React.FunctionComponent = (props) => {
 
 interface Props extends StyledComponentProps {
     // injected
-    activeDialog?: Dialogs | null;
-    closeThisDialog?: () => void;
-    currentlyEdited?: string;
-    geoInfos?: { [uuid: string]: GeographicInfo }
-    addGeoInfos?: (uuid: string, geoInfo: GeographicInfo) => void;
+    activeDialog: Dialogs | null;
+    closeThisDialog: () => void;
+    currentlyEdited: string;
+    geoInfos: { [uuid: string]: GeographicInfo }
+    addGeoInfos: (uuid: string, geoInfo: GeographicInfo) => void;
 }
 
 interface State {
@@ -57,24 +57,12 @@ class MarkerEditDialogContainer extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            label: props.geoInfos![props.currentlyEdited!].module.getOptions().label || "",
-            textInfo: props.geoInfos![props.currentlyEdited!].module.getOptions().textInfo || "",
+            label: props.geoInfos[props.currentlyEdited].label || "",
+            textInfo: props.geoInfos[props.currentlyEdited].textInfo || "",
         }
     }
 
-    private handleClose = () => {
-        this.props.closeThisDialog!();
-    };
-
-    private handleSave = () => {
-        this.props.closeThisDialog!();
-        const geoInfo = {...this.props.geoInfos![this.props.currentlyEdited!]};
-        geoInfo.module.getOptions().label = this.state.label;
-        geoInfo.module.getOptions().textInfo = this.state.textInfo;
-        this.props.addGeoInfos!(geoInfo.id, geoInfo);
-    };
-
-    render() {
+    public render() {
         const {classes} = this.props;
         return (
             <Dialog
@@ -125,6 +113,18 @@ class MarkerEditDialogContainer extends React.Component<Props, State> {
             </Dialog>
         );
     }
+
+    private handleClose = () => {
+        this.props.closeThisDialog();
+    };
+
+    private handleSave = () => {
+        this.props.closeThisDialog();
+        const geoInfo = {...this.props.geoInfos[this.props.currentlyEdited]};
+        geoInfo.label = this.state.label;
+        geoInfo.textInfo = this.state.textInfo;
+        this.props.addGeoInfos(geoInfo.id, geoInfo);
+    };
 
     private onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name;

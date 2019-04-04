@@ -11,7 +11,7 @@ import {GeoButton} from "./GeoButton";
 
 const styles: StyleRulesCallback<any> = (theme) => ({
     toolboxPaper: {
-        display: 'flex',
+        display: "flex",
         flexDirection: "column",
         alignItems: "center",
         marginTop: theme.spacing.unit,
@@ -21,8 +21,8 @@ const styles: StyleRulesCallback<any> = (theme) => ({
 });
 
 interface Props extends StyledComponentProps {
-    geoInfos?: { [uuid: string]: GeographicInfo };
-    setActiveDialog?: () => void;
+    geoInfos: { [uuid: string]: GeographicInfo };
+    setActiveDialog: () => void;
 }
 
 const handleDragOver = (e: React.DragEvent) => {
@@ -34,19 +34,19 @@ const MapPickerToolboxContainer: React.FunctionComponent<Props> = (props) => {
     return (
         <>
             <div onDragOver={handleDragOver}>
-                {Object.keys(props.geoInfos!).map((key) => (
+                {Object.keys(props.geoInfos).map((key) => (
                     <Paper key={key} className={props.classes!.toolboxPaper} draggable>
                         <GeoButton
                             key={key}
                             uuid={key}
-                            type={props.geoInfos![key].type}
+                            type={props.geoInfos[key].rdnsType}
                         />
                     </Paper>
                 ))}
             </div>
-            {Object.keys(props.geoInfos!).length === 0 &&
+            {Object.keys(props.geoInfos).length === 0 &&
             <Paper className={props.classes!.toolboxPaper}>
-                <Typography>Click on the + button!</Typography>
+                <Typography>Click on the + button</Typography>
             </Paper>}
             <Paper className={props.classes!.toolboxPaper} style={{marginTop: "auto"}}>
                 <Button
@@ -64,10 +64,9 @@ const MapPickerToolboxContainer: React.FunctionComponent<Props> = (props) => {
 
 export const MapPickerToolbox = connect(
     (state: RootReducerState) => ({
-        geoInfos: state.map.geoInfos
+        geoInfos: state.map.geoInfos,
     }),
     (dispatch) => ({
         setActiveDialog: () => dispatch(setActiveDialog(Dialogs.TypeSelector)),
-    })
+    }),
 )(withStyles(styles)(MapPickerToolboxContainer));
-

@@ -1,15 +1,18 @@
-import React from 'react';
-import Typography from "@material-ui/core/es/Typography";
 import {StyledComponentProps} from "@material-ui/core/es";
-import Card from "@material-ui/core/es/Card";
-import CardContent from "@material-ui/core/es/CardContent";
-import CardActions from "@material-ui/core/es/CardActions";
 import Button from "@material-ui/core/es/Button";
+import Card from "@material-ui/core/es/Card";
+import CardActions from "@material-ui/core/es/CardActions";
+import CardContent from "@material-ui/core/es/CardContent";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import Typography from "@material-ui/core/es/Typography";
+import React from "react";
 import {connect} from "react-redux";
-import {RootReducerState} from "../../reducers/root-reducer";
-import {addGeoInfos, GeographicInfo} from "../../reducers/map-reducer";
-import {Dialogs, setActiveDialog} from "../../reducers/dialog-reducer";
+import {Dialogs, setActiveDialog} from "../../../reducers/dialog-reducer";
+import {addGeoInfos, GeographicInfo} from "../../../reducers/map-reducer";
+import {RootReducerState} from "../../../reducers/root-reducer";
+import {MapPickerModule} from "./modules/MapPickerModule";
+import {MarkerModuleOpts} from "./modules/MarkerModule";
+import {PolygonModuleOpts} from "./modules/PolygonModule";
 
 const styles = {
     card: {
@@ -40,10 +43,10 @@ interface Props extends StyledComponentProps {
     lng: number;
 
     // injected
-    geoInfos?: { [uuid: string]: GeographicInfo };
-    setActiveDialog?: () => void;
-    current?: string;
-    addGeoInfos?: (uuid: string, geoInfo: GeographicInfo) => void;
+    setActiveDialog: () => void;
+    current: string;
+    modules: {[uuid: string]: MapPickerModule<MarkerModuleOpts | PolygonModuleOpts>};
+
 }
 
 interface State {
@@ -59,35 +62,34 @@ class InfoWindowContainer extends React.Component<Props> {
     private evtListenerStart: google.maps.MapsEventListener | null = null;
     private evtListenerEnd: google.maps.MapsEventListener | null = null;
 
-    public componentWillMount(): void {
-        const module = this.props.geoInfo!.module;
+    public componentWillUpdate(nextProps: Readonly<Props>): void {
+        if (nextProps !== this.props && this.props.modules[this.props.geoInfo.id] !== undefined) {
+            const module = this.props.modules[this.props.geoInfo.id];
 
-        const item = module.getItem();
-        if (item) {
-            this.evtListenerStart = item.addListener("dragstart", () => this.setState({dragged: true}));
-            this.evtListenerEnd = item.addListener("dragend", () => {
-                this.setState({dragged: false});
-                const newGeoInfo = {...this.props.geoInfo};
-                newGeoInfo.module.modifiedFlag = !newGeoInfo.module.modifiedFlag;
-                this.props.addGeoInfos!(newGeoInfo.id, newGeoInfo);
-            });
+            const item = module.getItem();
+            if (item && this.evtListenerStart === null && this.evtListenerEnd === null) {
+                this.evtListenerStart = item.addListener("dragstart", () => this.setState({dragged: true}));
+                this.evtListenerEnd = item.addListener("dragend", () => this.setState({dragged: false}));
+            }
         }
     }
 
     public componentWillUnmount(): void {
         if (this.evtListenerStart) {
             this.evtListenerStart.remove();
+            this.evtListenerStart = null;
         }
 
         if (this.evtListenerEnd) {
             this.evtListenerEnd.remove();
+            this.evtListenerStart = null;
         }
     }
 
     public render() {
-        const {classes, geoInfo, setActiveDialog} = this.props;
-        const textInfo = geoInfo.module.getOptions().textInfo || "";
-        const label = geoInfo.module.getOptions().label;
+        const {classes, geoInfo} = this.props;
+        const textInfo = geoInfo.textInfo || "";
+        const label = geoInfo.label;
 
         if (!label || this.props.current !== geoInfo.id || this.state.dragged) {
             return null;
@@ -109,7 +111,7 @@ class InfoWindowContainer extends React.Component<Props> {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button size="small" onClick={setActiveDialog}>Edit</Button>
+                        <Button size="small" onClick={this.props.setActiveDialog}>Edit</Button>
                     </CardActions>
                 </Card>
                 <div className={classes!.arrowBottom}/>
@@ -117,17 +119,17 @@ class InfoWindowContainer extends React.Component<Props> {
         );
     }
 
-    private handleMouseEnter = () => Object.values(this.props.geoInfos!)
-        .forEach((geoInfo) => geoInfo.module.disableActiveListener());
+    private handleMouseEnter = () => Object.values(this.props.modules)
+        .forEach((module) => module.disableActiveListener());
 
-    private handleMouseLeave = () => Object.values(this.props.geoInfos!)
-        .forEach((geoInfo) => geoInfo.module.enableActiveListener());
+    private handleMouseLeave = () => Object.values(this.props.modules)
+        .forEach((module) => module.enableActiveListener());
 }
 
 export const InfoWindow = connect(
     (state: RootReducerState) => ({
-        geoInfos: state.map.geoInfos,
         current: state.map.currentlyEditedUuid,
+        modules: state.googleModule.modules,
     }),
     (dispatch) => ({
         setActiveDialog: () => dispatch(setActiveDialog(Dialogs.MarkerEdit)),

@@ -5,14 +5,18 @@
   "dependencies": {
     "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.2",
+    "file-saver": "2.0.1",
     "geojson-validation": "0.2.1",
     "google-map-react": "1.1.3",
+    "leaflet": "1.4.0",
     "react": "16.8.5",
     "react-dom": "16.8.5",
+    "react-leaflet": "2.2.1",
     "react-redux": "6.0.1",
     "redux": "4.0.1"
   },
   "devDependencies": {
+    "@types/file-saver": "2.0.0",
     "@types/google-map-react": "0.23.11",
     "@types/googlemaps": "3.30.19",
     "@types/jest": "24.0.11",
@@ -20,15 +24,19 @@
     "@types/node": "11.11.6",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
+    "@types/react-leaflet": "2.2.1",
     "@types/react-redux": "7.0.5",
     "react-scripts": "2.1.8",
+    "tslint": "5.15.0",
+    "tslint-react": "4.0.0",
     "typescript": "3.3.4000"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "tslint 'src/**/*.{ts,tsx}'"
   },
   "eslintConfig": {
     "extends": "react-app"

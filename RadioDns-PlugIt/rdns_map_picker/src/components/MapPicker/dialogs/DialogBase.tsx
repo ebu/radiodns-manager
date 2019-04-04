@@ -1,11 +1,11 @@
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {TextField} from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import ListItemText from "@material-ui/core/es/ListItemText";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import withStyles, {StyledComponentProps, StyleRulesCallback} from "@material-ui/core/styles/withStyles";
-import * as React from 'react';
-import {TextField} from '@material-ui/core';
+import * as React from "react";
 
 const styles: StyleRulesCallback<any> = (theme) => ({
     searchField: {
@@ -34,7 +34,7 @@ const DialogBaseUnstyled = <T extends any>(props: Props<T>) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setDataFilter(event.target.value);
 
-    const filtered = data.filter((data) => getDataKey(data).toLocaleLowerCase().startsWith(dataFilter.toLocaleLowerCase()));
+    const filtered = data.filter((d) => getDataKey(d).toLocaleLowerCase().startsWith(dataFilter.toLocaleLowerCase()));
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="simple-dialog-title" {...other}>
             <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
@@ -50,9 +50,9 @@ const DialogBaseUnstyled = <T extends any>(props: Props<T>) => {
             <div>
                 <List>
                     {
-                        filtered.map((data) => (
-                            <ListItem button onClick={() => onClose!(data)} key={getDataKey(data)}>
-                                {renderData(data)}
+                        filtered.map((d) => (
+                            <ListItem button onClick={handleClose} key={getDataKey(d)}>
+                                {renderData(d)}
                             </ListItem>
                         ))}
                     {filtered.length === 0 && <ListItemText primary="No results."/>}

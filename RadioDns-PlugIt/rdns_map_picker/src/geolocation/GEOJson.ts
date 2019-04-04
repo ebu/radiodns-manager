@@ -1,10 +1,7 @@
-import countries from "./countries.json";
-import {GeographicInfo} from "../reducers/map-reducer";
-import {MapPickerModuleType} from "../components/MapPicker/modules/MapPickerModule";
-import {MarkerModule} from "../components/MapPicker/modules/MarkerModule";
 import * as GJV from "geojson-validation";
-import {PolygonModule} from "../components/MapPicker/modules/PolygonModule";
+import {GeoData, GeographicInfo, ModuleType, PointGeoInfo, RdnsType} from "../reducers/map-reducer";
 import {uuidv4} from "../utilities";
+import countries from "./countries.json";
 
 export interface GeometryPolygon {
     type: "Polygon";
@@ -29,7 +26,7 @@ export interface GEOJsonFeature {
     properties: {
         ADMIN?: string;
         ISO_A3?: string;
-        rdnsType?: MapPickerModuleType;
+        rdnsType?: RdnsType;
         rdnsCircleInfo?: {
             circleRadius: number;
             circleUnit: string;
@@ -53,30 +50,29 @@ export interface GEOJson {
 export const getGeoJson: () => Promise<GEOJsonFeature[]> = async () => (countries as GEOJson).features
     .filter((feature) => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon");
 
-
-const convertToGeometry: (type: MapPickerModuleType, points: google.maps.LatLngLiteral[][]) => GeometryMultiPolygon | GeometryPoint =
-    (type, points) => {
-        switch (type) {
-            case MapPickerModuleType.Station:
-            case MapPickerModuleType.Country:
-                return {
-                    type: "MultiPolygon",
-                    coordinates: [points.map((polygon) => {
-                        const multiPolygon = polygon.map((point) => [point.lng, point.lat]);
-                        if (multiPolygon.length > 0) {
-                            multiPolygon.push(multiPolygon[0]);
-                        }
-                        return multiPolygon;
-                    })]
-                };
-            case MapPickerModuleType.Channel:
-            case MapPickerModuleType.Headquarters:
-                return {
-                    type: "Point",
-                    coordinates: points[0].flatMap((point) => [point.lng, point.lat]),
-                };
-        }
-    };
+const convertToGeometry: (geoInfo: GeographicInfo) => GeometryMultiPolygon | GeometryPoint = (geoInfo) => {
+    switch (geoInfo.geoData.type) {
+        case ModuleType.MultiPolygon:
+            return {
+                type: "MultiPolygon",
+                coordinates: [geoInfo.geoData.points.map((polygon) => {
+                    const multiPolygon = polygon.map((point) => [point.lng, point.lat]);
+                    if (multiPolygon.length > 0) {
+                        multiPolygon.push(multiPolygon[0]);
+                    }
+                    return multiPolygon;
+                })],
+            };
+        case ModuleType.Point:
+            const geoData = geoInfo.geoData as PointGeoInfo;
+            return {
+                type: "Point",
+                coordinates: geoData.center
+                    ? [geoData.center.lng, geoData.center.lat]
+                    : [],
+            };
+    }
+};
 
 export const saveToGeoJson: (geoInfos: { [uuid: string]: GeographicInfo }) => GEOJson = (geoInfos) =>
     ({
@@ -84,71 +80,47 @@ export const saveToGeoJson: (geoInfos: { [uuid: string]: GeographicInfo }) => GE
         features: Object.values(geoInfos)
             .map((geoInfo) => ({
                 type: "Feature",
-                geometry: convertToGeometry(geoInfo.type, geoInfo.module.returnPoints()),
+                geometry: convertToGeometry(geoInfo),
                 properties: {
-                    rdnsType: geoInfo.type,
-                    rdnsCircleInfo: geoInfo.type === MapPickerModuleType.Channel
-                        ? {circleRadius: (geoInfo.module as MarkerModule).getCircleRadius(), circleUnit: "meters"}
+                    rdnsType: geoInfo.rdnsType,
+                    rdnsCircleInfo: (geoInfo.geoData.type === ModuleType.Point)
+                        ? {circleRadius: geoInfo.geoData.radius, circleUnit: "meters"}
                         : undefined,
-                    rdnsLabel: geoInfo.module.getOptions().label,
-                    rdnsTextInfo: geoInfo.module.getOptions().textInfo,
-                }
+                    rdnsLabel: geoInfo.label,
+                    rdnsTextInfo: geoInfo.textInfo,
+                },
             })),
     });
 
-const toMapPickerModule = (
-    uuid: string,
-    feature: GEOJsonFeature,
-    map: google.maps.Map,
-    setActive: (uuid: string) => () => void,
-) => {
-    switch (feature.properties.rdnsType!) {
-        case MapPickerModuleType.Country:
-        case MapPickerModuleType.Station:
-            const paths = (feature.geometry as GeometryMultiPolygon).coordinates
-                .flatMap((superMultiPolygon) => superMultiPolygon
-                    .map((multiPolygon) => multiPolygon
-                        .map((polygon) => ({lat: polygon[1], lng: polygon[0]}))
-                    )
-                );
-            return new PolygonModule({
-                map,
-                editable: MapPickerModuleType.Station === feature.properties.rdnsType!,
-                draggable: MapPickerModuleType.Station === feature.properties.rdnsType!,
-                noClick: true,
-                setActive: setActive(uuid),
-                paths,
-                label: feature.properties.rdnsLabel,
-                textInfo: feature.properties.rdnsTextInfo,
-            }).init();
-        case MapPickerModuleType.Headquarters:
-        case MapPickerModuleType.Channel:
-            return new MarkerModule({
-                map,
-                editable: true,
-                draggable: true,
-                noClick: true,
-                label: feature.properties.rdnsLabel,
-                textInfo: feature.properties.rdnsTextInfo,
-                setActive: setActive(uuid),
-                position: {
+export const toGeoData: (feature: GEOJsonFeature) => GeoData = (feature) => {
+    switch (feature.properties.rdnsType) {
+        case RdnsType.Channel:
+        case RdnsType.Headquarters:
+            return {
+                type: ModuleType.Point,
+                radius: feature.properties.rdnsCircleInfo ? feature.properties.rdnsCircleInfo.circleRadius : 0,
+                center: {
                     lat: (feature.geometry as GeometryPoint).coordinates[1],
-                    lng: (feature.geometry as GeometryPoint).coordinates[0]
+                    lng: (feature.geometry as GeometryPoint).coordinates[0],
                 },
-                circleRadius: feature.properties.rdnsType! === MapPickerModuleType.Channel
-                    ? feature.properties.rdnsCircleInfo!.circleRadius
-                    : undefined,
-            }).init()
+            };
+        default:
+            return {
+                type: ModuleType.MultiPolygon,
+                points: (feature.geometry as GeometryMultiPolygon).coordinates
+                    .flatMap((superMultiPolygon) => {
+                        return superMultiPolygon
+                                .map((multiPolygon) => multiPolygon
+                                    .map((polygon) => ({lat: polygon[1], lng: polygon[0]})),
+                                )
+                        },
+                    ),
+            }
     }
 };
 
-export const importFromGeoJson: (
-    geoJson: GEOJson,
-    map: google.maps.Map,
-    setActive: (uuid: string) => () => void,
-    openDeleteMenu: () => void
-) => GeoJSONParsedResult
-    = (geoJson, map, setActive) => {
+export const importFromGeoJson: (geoJson: GEOJson) => GeoJSONParsedResult
+    = (geoJson) => {
     const warnings: string[] = [];
 
     if (!GJV.valid(geoJson)) {
@@ -156,7 +128,7 @@ export const importFromGeoJson: (
     }
 
     if (geoJson.type !== "FeatureCollection") {
-        return {errors: "The type the root element of the GeoJSON must be \"FeatureCollection\""};
+        return {errors: "The rdnsType the root element of the GeoJSON must be \"FeatureCollection\""};
     }
 
     let geographicInfos: { [uuid: string]: GeographicInfo } = {};
@@ -174,25 +146,24 @@ export const importFromGeoJson: (
                 return false;
             }
 
-            if (properties.rdnsType === MapPickerModuleType.Channel && !properties.rdnsCircleInfo) {
-                warnings.push(`An rdns Channel entry must have a \"rdnsCircleInfo\" property in its properties. This entry will be ignored: ${feature}`);
+            if (properties.rdnsType === RdnsType.Channel && !properties.rdnsCircleInfo) {
+                warnings
+                    .push(`An rdns Channel entry must have a \"rdnsCircleInfo\" property in its properties. This entry will be ignored: ${feature}`);
                 return false;
             }
             return true;
         })
         .forEach((feature) => {
-            const uuid = uuidv4();
+            const uuid: string = uuidv4();
             geographicInfos = {
                 ...geographicInfos, [uuid]: {
                     id: uuid,
-                    type: feature.properties.rdnsType!,
-                    module: toMapPickerModule(
-                        uuid,
-                        feature,
-                        map,
-                        setActive,
-                    ),
-                }
+                    rdnsType: feature.properties.rdnsType!,
+                    geoData: toGeoData(feature),
+                    label: feature.properties.rdnsLabel || "",
+                    textInfo: feature.properties.rdnsTextInfo || "",
+                    injected: true,
+                },
             }
         });
 
@@ -201,4 +172,3 @@ export const importFromGeoJson: (
         warnings,
     }
 };
-
