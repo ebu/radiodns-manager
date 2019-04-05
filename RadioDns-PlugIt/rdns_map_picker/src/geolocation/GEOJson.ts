@@ -1,7 +1,6 @@
 import * as GJV from "geojson-validation";
 import {GeoData, GeographicInfo, ModuleType, PointGeoInfo, RdnsType} from "../reducers/map-reducer";
 import {uuidv4} from "../utilities";
-import countries from "./countries.json";
 
 export interface GeometryPolygon {
     type: "Polygon";
@@ -47,7 +46,8 @@ export interface GEOJson {
     features: GEOJsonFeature[];
 }
 
-export const getGeoJson: () => Promise<GEOJsonFeature[]> = async () => (countries as GEOJson).features
+export const getGeoJson: () => Promise<GEOJsonFeature[]> = async () =>
+    ((await import("./countries.json")) as any as GEOJson).features
     .filter((feature) => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon");
 
 const convertToGeometry: (geoInfo: GeographicInfo) => GeometryMultiPolygon | GeometryPoint = (geoInfo) => {
