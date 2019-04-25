@@ -11,6 +11,7 @@ elif [ -n "$1" ] && [ -n "$2" ]; then
     rm -f /home/ubuntu/radiodns-plugit/Nginx/certificates/privkey.pem  &&
     cp /etc/letsencrypt/live/$2*/fullchain.pem /home/ubuntu/radiodns-plugit/Nginx/certificates/fullchain.pem &&
     cp /etc/letsencrypt/live/$2*/privkey.pem /home/ubuntu/radiodns-plugit/Nginx/certificates/privkey.pem &&
+    cd /home/ubuntu/radiodns-plugit &&
     $(which docker-compose) down &&
     $(which docker-compose) up --build -d
 else
