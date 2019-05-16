@@ -24,7 +24,7 @@
                             xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_description }}</shortDescription>
                 {% endif %}
                 {% if service_provider.url_default %}
-                    <link url="{{ service_provider.url_default }}" mimeValue="text/html"
+                    <link uri="{{ service_provider.url_default }}" mimeValue="text/html"
                           description="{{ service_provider.short_name }} Webpage"
                           xml:lang="{{ service_provider.default_language }}"/>
                 {% endif %}
@@ -80,7 +80,7 @@
                     <shortDescription xml:lang="fr">{{ station.0.short_description }}</shortDescription>
                 {% endif %}
                 {% if station.0.url_default %}
-                    <link url="{{ station.0.url_default }}" mimeValue="text/html"
+                    <link uri="{{ station.0.url_default }}" mimeValue="text/html"
                           xml:lang="{{ service_provider.default_language }}"/>
                 {% endif %}
                 {% if station.0.keywords %}
