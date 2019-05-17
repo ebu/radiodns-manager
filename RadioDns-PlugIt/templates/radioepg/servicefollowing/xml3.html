@@ -75,8 +75,7 @@
                     <shortDescription {% if station.0.default_language %}xml:lang="{{ station.0.default_language }}"{% endif %}>{{ station.0.short_description }}</shortDescription>
                 {% endif %}
                 {% if station.0.url_default %}
-                    <link url="{{ station.0.url_default }}" mimeValue="text/html"
-                          {% if station.0.default_language %}xml:lang="{{ station.0.default_language }}"{% endif %}/>
+                    <link url="{{ station.0.url_default }}" mimeValue="text/html"/>
                 {% endif %}
                 {% if station.0.keywords %}
                     <keywords>{{ station.0.keywords }}</keywords>
