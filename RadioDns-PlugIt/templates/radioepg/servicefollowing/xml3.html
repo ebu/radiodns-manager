@@ -2,27 +2,24 @@
 <serviceInformation xmlns="http://www.worlddab.org/schemas/spi/31" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="http://www.worlddab.org/schemas/spi/31 spi_31.xsd"
                     creationTime="{{ creation_time }}" originator="EBU.io RadioDNS Services v3"
-                    xml:lang="{{ service_provider.default_language }}">
+                    {% if service_provider.default_language %}xml:lang="{{ service_provider.default_language }}"{% endif %}>
 
     <services>
         {% if service_provider %}
             <serviceProvider>
                 {% if service_provider.short_name %}
-                    <shortName
-                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_name }}</shortName>
+                    <shortName>{{ service_provider.short_name }}</shortName>
                 {% endif %}
                 {% if service_provider.medium_name %}
-                    <mediumName
-                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.medium_name }}</mediumName>
+                    <mediumName>{{ service_provider.medium_name }}</mediumName>
                 {% endif %}
                 {% if service_provider.long_name %}
-                    <longName
-                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.long_name }}</longName>
+                    <longName>{{ service_provider.long_name }}</longName>
                 {% endif %}
+
                 {% if service_provider.url_default %}
                     <link url="{{ service_provider.url_default }}" mimeValue="text/html"
-                          description="{{ service_provider.short_name }} Webpage"
-                          xml:lang="{{ service_provider.default_language }}"/>
+                          description="{{ service_provider.short_name }} Webpage"/>
                 {% endif %}
                 {% if service_provider.keywords %}
                     <keywords>{{ service_provider.keywords }}</keywords>
@@ -78,9 +75,9 @@
                 {% if station.0.long_name %}
                     <longName>{{ station.0.long_name }}</longName>
                 {% endif %}
+
                 {% if station.0.url_default %}
-                    <link url="{{ station.0.url_default }}" mimeValue="text/html"
-                          xml:lang="{{ service_provider.default_language }}"/>
+                    <link url="{{ station.0.url_default }}" mimeValue="text/html"/>
                 {% endif %}
                 {% if station.0.keywords %}
                     <keywords>{{ station.0.keywords }}</keywords>
