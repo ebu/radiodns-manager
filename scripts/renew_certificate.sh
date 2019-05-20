@@ -12,8 +12,8 @@ elif [ -n "$1" ] && [ -n "$2" ]; then
     cp /etc/letsencrypt/live/$2*/fullchain.pem /home/ubuntu/radiodns-plugit/Nginx/certificates/fullchain.pem &&
     cp /etc/letsencrypt/live/$2*/privkey.pem /home/ubuntu/radiodns-plugit/Nginx/certificates/privkey.pem &&
     cd /home/ubuntu/radiodns-plugit &&
-    $(which docker-compose) down &&
-    $(which docker-compose) up --build -d
+    docker-compose down &&
+    docker-compose up --build -d
 else
     echo "Usage: <aws_credentials_file_full_path> <root_domain>" &&
     echo "example: /home/ubuntu/.aws/credentials dev.staging-radiodns.com"
