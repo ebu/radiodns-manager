@@ -16,9 +16,7 @@
                 {% if service_provider.long_name %}
                     <longName>{{ service_provider.long_name }}</longName>
                 {% endif %}
-                {% if service_provider.short_description %}
-                    <shortDescription>{{ service_provider.short_description }}</shortDescription>
-                {% endif %}
+
                 {% if service_provider.url_default %}
                     <link url="{{ service_provider.url_default }}" mimeValue="text/html"
                           description="{{ service_provider.short_name }} Webpage"/>
@@ -31,6 +29,12 @@
                 {% endif %}
                 {% if service_provider.epg_phone_number %}
                     <link uri="{{ service_provider.epg_phone_number }}"/>
+                {% endif %}
+                
+                {% if service_provider.short_description %}
+                <mediaDescription>
+                    <shortDescription xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_description }}</shortDescription>
+                </mediaDescription>
                 {% endif %}
 
                 <mediaDescription>
@@ -71,9 +75,7 @@
                 {% if station.0.long_name %}
                     <longName>{{ station.0.long_name }}</longName>
                 {% endif %}
-                {% if station.0.short_description %}
-                    <shortDescription {% if station.0.default_language %}xml:lang="{{ station.0.default_language }}"{% endif %}>{{ station.0.short_description }}</shortDescription>
-                {% endif %}
+
                 {% if station.0.url_default %}
                     <link url="{{ station.0.url_default }}" mimeValue="text/html"/>
                 {% endif %}
@@ -112,6 +114,12 @@
                                 bitrate="{{ entry.bitrate }}"
                             {% endif %}/>
                 {% endfor %}
+
+                {% if station.0.short_description %}
+                <mediaDescription>
+                    <shortDescription xml:lang="fr">{{ station.0.short_description }}</shortDescription>
+                </mediaDescription>
+                {% endif %}
 
                 <mediaDescription>
                     <multimedia height="32" width="32" type="logo_colour_square"

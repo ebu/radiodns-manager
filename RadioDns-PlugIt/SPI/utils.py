@@ -10,6 +10,9 @@ import config
 from models import Station, LogoImage, ServiceProvider, Channel, Ecc, GenericServiceFollowingEntry, Schedule
 from stations.utils import station_fields
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def apply_overrides(client, station):
     """
@@ -161,7 +164,7 @@ def generate_si_file(service_provider, client, template_uri):
     """
     with plugit.app.app_context():
         time_format = '%Y-%m-%dT%H:%M:%S%z'
-
+        logger.debug('generating si file: service_provider=%s, client=%s', service_provider, client)
         data, sp = generate_si_data(service_provider, client)
 
         return render_template(template_uri, stations=data, service_provider=sp,
