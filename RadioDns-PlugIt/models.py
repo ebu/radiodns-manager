@@ -436,26 +436,29 @@ class Channel(db.Model):
 
     type_id = db.Column(db.String(5), index=True)
 
+    # FM
     ecc_id = db.Column(db.Integer, db.ForeignKey('ecc.id'))
-
     pi = db.Column(db.String(4))
     frequency = db.Column(db.String(5))
 
+    # DAB/DAB+
     eid = db.Column(db.String(4))
     sid = db.Column(db.String(8))
     scids = db.Column(db.String(3))
-
     appty_uatype = db.Column(db.String(6))
     pa = db.Column(db.Integer)
 
+    # IP
     stream_url = db.Column(db.String(255))
     bitrate = db.Column(db.Integer)
     mime_type = db.Column(db.String(64))
 
+    # hd
     tx = db.Column(db.String(5))
     cc = db.Column(db.String(3))
-    mid = db.Column(db.Integer
+    mid = db.Column(db.Integer)
 
+    # ID
     fqdn = db.Column(db.String(255))
     serviceIdentifier = db.Column(db.String(16))
 
