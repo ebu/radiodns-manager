@@ -171,6 +171,18 @@
             </div>
         </div>
 
+        <div class="form-group opblk opblk_mid">
+            <label class="col-sm-3 col-md-3 control-label">MID:</label>
+            <div class="col-sm-9 col-md-7">
+                <select class="form-control" name="mid" id="mid" cval="{{ object.mid }}">
+                    <option value="1">HD-1 (Main Programme Service)</option>
+                    <option value="2">HD-2 (First Supplemental Programme Service)</option>
+                    <option value="3">HD-3 (Second Supplemental Programme Service)</option>
+                </select>
+                <small>Multicast (Supplemental Programme Service) Identifier</small>
+            </div>
+        </div>        
+
         <div class="form-group opblk opblk_stream_url">
             <label class="col-sm-3 col-md-3 control-label">Stream Url:</label>
             <div class="col-sm-9 col-md-7">
