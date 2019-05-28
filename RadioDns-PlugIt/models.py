@@ -429,7 +429,7 @@ class Channel(db.Model):
                        ('dab', 'DAB', ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'mime_type']),
                        ('drm', 'DRM', ['sid']),
                        ('amss', 'AMSS', ['sid']),
-                       ('hd', 'HD Radio', ['cc', 'tx']),
+                       ('hd', 'HD Radio', ['cc', 'tx', 'mid']),
                        ('id', 'IP', ['fqdn', 'serviceIdentifier', 'stream_url', 'mime_type', 'bitrate'])
                        ]
     TO_IGNORE_IN_DNS = ['stream_url', 'mime_type', 'bitrate']
@@ -454,6 +454,7 @@ class Channel(db.Model):
 
     tx = db.Column(db.String(5))
     cc = db.Column(db.String(3))
+    mid = db.Column(db.Integer
 
     fqdn = db.Column(db.String(255))
     serviceIdentifier = db.Column(db.String(16))
