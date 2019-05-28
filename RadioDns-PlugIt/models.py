@@ -566,8 +566,11 @@ class Channel(db.Model):
                             else:
                                 value = (cc_obj.pi + cc_obj.ecc).lower()
 
-                        if v not in Channel.TO_IGNORE_IN_DNS:  # Ignore certain values
-                            val = value + '.' + val
+                        # Exclude certain parameters from the RadioDNS FQDN construction
+                        if v in Channel.TO_IGNORE_IN_DNS: continue
+                        if v == 'mid' and value == "1": continue
+                        
+                        val = value + '.' + val
         return val
 
     @property

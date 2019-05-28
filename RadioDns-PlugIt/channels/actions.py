@@ -152,7 +152,7 @@ def channels_edit(request, id):
                 errors.append("cc must be 3 characters in hexadecimal")
 
         if channel.mid is not None:
-            if not re.match(r"^[1-3]{1}$", channel.cc):
+            if not re.match(r"^[1-3]{1}$", channel.mid):
                 errors.append("mid must be 1 characters in decimal (range 1-3)")
 
         if channel.fqdn is not None:
@@ -317,8 +317,7 @@ def channels_import(request):
                         if not re.match(r"^[a-fA-F0-9]{3}$", channel.cc):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
-                    if channel.mid is not None:
-                        if not re.match(r"^[1-3]{1}$", channel.cc):
+                    if not re.match(r"^[1-3]{1}$", channel.mid):
                             errors.append("mid must be 1 characters in decimal (range 1-3)")                            
 
                     if channel.fqdn is not None:
@@ -455,7 +454,7 @@ def string_to_channel(linedata, station):
         object.sid = data[2]
 
     # HD Radio
-    # name	hd	cc	tx
+    # name	hd	cc	tx  mid
     elif object.type_id == 'hd':
         if len(data) < 4:
             return None

@@ -174,10 +174,10 @@
         <div class="form-group opblk opblk_mid">
             <label class="col-sm-3 col-md-3 control-label">MID:</label>
             <div class="col-sm-9 col-md-7">
-                <select class="form-control" name="mid" id="mid" cval="{{ object.mid }}">
-                    <option value="1">HD-1 (Main Programme Service)</option>
-                    <option value="2">HD-2 (First Supplemental Programme Service)</option>
-                    <option value="3">HD-3 (Second Supplemental Programme Service)</option>
+                <select class="form-control" name="mid" id="mid" blark="{{ object.mid }}">
+                    <option value="1" {% if object.mid == 1 %}selected="selected"{% endif %}>HD-1 (Main Programme Service)</option>
+                    <option value="2" {% if object.mid == 2 %}selected="selected"{% endif %}>HD-2 (First Supplemental Programme Service)</option>
+                    <option value="3" {% if object.mid == 3 %}selected="selected"{% endif %}>HD-3 (Second Supplemental Programme Service)</option>
                 </select>
                 <small>Multicast (Supplemental Programme Service) Identifier</small>
             </div>
