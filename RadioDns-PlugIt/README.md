@@ -19,6 +19,7 @@ testing purposes. See deployment for notes on how to deploy the project on a liv
 
     virtualenv --python=$(which python2) venv
     source venv/bin/activate
+    cd RadioDNS-Plugit
     
 Install the required PIP dependencies:
 
