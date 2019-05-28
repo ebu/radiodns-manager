@@ -31,9 +31,10 @@ To deactivate the running environment:
     
 ## Running the Server
 
+Remember that you must have a running PlugIt Proxy and database in order to test the service.
+
     python server.py
     
-Remember that you must have a running PlugIt Proxy in order to test the service.
 
 ### Extra steps for mac users
 
