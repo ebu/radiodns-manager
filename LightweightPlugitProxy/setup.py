@@ -8,7 +8,7 @@ setup(name='lightweight_plugIt_proxy',
       author='Ioannis Noukakis',
       author_email='inoukakis@gmail.com',
       install_requires=[
-          'Django==2.1.6',
+          'Django==2.1.7',
           'pylint==2.1.1',
           'requests==2.21.0',
           'urlparse3==1.1',

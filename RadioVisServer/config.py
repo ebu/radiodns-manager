@@ -26,7 +26,7 @@ monitoring = {
     "server_id": os.environ.get("MONITORING_SERVER_ID", "rabbit@radiodnsrabbitmq").strip().split(','),
 }
 
-STOMP_IP = os.environ.get("STOMP_IP", "0.0.0.0").strip().split(',')
+STOMP_IP = os.environ.get("STOMP_IP", "0.0.0.0")
 STOMP_PORT = int(os.environ.get("STOMP_PORT", 61613))
 
 # RadioDns plugit API
