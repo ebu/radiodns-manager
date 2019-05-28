@@ -317,7 +317,8 @@ def channels_import(request):
                         if not re.match(r"^[a-fA-F0-9]{3}$", channel.cc):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
-                    if not re.match(r"^[1-3]{1}$", channel.mid):
+                    if channel.mid is not None:
+                    	if not re.match(r"^[1-3]{1}$", channel.mid):
                             errors.append("mid must be 1 characters in decimal (range 1-3)")                            
 
                     if channel.fqdn is not None:
