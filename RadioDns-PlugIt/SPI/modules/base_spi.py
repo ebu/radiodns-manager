@@ -30,9 +30,9 @@ class BaseSPI:
         """
         pass
 
-    def on_request_epg_1(self, codops, client_identifier):
+    def on_request_xsi_1(self, codops, client_identifier):
         """
-        A class must implement this event listener and return the requested EPG file version 1.
+        A class must implement this event listener and return the requested RadioEPG XSI file version 1.
         NOTE: If possible avoid to access the database in this handler. The goal of this method is to return the
         SI file a soon as possible.
 
@@ -42,9 +42,9 @@ class BaseSPI:
         """
         pass
 
-    def on_request_epg_3(self, codops, client_identifier):
+    def on_request_si_3(self, codops, client_identifier):
         """
-        A class must implement this event listener and return the requested EPG file version 3.
+        A class must implement this event listener and return the requested SPI SI file version 3.1.
         NOTE: If possible avoid to access the database in this handler. The goal of this method is to return the
         SI file a soon as possible.
 
@@ -54,19 +54,27 @@ class BaseSPI:
         """
         pass
 
-    def on_request_schedule_1(self, path, date):
+    def on_request_pi_1(self, path, date):
         """
-        A class must implement this event listener and return the requested schedule EPG file version 1.
+        A class must implement this event listener and return the requested schedule RadioEPG file version 1.
 
         NOTE: If possible avoid to access the database in this handler. The goal of this method is to return the
         PI file a soon as possible.
 
-        :param path: the service identifier of the requested file. The service identifier is described here:
-        https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
-        :param date: the date is of the shape <YEAR><MONTH><DAY>.
-            - <YEAR> is a four digit number representing the current year, eg: 2019
-            - <MONTH> is a two digit number representing the current month in the current year, eg: 01
-            - <DAY> is a two digit number representing the current day in the current month, eg: 01
+        :param path: the service identifier of the requested file. The service identifier is described
+                     in the RadioDNS Lookup specification
+        :param date: date in format YYYYMMDD
+        :return: The requested file or a redirection to the requested file.
+        """
+        pass
+
+    def on_request_pi_3(self, path, date):
+        """
+        A class must implement this event listener and return the requested SPI PI file version 3.1.
+
+        :param path: the service identifier of the requested file. The service identifier is described
+                     in the RadioDNS Lookup specification
+        :param date: date in format YYYYMMDD
         :return: The requested file or a redirection to the requested file.
         """
         pass

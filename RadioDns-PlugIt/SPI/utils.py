@@ -13,7 +13,6 @@ from stations.utils import station_fields
 import logging
 logger = logging.getLogger(__name__)
 
-
 def apply_overrides(client, station):
     """
     Clones a station and returns it with its overrides for a specific client.
@@ -35,35 +34,12 @@ def apply_overrides(client, station):
 
     return station
 
-
-def make_xsi1_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_xsi1_' + args).encode('utf-8')
-
-
-def make_pi1_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    path = Request.path
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_pi1_' + path + '_' + args).encode('utf-8')
-
-
-def make_xsi3_hostname_cache_key(*args, **kwargs):
-    """Generates a cachekey containing the hostname"""
-    hostname = Request.host
-    args = str(hash(frozenset(Request.args.items())))
-    return (hostname + '_xsi3_' + args).encode('utf-8')
-
-
 def get_codops_from_request():
     """
     Tries to read a service provider's codops from the Flask request context.
     :return: the codops or None.
     """
-    regex = re.compile('((?P<provider>[^\.]+?)\.).+\.' + config.XSISERVING_DOMAIN)
+    regex = re.compile('((?P<provider>[^\.]+?)\.).+\.' + config.SPISERVING_DOMAIN)
     r = regex.search(Request.host)
     if r:
         return r.groupdict()['provider']
@@ -221,7 +197,7 @@ def extract_pi_data_from_path(path, date):
     channels = None
 
     # Find out what stations to serve if by codops or station
-    regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.XSISERVING_DOMAIN)
+    regex = re.compile('((?P<station>[^\.]+?)\.)?(?P<provider>[^\.]+?)\.' + config.SPISERVING_DOMAIN)
     r = regex.search(Request.host)
     if r:
 
@@ -288,7 +264,7 @@ def extract_pi_data_from_path(path, date):
     return None
 
 
-def generate_pi_file(date, path=None, station=None):
+def generate_pi_file(date, template_uri, path=None, station=None):
     """
     Renders a PI file.
 
@@ -306,6 +282,7 @@ def generate_pi_file(date, path=None, station=None):
 
     :return: The rendered XML file.
     """
+    print('generate_pi_file', path)
     if path is None:
         data = generate_pi_data(station, date)
     else:
@@ -318,7 +295,7 @@ def generate_pi_file(date, path=None, station=None):
     real_end_date = data[2]
     time_format = '%Y-%m-%dT%H:%M:%S%z'
     with plugit.app.app_context():
-        return render_template('radioepg/schedule/xml1.html', schedules=json_schedules,
+        return render_template(template_uri, schedules=json_schedules,
                                start_time=real_start_date.strftime(time_format),
                                end_time=real_end_date.strftime(time_format),
                                creation_time=datetime.datetime.now().strftime(time_format))

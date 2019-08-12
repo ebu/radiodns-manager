@@ -42,26 +42,48 @@ class AWSSPI(BaseSPI):
             start_of_the_week = datetime.datetime.combine(today - datetime.timedelta(days=today.weekday()),
                                                           datetime.time())
 
-            for i in range(0, 7):
+            for i in range(0, 14): # RadioEPG 1.1
                 start_date = (start_of_the_week + datetime.timedelta(days=i)).strftime("%Y%m%d")
-                contents = SPI.utils.generate_pi_file(start_date, station=station)
+                contents = SPI.utils.generate_pi_file(start_date, "/templates/radioepg/schedule/xml1.html", station=station)
                 if not contents:
                     continue
 
                 filtered = Channel.query.filter(Channel.station_id == station.id and Channel.type_id in ["fm", "dab"])
                 for channel in filtered:
-                    for w in range(0, 2):
-                        try:
-                            self.upload_file(
-                                AWSSPI.get_static_bucket_pi_filename(
-                                    channel.service_identifier,
-                                    (start_of_the_week + datetime.timedelta(weeks=w, days=i)).strftime("%Y%m%d")
-                                ),
-                                contents,
-                                station.id,
-                            )
-                        except AttributeError as e:
+                    try:
+                        self.upload_file(
+                            AWSSPI.get_static_bucket_pi_filename(
+                                1,
+                                channel.service_identifier,
+                                start_date.strftime("%Y%m%d")
+                            ),
+                            contents,
+                            station.id,
+                        )                         
+                    except AttributeError as e:
                             print("[WARN][AWS] in pi resource changed handler", e)
+
+            for i in range(0, 14): # SPI 3.1
+                start_date = (start_of_the_week + datetime.timedelta(days=i)).strftime("%Y%m%d")
+                contents = SPI.utils.generate_pi_file(start_date, "/templates/radioepg/schedule/xml3.html", station=station)
+                if not contents:
+                    continue
+
+                filtered = Channel.query.filter(Channel.station_id == station.id and Channel.type_id in ["fm", "dab"])
+                for channel in filtered:
+                    try:
+                        self.upload_file(
+                            AWSSPI.get_static_bucket_pi_filename(
+                                1,
+                                channel.service_identifier,
+                                start_date.strftime("%Y%m%d")
+                            ),
+                            contents,
+                            station.id,
+                        )                         
+                    except AttributeError as e:
+                            print("[WARN][AWS] in pi resource changed handler", e)
+
         elif event_name == SPI.modules.base_spi.EVENT_SI_PI_DELETED:
             for key in [key for key in self.bucket.get_all_keys() if
                         key.get_metadata("x-amz-meta-station_id") == station]:
@@ -70,17 +92,21 @@ class AWSSPI(BaseSPI):
                 except Exception as e:
                     print("[WARN][AWS] in pi resource deleted handler", e)
 
-    def on_request_epg_1(self, codops, client_identifier):
+    def on_request_xsi_1(self, codops, client_identifier):
         return redirect(AWSSPI.get_file_url({"codops": codops, "version": "1", "client_identifier": client_identifier}),
                         code=301)
 
-    def on_request_epg_3(self, codops, client_identifier):
+    def on_request_si_3(self, codops, client_identifier):
         return redirect(AWSSPI.get_file_url({"codops": codops, "version": "3", "client_identifier": client_identifier}),
                         code=301)
 
-    def on_request_schedule_1(self, path, date):
-        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=301)
+    def on_request_pi_1(self, path, date):
+        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date), "version": 1}, type="pi"), 
+                        code=301)  
 
+    def on_request_pi_3(self, path, date):
+        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date), "version": 3}, type="pi"), 
+                        code=301)  
     @staticmethod
     def get_file_url(data, type="si"):
         """
@@ -94,6 +120,7 @@ class AWSSPI(BaseSPI):
                 data["codops"], data["version"], data["client_identifier"])
         elif type == "pi":
             return "https://" + config.SPI_CLOUDFRONT_DOMAIN + "/" + AWSSPI.get_static_bucket_pi_filename(
+                data["version"],
                 data["path"],
                 data["date"],
             )
@@ -118,11 +145,11 @@ class AWSSPI(BaseSPI):
         return hashlib.sha256(name).hexdigest() + ".xml"
 
     @staticmethod
-    def get_static_bucket_pi_filename(path, date):
+    def get_static_bucket_pi_filename(version, service_identifier, date):
         """
         Returns the name of a PI file that is hosted in the s3 bucket.
 
-        The scheme of the name is the following: schedule/<service_identifier>/<date>.xml
+        The scheme of the name is the following: schedule/<version>/<service_identifier>/<date>.xml
 
         :param path: The path or <service_identifier> is described here:
             https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
@@ -133,7 +160,7 @@ class AWSSPI(BaseSPI):
             - <DAY> is a two digit number representing the current day in the current month, eg: 01
         :return: The full filename and path of the PI file.
         """
-        return ("schedule/" + path + "/" + date + ".xml").lower()
+        return ("schedule/" + version + "/" + service_identifier + "/" + date + ".xml").lower()
 
     def upload_file(self, file_key, contents, station_id=None):
         """
