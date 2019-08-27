@@ -264,7 +264,7 @@ def extract_pi_data_from_path(path, date):
     return None
 
 
-def generate_pi_file(date, template_uri, path=None, station=None):
+def generate_pi_file(date, template_path, path=None, station=None):
     """
     Renders a PI file.
 
@@ -274,6 +274,7 @@ def generate_pi_file(date, template_uri, path=None, station=None):
     - <YEAR> is a four digit number representing the current year, eg: 2019
     - <MONTH> is a two digit number representing the current month in the current year, eg: 01
     - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :param template_path: reference to the internal template path
     :param path: (Optional) The requested path or service identifier of the requested file. If provided, the
     generation will extract the requested station scheduling from the path.
     The path or service identifier is described here:
@@ -282,7 +283,6 @@ def generate_pi_file(date, template_uri, path=None, station=None):
 
     :return: The rendered XML file.
     """
-    print('generate_pi_file', path)
     if path is None:
         data = generate_pi_data(station, date)
     else:
@@ -295,7 +295,7 @@ def generate_pi_file(date, template_uri, path=None, station=None):
     real_end_date = data[2]
     time_format = '%Y-%m-%dT%H:%M:%S%z'
     with plugit.app.app_context():
-        return render_template(template_uri, schedules=json_schedules,
+        return render_template(template_path, schedules=json_schedules,
                                start_time=real_start_date.strftime(time_format),
                                end_time=real_end_date.strftime(time_format),
                                creation_time=datetime.datetime.now().strftime(time_format))
