@@ -83,7 +83,7 @@ def channels_edit(request, id):
 
         # Get values
         for x in ['name', 'type_id', 'ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx',
-                  'cc', 'fqdn', 'stream_url', 'mime_type', 'bitrate', 'serviceIdentifier', 'fk_client']:
+                  'cc', 'mid', 'fqdn', 'stream_url', 'mime_type', 'bitrate', 'serviceIdentifier', 'fk_client']:
             val = request.form.get(x)
             if val == '':
                 val = None
@@ -105,7 +105,7 @@ def channels_edit(request, id):
 
         if list_props:
 
-            for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'fqdn',
+            for x in ['ecc_id', 'pi', 'frequency', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'tx', 'cc', 'mid', 'fqdn',
                       'mime_type', 'stream_url', 'bitrate', 'serviceIdentifier']:
                 if x in list_props:  # Want it ? Keep it !
                     if x != 'appty_uatype' and x != 'pa':  # Exception
@@ -150,6 +150,10 @@ def channels_edit(request, id):
         if channel.cc is not None:
             if not re.match(r"^[a-fA-F0-9]{3}$", channel.cc):
                 errors.append("cc must be 3 characters in hexadecimal")
+
+        if channel.mid is not None:
+            if not re.match(r"^[1-3]{1}$", channel.mid):
+                errors.append("mid must be 1 characters in decimal (range 1-3)")
 
         if channel.fqdn is not None:
             channel.fqdn = channel.fqdn.rstrip('.')
@@ -313,6 +317,10 @@ def channels_import(request):
                         if not re.match(r"^[a-fA-F0-9]{3}$", channel.cc):
                             errors.append("cc must be 3 characters in hexadecimal for line " + line)
 
+                    if channel.mid is not None:
+                    	if not re.match(r"^[1-3]{1}$", channel.mid):
+                            errors.append("mid must be 1 characters in decimal (range 1-3)")                            
+
                     if channel.fqdn is not None:
                         if not re.match(r"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}\.?$)",
                                         channel.fqdn):
@@ -447,13 +455,16 @@ def string_to_channel(linedata, station):
         object.sid = data[2]
 
     # HD Radio
-    # name	hd	cc	tx
+    # name	hd	cc	tx  mid
     elif object.type_id == 'hd':
         if len(data) < 4:
             return None
         # cc
         object.cc = data[2]
         object.tx = data[3]
+        # Optional Elements
+        if len(data) >= 4:
+            object.mid = data[4]
 
     # IP
     # name	ip	fqdn	service id

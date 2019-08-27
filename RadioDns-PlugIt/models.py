@@ -429,32 +429,36 @@ class Channel(db.Model):
                        ('dab', 'DAB', ['ecc_id', 'eid', 'sid', 'scids', 'appty_uatype', 'pa', 'mime_type']),
                        ('drm', 'DRM', ['sid']),
                        ('amss', 'AMSS', ['sid']),
-                       ('hd', 'HD Radio', ['cc', 'tx']),
+                       ('hd', 'HD Radio', ['cc', 'tx', 'mid']),
                        ('id', 'IP', ['fqdn', 'serviceIdentifier', 'stream_url', 'mime_type', 'bitrate'])
                        ]
     TO_IGNORE_IN_DNS = ['stream_url', 'mime_type', 'bitrate']
 
     type_id = db.Column(db.String(5), index=True)
 
+    # FM
     ecc_id = db.Column(db.Integer, db.ForeignKey('ecc.id'))
-
     pi = db.Column(db.String(4))
     frequency = db.Column(db.String(5))
 
+    # DAB/DAB+
     eid = db.Column(db.String(4))
     sid = db.Column(db.String(8))
     scids = db.Column(db.String(3))
-
     appty_uatype = db.Column(db.String(6))
     pa = db.Column(db.Integer)
 
+    # IP
     stream_url = db.Column(db.String(255))
     bitrate = db.Column(db.Integer)
     mime_type = db.Column(db.String(64))
 
+    # hd
     tx = db.Column(db.String(5))
     cc = db.Column(db.String(3))
+    mid = db.Column(db.Integer)
 
+    # ID
     fqdn = db.Column(db.String(255))
     serviceIdentifier = db.Column(db.String(16))
 
@@ -562,8 +566,11 @@ class Channel(db.Model):
                             else:
                                 value = (cc_obj.pi + cc_obj.ecc).lower()
 
-                        if v not in Channel.TO_IGNORE_IN_DNS:  # Ignore certain values
-                            val = value + '.' + val
+                        # Exclude certain parameters from the RadioDNS FQDN construction
+                        if v in Channel.TO_IGNORE_IN_DNS: continue
+                        if v == 'mid' and value == "1": continue
+                        
+                        val = value + '.' + val
         return val
 
     @property
