@@ -27,9 +27,9 @@ if AWS_SECRET_KEY == '':
 # Domain Name base for all services
 DOMAIN = os.environ.get('DOMAIN', 'radio.ebu.io')
 
-# XSI
-XSISERVING_ENABLED = "True" == os.environ.get('XSISERVING_ENABLED', 'True')
-XSISERVING_DOMAIN = os.environ.get('XSISERVING_DOMAIN', '127.0.0.1:5000')
+# SPI
+SPISERVING_ENABLED = "True" == os.environ.get('XSISERVING_ENABLED', 'True')
+SPISERVING_DOMAIN = os.environ.get('XSISERVING_DOMAIN', '127.0.0.1:5000')
 
 # Default Service URLs for RadioDNS Services
 RADIOVIS_DNS = os.environ.get('RADIOVIS_DNS', '127.0.0.1')
