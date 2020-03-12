@@ -24,7 +24,7 @@ setup(
         'requests==2.21.0',
         'beaker==1.10.0',
         'nose==1.3.7',
-        'psutil==5.4.8',
+        'psutil==5.6.6',
         'pylibmc==1.6.0',
     ],
     include_package_data=True,
