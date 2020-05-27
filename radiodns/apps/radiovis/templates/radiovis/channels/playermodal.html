@@ -1,0 +1,56 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span  aria-hidden="true">&times;</span></button>
+            {% if name %}
+                {% if stationname %}
+                <h4 class="modal-title">{{stationname}},
+                    <small>{{name}}</small>
+                </h4>
+                {% else %}
+                <h4 class="modal-title">{{name}}</h4>
+                {% endif %}
+                <address>{{topic}}</address>
+                {% else %}
+                <h4 class="modal-title">{{topic}}</h4>
+            {% endif %}
+        </div>
+        <div id="player_modal_body" class="modal-body">
+
+            <link rel="stylesheet" href="{{ebuio_baseUrl}}media/css/radiovis-html5player.css">
+            <style>
+                .radiovis-main {
+                    border: 1px #C5C5C2 solid;
+                    width:322px;
+                }
+
+                .radiovis-mainframe {
+                    box-shadow: 1px 1px 4px 0px #CFCFCF;
+                }
+                .radiovis-outtertext {
+                    border-top: 1px #C5C5C2 solid;
+                }
+
+                .frame {
+                    margin: 15px;
+                }
+            </style>
+            <script src="{{ebuio_baseUrl}}media/js/radiovis-html5player.js"></script>
+            <script>
+				$(document).ready(function(){
+					$('#frame1').radiovisplayer('{{topic}}', '{{ ws_endpoint }}', '{{ secure }}' === 'True');
+				});
+
+            </script>
+
+            <div style="margin:10px auto; width:330px;">
+                <div id="frame1" class="frame"></div>
+            </div>
+
+            <hr />
+            <div>Link to this demo player :
+            <a href="{{ebuio_baseUrl}}radiovis/channels/player/?topic={{topic}}&stationname={{stationname}}&name={{name}}" target="_blank">right-click and copy this link</a></div>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

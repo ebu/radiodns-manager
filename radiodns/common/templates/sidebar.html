@@ -1,0 +1,53 @@
+{% if request.user.is_authenticated and request.user.active_organization %}
+    <div class="menu-section">
+        <h3>Select Organization</h3>
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ request.user.active_organization.medium_name }}
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                      {% for organization in request.user.organizations_list %}
+                            <li><a href="{% url 'manager:set_organization' organization.id %}">{{ organization.medium_name }}</a></li>
+                      {% endfor %}
+                  </ul>
+              </div>
+    </div>
+    <div class="menu-section">
+        <h3>RadioDNS</h3>
+        <ul>
+            <li><a href="{% url 'manager:details' %}">Service Provider</a></li>
+            <li><a href="{% url 'stations:list' %}">My Stations</a></li>
+            <li><a href="{% url 'channels:list' %}">My Channels</a></li>
+            <li><a href="{% url 'clients:list' %}">My Clients</a></li>
+        </ul>
+    </div>
+    <div class="menu-section">
+        <h3>Service & Program Info</h3>
+        <ul>
+            <li><a href="">Logo Image Repository</a></li>
+            <li><a href="">Station Logos</a></li>
+            <li><a href="">Service following</a></li>
+            <li><a href="">Calendar & Schedule (EPG)</a></li>
+        </ul>
+    </div>
+    <div class="menu-section">
+        <h3>RadioVIS SlideShow</h3>
+        <ul>
+            <li><a href="">SlideShow Image Repository</a></li>
+            <li><a href="">RadioVIS Channel Images</a></li>
+            <li><a href="">RadioEPG Gallery</a></li>
+        </ul>
+    </div>
+
+    {% if request.user.is_staff %}
+        <div class="menu-section">
+            <h3>System</h3>
+            <ul>
+                <li><a href="">System Status</a></li>
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="menu-section">
+        <h3><a href="{% url 'common:terms' %}">Terms of Use</a></h3>
+    </div>
+{% endif%}

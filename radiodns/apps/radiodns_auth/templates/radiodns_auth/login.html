@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Organization :: RadioDNS{% endblock %}
+
+{% block content %}
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                Login
+            </div>
+        </div>
+    {% endblock %}
+
+    {% if use_saml %}
+        TODO: Saml form goes here
+    {% endif %}
+    {% if use_login %}
+    <form class="form-horizontal" method="post" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.username.errors }}
+            <label for="{{ form.username.auto_id }}" class="col-sm-3 col-md-3 control-label">Login</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="text" name="username" class="form-control" placeholder="Username" value="{% if form.username.value  %}{{ form.username.value }}{% endif %}">
+            </div>
+        </div>
+		<div class="form-group">
+            {{ form.password.errors }}
+            <label for="{{ form.password.auto_id }}" class="col-sm-3 col-md-3 control-label">Password</label>
+            <div class="col-sm-9 col-md-7">
+		        <input type="password" name="password" class="form-control" placeholder="Password" value="{% if form.username.value  %}{{ form.username.value }}{% endif %}" >
+            </div>
+        </div>
+        <div>
+            {{ form.non_field_errors }}
+        </div>
+        <div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+            </div>
+        </div>
+    </form>
+    {% endif %}
+{% endblock %}

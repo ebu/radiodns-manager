@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "403 Error !" %}
+{% endblock %}
+
+{% block content %}
+    <h1>{% trans "403 Error" %}</h1>
+
+    <p>
+        {% blocktrans with context.reason as reason %}
+            You don't have rights to view this page. Internal reason. {{reason}}
+        {% endblocktrans %}
+    </p>
+
+{% endblock %}

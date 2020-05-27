@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Organization :: RadioDNS{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                 No Organization :: Error
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                <a href="{% url 'manager:edit'%}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    {% endblock %}
+        <div class="alert alert-danger" role="alert">
+            <strong>You are not a part of any organization!</strong> <br/>
+            As this is a required to start interacting with the system, please contact an administrator first.
+        </div>
+    {% endif %}
+{% endblock %}
+

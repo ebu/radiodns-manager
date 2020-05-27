@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Organization :: RadioDNS{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ organization.short_name }} :: Configuration
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                <a href="{% url 'manager:edit'%}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% if not organization.codops %}
+        <div class="alert alert-danger" role="alert">
+            <strong>No CODOPS has been defined for your organization yet.</strong> <br/>
+            As this is a required global setting, please contact Mathias Coinchon (<a href="mailto:coinchon@ebu.ch">coinchon@ebu.ch</a>)
+            to get started.
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Current configuration:</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-condensed">
+                        <tbody>
+                        <tr>
+                            <th>CODOPS</th>
+                            <td><i>{{ organization.codops }}</i></td>
+                        </tr>
+                        <tr>
+                            <th>Short Name</th>
+                            <td>{{ organization.short_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Medium Name</th>
+                            <td>{{ organization.medium_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Long Name</th>
+                            <td>{{ organization.long_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Short Description</th>
+                            <td>{{ organization.short_description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Long Description</th>
+                            <td>{{ organization.long_description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Default Url</th>
+                            <td><a href="{{ organization.url_default }}"
+                                   target="_blank">{{ organization.url_default }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Default Language</th>
+                            <td>{{ organization.default_language }}</td>
+                        </tr>
+                        <tr>
+                            <th>Postal Address</th>
+                            <td>{{ organization.postal_name }}<br/>
+                                {{ organization.street }}<br/>
+                                {{ organization.city }}{% if organization.zipcode %},
+                                {{ organization.zipcode }}{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>{{ organization.epg_country }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td>{{ organization.phone_number }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

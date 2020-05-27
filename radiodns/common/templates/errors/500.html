@@ -1,0 +1,17 @@
+{% extends "plugIt/plugItBase.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Error 500 !" %}
+{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Error 500" %}</h1>
+
+    <p>
+        {% blocktrans %}
+            Internal error on service side.
+        {% endblocktrans %}
+    </p>
+
+{% endblock %}

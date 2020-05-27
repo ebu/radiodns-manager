@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Clients :: RadioDNS{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ request.user.active_organization.medium_name }} :: My Clients
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                {% block pagefunctions %}
+                        <a href="{% url 'clients:new' %}" class="btn btn-primary">Add a new client</a>
+                {% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+
+     <div class="table-responsive">
+         <table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
+             <thead>
+                 <tr role="row">
+                     <th>Name</th>
+                     <th>Email</th>
+                     <th>Identifier</th>
+                     <th style=" width: 150px;"></th>
+                 </tr>
+             </thead>
+             <tbody>
+             {% for client in clients %}
+                 <tr>
+                     <td><strong>{{ client.name }}</strong></td>
+                     <td>{{ channel.email }}</td>
+                     <td>{{ channel.identifier }}</td>
+                     <td style="text-align:right;">
+                             <a href="{% url 'clients:edit' client.id %}"
+                                class="btn btn-sm btn-default">Edit</a>
+                             <a href="{% url 'clients:delete' client.id %}"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to delete {{ client.name }}?');">Delete</a>
+                     </td>
+                 </tr>
+             {% endfor %}
+             </tbody>
+         </table>
+     </div>
+{% endblock %}

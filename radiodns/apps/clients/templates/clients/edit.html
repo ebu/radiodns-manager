@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Service Provider :: RadioDNS{% endblock %}
+
+{% block content %}
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            {{ request.user.active_organization.medium_name}} :: Service Provider Configuration
+        </div>
+    </div>
+    {% endblock %}
+
+     <form>
+         {% csrf_token %}
+
+         <div class="form-group">
+            {{ form.name.errors }}
+            <label for="{{ form.name.auto_id }}" class="col-sm-3 col-md-3 control-label">Name</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="name" id="name" value="{% if form.name.value %}{{form.name.value}}{% endif %}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.email.errors }}
+            <label for="{{ form.email.auto_id }}" class="col-sm-3 col-md-3 control-label">Email</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="email" id="email" value="{% if form.email.value %}{{form.email.value}}{% endif %}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.identifier.errors }}
+            <label for="{{ form.identifier.auto_id }}" class="col-sm-3 col-md-3 control-label">Identifier</label>
+            <div class="col-sm-9 col-md-7">
+                <input type="text" class="form-control" name="identifier" id="identifier" value="{% if form.identifier.value %}{{form.identifier.value}}{% endif %}"/>
+            </div>
+        </div>
+
+         <div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+                <input type="submit" class="btn btn-primary" value="Save">
+                <a href="{% url 'clients:list' %}" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+
+     </form>
+    <br>
+    <div class="col-sm-9 col-md-7">
+        <hr>
+        <p>
+            When creating or updating a client keep the following in mind:
+        </p>
+        <ul>
+            <li>The name of a client cannot be longer than 255 characters and cannot be empty.</li>
+            <li>The email of a client cannot be longer than 255 characters, cannot be empty and has to be a valid
+                email.
+            </li>
+            <li>The client identifier can only be composed of alphanumerics and has to have a length in the range 16
+                to 128.
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+

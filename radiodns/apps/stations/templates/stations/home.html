@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Stations :: RadioDNS{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ request.user.active_organization.medium_name }} :: Stations
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                {% block pagefunctions %}
+                    <a href="{% url 'stations:new' %}" class="btn btn-primary">Add a new station</a>
+                {% endblock %}
+            </div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+        </div>
+    {% endblock %}
+
+        <div class="table-responsive">
+            <table id="radiodns-station-table" class="display" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Service Provider</th>
+                    <th>FQDN</th>
+                    <th>Services</th>
+                    <th style="width: 150px;"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for station in stations %}
+                    <tr>
+                        <td>{% if station.default_logo_image_data %}<img style="height: 32px;width: 32px;"
+                                                                         src="{{ station.default_logo_image_data.public_32x32_url }}">
+                        {% else %}
+                            <a href="" class="btn btn-xs btn-primary">Set logo</a>
+                        {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'stations:details' station.id %}"><strong>{{ station.name }}</strong></a>
+                        </td>
+                        <td>
+                            {{ station.service_provider_data.short_name }}
+                        </td>
+                        <td>{{ station.fqdn }}</td>
+                        <td>
+                            <span id="vis-{{ station.id }}">
+                                {% if station.radiovis_service %}
+                                    <small>VIS</small> {{ station.radiovis_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            <span id="epg-{{ station.id }}">
+                                {% if station.radioepg_service %}
+                                    <small>EPG</small> {{ station.radioepg_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            <span id="spi-{{ station.id }}">
+                                {% if station.radiospi_service %}
+                                    <small>SPI</small> {{ station.radiospi_service }}
+                                {% endif %}
+                            </span>
+                            <br/>
+                            {% if RADIOTAG_ENABLED %}
+                                <span id="tag-{{ station.id }}">
+                                    {% if station.radiotag_service %}
+                                        <small>TAG</small> {{ station.radiotag_service }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
+
+                        </td>
+                        <td style="text-align:right;">
+                            <div style="display: block">
+                                {% if request.user.is_staff %}
+                                    <a href="{% url 'stations:details' station.id %}"
+                                       class="btn btn-sm btn-default">Details</a>
+                                    <a href="{% url 'stations:edit' station.id %}"
+                                       class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="{% url 'stations:delete' station.id %}"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Are you sure ?');">Delete</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+{% endblock %}
+

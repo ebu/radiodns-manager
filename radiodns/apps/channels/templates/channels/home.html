@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Channels :: RadioDNS{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                {{ request.user.active_organization.medium_name }} :: Channels
+                <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+            </div>
+            <div id="page-functions" class="pull-right">
+                {% block pagefunctions %}
+                    <button type="button" id="checkButton" data-loading-text="Checking..."
+                            class="btn btn-default" autocomplete="off">
+                        Check Channels
+                    </button>
+                    <a href="{% url 'channels:list' %}" class="btn btn-info">Export to zone file</a>
+                    <a href="{% url 'channels:list' %}" class="btn btn-primary">Import channels</a>
+                    <a href="{% url 'channels:new' %}" class="btn btn-primary">Add a new channel</a>
+                {% endblock %}
+            </div>
+            <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+        </div>
+    {% endblock %}
+
+        <div class="table-responsive">
+            <table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Station</th>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>RadioDNS entry / Url</th>
+                    <th>DNS Authoritative FQDN</th>
+                    <th>Services</th>
+                    <th style="width: 100px;"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for channel in channels %}
+                    <tr>
+
+                        <td><strong>{{ channel.station_name }}</strong></td>
+                        <td>{{ channel.client_json.name }}</td>
+                        <td>{{ channel.type_id }}</td>
+                        <td>{{ channel.name }}</td>
+                        <td>{% if channel.type_id == 'id' %}
+                            <a href="{{ channel.stream_url }}" target="_blank">{{ channel.stream_url }}</a>{% else %}
+                            {{ channel.radiodns_entry }}{% endif %}</td>
+                        <td id="fqdn-{{ c.id }}">{{ channel.station_json.fqdn }}</td>
+                        <td>
+                            {% if channel.type_id == 'id' %} {% else %}
+                                <div id="vis-{{ channel.id }}">{% if channel.station_json.radiovis_service %}
+                                    <small>VIS</small> {{ channel.station_json.radiovis_service }}{% endif %}</div>
+                                <div id="epg-{{ channel.id }}">{% if channel.station_json.radioepg_service %}
+                                    <small>EPG</small> {{ channel.station_json.radioepg_service }}{% endif %}</div>
+                                <div id="spi-{{ channel.id }}">{% if channel.station_json.radiospi_service %}
+                                    <small>SPI</small> {{ channel.station_json.radiospi_service }}{% endif %}</div>
+                                <div id="tag-{{ channel.id }}">{% if channel.station_json.radiotag_service %}
+                                    <small>TAG</small> {{ channel.station_json.radiotag_service }}{% endif %}</div>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:right;">
+                                <a href="{% url 'channels:edit' channel.id %}"
+                                   class="btn btn-sm btn-default">Edit</a>
+                                <a href="{% url 'channels:delete' channel.id %}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete {{ channel.name }} / {{ channel.radiodns_entry }} ?');">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}
+
