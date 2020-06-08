@@ -10,7 +10,7 @@
                 <i class="ion-navicon"></i>
             </div>
             <div class="page-title">
-                 No Organization :: Error
+                 Organization :: Error
                 <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
             </div>
             <div id="page-functions" class="pull-right">
@@ -19,9 +19,8 @@
         </div>
     {% endblock %}
         <div class="alert alert-danger" role="alert">
-            <strong>You are not a part of any organization!</strong> <br/>
-            As this is a required to start interacting with the system, please contact an administrator first.
+            <strong>It appears that you are not a part of any organization or your selected organization codops is not set.</strong> <br/>
+            As this is a required to start interacting with the system, please contact an administrator first for proper setup.
         </div>
-    {% endif %}
 {% endblock %}
 

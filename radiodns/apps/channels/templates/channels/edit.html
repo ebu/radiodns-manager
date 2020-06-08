@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Channels :: RadioDNS{% endblock %}
 
 {% block content %}
@@ -10,13 +10,16 @@
                 <i class="ion-navicon"></i>
             </div>
             <div class="page-title">
-                {{ request.user.active_organization.medium_name }} {% if station %}:: {{ station.name }} {% endif %}:: {% if object.id %}
-                Edit a channel{% else %}Add a channel {% endif %}
+                {% if object.id %} Edit a channel{% else %}Add a channel {% endif %}
                 <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
             </div>
             <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
             <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
+    {% endblock %}
+    {% block alerts %}
+    {{ block.super }}
+    {{ form.errors }}
     {% endblock %}
 
     <form action="" method="POST" class="form-horizontal">
@@ -26,11 +29,11 @@
             <label class="col-sm-3 col-md-3 control-label">Station:</label>
             <div class="col-sm-9 col-md-7">
                 <select name="station" id="station_select" class="form-control">
-                    {% for s in stations %}
-                        <option value="{{ s.id }}"
-                                {% if object.id and object.station_id == s.id %}selected{% elif station and station.id == s.id %}selected{% endif %}
-                                data-stationserviceid="{{ s.service_identifier }}"
-                                data-stationfqdn="{{ s.fqdn }}">{{ s.name }}</option>
+                    {% for station in stations %}
+                        <option value="{{ station.id }}"
+                                {% if form.station.id == s.id %}selected{% endif %}
+                                data-stationserviceid="{{ station.service_identifier }}"
+                                data-stationfqdn="{{ station.fqdn }}">{{ station.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -39,14 +42,15 @@
         <div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">Channel Name:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="name" value="{{ object.name }}">
+                <input type="text" class="form-control" name="name" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
             </div>
         </div>
-
+        {% comment %}
         <div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">(Optional) Client:</label>
             <div class="col-sm-9 col-md-7">
                 <select name="fk_client" id="clients_select" class="form-control">
+                    <option value="" {% if form.client %}selected{% endif %} default </option>
                     {% for c in clients %}
                         <option
                                 value="{% if c.id != 0 %}{{ c.id }}{% endif %}"
@@ -58,7 +62,7 @@
                 </select>
             </div>
         </div>
-
+        {% endcomment %}
         <hr/>
 
         <div class="form-group">
@@ -66,7 +70,7 @@
             <div class="col-sm-9 col-md-7">
                 <select name="type_id" id="type" class="form-control" onchange="ChannelsModule.prototype.update_display();">
                     {% for t in types_id %}
-                        <option value="{{ t.0 }}" {% if object.type_id == t.0 %}selected{% endif %}>{{ t.1 }}</option>
+                        <option value="{{ t.0 }}" {% if form.type_id.value == t.0 %}selected{% endif %}>{{ t.1 }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -77,7 +81,10 @@
         <div class="form-group opblk opblk_ecc_id">
             <label class="col-sm-3 col-md-3 control-label">ECC:</label>
             <div class="col-sm-9 col-md-7">
-                <select name="ecc_id" class="form-control" id="ecc" cval="{{ object.ecc_id }}">
+                <select name="ecc_id" class="form-control" id="ecc" cval="{% if form.ecc_id.value %}{{ form.ecc_id.value }}{% endif %}">
+                    {% for country in countries %}
+                    <option {% if form.ecc_id.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                    {% endfor %}
                 </select>
                 <small>Country Code</small>
             </div>
@@ -86,7 +93,7 @@
         <div class="form-group opblk opblk_pi">
             <label class="col-sm-3 col-md-3 control-label">PI:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="pi" value="{{ object.pi }}">
+                <input type="text" class="form-control" name="pi" value="{% if form.pi.value %}{{ form.pi.value }}{% endif %}">
                 <small>Programme Identificaton</small>
             </div>
         </div>
@@ -94,7 +101,7 @@
         <div class="form-group opblk opblk_frequency">
             <label class="col-sm-3 col-md-3 control-label">Frequency:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" id="frequency" name="frequency" value="{{ object.frequency }}">
+                <input type="text" class="form-control" id="frequency" name="frequency" value="{% if form.frequency.value %}{{ form.frequency.value }}{% endif %}">
                 <small>wildcard * is possible, otherwise use 5 digits, 97.10 becomes 09710</small>
             </div>
         </div>
@@ -102,7 +109,7 @@
         <div class="form-group opblk opblk_eid">
             <label class="col-sm-3 col-md-3 control-label">EID:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="eid" value="{{ object.eid }}">
+                <input type="text" class="form-control" name="eid" value="{% if form.eid.value %}{{ form.eid.value }}{% endif %}">
                 <small>Ensemble ID (4 digit hex value like '43e1')</small>
             </div>
         </div>
@@ -110,7 +117,7 @@
         <div class="form-group opblk opblk_sid">
             <label class="col-sm-3 col-md-3 control-label">SID:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="sid" value="{{ object.sid }}">
+                <input type="text" class="form-control" name="sid" value="{% if form.sid.value %}{{ form.sid.value }}{% endif %}">
                 <small>Service ID (4 digit hex value like '4001')</small>
             </div>
         </div>
@@ -118,7 +125,7 @@
         <div class="form-group opblk opblk_scids">
             <label class="col-sm-3 col-md-3 control-label">SCIDS:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="scids" value="{{ object.scids }}">
+                <input type="text" class="form-control" name="scids" value="{% if form.scids.value %}{{ form.scids.value }}{% endif %}">
                 <small>Service Component Identifier (usually 0)</small>
             </div>
         </div>
@@ -126,7 +133,7 @@
         <div class="form-group opblk opblk_appty_uatype">
             <label class="col-sm-3 col-md-3 control-label">appty-uatype (Optional):</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="appty_uatype" value="{{ object.appty_uatype }}">
+                <input type="text" class="form-control" name="appty_uatype" value="{% if form.appty_uatype.value %}{{ form.appty_uatype.value }}{% endif %}">
                 <small>X-PAD Applicaton Type (AppTy) and User Applicaton type (UAtype)</small>
             </div>
         </div>
@@ -134,7 +141,7 @@
         <div class="form-group opblk opblk_pa">
             <label class="col-sm-3 col-md-3 control-label">PA (Optional):</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="pa" value="{{ object.pa }}">
+                <input type="text" class="form-control" name="pa" value="{% if form.pa.value %}{{ form.pa.value }}{% endif %}">
                 <small>Packet Address</small>
             </div>
         </div>
@@ -142,7 +149,7 @@
         <div class="form-group opblk opblk_tx">
             <label class="col-sm-3 col-md-3 control-label">TX:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="tx" value="{{ object.tx }}">
+                <input type="text" class="form-control" name="tx" value="{% if form.tx.value %}{{ form.tx.value }}{% endif %}">
                 <small>Transmiter Identifier</small>
             </div>
         </div>
@@ -151,6 +158,9 @@
             <label class="col-sm-3 col-md-3 control-label">CC:</label>
             <div class="col-sm-9 col-md-7">
                 <select class="form-control" name="cc" id="cc" cval="{{ object.cc }}">
+                    {% for country in countries %}
+                    <option {% if form.cc.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                    {% endfor %}
                 </select>
                 <small>Country Code</small>
             </div>
@@ -159,10 +169,10 @@
         <div class="form-group opblk opblk_mid">
             <label class="col-sm-3 col-md-3 control-label">MID:</label>
             <div class="col-sm-9 col-md-7">
-                <select class="form-control" name="mid" id="mid" blark="{{ object.mid }}">
-                    <option value="1" {% if object.mid == 1 %}selected="selected"{% endif %}>HD-1 (Main Programme Service)</option>
-                    <option value="2" {% if object.mid == 2 %}selected="selected"{% endif %}>HD-2 (First Supplemental Programme Service)</option>
-                    <option value="3" {% if object.mid == 3 %}selected="selected"{% endif %}>HD-3 (Second Supplemental Programme Service)</option>
+                <select class="form-control" name="mid" id="mid" blark="{{ form.mid.value }}">
+                    <option value="1" {% if form.mid.value == 1 %}selected="selected"{% endif %}>HD-1 (Main Programme Service)</option>
+                    <option value="2" {% if form.mid.value == 2 %}selected="selected"{% endif %}>HD-2 (First Supplemental Programme Service)</option>
+                    <option value="3" {% if form.mid.value == 3 %}selected="selected"{% endif %}>HD-3 (Second Supplemental Programme Service)</option>
                 </select>
                 <small>Multicast (Supplemental Programme Service) Identifier</small>
             </div>
@@ -172,7 +182,7 @@
             <label class="col-sm-3 col-md-3 control-label">Stream Url:</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="stream_url" id="stream_url"
-                       value="{{ object.stream_url }}">
+                       value="{% if form.stream_url.value %}{{ form.stream_url.value }}{% endif %}">
                 <small>http://server/stream</small>
             </div>
         </div>
@@ -180,7 +190,7 @@
         <div class="form-group opblk opblk_fqdn">
             <label class="col-sm-3 col-md-3 control-label">FQDN:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="fqdn" id="fqdn" value="{{ object.fqdn }}">
+                <input type="text" class="form-control" name="fqdn" id="fqdn" value="{% if form.fqdn.value %}{{ form.fqdn.value }}{% endif %}">
                 <small>Authoritative FQDN</small>
             </div>
         </div>
@@ -189,7 +199,7 @@
             <label class="col-sm-3 col-md-3 control-label">serviceIdentifier:</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="serviceIdentifier" id="serviceIdentifier"
-                       value="{{ object.serviceIdentifier }}">
+                       value="{% if form.serviceIdentifier.value %}{{ form.serviceIdentifier.value }}{% endif %}">
                 <small>Service Identifier</small>
             </div>
         </div>
@@ -197,7 +207,7 @@
         <div class="form-group opblk opblk_mime_type">
             <label class="col-sm-3 col-md-3 control-label">Mime Type:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" id="mime_type" name="mime_type" value="{{ object.mime_type }}">
+                <input type="text" class="form-control" id="mime_type" name="mime_type" value="{% if form.mime_type.value %}{{ form.mime_type.value }}{% endif %}">
                 <small id="id_mime_type"><a onclick="$('#mime_type').val('audio/mpeg');" class="btn btn-xs btn-default">audio/mpeg</a>
                     or <a onclick="$('#mime_type').val('audio/aac');" class="btn btn-xs btn-default">audio/aac</a> etc.
                 </small>
@@ -211,7 +221,7 @@
         <div class="form-group opblk opblk_bitrate">
             <label class="col-sm-3 col-md-3 control-label">Bitrate:</label>
             <div class="col-sm-9 col-md-7">
-                <input type="text" class="form-control" name="bitrate" value="{{ object.bitrate }}">
+                <input type="text" class="form-control" name="bitrate" value="{% if form.bitrate.value %}{{ form.bitrate.value }}{% endif %}">
                 <small>kbits/s</small>
             </div>
         </div>
@@ -221,13 +231,40 @@
         <div class="form-group">
             <div class="col-sm-4 col-sm-offset-3">
                 <input type="submit" class="btn btn-primary" value="Save">
-                <a href="{% if station %}{{ ebuio_baseUrl }}stations/{{ station.id }}/channels
-                    {% else %}{{ ebuio_baseUrl }}channels/{% endif %}" class="btn btn-default">Cancel</a>
+                <a href="{% url 'channels:list' %}" class="btn btn-default">Cancel</a>
             </div>
         </div>
 
 
     </form>
+<script src="{% static 'js/channels.js' %}"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            const module = ChannelsModule.prototype;
 
+            {% for t in types_id %}
+                module.typesIds.push([
+                    '{{ t.0 }}',
+                    '{{ t.1 }}',
+                    [],
+                ]);
+                {% for field_name in t.2 %}
+                    module.typesIds[module.typesIds.length - 1][2].push(
+                        '{{ field_name }}'
+                    );
+                {% endfor %}
+            {% endfor %}
+            module.update_display();
+
+            // Automatic Frequency Transformation
+            $('#frequency').on('focusout', function () {
+                if ($(this).val() !== "" && $(this).val() !== "*") {
+                    var str = $(this).val();
+                    var result = '000000' + str.replace(/[. ]/g, '');
+                    $(this).val(result.substr(result.length - 5));
+                }
+            });
+        });
+</script>
 {% endblock %}
 

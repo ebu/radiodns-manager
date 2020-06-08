@@ -22,6 +22,11 @@
         </div>
     {% endblock %}
 
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
+
+
         <div class="table-responsive">
             <table id="radiodns-station-table" class="display" cellspacing="0" width="100%">
                 <thead>
@@ -38,17 +43,18 @@
                 <tbody>
                 {% for station in stations %}
                     <tr>
-                        <td>{% if station.default_logo_image_data %}<img style="height: 32px;width: 32px;"
-                                                                         src="{{ station.default_logo_image_data.public_32x32_url }}">
+                        <td>
+                        {% if station.default_image.file %}
+                            <img style="height: 32px;width: 32px;" src="{{ station.default_image.file.url }}">
                         {% else %}
-                            <a href="" class="btn btn-xs btn-primary">Set logo</a>
+                            <a href="{% url 'radioepg:station_logos' %}" class="btn btn-xs btn-primary">Set logo</a>
                         {% endif %}
                         </td>
                         <td>
                             <a href="{% url 'stations:details' station.id %}"><strong>{{ station.name }}</strong></a>
                         </td>
                         <td>
-                            {{ station.service_provider_data.short_name }}
+                            {{ station.organization.short_name }}
                         </td>
                         <td>{{ station.fqdn }}</td>
                         <td>

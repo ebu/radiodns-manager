@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Service Provider :: RadioDNS :: Images{% endblock %}
+
+{% block content %}
+
+    {% block pageheader %}
+    <div class="menubar">
+        <div class="sidebar-toggler visible-xs">
+            <i class="ion-navicon"></i>
+        </div>
+        <div class="page-title">
+            RadioDNS :: Service Provider / Station :: Images
+            <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
+        </div>
+        <div id="page-functions" class="pull-right">
+            {% block pagefunctions %}
+                    <a href="{% url 'manager:new_image' %}" class="btn btn-primary">Add a new image</a>
+            {% endblock %}
+        </div>
+        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
+    </div>
+    {% endblock %}
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
+
+        <div class="table-responsive">
+        <table id="radiodns-spigm-table" class="display" cellspacing="0" width="100%">
+
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>32x32</th>
+                    <th>112x32</th>
+                    <th>128x128</th>
+                    <th>320x240</th>
+                    <th>600x600</th>
+                    <th style="width: 200px;"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for image in images %}
+                    <tr>
+                        <td>{{image.name}}</td>
+                        <td><img src="{% if image.scaled32x32 %}{{image.scaled32x32.url}}{% endif %}" width="32" height="32" /></td>
+                        <td><img src="{% if image.scaled112x32 %}{{image.scaled112x32.url}}{% endif %}" width="112" height="32" /></td>
+                        <td><img src="{% if image.scaled128x128 %}{{image.scaled128x128.url}}{% endif %}" width="64" height="64" /></td>
+                        <td><img src="{% if image.scaled320x240 %}{{image.scaled320x240.url}}{% endif %}" width="85" height="64" /></td>
+                        <td><img src="{% if image.scaled600x600 %}{{image.scaled600x600.url}}{% endif %}" width="64" height="64" /></td>
+                        <td nowrap="nowrap" style="text-align:right;">
+                            <a href="{% url 'manager:set_default_image' image.id %}" class="btn btn-sm btn-info">Set as Provider Default</a>
+                            <a href="{% url 'manager:edit_image' image.id %}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{% url 'manager:delete_image' image.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+{% endblock %}
+

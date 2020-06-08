@@ -1,11 +1,7 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
-
+{% extends "base.html" %}
+{% load static %}
 {% block title %}Channels :: RadioVIS{% endblock %}
 
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -22,7 +18,9 @@
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
-
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 	<div class="table-responsive">
 	<table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
 
@@ -39,32 +37,28 @@
 		</thead>
 
 		<tbody>
-			{% for c in list %}
+			{% for channel in channels %}
 				<tr>
-					<td><strong>{{c.station_name}}</strong></td>
-                    <td>{{c.type_id}}</td>
-					<td>{{c.name}}</td>
-					<td>{{c.topic}}</td>
-                    <td><img id="channel-img-{{c.id}}" height="24" width="32" src="{{c.default_picture_data.public_url}}" /></td>
+					<td><strong>{{channel.station.name}}</strong></td>
+                    <td>{{channel.type_id}}</td>
+					<td>{{channel.name}}</td>
+					<td>{{channel.topic}}</td>
+                    <td><img id="channel-img-{{channel.id}}" height="24" width="32"style="height: 32px;width: 32px; {% if not channel.default_image.file %}display:none;{% endif %}"
+                                 src="{{channel.default_image.file.url}}">
 					<td>
-						{% if ebuio_u.ebuio_orga_admin %}
                             <div class="form-inline">
-                                <input type="hidden" id="currentvalue-{{c.id}}" value="{{c.default_picture_data.id}}" />
-							<select class="form-control" style="margin-bottom: 0px;" id="select-{{c.id}}" onchange="toggle_button({{c.id}});">
-								<option value="0" {% if not c.default_picture_data.id %} selected{% endif %}><i>Disabled</i></option>
-								{% for p in pictures %}
-									<option value="{{p.id}}" data-public_url="{{p.public_url}}" {% if c.default_picture_data.id == p.id %}selected{% endif %}>{{p.name}}</option>
-								{% endfor %}
-							</select>
-                            <button class="btn btn-primary" style="display:none;" id="button-{{c.id}}" onclick="switch_default({{c.id}});"><i class="ion-code-download"></i></button>
+							<select id="image_select" style="margin-bottom: 0px;" class="form-control"
+                                    onchange="switch_default($(this).val(), $(this));">
+                                <option value="{% url 'radiovis:set_image' channel.id 0 %}" {% if not channel.default_image.id %} selected{% endif %}><i>Disabled</i></option>
+                                {% for image in images %}
+                                    <option value="{% url 'radiovis:set_image' channel.id image.id %}" data- data-public_url="{{image.file.url}}" {% if channel.default_image.id == image.id %}selected{% endif %}>{{image.name}}</option>
+                                {% endfor %}
+                            </select>
                             </div>
-						{% else %}
-							{{c.default_picture_data.name|default:"<i>Disabled</i>"}}
-						{% endif %}
 					</td>
 					<td>
-						<a href="{{ebuio_baseUrl}}radiovis/channels/logs/{{c.id}}" class="btn btn-default" title="Logs"><i class="ion-ios-list"></i> Logs</a>
-                        <a href="#" onclick="play_topic('{{c.topic_no_slash}}', '{{c.station_name}}', '{{c.name}}' );" class="btn btn-default" title="Ajax player"><i class="ion-play"></i>  Player</a>
+						<a href="{% url 'radiovis:channel_logs' channel.id %}" class="btn btn-default" title="Logs"><i class="ion-ios-list"></i> Logs</a>
+                        <a href="#" onclick="play_topic('{{channel.topic_no_slash}}', '{{channel.station.name}}', '{{channel.name}}' );" class="btn btn-default" title="Ajax player"><i class="ion-play"></i>  Player</a>
 
 					</td>
 				</tr>
@@ -85,8 +79,8 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css'}" />
 	<script type="text/javascript">
         function toggle_button(id) {
             var nval = $('#select-'+id).val();
@@ -97,31 +91,27 @@
                 $('#button-'+id).hide();
             }
         }
-		function switch_default(id) {
-		    var val = $('#select-'+id).val();
-			$.ajax({
-				url: '{{ebuio_baseUrl}}radiovis/channels/set/' + id + '/' + val,
-				success: function() {
-				    elemToBlink = $('#select-'+id)
-				    $('#currentvalue-'+id).val(val);
-					elemToBlink.css('backgroundColor', 'green');
-					elemToBlink.css('opacity', '0.25');
-					elemToBlink.animate({ opacity: 1 }, 500, function() {
-						elemToBlink.css('backgroundColor', '#ffffff');
-					} );
-					toggle_button(id);
-					// Update inline image
-					if(val == 0) {
-                        $('#channel-img-'+id).hide();
-					} else {
-					    $('#channel-img-'+id).show();
-                        var selected = elemToBlink.find('option:selected');
-                        var new_public_url = selected.data('public_url');
-                        $('#channel-img-'+id).attr("src", new_public_url);
+		function switch_default( val, elemToBlink) {
+                $.ajax({
+                    url: val,
+                    success: function(data) {
+                        elemToBlink.css('backgroundColor', 'green');
+                        elemToBlink.css('opacity', '0.25');
+                        elemToBlink.animate({ opacity: 1 }, 500, function() {
+                            elemToBlink.css('backgroundColor', '#ffffff');
+                        } );
+                        // Update inline image
+                        if(data["imageo_id"] == 0) {
+                            $('#channel-img-'+data["channel_id"]).hide();
+                        } else {
+                            $('#channel-img-'+data["channel_id"]).show();
+                            var selected = elemToBlink.find('option:selected');
+                            var new_public_url = selected.data('public_url');
+                            $('#channel-img-'+data["channel_id"]).attr("src", new_public_url);
+                        }
                     }
-				}
-			})
-		}
+                })
+         }
 
         function play_topic(topic, stationname, channel) {
             if(false) {
@@ -160,6 +150,5 @@
 	</script>
 
 	<hr style="visibility: hidden; clear: both;">
-
+    </div>
 {% endblock %}
-

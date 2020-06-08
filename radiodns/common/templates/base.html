@@ -37,6 +37,13 @@
         </div>
         <div class="col-md-8 col-md-offset-1">
             {% block content %}
+                {% block pageheader %}
+                {% endblock %}
+                {% block alerts %}
+                    {% include "alerts.html" %}
+                {% endblock %}
+                {% block body %}
+                {% endblock %}
             {% endblock %}
         </div>
     </div>

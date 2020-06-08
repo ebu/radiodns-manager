@@ -27,13 +27,15 @@
             <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
     {% endblock %}
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 
         <div class="table-responsive">
             <table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Station</th>
-                    <th>Client</th>
                     <th>Type</th>
                     <th>Name</th>
                     <th>RadioDNS entry / Url</th>
@@ -47,24 +49,23 @@
                 {% for channel in channels %}
                     <tr>
 
-                        <td><strong>{{ channel.station_name }}</strong></td>
-                        <td>{{ channel.client_json.name }}</td>
+                        <td><strong>{{ channel.station.name }}</strong></td>
                         <td>{{ channel.type_id }}</td>
                         <td>{{ channel.name }}</td>
                         <td>{% if channel.type_id == 'id' %}
                             <a href="{{ channel.stream_url }}" target="_blank">{{ channel.stream_url }}</a>{% else %}
                             {{ channel.radiodns_entry }}{% endif %}</td>
-                        <td id="fqdn-{{ c.id }}">{{ channel.station_json.fqdn }}</td>
+                        <td id="fqdn-{{ c.id }}">{{ channel.station.fqdn }}</td>
                         <td>
                             {% if channel.type_id == 'id' %} {% else %}
-                                <div id="vis-{{ channel.id }}">{% if channel.station_json.radiovis_service %}
-                                    <small>VIS</small> {{ channel.station_json.radiovis_service }}{% endif %}</div>
-                                <div id="epg-{{ channel.id }}">{% if channel.station_json.radioepg_service %}
-                                    <small>EPG</small> {{ channel.station_json.radioepg_service }}{% endif %}</div>
-                                <div id="spi-{{ channel.id }}">{% if channel.station_json.radiospi_service %}
-                                    <small>SPI</small> {{ channel.station_json.radiospi_service }}{% endif %}</div>
-                                <div id="tag-{{ channel.id }}">{% if channel.station_json.radiotag_service %}
-                                    <small>TAG</small> {{ channel.station_json.radiotag_service }}{% endif %}</div>
+                                <div id="vis-{{ channel.id }}">{% if channel.station.radiovis_service %}
+                                    <small>VIS</small> {{ channel.station.radiovis_service }}{% endif %}</div>
+                                <div id="epg-{{ channel.id }}">{% if channel.station.radioepg_service %}
+                                    <small>EPG</small> {{ channel.station.radioepg_service }}{% endif %}</div>
+                                <div id="spi-{{ channel.id }}">{% if channel.station.radiospi_service %}
+                                    <small>SPI</small> {{ channel.station.radiospi_service }}{% endif %}</div>
+                                <div id="tag-{{ channel.id }}">{% if channel.station.radiotag_service %}
+                                    <small>TAG</small> {{ channel.station.radiotag_service }}{% endif %}</div>
                             {% endif %}
                         </td>
                         <td style="text-align:right;">

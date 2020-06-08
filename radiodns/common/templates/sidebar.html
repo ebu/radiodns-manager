@@ -6,7 +6,7 @@
                   <span class="caret"></span></button>
                   <ul class="dropdown-menu">
                       {% for organization in request.user.organizations_list %}
-                            <li><a href="{% url 'manager:set_organization' organization.id %}">{{ organization.medium_name }}</a></li>
+                            <li><a href="{% url 'manager:SetOrganizationView' organization.id %}">{{ organization.medium_name }}</a></li>
                       {% endfor %}
                   </ul>
               </div>
@@ -23,30 +23,25 @@
     <div class="menu-section">
         <h3>Service & Program Info</h3>
         <ul>
-            <li><a href="">Logo Image Repository</a></li>
-            <li><a href="">Station Logos</a></li>
-            <li><a href="">Service following</a></li>
-            <li><a href="">Calendar & Schedule (EPG)</a></li>
+            <li><a href="{% url 'manager:list_images' %}">Logo Image Repository</a></li>
+            <li><a href="{% url 'radioepg:station_logos' %}">Station Logos</a></li>
+            <li><a href="{% url 'radioepg:default_services' %}">Service following</a></li>
+            <li><a href="{% url 'radioepg:default_schedule' %}">Calendar & Schedule (EPG)</a></li>
         </ul>
     </div>
     <div class="menu-section">
         <h3>RadioVIS SlideShow</h3>
         <ul>
-            <li><a href="">SlideShow Image Repository</a></li>
-            <li><a href="">RadioVIS Channel Images</a></li>
-            <li><a href="">RadioEPG Gallery</a></li>
+            <li><a href="{% url 'radiovis:list_images' %}">SlideShow Image Repository</a></li>
+            <li><a href="{% url 'radiovis:list_channels' %}">RadioVIS Channel Images</a></li>
         </ul>
     </div>
-
-    {% if request.user.is_staff %}
-        <div class="menu-section">
-            <h3>System</h3>
-            <ul>
-                <li><a href="">System Status</a></li>
-            </ul>
-        </div>
-    {% endif %}
-
+    <div class="menu-section">
+        <h3>System</h3>
+        <ul>
+            <li><a href="{% url 'system:status' %}">System Status</a></li>
+        </ul>
+    </div>
     <div class="menu-section">
         <h3><a href="{% url 'common:terms' %}">Terms of Use</a></h3>
     </div>

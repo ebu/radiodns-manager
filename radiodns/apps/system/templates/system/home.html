@@ -1,11 +1,7 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}System :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -20,7 +16,6 @@
             </div>
             <div id="page-functions" class="pull-right">
                 {% block pagefunctions %}
-                    {% if ebuio_u.ebuio_orga_admin %}
                         <button
                                 id="re-generate"
                                 class="btn btn-primary"
@@ -28,7 +23,6 @@
                         >
                             Re-generate all files
                         </button>
-                    {% endif %}
                 {% endblock %}</div>
             <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
@@ -76,7 +70,7 @@
         </tbody>
     </table>
 
-    <script src='{{ ebuio_baseUrl }}media/js/ajaxq.js'></script>
+    <script src="{% static 'js/ajaxq.js' %}"></script>
     <script type="text/javascript">
         function checkSystem() {
             $.ajaxq("rdns-systemq", {

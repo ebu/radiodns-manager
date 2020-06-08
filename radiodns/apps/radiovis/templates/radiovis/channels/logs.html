@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
 
 {% block title %}Channels :: RadioVIS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -34,12 +29,12 @@
 		</thead>
 
 		<tbody>
-			{% for c in list %}
+			{% for log in logs %}
 				<tr>
-					<td>{{c.topic}}</td>
-					<td>{{c.body}}</td>
-					<td>{{c.headers}}</td>
-					<td>{{c.reception_date}}</td>
+					<td>{{log.topic}}</td>
+					<td>{{log.body}}</td>
+					<td>{{log.headers}}</td>
+					<td>{{log.reception_date}}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

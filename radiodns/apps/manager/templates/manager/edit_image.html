@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
 
 {% block title %}Gallery :: RadioEPF :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -15,23 +10,16 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {% if object.clean_filename %}Edit a{% else %}New{% endif %} picture
+            {% if form.name.value %}Edit a{% else %}New{% endif %} picture
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
-
-	{% if errors %}
-		<div class="alert alert-error">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 
 	<form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
 		{% csrf_token %}
@@ -39,7 +27,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input id="name" type="text" class="form-control" name="name" value="{{object.name}}">
+				<input id="name" type="text" class="form-control" name="name" value="{% if form.name.value %}{{form.name.value}}{% endif %}">
 			</div>
 		</div>
 
@@ -47,21 +35,21 @@
 			<label class="col-sm-3 col-md-3 control-label">Photo:</label>
 			<div class="col-sm-9 col-md-7">
 				<input id="img_file_input" type="file" class="form-control" name="file">
-				{% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
+				{% if form.file.filename %}{{form.file.filename}}{% endif %}
 				<br /><small>PNG or JPEG. Please upload an initial logo of minimum size 600x600. Logo will be resized to {% for w in sizes %} {{w.0}}x{{w.1}} {% endfor %}.<br />
 				You can upload different sizes later when editing the image.</small>
 			</div>
 		</div>
-		{% if object.id %}
+		{% if form.name.value %}
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Replace a particular size:</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="radio" name="replace_size" value="" checked> All
-				<br />
-				{% for w in sizes %}
-					<input type="radio" name="replace_size" value="{{w.0}}x{{w.1}}"> {{w.0}}x{{w.1}}
-					<br />
-				{% endfor %}
+                <input type="radio" name="replace_size" value="32x32"> 32x32
+                <input type="radio" name="replace_size" value="112x32"> 112x32
+                <input type="radio" name="replace_size" value="128x128"> 128x128
+                <input type="radio" name="replace_size" value="320x240"> 320x240
+                <input type="radio" name="replace_size" value="600x600"> 600x600
 			</div>
 		</div>
 		{% endif %}
@@ -70,36 +58,14 @@
 
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
-				<input id="img_save" type="submit" class="btn btn-primary" value="Save" disabled>
-				<a href="{{ebuio_baseUrl}}serviceprovider/images/" class="btn btn-default">Cancel</a>
+				<input id="img_save" type="submit" class="btn btn-primary" value="Save">
+				<a href="{% url 'manager:list_images' %}" class="btn btn-default">Cancel</a>
 			</div>
 		</div>
 
 	</form>
 
 	<hr style="visibility: hidden; clear: both;">
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            const saveButton = $("#img_save");
-            const fileInput = $("#img_file_input");
-            const nameInput = $("#name");
-
-            function updateSaveButton() {
-                saveButton.prop('disabled', (nameInput.val().length === 0) || (fileInput.val().length === 0));
-            }
-            updateSaveButton();
-
-            fileInput.change(function(){
-                updateSaveButton();
-            });
-
-            nameInput.keyup(function(){
-                updateSaveButton();
-            });
-        });
-
-    </script>
 
 {% endblock %}
 

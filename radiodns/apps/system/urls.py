@@ -1,3 +1,6 @@
 from django.urls import path
 
-urlpatterns = []
+from . import views
+
+app_name = "system"
+urlpatterns = [path("", views.SystemStatusView, name="status")]

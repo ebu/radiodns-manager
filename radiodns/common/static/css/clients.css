@@ -1,0 +1,38 @@
+.btn-group-sm > .btn, .btn-sm, btn-mr {
+    margin-right: 5px;
+}
+
+.btn_suggestion_container {
+    margin-left: 5px;
+    padding-top: 2px
+}
+
+.input_invalid {
+    border: 1px solid #dc3545;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.input_valid {
+    border: 1px solid #28a745;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.validated_input_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.error_message_container {
+    color: #dc3545;
+}
+
+.identifier-container {
+    overflow: auto;
+    vertical-align: middle;
+}
+
+.identifier-wrapper {
+    display: flex;
+    align-items: center;
+}

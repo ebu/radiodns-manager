@@ -13,8 +13,11 @@
         </div>
     </div>
     {% endblock %}
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 
-     <form>
+     <form action="" method="POST" class="form-horizontal">
          {% csrf_token %}
 
          <div class="form-group">

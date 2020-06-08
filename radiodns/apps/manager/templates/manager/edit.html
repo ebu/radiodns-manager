@@ -13,7 +13,9 @@
         </div>
     </div>
     {% endblock %}
-
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 	<form action="" method="POST" class="form-horizontal">
         {% csrf_token %}
         <h2>Names</h2>
@@ -22,40 +24,41 @@
             <label for="{{ form.short_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Short Name (8 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="short_name" class="form-control" value="{% if form.short_name.value  %}{{form.short_name.value}}{% endif %}" maxlength="8">
+                {{ form.short_name.errors }}
             </div>
         </div>
 
 		<div class="form-group">
-            {{ form.medium_name.errors }}
             <label for="{{ form.medium_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Medium Name (16 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="medium_name" class="form-control" value="{% if form.medium_name.value %}{{form.medium_name.value}}{% endif %}" maxlength="16">
-            </div>
-        </div>
+                {{ form.medium_name.errors }}
+		</div>
 
 		<div class="form-group">
-            {{ form.long_name.errors }}
+
             <label for="{{ form.long_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Long Name (128 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="long_name" class="form-control" value="{% if form.long_name.value %}{{form.long_name.value}}{% endif %}" maxlength="128">
+                {{ form.long_name.errors }}
             </div>
         </div>
 
         <hr />
 
 		<div class="form-group">
-            {{ form.short_description.errors }}
             <label for="{{ form.short_description.auto_id }}" class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="short_description" class="form-control" value="{% if form.short_description.value %}{{ form.short_description.value }}{% endif %}" maxlength="180">
+                {{ form.short_description.errors }}
             </div>
         </div>
 
 		<div class="form-group">
-            {{ form.long_description.errors }}
             <label for="{{ form.long_description.auto_id }}" class="col-sm-3 col-md-3 control-label">Long description (1200 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="long_description" class="form-control" value="{% if form.long_description.value %}{{form.long_description.value}}{% endif %}" maxlength="1200">
+                 {{ form.long_description.errors }}
             </div>
         </div>
 
@@ -64,12 +67,14 @@
         <h2>Language</h2>
 
         <div class="form-group">
-            {{ form.default_language.errors }}
             <label for="{{ form.default_language.auto_id }}" class="col-sm-3 col-md-3 control-label">Default Language</label>
             <div class="col-sm-9 col-md-7">
-                <select name="default_language" class="form-control" id="default_language" cval="{% if form.default_language.value %}{{form.default_language.value}}{% endif %}">
-                    <option value=""></option><option value="af">Afrikaans</option><option value="ak">Akan</option><option value="an">aragonés</option><option value="ar">عربي</option><option value="as">অসমীয়া</option><option value="ast">Asturianu</option><option value="az">Azərbaycanca</option><option value="be">Беларуская</option><option value="bg">Български</option><option value="br">Brezhoneg</option><option value="ca">Català</option><option value="cs">Čeština</option><option value="csb">Kaszëbsczi</option><option value="cy">Cymraeg</option><option value="da">Dansk</option><option value="de">Deutsch</option><option value="dsb">Dolnoserbšćina</option><option value="el">Ελληνικά</option><option value="en-GB">English (British)</option><option value="en-US">English (US)</option><option value="eo">Esperanto</option><option value="es-AR">Español (de Argentina)</option><option value="es-CL">Español (de Chile)</option><option value="es-ES">Español (de España)</option><option value="es-MX">Español (de México)</option><option value="et">Eesti keel</option><option value="eu">Euskara</option><option value="fa">فارسی</option><option value="ff">Pulaar-Fulfulde</option><option value="fi">suomi</option><option value="fr">Français</option><option value="fy-NL">Frysk</option><option value="ga-IE">Gaeilge</option><option value="gd">Gàidhlig</option><option value="gl">Galego</option><option value="he">עברית</option><option value="hi-IN">हिन्दी (भारत)</option><option value="hr">Hrvatski</option><option value="hsb">Hornjoserbsce</option><option value="hu">magyar</option><option value="hy-AM">Հայերեն</option><option value="id">Bahasa Indonesia</option><option value="is">íslenska</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ka">ქართული</option><option value="kk">Қазақ</option><option value="km">ខ្មែរ</option><option value="ko">한국어</option><option value="ku">Kurdî</option><option value="lg">Luganda</option><option value="lij">Ligure</option><option value="lt">lietuvių kalba</option><option value="lv">Latviešu</option><option value="mk">Македонски</option><option value="ml">മലയാളം</option><option value="mr">मराठी</option><option value="ms">Melayu</option><option value="my">မြန်မာဘာသာ</option><option value="nb-NO">Norsk bokmål</option><option value="nl">Nederlands</option><option value="nso">Sepedi</option><option value="oc">occitan (lengadocian)</option><option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option><option value="pl">Polski</option><option value="pt-BR">Português (do Brasil)</option><option value="pt-PT">Português (Europeu)</option><option value="rm">rumantsch</option><option value="ro">română</option><option value="ru">Русский</option><option value="sk">slovenčina</option><option value="sl">Slovenščina</option><option value="son">Soŋay</option><option value="sq">Shqip</option><option value="sr">Српски</option><option value="sv-SE">Svenska</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="ur">اُردو</option><option value="vi">Tiếng Việt</option><option value="xh">isiXhosa</option><option value="zh-CN">中文 (简体)</option><option value="zh-TW">正體中文 (繁體)</option>
+                <select name="default_language" class="form-control" id="default_language">
+                    {% for language in languages %}
+                    <option {% if form.default_language.value == language.0 %} selected {% endif %} value="{{ language.0 }}">{{ language.1 }}</option>
+                    {% endfor %}
                 </select>
+                {{ form.default_language.errors }}
             </div>
         </div>
 
@@ -78,10 +83,10 @@
         <h2>Links</h2>
 
         <div class="form-group">
-            {{ form.url_default.errors }}
             <label for="{{ form.url_default.auto_id }}" class="col-sm-3 col-md-3 control-label">Default Url</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="url_default" class="form-control" value="{% if form.url_default.value %}{{form.url_default.value}}{% endif %}" maxlength="255">
+                {{ form.url_default.errors }}
             </div>
         </div>
 
@@ -92,58 +97,61 @@
         <h2>Address</h2>
 
         <div class="form-group">
-            {{ form.postal_name.errors }}
             <label for="{{ form.postal_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Postal Name</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="postal_name" id="postal_name" value="{% if form.postal_name.value %}{{form.postal_name.value}}{% endif %}"/>
+                {{ form.postal_name.errors }}
             </div>
         </div>
         <div class="form-group">
-            {{ form.street.errors }}
             <label for="{{ form.postal_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Street</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="street" id="street" value="{% if form.street.value %}{{form.street.value}}{% endif %}"/>
+                {{ form.street.errors }}
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 col-md-3 control-label">ZIP, City</label>
             <div class="col-sm-9 col-md-7">
                 <div class="row">
-                    {{ form.zipcode.errors }}
+
                     <div class="col-lg-4">
-                    <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{% if form.zipcode.value %}{{form.zipcode.value}}{% endif %}"/>
+                        <input type="text" class="form-control pull-left" name="zipcode" id="zipcode" value="{% if form.zipcode.value %}{{form.zipcode.value}}{% endif %}"/>
+                        {{ form.zipcode.errors }}
                     </div>
-                    {{ form.city.errors }}
                     <div class="col-lg-8">
-                    <input type="text" class="form-control" name="city" id="city" value="{% if form.city.value %}{{form.city.value}}{% endif %}"/>
+                        <input type="text" class="form-control" name="city" id="city" value="{% if form.city.value %}{{form.city.value}}{% endif %}"/>
+                        {{ form.city.errors }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            {{ form.location_country.errors }}
             <label for="{{ form.location_country.auto_id }}" class="col-sm-3 col-md-3 control-label">Country</label>
             <div class="col-sm-9 col-md-7">
-                <select class="form-control" name="location_country" id="location_country" cval="{% if form.location_country.value %}{{form.location_country.value}}{% endif %}">
-				 <option value=""></option><option value="af">Afrikaans</option><option value="ak">Akan</option><option value="an">aragonés</option><option value="ar">عربي</option><option value="as">অসমীয়া</option><option value="ast">Asturianu</option><option value="az">Azərbaycanca</option><option value="be">Беларуская</option><option value="bg">Български</option><option value="br">Brezhoneg</option><option value="ca">Català</option><option value="cs">Čeština</option><option value="csb">Kaszëbsczi</option><option value="cy">Cymraeg</option><option value="da">Dansk</option><option value="de">Deutsch</option><option value="dsb">Dolnoserbšćina</option><option value="el">Ελληνικά</option><option value="en-GB">English (British)</option><option value="en-US">English (US)</option><option value="eo">Esperanto</option><option value="es-AR">Español (de Argentina)</option><option value="es-CL">Español (de Chile)</option><option value="es-ES">Español (de España)</option><option value="es-MX">Español (de México)</option><option value="et">Eesti keel</option><option value="eu">Euskara</option><option value="fa">فارسی</option><option value="ff">Pulaar-Fulfulde</option><option value="fi">suomi</option><option value="fr">Français</option><option value="fy-NL">Frysk</option><option value="ga-IE">Gaeilge</option><option value="gd">Gàidhlig</option><option value="gl">Galego</option><option value="he">עברית</option><option value="hi-IN">हिन्दी (भारत)</option><option value="hr">Hrvatski</option><option value="hsb">Hornjoserbsce</option><option value="hu">magyar</option><option value="hy-AM">Հայերեն</option><option value="id">Bahasa Indonesia</option><option value="is">íslenska</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ka">ქართული</option><option value="kk">Қазақ</option><option value="km">ខ្មែរ</option><option value="ko">한국어</option><option value="ku">Kurdî</option><option value="lg">Luganda</option><option value="lij">Ligure</option><option value="lt">lietuvių kalba</option><option value="lv">Latviešu</option><option value="mk">Македонски</option><option value="ml">മലയാളം</option><option value="mr">मराठी</option><option value="ms">Melayu</option><option value="my">မြန်မာဘာသာ</option><option value="nb-NO">Norsk bokmål</option><option value="nl">Nederlands</option><option value="nso">Sepedi</option><option value="oc">occitan (lengadocian)</option><option value="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</option><option value="pl">Polski</option><option value="pt-BR">Português (do Brasil)</option><option value="pt-PT">Português (Europeu)</option><option value="rm">rumantsch</option><option value="ro">română</option><option value="ru">Русский</option><option value="sk">slovenčina</option><option value="sl">Slovenščina</option><option value="son">Soŋay</option><option value="sq">Shqip</option><option value="sr">Српски</option><option value="sv-SE">Svenska</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="uk">Українська</option><option value="ur">اُردو</option><option value="vi">Tiếng Việt</option><option value="xh">isiXhosa</option><option value="zh-CN">中文 (简体)</option><option value="zh-TW">正體中文 (繁體)</option>
+                <select class="form-control" name="location_country" id="location_country">
+                    {% for country in countries %}
+                    <option {% if form.location_country.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                    {% endfor %}
                 </select>
+                {{ form.location_country.errors }}
             </div>
         </div>
         <div class="form-group">
-            {{ form.phone_number.errors }}
             <label for="{{ form.phone_number.auto_id }}" class="col-sm-3 col-md-3 control-label">Phone Number</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="phone_number" id="phone_number" value="{% if form.phone_number.value %}{{form.phone_number.value}}{% endif %}"/>
                 <small>Format: +41-22-7172745</small>
+                {{ form.phone_number.errors }}
             </div>
         </div>
 
         <h2>Keywords</h2>
         <div class="form-group">
-            {{ form.keywords.errors }}
             <label for="{{ form.keywords.auto_id }}" class="col-sm-3 col-md-3 control-label">Keywords</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="keywords" id="keywords" value="{% if form.keywords.value %}{{form.keywords.value}}{% endif %}"/>
+                {{ form.keywords.errors }}
             </div>
         </div>
         <hr />

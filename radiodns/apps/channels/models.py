@@ -4,6 +4,14 @@ from apps.manager.models import Organization
 from apps.stations.models import Station
 
 
+class Image(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    file = models.ImageField(blank=True, null=True)
+    radiotext = models.CharField(max_length=255)
+    radiolink = models.URLField()
+
+
 class Channel(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -29,30 +37,31 @@ class Channel(models.Model):
     type_id = models.CharField(max_length=5)
 
     # FM
-
-    pi = models.CharField(max_length=4)
-    frequency = models.CharField(max_length=5)
+    pi = models.CharField(max_length=4, blank=True, null=True)
+    frequency = models.CharField(max_length=5, blank=True, null=True)
 
     # DAB/DAB+
-    eid = models.CharField(max_length=4)
-    sid = models.CharField(max_length=8)
-    scids = models.CharField(max_length=3)
-    appty_uatype = models.CharField(max_length=6)
-    pa = models.IntegerField()
+    eid = models.CharField(max_length=4, blank=True, null=True)
+    sid = models.CharField(max_length=8, blank=True, null=True)
+    scids = models.CharField(max_length=3, blank=True, null=True)
+    appty_uatype = models.CharField(max_length=6, blank=True, null=True)
+    pa = models.IntegerField(blank=True, null=True)
 
     # IP
-    stream_url = models.CharField(max_length=255)
-    bitrate = models.IntegerField()
-    mime_type = models.CharField(max_length=64)
+    stream_url = models.CharField(max_length=255, blank=True, null=True)
+    bitrate = models.IntegerField(blank=True, null=True)
+    mime_type = models.CharField(max_length=64, blank=True, null=True)
 
     # hd
-    tx = models.CharField(max_length=5)
-    cc = models.CharField(max_length=3)
-    mid = models.IntegerField()
+    tx = models.CharField(max_length=5, blank=True, null=True)
+    cc = models.CharField(max_length=3, blank=True, null=True)
+    mid = models.IntegerField(blank=True, null=True)
 
     # ID
-    fqdn = models.CharField(max_length=255)
-    serviceIdentifier = models.CharField(max_length=16)
+    fqdn = models.CharField(max_length=255, blank=True, null=True)
+    serviceIdentifier = models.CharField(max_length=16, blank=True, null=True)
+
+    default_image = models.ForeignKey(Image, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Ecc(models.Model):
@@ -64,11 +73,3 @@ class Ecc(models.Model):
     ecc = models.CharField(max_length=3)
 
 
-class Picture(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
-    name = models.CharField(max_length=80)
-    filename = models.CharField(max_length=255)
-    radiotext = models.CharField(max_length=255)
-    radiolink = models.CharField(max_length=255)
-    image_url_prefix = models.CharField(max_length=255)

@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
-
+{% extends "base.html" %}
+{% load static %}
 {% block title %}Gallery :: RadioVIS :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -19,26 +14,14 @@
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %}
-            {% if ebuio_u.ebuio_orga_admin %}
-                    <a href="{{ebuio_baseUrl}}radiovis/gallery/edit/-" class="btn btn-primary">Add a new image</a>
-            {% endif %}
+                    <a href="{% url 'radiovis:new_image' %}" class="btn btn-primary">Add a new image</a>
             {% endblock %}</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
-
-	{% if saved %}
-		<div class="alert alert-success" role="alert">
-			Picture has been saved
-		</div>
-	{% endif %}
-
-	{% if deleted %}
-		<div class="alert alert-success" role="alert">
-			Picture has been deleted
-		</div>
-	{% endif %}
-
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 	<div class="table-responsive">
 	<table id="radiovis-img-table" class="display" cellspacing="0" width="100%">
 		<thead>
@@ -52,39 +35,23 @@
 		</thead>
 
 		<tbody>
-			{% for s in list %}
+			{% for image in images %}
 				<tr>
-					<td>{{s.name}}</td>
-					<td>{{s.radiotext}}</td>
-					<td>{{s.radiolink}}</td>
-					<td><img class="tooltipme" src="{{s.public_url}}" width="64" heigh="48" data-placement="top" data-original-title="<img src='{{s.public_url}}' width='320' height='240'>"></td>
+					<td>{{image.name}}</td>
+					<td>{{image.radiotext}}</td>
+					<td>{{image.radiolink}}</td>
+					<td><img src="{{image.file.url}}" width="64" height="48" ></td>
 					<td style="text-align:right;">
-						{% if ebuio_u.ebuio_orga_admin %}
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/delete/{{s.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-							<a href="{{ebuio_baseUrl}}radiovis/gallery/edit/{{s.id}}" class="btn btn-sm btn-default">Edit</a>
-						{% endif %}
+							<a href="{% url 'radiovis:delete_image' image.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
+							<a href="{% url 'radiovis:edit_image' image.id %}" class="btn btn-sm btn-default">Edit</a>
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 
-    <script src='{{ebuio_baseUrl}}media/js/jquery.dataTables.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="{{ebuio_baseUrl}}media/css/jquery.dataTables.min.css" />
-	<script type="text/javascript">
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}" />
 
-		$(document).ready(function() {
-		    $('.tooltipme').tooltip({html: true});
-            $('#radiovis-img-table').DataTable( {
-                    "paging":   false,
-                    "ordering": true,
-                    "info":     true,
-                    columnDefs: [ { orderable: false, targets: [3,4] },
-                                        { "bSearchable": false, "aTargets": [3,4] } ]
-                } );
-        } );
-	</script>
-
-
+    </div>
 {% endblock %}
-

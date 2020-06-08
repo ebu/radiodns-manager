@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+from .constants import COUNTRIES, COUNTRIES_N_CODES, LANGUAGES, COLORS
 
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
@@ -52,10 +53,11 @@ LOCAL_APPS = [
     "apps.radiodns_auth",
     "apps.channels",
     "apps.clients",
-    "apps.shows",
     "apps.stations",
     "apps.system",
     "apps.manager",
+    "apps.radioepg",
+    "apps.radiovis",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
@@ -68,6 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "apps.radiodns_auth.middleware.LoginRequiredMiddleware",
+    "apps.manager.middleware.SetupRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -93,6 +97,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+LOGIN_URL = "login/"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -131,8 +137,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = "/common/static/"
+SETUP_EXEMPT_URLS = [
+    "setup_error/",
+    "admin/"
+]

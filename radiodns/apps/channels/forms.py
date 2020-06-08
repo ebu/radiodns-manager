@@ -8,4 +8,21 @@ class ChannelForm(ModelForm):
         model = Channel
         fields = [
             "name",
+            "station",
+            "type_id",
+            "pi",
+            "frequency",
+            "eid",
+            "sid",
+            "scids",
+            "appty_uatype",
+            "pa",
+            "stream_url",
+            "bitrate",
+            "mime_type",
+            "tx",
+            "cc",
+            "mid",
+            "fqdn",
+            "serviceIdentifier",
         ]

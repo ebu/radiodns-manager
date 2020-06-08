@@ -15,20 +15,20 @@
             </div>
             <div id="page-functions" class="pull-right">
                 {% block pagefunctions %}
-                    {% if ebuio_u.ebuio_orga_admin %}
                         <a href="{% url 'stations:edit' station.id %}" class="btn btn-primary">Edit</a>
                         <a href="{% url 'stations:delete' station.id %}" class="btn btn-danger" onclick="return confirm('Are you sure ?');">Delete</a>
-                    {% endif %}
                 {% endblock %}
             </div>
             <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
         </div>
     {% endblock %}
-
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
     <div role="tabpanel">
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="details">
-                <div id="tab_wrapper_{{ station.id }}" style="display: none;">
+                <div id="tab_wrapper_{{ station.id }}">
                     <div class="row">
                         <div class="col-md-7">
                             <h3>Current configuration:</h3>
@@ -52,12 +52,6 @@
                                         <th>Short Description</th>
                                         <td>{{ station.short_description }}</td>
                                     </tr>
-                                    {% comment %}
-                                        <tr>
-                                            <th>Long Description</th>
-                                            <td>{{ station.long_description }}</td>
-                                        </tr>
-                                    {% endcomment %}
                                     <tr>
                                         <th>Default Url</th>
                                         <td>
@@ -73,9 +67,9 @@
                                     </tr>
                                     <tr>
                                         <th>Postal Address</th>
-                                        <td>{{ station.postal_name }}<br/>
-                                            {{ station.street }}<br/>
-                                            {{ station.city }}{% if station.zipcode %}, {{ station.zipcode }}{% endif %}
+                                        <td>{% if station.postal_name %}{{ station.postal_name }}{% endif %}<br/>
+                                            {% if station.street %}{{ station.street }}{% endif %}<br/>
+                                            {% if station.city %}{{ station.city }}{% endif %}{% if station.zipcode %}, {{ station.zipcode }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
@@ -86,7 +80,7 @@
                                     </tr>
                                     <tr>
                                         <th>Phone Number</th>
-                                        <td>{{ station.phone_number }}</td>
+                                        <td>{% if station.phone_number %}{{ station.phone_number }}{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <th>SMS</th>
@@ -108,25 +102,25 @@
                                 </table>
                             </div>
                         </div>
-                        {% if station.default_logo_image_data %}
+                        {% if station.default_image %}
                             <div class="col-md-4 col-md-offset-1">
                                 <h3>Current station logo:</h3>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <img style="width: 100%; max-width:600px;"
                                              id="station-img-{{ station.id }}"
-                                             src="{{ station.default_logo_image_data.public_600x600_url }}">
+                                             src="{{ station.default_image.scaled600x600.url }}">
                                     </div>
                                     <div class="col-md-12">
                                         <h4>Change logo</h4>
                                         <select style="margin-bottom: 0px;" class="form-control"
                                                 onchange="StationModuleDetails.prototype.switch_default({{ station.id }}, $(this).val(), $(this));">
-                                            <option value="0" {% if not station.default_logo_image_data %}
+                                            <option value="0" {% if not station.default_image %}
                                                     selected{% endif %}><i>Disabled</i></option>
-                                            {% for p in pictures %}
-                                                <option value="{{ p.id }}"
-                                                        data-public_url="{{ p.public_600x600_url }}"
-                                                        {% if station.default_logo_image_data.id == p.id %}selected{% endif %}>{{ p.name }}</option>
+                                            {% for image in images %}
+                                                <option value="{{ image.id }}"
+                                                        data-public_url="{{ image.scaled600x600.url  }}"
+                                                        {% if station.default_image.id == image.id %}selected{% endif %}>{{ image.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -181,6 +175,8 @@
                                                     <td>{{ station.ip_allowed }}</td>
                                                 </tr>
                                             </table>
+                                        {% else %}
+                                            <small>VIS service disabled</small>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -188,15 +184,19 @@
                                     <th>SPI Service Details:</th>
                                     <td>
                                         <span id="epg-{{ station.id }}">
-                                            {% if station.radioepg_service %}
+                                            {% if station.radioepg_enabled %}
                                                 <small>EPG</small>
                                                 {{ station.radioepg_service }}
+                                            {% else %}
+                                                <small>EPG epg disabled</small>
                                             {% endif %}
                                         </span><br/>
                                         <span id="spi-{{ station.id }}">
                                             {% if station.radiospi_service %}
                                                 <small>SPI</small>
                                                 {{ station.radiospi_service }}
+                                            {% else %}
+                                                <small>SPI spi disabled</small>
                                             {% endif %}
                                         </span>
                                     </td>

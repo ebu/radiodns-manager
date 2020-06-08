@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
 
 {% block title %}Gallery :: RadioVIS :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -15,45 +10,37 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {% if object.clean_filename %}Edit a{% else %}New{% endif %} picture
+            {% if form.file %}Edit a{% else %}New{% endif %} picture
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
-
-	{% if errors %}
-		<div class="alert alert-error">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
-
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 	<form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
 		{% csrf_token %}
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Name:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="name" value="{{object.name}}">
+				<input type="text" class="form-control" name="name" value="{% if form.name.value %}{{form.name.value}}{% endif %}">
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Radio text:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="radiotext" value="{{object.radiotext}}">
+				<input type="text" class="form-control" name="radiotext" value="{% if form.radiotext.value %}{{form.radiotext.value}}{% endif %}">
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-3 col-md-3 control-label">Associated Weblink:</label>
 			<div class="col-sm-9 col-md-7">
-				<input type="text" class="form-control" name="radiolink" value="{{object.radiolink}}">
+				<input type="text" class="form-control" name="radiolink" value="{% if form.radiolink.value %}{{form.radiolink.value}}{% endif %}">
 			</div>
 		</div>
 
@@ -61,8 +48,8 @@
 			<label class="col-sm-3 col-md-3 control-label">Photo:</label>
 			<div class="col-sm-9 col-md-7">
 				<input type="file" class="form-control" name="file">
-				{% if object.clean_filename %}(Current: {{object.clean_filename}}){% endif %}
-				<br /><small>PNG or JPEG. Please upload an image of size 320x240.</small>
+				{% if form.file.filename %}{{form.file.filename}}{% endif %}
+				<br /><small>PNG or JPEG. Please upload an image of size 320x240 or it will be resized.</small>
 			</div>
 		</div>
 
@@ -71,7 +58,7 @@
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-3">
 				<input type="submit" class="btn btn-primary" value="Save">
-				<a href="{{ebuio_baseUrl}}radiovis/gallery/" class="btn btn-default">Cancel</a>
+				<a href="{% url 'radiovis:list_images' %}" class="btn btn-default">Cancel</a>
 			</div>
 		</div>
 

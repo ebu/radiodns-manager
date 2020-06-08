@@ -20,6 +20,9 @@
             </div>
         </div>
     {% endblock %}
+    {% block alerts %}
+    {{ block.super }}
+    {% endblock %}
 
      <div class="table-responsive">
          <table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
@@ -35,8 +38,8 @@
              {% for client in clients %}
                  <tr>
                      <td><strong>{{ client.name }}</strong></td>
-                     <td>{{ channel.email }}</td>
-                     <td>{{ channel.identifier }}</td>
+                     <td>{{ client.email }}</td>
+                     <td>{{ client.identifier }}</td>
                      <td style="text-align:right;">
                              <a href="{% url 'clients:edit' client.id %}"
                                 class="btn btn-sm btn-default">Edit</a>

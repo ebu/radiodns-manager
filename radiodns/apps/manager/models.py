@@ -10,31 +10,25 @@ class Organization(models.Model):
     medium_name = models.CharField(max_length=16)
     long_name = models.CharField(max_length=128)
     short_description = models.CharField(max_length=180)
-    long_description = models.CharField(max_length=1200)
+    long_description = models.CharField(max_length=1200, blank=True, null=True)
     url_default = models.CharField(max_length=255)
 
-    postal_name = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    zipcode = models.CharField(max_length=25)
-    phone_number = models.CharField(max_length=128)
+    postal_name = models.CharField(max_length=255, blank=True, null=True)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    zipcode = models.CharField(max_length=25, blank=True, null=True)
+    phone_number = models.CharField(max_length=128, blank=True, null=True)
 
-    keywords = models.CharField(max_length=255)
-    default_language = models.CharField(max_length=5)
-    location_country = models.CharField(max_length=5)
+    keywords = models.CharField(max_length=255, blank=True, null=True)
+    default_language = models.CharField(max_length=5, blank=True, null=True)
+    location_country = models.CharField(max_length=5, blank=True, null=True)
+
+    default_image_id = models.IntegerField(blank=True, null=True)
 
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self):
         return f"{self.medium_name} {self.codops}"
-
-
-class LogoImage(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    filename = models.CharField(max_length=255)
-
-    url = models.URLField()
 
 
 class User(AbstractUser):
@@ -59,3 +53,15 @@ class User(AbstractUser):
     @active_organization.setter
     def active_organization(self, organization):
         self.current_organization = organization
+
+
+class LogoImage(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=255)
+    file = models.ImageField(blank=True, null=True)
+    scaled32x32 = models.ImageField(blank=True, null=True)
+    scaled112x32 = models.ImageField(blank=True, null=True)
+    scaled128x128 = models.ImageField(blank=True, null=True)
+    scaled320x240 = models.ImageField(blank=True, null=True)
+    scaled600x600 = models.ImageField(blank=True, null=True)

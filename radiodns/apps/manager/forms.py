@@ -1,6 +1,6 @@
-from django.forms import ModelForm, forms, ChoiceField, Select
+from django.forms import ModelForm, CharField
 
-from apps.manager.models import Organization
+from apps.manager.models import Organization, LogoImage
 
 
 class OrganizationForm(ModelForm):
@@ -22,3 +22,13 @@ class OrganizationForm(ModelForm):
             "phone_number",
             "keywords",
         ]
+
+
+class LogoImageForm(ModelForm):
+    replace_size = CharField(
+        label="Replace particular size", max_length=10, required=False
+    )
+
+    class Meta:
+        model = LogoImage
+        fields = ["name", "file"]

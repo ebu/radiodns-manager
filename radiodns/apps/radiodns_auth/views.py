@@ -3,8 +3,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.conf import settings
 
-from apps.radiodns_auth.forms import UserAuthenticationForm
-
 
 def login_view(request):
     form = AuthenticationForm()

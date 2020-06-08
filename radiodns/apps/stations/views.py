@@ -1,48 +1,54 @@
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 
+from apps.manager.models import LogoImage
 from apps.stations.forms import StationForm
 from apps.stations.models import Station
 
 
-@login_required
-def list_stations(request):
+def ListStationsView(request):
     stations = Station.objects.filter(
         organization__id=request.user.active_organization.id
     )
     return render(request, "stations/home.html", context={"stations": stations})
 
 
-# STATION
-@login_required
-def station_details(request, station_id):
-    station = get_object_or_404(Station, id=station_id)
-    return render(request, "stations/details.html", context={"station": station})
+def StationDetailsView(request, station_id):
+    station = get_object_or_404(
+        Station, id=station_id, organization__id=request.user.active_organization.id
+    )
+    images = LogoImage.objects.filter(organization__id=request.user.active_organization.id)
+    return render(request, "stations/details.html", context={"station": station, "images":images })
 
 
-# EDIT ADD STATION
-@login_required
-def edit_station(request, station_id=None):
+def EditStationView(request, station_id=None):
     station = None
     if station_id is not None:
-        station = get_object_or_404(Station, id=station_id)
+        station = get_object_or_404(
+            Station, id=station_id, organization__id=request.user.active_organization.id
+        )
     form = StationForm(instance=station)
     if request.method == "POST":
         form = StationForm(request.POST, instance=station)
+        print(form.errors)
         if form.is_valid():
-            form.save()
+            station = form.save(commit=False)
+            station.organization = request.user.active_organization
+            station.save()
             return redirect("stations:list")
     return render(
         request,
         "stations/edit.html",
-        context={"form": form, "organization": request.user.active_organization},
+        context={
+            "form": form,
+            "organization": request.user.active_organization,
+            "languages": settings.LANGUAGES,
+            "countries": settings.COUNTRIES_N_CODES
+        },
     )
 
 
-# DELETE STATION
-@login_required
-def delete_station(request, station_id):
+def DeleteStationView(request, station_id):
     station = get_object_or_404(Station, id=station_id)
     station.delete()
-    station.save()
     return redirect("stations:list")

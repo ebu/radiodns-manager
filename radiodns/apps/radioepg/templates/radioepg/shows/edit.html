@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
 
 {% block title %}Shows :: RadioEPG :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -23,37 +18,27 @@
     </div>
     {% endblock %}
 
-	{% if errors %}
-		<div class="alert alert-error">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
-
 	<form action="" method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
-
+        {{ form.errors }}
 		<label>Medium name</label>
-		<input type="text" name="medium_name" value="{{object.medium_name}}">
+		<input type="text" name="medium_name" value="{% if form.medium_name.value %}{{ form.medium_name.value }}{% endif %}">
 
 		<label>Long name</label>
-		<input type="text" name="long_name" value="{{object.long_name}}">
+		<input type="text" name="long_name" value="{% if form.long_name.value %}{{ form.long_name.value }}{% endif %}">
 
 		<label>Description</label>
-		<textarea name="description">{{object.long_name}}</textarea>
+		<textarea name="description">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
 
 		<label>Color</label>
 		<select name="color">
 			{% for color in colors %}
-				<option style="color: #000; background-color: {{color.1}};" value="{{color.1}}" {% if object.color == color.1 %}selected{% endif %}>{{color.0}}</option>
+				<option style="color: #000; background-color: {{color.0}};" value="{{color.0}}" {% if form.color.value == color.0 %}selected{% endif %}>{{color.1}}</option>
 			{% endfor %}
 		</select>
 
 		<span style="float: right;">
-			<a href="{{ebuio_baseUrl}}radioepg/shows/" class="btn">Cancel</a>
+			<a href="{% url 'radioepg:list_shows' selected_station.id %}" class="btn">Cancel</a>
 			<input type="submit" class="btn btn-primary" value="Save">
 		</span>
 
