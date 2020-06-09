@@ -10,9 +10,9 @@ def scale_image(image, width, height):
     new_image = Image.open(image)
     new_image.thumbnail((width, height),)
     buffer = BytesIO()
-    new_image.save(fp=buffer, format="JPEG")
+    new_image.save(fp=buffer, format="PNG")
     pillow_img = ContentFile(buffer.getvalue())
-    img_name = f"{uuid.uuid4()}.jpg"
+    img_name = f"{uuid.uuid4()}.png"
     return InMemoryUploadedFile(
         pillow_img,  # file
         None,  # field_name
