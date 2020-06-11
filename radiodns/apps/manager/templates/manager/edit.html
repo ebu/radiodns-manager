@@ -9,7 +9,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {{organization.short_name}} :: Service Provider Configuration
+            {{request.user.current_organization.short_name}} :: Service Provider Configuration
         </div>
     </div>
     {% endblock %}
@@ -33,10 +33,10 @@
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="medium_name" class="form-control" value="{% if form.medium_name.value %}{{form.medium_name.value}}{% endif %}" maxlength="16">
                 {{ form.medium_name.errors }}
+            </div>
 		</div>
 
 		<div class="form-group">
-
             <label for="{{ form.long_name.auto_id }}" class="col-sm-3 col-md-3 control-label">Long Name (128 chars)</label>
             <div class="col-sm-9 col-md-7">
 		        <input type="text" name="long_name" class="form-control" value="{% if form.long_name.value %}{{form.long_name.value}}{% endif %}" maxlength="128">
@@ -71,7 +71,7 @@
             <div class="col-sm-9 col-md-7">
                 <select name="default_language" class="form-control" id="default_language">
                     {% for language in languages %}
-                    <option {% if form.default_language.iso == language.iso %} selected {% endif %} value="{{ language.iso }}">{{ language.iso }} - {{ language.name }}</option>
+                    <option {% if form.default_language.id == language.id %} selected {% endif %} value="{{ language.id }}">{{ language.iso }} - {{ language.name }}</option>
                     {% endfor %}
                 </select>
                 {{ form.default_language.errors }}
@@ -131,7 +131,7 @@
             <div class="col-sm-9 col-md-7">
                 <select class="form-control" name="location_country" id="location_country">
                     {% for country in countries %}
-                    <option {% if form.location_country.iso == country.iso %} selected {% endif %} value="{{ country.iso }}">{{ country.iso }} - {{ language.name }}</option>
+                    <option {% if form.location_country.id == country.id %} selected {% endif %} value="{{ country.id }}">{{ country.iso }} - {{ country.name }}</option>
                     {% endfor %}
                 </select>
                 {{ form.location_country.errors }}

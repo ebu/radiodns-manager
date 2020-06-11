@@ -41,15 +41,7 @@ def EditOrganizationView(request):
     if request.method == "POST":
         form = OrganizationForm(request.POST, instance=selected_organization)
         if form.is_valid():
-            selected_country = countries.filter(
-                iso=form.cleaned_data["location_country"]
-            )
-            selected_language = languages.filter(
-                iso=form.cleaned_data["default_language"]
-            )
-            organization = form.save(commit=False)
-            organization.location_country = selected_country
-            organization.default_language = selected_language
+            form.save()
             return redirect("manager:details")
     return render(
         request,

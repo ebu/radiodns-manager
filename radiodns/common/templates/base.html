@@ -14,46 +14,55 @@
     {% block css %}
         {#  CSS used on a specific page. #}
         {#  use {{ block.super }} to avoid overwriting #}
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/theme.css' %}" rel="stylesheet" media="screen">
         <link href="{% static 'css/ionicons.min.css' %}" rel="stylesheet" media="screen">
-        <link href="{% static 'css/plugIt-standalone.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/animate.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/brankic.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/datepicker.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/morris.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/select2.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/select2-bootstrap.css' %}" rel="stylesheet" media="screen">
     {% endblock %}
 
     {% block javascript %}
         {#  Javascript used on a specific page. #}
         {#  use {{ block.super }} to avoid overwriting #}
-        <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/theme.js' %}"></script>
+        <script src="{% static 'js/ebuio.js' %}"></script>
+        <script src="{% static 'js/settings.js' %}"></script>
+        <script src="{% static 'js/underscore-min.js' %}"></script>
+
+        <script src="{% static 'js/select2.min.js' %}"></script>
+        <script src="{% static 'js/jquery.cookie.js' %}"></script>
+        <script src="{% static 'js/moment.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+        <script src="{% static 'js/raphael-min.js' %}"></script>
+        <script src="{% static 'js/morris.min.js' %}"></script>
+        <script src="{% static 'js/jquery.flot.js' %}"></script>
+        <script src="{% static 'js/jquery.flot.time.js' %}"></script>
+        <script src="{% static 'js/jquery.flot.tooltip.js' %}"></script>
+        <script src="{% static 'js/backbone-min.js' %}"></script>
     {% endblock %}
 </head>
-<body>
-
-
-{% include "navbar.html" %}
-
-<div class="row">
-        <div class="col-md-2">
+<body id="light">
+    <div id="wrapper">
             {% include "sidebar.html" %}
-        </div>
-        <div class="col-md-8 col-md-offset-1">
-            {% block content %}
-                {% block pageheader %}
-                {% endblock %}
-                {% block alerts %}
-                    {% include "alerts.html" %}
-                {% endblock %}
-                {% block body %}
-                {% endblock %}
-            {% endblock %}
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 text-center">
-            {% block footer %}
-                <p>&copy; EBU 2013 - 2020</p>
-            {% endblock %}
-        </div>
+            <div id="content">
+                <div class="content-wrapper">
+                    {% block content %}
+                        {% block pageheader %}
+                        {% endblock %}
+                        {% block alerts %}
+                            {% include "alerts.html" %}
+                        {% endblock %}
+                        {% block body %}
+                        {% endblock %}
+                    {% endblock %}
+                </div>
+            </div>
     </div>
 </div>
 

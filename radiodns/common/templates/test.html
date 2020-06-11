@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>EBU.io - RadioDNS Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+
+
+
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/static/protected/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/animate.css" />
+    <link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/ionicons.min.css" />
+
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/brankic.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/ionicons.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/morris.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/select2.css" />
+<link rel="stylesheet" type="text/css" href="/static/protected/css/vendor/select2-bootstrap.css" />
+
+
+
+
+
+
+
+
+
+    <!-- javascript -->
+    <script src="/static/protected/js/vendor/jquery.min.js"></script>
+    <script src="/static/protected/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/static/protected/js/theme.js"></script>
+    <script src="/static/protected/js/ebuio.js"></script>
+    <script src="/settings.js"></script>
+    <script src="/static/javascripts/underscore-min.js"></script>
+    <script src="/static/javascripts/backbone-min.js"></script>
+    <script src="/static/javascripts/analytics.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/static/protected/js/vendor/shiv.html5.js"></script>
+    <![endif]-->
+
+<script src="/static/protected/js/vendor/select2.min.js"></script>
+<script src="/static/protected/js/vendor/jquery.cookie.js"></script>
+<script src="/static/protected/js/vendor/moment.min.js"></script>
+<script src="/static/protected/js/vendor/bootstrap-datepicker.js"></script>
+<script src="/static/protected/js/vendor/raphael-min.js"></script>
+<script src="/static/protected/js/vendor/morris.min.js"></script>
+<script src="/static/protected/js/vendor/jquery.flot/jquery.flot.js"></script>
+<script src="/static/protected/js/vendor/jquery.flot/jquery.flot.time.js"></script>
+<script src="/static/protected/js/vendor/jquery.flot/jquery.flot.tooltip.js"></script>
+<script src="/static/javascripts/backbone-min.js"></script>
+<script src="/static/javascripts/epiceditor.min.js"></script>
+<script src="/static/javascripts/epiceditor-io2-toolbar.js"></script>
+
+
+
+
+    <!-- favicons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/images/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/images/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/images/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/images/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/images/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/images/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/images/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/images/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/static/images/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/static/images/icons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/static/images/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/static/images/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/static/images/icons/manifest.json">
+    <link rel="mask-icon" href="/static/images/icons/safari-pinned-tab.svg" color="#0042ff">
+    <link rel="shortcut icon" href="/static/images/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/static/images/icons/mstile-144x144.png">
+    <meta name="msapplication-config" content="/static/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+
+
+
+    <body id="light">
+        <div id="wrapper">
+
+
+
+
+
+
+
+
+
+<div class="main-sidebar navbar" id="sidebar-flat">
+
+    <div id="ebu-menulogo">
+        <a href="/">
+            <img id="ebu-menulogo-large" src="/static/images/static/ebu-tagline-black.png">
+            <img id="ebu-menulogo-small" src="/static/images/static/ebu-black.png">
+        </a>
+    </div>
+
+
+<!-- User -->
+<div class="current-user">
+    <a href="#" class="name">
+        <img class="avatar" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=blank"/>
+        <span>
+            Pawel
+            <i class="fa fa-chevron-down"></i>
+        </span>
+    </a>
+    <ul class="menu">
+        <li>
+            <a href="/users/me/">
+                <i class="ion-ios-person"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="/organizations/">
+                <i class="ion-earth"></i>
+                <span>My Organizations</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/contact/">
+                <i class="ion-paper-airplane"></i>
+                <span>Feedback & contact</span>
+            </a>
+        </li>
+        <li>
+            <a href="/users/logout/">
+                <i class="ion-log-out"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
+
+    </ul>
+</div>
+
+
+    <!-- Main nav -->
+
+    <div class="menu-section">
+    <h3>RadioDNS</h3>
+    <ul>
+        <li><a href="/rdns/stations/">My Stations</a></li>
+        <li><a href="/rdns/channels/">My Channels</a></li>
+        <li><a href="/rdns/clients/">My Clients</a></li>
+        <li><a href="/rdns/serviceprovider/">Service Provider</a></li>
+    </ul>
+</div>
+<div class="menu-section">
+    <h3>Service & Program Info</h3>
+    <ul>
+        <li><a href="/rdns/serviceprovider/images/">Logo Image Repository</a></li>
+        <li><a href="/rdns/radioepg/logos/">Station Logos</a></li>
+        <li>
+            <a href="/rdns/radioepg/servicefollowing/">Service
+                following</a></li>
+        <li>
+            <a href="/rdns/radioepg/schedule/">Calendar
+                & Schedule (EPG)</a></li>
+    </ul>
+</div>
+<div class="menu-section">
+    <h3>RadioVIS SlideShow</h3>
+    <ul>
+        <li><a href="/rdns/radiovis/gallery/">SlideShow Image Repository</a></li>
+        <li><a href="/rdns/radiovis/channels/">RadioVIS Channel Images</a></li>
+
+    </ul>
+</div>
+
+
+    <div class="menu-section">
+        <h3>System</h3>
+        <ul>
+            <li><a href="/rdns/system/">System Status</a></li>
+        </ul>
+    </div>
+
+
+
+<script>const ebuio_baseUrl = '/rdns/';</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/rdns/media/js/">
+<link rel="stylesheet" type="text/css" href="/rdns/media/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="/rdns/media/css/overrides.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='/rdns/media/js/utilities.js'></script>
+<div class="menu-section">
+    <h3><a href="/rdns/terms/">Terms of Use</a></h3>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <!-- OrgaMode Selector -->
+    <div class="menu-section">
+        <h3>Organization</h3>
+        <ul>
+            <li>
+
+                <a> Select:
+                <select onchange="$.ajax({url: '/18/_ebuio_setOrga?orga=' + $(this).val()}).done(function(){location.reload();});">
+
+                        <option value="3" selected>EBU</option>
+
+                        <option value="63" >Radio Wrocław</option>
+
+                </select>
+                </a>
+
+            </li>
+
+                  <li><a><i class="ion-unlocked"></i> you have admin rights</a></li>
+
+        </ul>
+    </div>
+
+
+
+
+
+</div>
+
+
+    <div id="content">
+        <div class="content-wrapper">
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="menubar">
+            <div class="sidebar-toggler visible-xs">
+                <i class="ion-navicon"></i>
+            </div>
+            <div class="page-title">
+                EBU :: Service Provider Configuration
+                <small class="hidden-xs"> </small>
+            </div>
+            <div id="page-functions" class="pull-right">
+
+
+                        <button
+                                id="re-generate"
+                                class="btn btn-primary"
+                                onclick="reGenerateSPIFiles()"
+                        >
+                            Re-publish all
+                        </button>
+                        <a href="/rdns/serviceprovider/edit/3-"
+                           class="btn btn-primary">Edit</a>
+
+
+            </div>
+            <div id="page-search" class="pull-right"> </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>Current configuration:</h3>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-condensed">
+                            <tbody>
+                            <tr>
+                                <th>CODOPS</th>
+                                <td><i>zzebu</i></td>
+                            </tr>
+                            <tr>
+                                <th>Short Name</th>
+                                <td>EBU</td>
+                            </tr>
+                            <tr>
+                                <th>Medium Name</th>
+                                <td>EBU</td>
+                            </tr>
+                            <tr>
+                                <th>Long Name</th>
+                                <td>European Broadcasting Union</td>
+                            </tr>
+                            <tr>
+                                <th>Short Description</th>
+                                <td>European Broadcasting Union</td>
+                            </tr>
+
+                            <tr>
+                                <th>Default Url</th>
+                                <td><a href="http://www.ebu.ch"
+                                       target="_blank">http://www.ebu.ch</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Default Language</th>
+                                <td>ast</td>
+                            </tr>
+                            <tr>
+                                <th>Postal Address</th>
+                                <td>EBU<br/>
+                                    <br/>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Country</th>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <th>Phone Number</th>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                    <div class="col-md-3 col-md-offset-1">
+                        <img style="width: 100%; max-width:600px;"
+                             src="http://static.zzebu.radio.ebu.io/600x600/36bfbc49-d082-4664-b80d-6ac807a706c2.png">
+                    </div>
+
+            </div>
+            <hr/>
+            <div class="row">
+
+                <h3>Bucket & DNS Configuration Check:</h3>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-condensed">
+                        <tbody>
+                        <tr>
+                            <th style="width:200px;">Status</th>
+                            <td><span id="radiodns-serviceprovider-status" class="label label-default">Loading</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Bucket</th>
+                            <td><span id="radiodns-serviceprovider-bucket"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>Bucket name</th>
+                            <td><span id="radiodns-serviceprovider-bucketname"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>Bucket public endpoint</th>
+                            <td><span id="radiodns-serviceprovider-bucketendpoint"><i class="ion-load-c"></i></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Bucket CNAME</th>
+                            <td><span id="radiodns-serviceprovider-bucketcname"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>Bucket CNAME Record</th>
+                            <td><span id="radiodns-serviceprovider-bucketcnameentry"><i class="ion-load-c"></i></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>DNS Zone</th>
+                            <td><span id="radiodns-serviceprovider-zone"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <td><span id="radiodns-serviceprovider-zonens"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>Parent NS Entry</th>
+                            <td><span id="radiodns-serviceprovider-parent"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <td><span id="radiodns-serviceprovider-parentns"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>VIS Service</th>
+                            <td><span id="radiovis-service"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>EPG Service</th>
+                            <td><span id="radioepg-service"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>SPI Service</th>
+                            <td><span id="radiospi-service"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        <tr>
+                            <th>TAG Service</th>
+                            <td><span id="radiotag-service"><i class="ion-load-c"></i></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <script src='/rdns/media/js/ajaxq.js'></script>
+            <script type="text/javascript">
+                function checkProvider() {
+                    $.ajaxq("rdns-serviceproviderq", {
+                        url: '/rdns/serviceprovider/check',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.isvalid) {
+                                $('#radiodns-serviceprovider-status').html('Success');
+                                $('#radiodns-serviceprovider-status').removeClass('label-default');
+                                $('#radiodns-serviceprovider-status').addClass('label-success');
+                            } else {
+                                $('#radiodns-serviceprovider-status').html('Failed');
+                                $('#radiodns-serviceprovider-status').removeClass('label-default');
+                                $('#radiodns-serviceprovider-status').addClass('label-danger');
+                            }
+
+                            if (data.bucket) {
+                                $('#radiodns-serviceprovider-bucket').html('Success');
+                                $('#radiodns-serviceprovider-bucket').addClass('text-success');
+                                $('#radiodns-serviceprovider-bucketname').html(data.bucket.name);
+                                $('#radiodns-serviceprovider-bucketendpoint').html(data.bucket.publicendpoint);
+                                $('#radiodns-serviceprovider-bucketcname').html(data.bucket.cname.name);
+                                $('#radiodns-serviceprovider-bucketcnameentry').html(data.bucket.cname.record);
+                                if (data.bucket.publicendpoint != data.bucket.cname.record) {
+                                    $('#radiodns-serviceprovider-bucketcnameentry').addClass('text-danger');
+                                }
+                            } else {
+                                $('#radiodns-serviceprovider-bucket').html('Missing');
+                                $('#radiodns-serviceprovider-bucket').addClass('text-danger');
+                            }
+
+                            if (data.zone) {
+                                $('#radiodns-serviceprovider-zone').html(data.zone.zone);
+                                $('#radiodns-serviceprovider-zone').addClass('text-success');
+                                $('#radiodns-serviceprovider-zonens').html(data.zone.ns);
+                            } else {
+                                $('#radiodns-serviceprovider-zone').html('Missing');
+                                $('#radiodns-serviceprovider-zone').addClass('text-danger');
+                            }
+
+                            if (data.parentns) {
+                                $('#radiodns-serviceprovider-parent').html(data.parentns.entry);
+                                $('#radiodns-serviceprovider-parent').addClass('text-success');
+                                $('#radiodns-serviceprovider-parentns').html(data.parentns.value);
+                            } else {
+                                $('#radiodns-serviceprovider-parent').html('Missing');
+                                $('#radiodns-serviceprovider-parent').addClass('text-danger');
+                            }
+                            if (data.services) {
+                                $('#radiovis-service').html(data.services.vis.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.vis.value);
+                                $('#radiovis-service').addClass('text-success');
+                                $('#radioepg-service').html(data.services.epg.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.epg.value);
+                                $('#radioepg-service').addClass('text-success');
+                                $('#radiospi-service').html(data.services.spi.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.spi.value);
+                                $('#radiospi-service').addClass('text-success');
+                                $('#radiotag-service').html(data.services.tag.name + " <i class=\"ion-arrow-right-c\"></i> " + data.services.tag.value);
+                                $('#radiotag-service').addClass('text-success');
+                            } else {
+                                $('#radiovis-service').html('Error');
+                                $('#radiovis-service').addClass('text-danger');
+                                $('#radioepg-service').html('Error');
+                                $('#radioepg-service').addClass('text-danger');
+                                $('#radiospi-service').html('Error');
+                                $('#radiospi-service').addClass('text-danger');
+                                $('#radiotag-service').html('Error');
+                                $('#radiotag-service').addClass('text-danger');
+                            }
+                        }
+                    });
+                }
+
+                checkProvider();
+
+            </script>
+            <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+            <script type="application/javascript">
+
+                function reGenerateSPIFiles() {
+                    if (window.confirm("This operation may take a long time (more than 5 minutes) to complete. " +
+                        "Do you want to proceed?")) {
+                        UtilitiesModule.prototype.request(`${ebuio_baseUrl}spi_generate`, 'GET');
+                        $("#re-generate-text-info").text("Command sent to worker!");
+                    }
+                }
+            </script>
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+        </div>
+
+        <script>
+            ebu.analytics.init();
+        </script>
+
+        <script>
+            !function(){window.EBUPipeQName="_pipe","_pipe"in window||(window._pipe=function(){
+            window._pipe.q.push(arguments)},window._pipe.q=[]),window._pipe.startTime=(new Date).getTime();
+            var e=document.createElement("script");e.src='//d3kyk5bao1crtw.cloudfront.net/pipe-latest.min.js',e.async=!0;
+            var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(e,i)}();
+
+            _pipe('register', 'zzebu00000000004');
+            _pipe('setUserId', '51230');
+            _pipe('set', { ebuio_project:'RadioDNS Manager', ebuio_project_id:'18' });
+            _pipe('set', { ebuio_orga:'EBU', ebuio_orga_id:'3' });
+            _pipe('collect', 'pageview');
+        </script>
+    </body>
+
+
+
+</html>

@@ -37,16 +37,8 @@ def EditStationView(request, station_id=None):
     if request.method == "POST":
         form = StationForm(request.POST, instance=station)
         if form.is_valid():
-            selected_country = countries.filter(
-                iso=form.cleaned_data["location_country"]
-            )
-            selected_language = languages.filter(
-                iso=form.cleaned_data["default_language"]
-            )
             station = form.save(commit=False)
             station.organization = request.user.active_organization
-            station.default_language = selected_language
-            station.location_country = selected_country
             station.save()
             return redirect("stations:list")
 

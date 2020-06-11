@@ -27,12 +27,7 @@ def EditChannelView(request, channel_id=None):
     if request.method == "POST":
         form = ChannelForm(request.POST, instance=channel)
         if form.is_valid():
-            selected_country = countries.filter(iso=form.cleaned_data["ecc"])
-            selected_station = Station.objects.filter(id=form.cleaned_data["station"])
-            channel = form.save(commit=False)
-            channel.ecc = selected_country
-            channel.station = selected_station
-            channel.save()
+            form.save()
             return redirect("channels:list")
     return render(
         request,

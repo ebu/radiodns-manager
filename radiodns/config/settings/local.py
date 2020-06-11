@@ -27,7 +27,7 @@ USE_LOGIN = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = os.path.join(BASE_DIR, "common/static/")
+STATIC_URL = "/common/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "common/static/")
 MEDIA_ROOT = os.path.join(BASE_DIR, "common/media/")
 
