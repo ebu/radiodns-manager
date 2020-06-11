@@ -1,0 +1,106 @@
+"""
+Create permission groups
+"""
+from django.core.management.base import BaseCommand
+
+from apps.localization.models import Language
+
+LANGUAGES = [
+    ("af", "Afrikaans"),
+    ("ak", "Akan"),
+    ("an", "aragonés"),
+    ("ar", "عربي"),
+    ("as", "অসমীয়া"),
+    ("ast", "Asturianu"),
+    ("az", "Azərbaycanca"),
+    ("be", "Беларуская"),
+    ("bg", "Български"),
+    ("br", "Brezhoneg"),
+    ("ca", "Català"),
+    ("cs", "Čeština"),
+    ("csb", "Kaszëbsczi"),
+    ("cy", "Cymraeg"),
+    ("da", "Dansk"),
+    ("de", "Deutsch"),
+    ("dsb", "Dolnoserbšćina"),
+    ("el", "Ελληνικά"),
+    ("en-GB", "English(British)"),
+    ("en-US", "English(US)"),
+    ("eo", "Esperanto"),
+    ("es-AR", "Español(de Argentina)"),
+    ("es-CL", "Español(de Chile)"),
+    ("es-ES", "Español(de España)"),
+    ("es-MX", "Español(de México)"),
+    ("et", "Eesti keel"),
+    ("eu", "Euskara"),
+    ("fa", "فارسی"),
+    ("ff", "Pulaar - Fulfulde"),
+    ("fi", "suomi"),
+    ("fr", "Français"),
+    ("fy-NL", "Frysk"),
+    ("ga-IE", "Gaeilge"),
+    ("gd", "Gàidhlig"),
+    ("gl", "Galego"),
+    ("he", "עברית"),
+    ("hi-IN", "हिन्दी(भारत)"),
+    ("hr", "Hrvatski"),
+    ("hsb", "Hornjoserbsce"),
+    ("hu", "magyar"),
+    ("hy-AM", "Հայերեն"),
+    ("id", "Bahasa Indonesia"),
+    ("is", "íslenska"),
+    ("it", "Italiano"),
+    ("ja", "日本語"),
+    ("ka", "ქართული"),
+    ("kk", "Қазақ"),
+    ("km", "ខ្មែរ"),
+    ("ko", "한국어"),
+    ("ku", "Kurdî"),
+    ("lg", "Luganda"),
+    ("lij", "Ligure"),
+    ("lt", "lietuvių kalba"),
+    ("lv", "Latviešu"),
+    ("mk", "Македонски"),
+    ("ml", "മലയാളം"),
+    ("mr", "मराठी"),
+    ("ms", "Melayu"),
+    ("my", "မြန်မာဘာသာ"),
+    ("nb-NO", "Norsk bokmål"),
+    ("nl", "Nederlands"),
+    ("nso", "Sepedi"),
+    ("oc", "occitan(lengadocian)"),
+    ("pa-IN", "ਪੰਜਾਬੀ(ਭਾਰਤ)"),
+    ("pl", "Polski"),
+    ("pt-BR", "Português(do Brasil)"),
+    ("pt-PT", "Português(Europeu)"),
+    ("rm", "rumantsch"),
+    ("ro", "română"),
+    ("ru", "Русский"),
+    ("sk", "slovenčina"),
+    ("sl", "Slovenščina"),
+    ("son", "Soŋay"),
+    ("sq", "Shqip"),
+    ("sr", "Српски"),
+    ("sv-SE", "Svenska"),
+    ("ta", "தமிழ்"),
+    ("te", "తెలుగు"),
+    ("th", "ไทย"),
+    ("tr", "Türkçe"),
+    ("uk", "Українська"),
+    ("ur", "اُردو"),
+    ("vi", "Tiếng Việt"),
+    ("xh", "isiXhosa"),
+    ("zh-CN", "中文(简体)"),
+    ("zh-TW", "正體中文(繁體)"),
+]
+
+
+class Command(BaseCommand):
+    help = "Creates Language records"
+
+    def handle(self, *args, **options):
+        for line in LANGUAGES:
+            new_ecc, created = Language.objects.get_or_create(name=line[1], iso=line[0])
+            new_ecc.save()
+
+        print("Created default Language records")

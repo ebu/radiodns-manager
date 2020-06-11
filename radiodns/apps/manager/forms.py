@@ -20,7 +20,6 @@ class OrganizationForm(ModelForm):
             "city",
             "zipcode",
             "phone_number",
-            "keywords",
         ]
 
 

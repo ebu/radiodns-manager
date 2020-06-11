@@ -34,6 +34,7 @@ def DeleteImageView(request, image_id):
     image = get_object_or_404(
         Image, id=image_id, organization__id=request.user.active_organization.id
     )
+    image.file.delete()
     image.delete()
     return redirect("radiovis:list_images")
 
@@ -61,15 +62,23 @@ def ListChannelsView(request):
     )
     images = Image.objects.filter(organization__id=request.user.active_organization.id)
     return render(
-        request, "radiovis/channels/home.html", context={"channels": channels, "images":images}
+        request,
+        "radiovis/channels/home.html",
+        context={"channels": channels, "images": images},
     )
 
 
 def SetChannelImageView(request, channel_id, image_id):
-    channel = get_object_or_404(Channel, id=channel_id, station__organization__id=request.user.active_organization.id)
+    channel = get_object_or_404(
+        Channel,
+        id=channel_id,
+        station__organization__id=request.user.active_organization.id,
+    )
     image = None
     if image_id != 0:
-        image = get_object_or_404(Image, id=image_id, organization__id=request.user.active_organization.id)
+        image = get_object_or_404(
+            Image, id=image_id, organization__id=request.user.active_organization.id
+        )
     channel.default_image = image
     channel.save()
     return JsonResponse({"channel_id": channel_id, "image_id": image_id})

@@ -9,5 +9,9 @@ urlpatterns = [
     path("delete/<int:image_id>", views.DeleteImageView, name="delete_image"),
     path("channels/logs/<int:channel_id>", views.ChannelLogsView, name="channel_logs"),
     path("channels/", views.ListChannelsView, name="list_channels"),
-    path("channels/<int:channel_id>/set_image/<int:image_id>", views.SetChannelImageView, name="set_image")
+    path(
+        "channels/<int:channel_id>/set_image/<int:image_id>",
+        views.SetChannelImageView,
+        name="set_image",
+    ),
 ]

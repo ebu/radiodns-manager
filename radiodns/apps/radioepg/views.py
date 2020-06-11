@@ -5,12 +5,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from apps.channels.models import Channel
 from apps.manager.models import LogoImage
 from apps.radioepg.forms import ShowForm, ServiceForm
-from apps.radioepg.models import Show, Event, GenericServiceFollowingEntry as Service
+from apps.radioepg.models import (
+    Show,
+    Event,
+    GenericServiceFollowingEntry as Service,
+    COLORS,
+)
 from apps.stations.models import Station
 
 
 def ScheduleView(request, station_id=None):
     selected_station = None
+    shows = None
     stations = Station.objects.filter(
         organization__id=request.user.active_organization.id
     )
@@ -18,10 +24,11 @@ def ScheduleView(request, station_id=None):
         selected_station = list(stations)[0]
     else:
         selected_station = stations.filter(id=station_id).first()
-    shows = Show.objects.filter(
-        station__id=selected_station.id,
-        station__organization__id=request.user.active_organization.id,
-    )
+    if selected_station is not None:
+        shows = Show.objects.filter(
+            station__id=selected_station.id,
+            station__organization__id=request.user.active_organization.id,
+        )
     return render(
         request,
         "radioepg/shows/home.html",
@@ -75,7 +82,7 @@ def EditShowView(request, station_id, show_id=None):
     return render(
         request,
         "radioepg/shows/edit.html",
-        context={"form": form, "selected_station": station, "colors": settings.COLORS},
+        context={"form": form, "selected_station": station, "colors": COLORS},
     )
 
 
@@ -89,6 +96,7 @@ def DeleteShowView(request, station_id, show_id):
 
 def ListServicesView(request, station_id=None):
     selected_station = None
+    services = None
     stations = Station.objects.filter(
         organization__id=request.user.active_organization.id
     )
@@ -96,10 +104,11 @@ def ListServicesView(request, station_id=None):
         selected_station = list(stations)[0]
     else:
         selected_station = stations.filter(id=station_id).first()
-    services = Service.objects.filter(
-        station__id=selected_station.id,
-        station__organization__id=request.user.active_organization.id,
-    )
+    if selected_station is not None:
+        services = Service.objects.filter(
+            station__id=selected_station.id,
+            station__organization__id=request.user.active_organization.id,
+        )
     return render(
         request,
         "radioepg/servicefollowing/home.html",
@@ -162,10 +171,14 @@ def ListStationLogosView(request):
 
 
 def SetStationLogoView(request, station_id, logo_id):
-    station = get_object_or_404(Station, id=station_id, organization__id=request.user.active_organization.id)
+    station = get_object_or_404(
+        Station, id=station_id, organization__id=request.user.active_organization.id
+    )
     logo = None
     if logo_id != 0:
-        logo = get_object_or_404(LogoImage, id=logo_id, organization__id=request.user.active_organization.id)
+        logo = get_object_or_404(
+            LogoImage, id=logo_id, organization__id=request.user.active_organization.id
+        )
     station.default_image = logo
     station.save()
     return JsonResponse({"station_id": station_id, "logo_id": logo_id})
@@ -212,14 +225,16 @@ def DeleteEventView(request, station_id):
 def ListEventsView(request, station_id):
     events = list(Event.objects.filter(show__station__id=station_id))
     start = int(request.GET.get("start"))
-    events_list = [{
-                "id": event.id,
-                "title": event.show.medium_name,
-                "start": start + event.seconds_from_base,
-                "end": start + event.seconds_from_base + event.length * 60,
-                "allDay": False,
-                "color": event.show.color,
-                "textColor": '#000'}
-                for event in events
+    events_list = [
+        {
+            "id": event.id,
+            "title": event.show.medium_name,
+            "start": start + event.seconds_from_base,
+            "end": start + event.seconds_from_base + event.length * 60,
+            "allDay": False,
+            "color": event.show.color,
+            "textColor": "#000",
+        }
+        for event in events
     ]
-    return JsonResponse({'list': events_list})
+    return JsonResponse({"list": events_list})

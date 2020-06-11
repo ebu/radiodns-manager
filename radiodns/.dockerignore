@@ -1,0 +1,7 @@
+
+/uploads/
+/db.sqlite3
+/.circleci/
+/.env
+/venv/
+/staticfiles/

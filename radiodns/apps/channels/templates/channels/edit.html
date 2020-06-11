@@ -83,7 +83,7 @@
             <div class="col-sm-9 col-md-7">
                 <select name="ecc_id" class="form-control" id="ecc" cval="{% if form.ecc_id.value %}{{ form.ecc_id.value }}{% endif %}">
                     {% for country in countries %}
-                    <option {% if form.ecc_id.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                    <option {% if form.ecc.iso == country.iso %} selected {% endif %} value="{{ country.iso }}">{{ country.iso }} - {{ country.name }}</option>
                     {% endfor %}
                 </select>
                 <small>Country Code</small>
@@ -159,7 +159,7 @@
             <div class="col-sm-9 col-md-7">
                 <select class="form-control" name="cc" id="cc" cval="{{ object.cc }}">
                     {% for country in countries %}
-                    <option {% if form.cc.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                    <option {% if form.ecc.iso == country.iso %} selected {% endif %} value="{{ country.0 }}">{{ country.iso }} - {{ country.name }}</option>
                     {% endfor %}
                 </select>
                 <small>Country Code</small>

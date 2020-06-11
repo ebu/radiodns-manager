@@ -1,6 +1,6 @@
-from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 
+from apps.localization.models import Language, Ecc
 from apps.manager.forms import OrganizationForm, LogoImageForm
 from apps.manager.models import Organization, LogoImage
 
@@ -36,19 +36,25 @@ def EditOrganizationView(request):
         Organization, id=request.user.active_organization.id
     )
     form = OrganizationForm(instance=selected_organization)
+    languages = Language.objects.all()
+    countries = Ecc.objects.all()
     if request.method == "POST":
         form = OrganizationForm(request.POST, instance=selected_organization)
         if form.is_valid():
-            form.save()
+            selected_country = countries.filter(
+                iso=form.cleaned_data["location_country"]
+            )
+            selected_language = languages.filter(
+                iso=form.cleaned_data["default_language"]
+            )
+            organization = form.save(commit=False)
+            organization.location_country = selected_country
+            organization.default_language = selected_language
             return redirect("manager:details")
     return render(
         request,
         "manager/edit.html",
-        context={
-            "form": form,
-            "languages": settings.LANGUAGES,
-            "countries": settings.COUNTRIES_N_CODES,
-        },
+        context={"form": form, "languages": languages, "countries": countries,},
     )
 
 
@@ -93,7 +99,14 @@ def EditImageView(request, image_id=None):
 
 def DeleteImageView(request, image_id):
     image = get_object_or_404(LogoImage, id=image_id)
+    image.file.delete()
+    image.scaled32x32.delete()
+    image.scaled112x32.delete()
+    image.scaled128x128.delete()
+    image.scaled320x240.delete()
+    image.scaled600x600.delete()
     image.delete()
+
     return redirect("manager:list_images")
 
 

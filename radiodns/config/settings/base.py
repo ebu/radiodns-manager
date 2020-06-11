@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
-from .constants import COUNTRIES, COUNTRIES_N_CODES, LANGUAGES, COLORS
 
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
@@ -33,7 +32,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = "manager.User"
+AUTH_USER_MODEL = "radiodns_auth.User"
 
 APPEND_SLASH = True
 
@@ -58,6 +57,7 @@ LOCAL_APPS = [
     "apps.manager",
     "apps.radioepg",
     "apps.radiovis",
+    "apps.localization",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
@@ -126,8 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
+
 
 TIME_ZONE = "UTC"
 
@@ -137,7 +137,23 @@ USE_L10N = True
 
 USE_TZ = True
 
-SETUP_EXEMPT_URLS = [
-    "setup_error/",
-    "admin/"
-]
+SETUP_EXEMPT_URLS = ["setup_error/", "admin/"]
+
+DOMAIN = os.environ.get("DOMAIN", "127.0.0.1")
+
+# Default Service URLs for RadioDNS Services
+RADIOVIS_DNS = os.environ.get("RADIOVIS_DNS", "127.0.0.1")
+RADIOEPG_DNS = os.environ.get("RADIOEPG_DNS", "127.0.0.1")
+RADIOTAG_DNS = os.environ.get("RADIOTAG_DNS", "127.0.0.1")
+RADIOSPI_DNS = os.environ.get("RADIOSPI_DNS", "127.0.0.1")
+
+RADIOVIS_PORT = os.environ.get("RADIOVIS_PORT", "61613")
+RADIOEPG_PORT = os.environ.get("RADIOEPG_PORT", "5000")
+RADIOTAG_PORT = os.environ.get("RADIOTAG_PORT", "5000")
+RADIOSPI_PORT = os.environ.get("RADIOSPI_PORT", "5000")
+
+RADIOVIS_SERVICE_DEFAULT = RADIOVIS_DNS + ":" + RADIOVIS_PORT
+RADIOEPG_SERVICE_DEFAULT = RADIOEPG_DNS + ":" + RADIOEPG_PORT
+RADIOTAG_SERVICE_DEFAULT = RADIOTAG_DNS + ":" + RADIOTAG_PORT
+RADIOSPI_SERVICE_DEFAULT = RADIOSPI_DNS + ":" + RADIOSPI_PORT
+RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from sentry_sdk import capture_message
 
 
 def TermsView(request):

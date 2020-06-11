@@ -3,6 +3,18 @@ from django.db import models
 from apps.channels.models import Channel
 from apps.stations.models import Station
 
+COLORS = [
+    ("#e41a1c", "Red"),
+    ("#377eb8", "Blue"),
+    ("#4daf4a", "Green"),
+    ("#984ea3", "Magenta"),
+    ("#ff7f00", "Orange"),
+    ("#ffff33", "Yellow"),
+    ("#a65628", "Brown"),
+    ("#f781bf", "Pink"),
+    ("#999999", "Gray"),
+]
+
 
 class Show(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
@@ -24,7 +36,9 @@ class Event(models.Model):
     @property
     def seconds_from_base(self):
         """The number, in seconds of start, based on monday 00:00"""
-        return self.day * 24 * 60 * 60 + self.start_hour * 60 * 60 + self.start_minute * 60
+        return (
+            self.day * 24 * 60 * 60 + self.start_hour * 60 * 60 + self.start_minute * 60
+        )
 
 
 class GenericServiceFollowingEntry(models.Model):

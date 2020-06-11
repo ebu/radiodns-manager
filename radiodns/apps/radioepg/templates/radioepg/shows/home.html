@@ -76,13 +76,11 @@
                         </div>
                 </div>
             </div>
-        {% endif %}
 
-		
 
-		<script type="text/javascript">
+        <script type="text/javascript">
 		 	$.fullCalendar.dayNames
-			
+
 				$(function() {
 					$( ".ui-draggable" ).draggable({ revert: true });
 				});
@@ -174,9 +172,8 @@
 			});
 			function refreshCal(){
 				$("#the_calendar").fullCalendar( 'refetchEvents' );
-			} 
+			}
 		</script>
-
-
+        {% endif %}
 {% endblock %}
 

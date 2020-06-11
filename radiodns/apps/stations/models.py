@@ -1,6 +1,13 @@
-from django.conf import settings
+import json
+import random
+import string
+
+import unicodedata
+from urllib import parse
 from django.db import models
 
+from apps.awsutils import awsutils
+from apps.localization.models import Ecc, Language
 from apps.manager.models import Organization, LogoImage
 
 
@@ -23,12 +30,11 @@ class Station(models.Model):
     email_address = models.EmailField(blank=True, null=True)
     email_description = models.CharField(max_length=255, blank=True, null=True)
 
-    default_language = models.CharField(
-        max_length=5, choices=settings.LANGUAGES, default="en"
+    default_language = models.ForeignKey(
+        Language, on_delete=models.SET_NULL, blank=True, null=True
     )
-
-    location_country = models.CharField(
-        max_length=5, choices=settings.COUNTRIES_N_CODES, default="en"
+    location_country = models.ForeignKey(
+        Ecc, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     radiovis_enabled = models.BooleanField(default=False)
@@ -43,11 +49,113 @@ class Station(models.Model):
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
-    default_image = models.ForeignKey(LogoImage, on_delete=models.CASCADE, blank=True, null=True)
+    default_image = models.ForeignKey(
+        LogoImage, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
-    ip_allowed = models.CharField(max_length=256, blank=True, null=True)  # A list of ip/subnet, with , between
+    ip_allowed = models.CharField(
+        max_length=256, blank=True, null=True
+    )  # A list of ip/subnet, with , between
     genres = models.TextField(blank=True, null=True)
 
     @classmethod
     def all_stations_in_organization(cls, organization_id):
         return cls.objects.filter(organization__id=organization_id)
+
+    def escape_slash_rfc3986(self, value):
+        if value:
+            return value.replace("/", "%2F")
+        return None
+
+    @property
+    def epg_postal(self):
+        if self.postal_name:
+            return "postal:%s/%s/%s/%s/%s" % (
+                self.escape_slash_rfc3986(self.postal_name),
+                self.escape_slash_rfc3986(self.street),
+                self.escape_slash_rfc3986(self.city),
+                self.escape_slash_rfc3986(self.zipcode),
+                self.escape_slash_rfc3986(self.location_country.name),
+            )
+        return None
+
+    @property
+    def epg_phone_number(self):
+        if self.phone_number:
+            return f"tel:{self.phone_number}"
+        return None
+
+    @property
+    def epg_email(self):
+        if self.email_address:
+            return f"mailto:{self.email_address}"
+        return None
+
+    @property
+    def epg_sms(self):
+        if self.sms_body:
+            if self.sms_body:
+                return (
+                    f"sms:{self.sms_number}?{parse.urlencode({'body': self.sms_body})}"
+                )
+            else:
+                return "sms:{self.sms_number}"
+        return None
+
+    @property
+    def genres_list(self):
+        try:
+            return json.loads(self.genres)
+        except:
+            return []
+
+    @property
+    def service_identifier(self):
+        if self.organization:
+            if self.organization.codops:
+                return f"ebu{self.id}{self.organization.codops.lower()}"
+        return None
+
+    @property
+    def ascii_name(self):
+        return unicodedata.normalize("NFKD", self.name if self.name else "").encode(
+            "ascii", "ignore"
+        )
+
+    def gen_random_password(self):
+        self.random_password = "".join(
+            random.choice(string.ascii_letters + string.digits) for x in range(32)
+        )
+
+    def check_aws(self):
+        return awsutils.check_station(self)
+
+    @property
+    def short_name_to_use(self):
+        """Return the shortname, based on the name or the short one"""
+        return (
+            (self.short_name or self.name)[:8] if self.short_name or self.name else ""
+        )
+
+    @property
+    def fqdn_prefix(self):
+        return filter(
+            lambda x: x in string.ascii_letters + string.digits, self.ascii_name.lower()
+        )
+
+    @property
+    def fqdn(self):
+        if self.organization:
+            return "%s.%s" % (self.fqdn_prefix, self.organization.fqdn)
+        return None
+
+    @property
+    def stomp_username(self):
+        return (
+            str(self.id)
+            + "."
+            + filter(
+                lambda x: x in string.ascii_letters + string.digits,
+                self.ascii_name.lower(),
+            )
+        )

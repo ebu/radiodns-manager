@@ -20,7 +20,11 @@
 					<option value="{% url 'radioepg:station_services' station.id %}" {% if station.id == selected_station.id %}selected{% endif %}>{{station.name}}</option>
 				{% endfor %}
 				    </select>
-				<a href="{% url 'radioepg:new_service' selected_station.id %}" class="btn btn-primary">Add a new entry</a>
+			{% if not stations %}
+            No stations !
+            {% else %}
+                <a href="{% url 'radioepg:new_service' selected_station.id %}" class="btn btn-primary">Add a new entry</a>
+            {% endif %}
 			{% endblock %}</div>
         <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>

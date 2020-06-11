@@ -21,7 +21,7 @@ class ChannelForm(ModelForm):
             "bitrate",
             "mime_type",
             "tx",
-            "cc",
+            "ecc",
             "mid",
             "fqdn",
             "serviceIdentifier",

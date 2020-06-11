@@ -139,7 +139,7 @@
                         <select name="default_language" class="form-control"
                                 id="default_language_{{ station.id }}" >
                                 {% for language in languages %}
-                                <option {% if form.default_language.value == language.0 %} selected {% endif %} value="{{ language.0 }}">{{ language.1 }}</option>
+                                <option {% if form.default_language.iso == language.iso %} selected {% endif %} value="{{ language.iso }}">{{ language.iso }} - {{ language.name }}</option>
                                 {% endfor %}
                         </select>
                         {{form.default_language.errors}}
@@ -251,7 +251,7 @@
                         <select class="form-control" name="location_country"
                                 id="location_country_{{ station.id }}" >
                                 {% for country in countries %}
-                                <option {% if form.location_country.value == country.0 %} selected {% endif %} value="{{ country.0 }}">{{ country.1 }}</option>
+                                <option {% if form.location_country.iso == country.iso %} selected {% endif %} value="{{ country.iso }}">{{ country.iso }} - {{ country.name }}</option>
                                 {% endfor %}
                         </select>
                         {{form.location_country.errors}}

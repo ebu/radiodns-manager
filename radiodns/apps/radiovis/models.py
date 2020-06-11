@@ -6,7 +6,6 @@ from apps.channels.models import Channel
 from apps.manager.models import Organization
 
 
-
 class LogEntry(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     topic = models.CharField(max_length=255)
