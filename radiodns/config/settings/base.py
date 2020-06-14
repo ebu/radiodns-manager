@@ -87,6 +87,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -95,6 +97,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 AUTHENTICATION_BACKENDS = [
+    "social_core.backends.open_id.OpenIdAuth",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -157,3 +160,10 @@ RADIOEPG_SERVICE_DEFAULT = RADIOEPG_DNS + ":" + RADIOEPG_PORT
 RADIOTAG_SERVICE_DEFAULT = RADIOTAG_DNS + ":" + RADIOTAG_PORT
 RADIOSPI_SERVICE_DEFAULT = RADIOSPI_DNS + ":" + RADIOSPI_PORT
 RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+)

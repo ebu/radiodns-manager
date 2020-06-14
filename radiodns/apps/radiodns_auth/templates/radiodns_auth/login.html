@@ -13,9 +13,8 @@
             </div>
         </div>
     {% endblock %}
-
     {% if use_saml %}
-        TODO: Saml form goes here
+        <div class="btn btn-primary col-sm-9 col-md-7"><a href="<a href="{% url 'social:begin' 'ebu' %}">Login with EBU</a></div>
     {% endif %}
     {% if use_login %}
     <form class="form-horizontal" method="post" action="">

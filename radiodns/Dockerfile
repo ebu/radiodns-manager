@@ -3,7 +3,7 @@ MAINTAINER Pawel Glimos <pawelglimos@gmail.com>
 
 
 RUN apk update \
-  && apk add --virtual  build-deps build-base gcc linux-headers pcre-dev zlib-dev bash jpeg-dev
+  && apk add --virtual  build-deps build-base gcc linux-headers pcre-dev zlib-dev bash jpeg-dev libffi-dev libxml2-dev libxslt-dev xmlsec-dev openssl-dev
 WORKDIR /opt/app/
 COPY . /opt/app/
 RUN pip install -r requirements.txt

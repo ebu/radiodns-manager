@@ -37,13 +37,33 @@ AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
 USE_SAML = True
 USE_LOGIN = False
 
-SOCIAL_AUTH_SAML_SP_ENTITY_ID = ""
-SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = ""
-SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = ""
-SOCIAL_AUTH_SAML_ORG_INFO = ""
-SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = ""
-SOCIAL_AUTH_SAML_SUPPORT_CONTACT = ""
-SOCIAL_AUTH_SAML_ENABLED_IDPS = ""
+SOCIAL_AUTH_SAML_SP_ENTITY_ID = env.str("SOCIAL_AUTH_SAML_SP_ENTITY_ID")
+SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = env.str("SOCIAL_AUTH_SAML_SP_PUBLIC_CERT")
+SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = env.str("SOCIAL_AUTH_SAML_SP_PRIVATE_KEY")
+SOCIAL_AUTH_SAML_ORG_INFO = {
+    "en-US": {
+        "name": "radiodnsmanager",
+        "displayname": "RadioDNS Manager",
+        "url": "https://staging.radio.ebu.io",
+    }
+}
+SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
+    "givenName": "Pawel Glimos",
+    "emailAddress": "pawel.glimos@bravelab.io"
+}
+SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
+    "givenName": "Pawel Glimos",
+    "emailAddress": "pawel.glimos@bravelab.io"
+}
+SOCIAL_AUTH_SAML_ENABLED_IDPS = {
+    "ebu": {
+        "entity_id": "https://sso.ebu.ch:443/auth",
+        "url": "https://sso.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
+        "x509cert": env.str("SOCIAL_AUTH_IPD_CERT")
+    }
+}
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
 
 # Sentry Integration
 # ------------------------------------------------------------------------------
@@ -57,6 +77,19 @@ sentry_sdk.init(
 
 # Database
 # ------------------------------------------------------------------------------
+# Database
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DATABASE_NAME', 'lpp'),
+        'USER': os.environ.get('DATABASE_USER', 'root'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', '1234'),
+        'HOST': os.environ.get('DATABASE_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DATABASE_PORT', '5432'),
+    }
+}
 
 
 # CORS

@@ -29,6 +29,7 @@ urlpatterns = [
     path("", include("common.urls")),
     path("", include("apps.manager.urls")),
     path("", include("apps.radiodns_auth.urls")),
+    path("", include('social_django.urls', namespace='social')),
     path("stations/", include("apps.stations.urls")),
     path("channels/", include("apps.channels.urls")),
     path("clients/", include("apps.clients.urls")),

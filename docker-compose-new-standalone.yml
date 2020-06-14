@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  radiodns_database:
+    image: postgres
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: lpp
+      POSTGRES_PASSWORD: 1234
+
+  radiodns:
+    build: radiodns/.
+    depends_on:
+      - radiodns_database
+
+  reverse_proxy:
+      build:
+          context: Nginx/.
+          dockerfile: Dockerfile.dev
+      ports:
+          - "80:80"
+      depends_on:
+          - radiodns
+volumes:
+  pgdata:
+

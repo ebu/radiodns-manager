@@ -4,6 +4,7 @@ from . import views
 
 app_name = "radiodns_auth"
 urlpatterns = [
-    path("login/", views.login_view, name="login"),
-    path("logout/", views.logout_view, name="logout"),
+    path("login/", views.LoginView, name="login"),
+    path("logout/", views.LogoutView, name="logout"),
+    path("xml-metadata/", views.SamlMetadataView, name="xml")
 ]
