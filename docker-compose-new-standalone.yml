@@ -16,7 +16,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
   nginx:
-    build: ./Nginx
+    build:
+      context: ./Nginx
+      dockerfile: Dockerfile.dev
     volumes:
       - static_volume:/opt/app/common/static
       - media_volume:/opt/app/common/media
