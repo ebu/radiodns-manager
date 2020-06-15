@@ -6,6 +6,8 @@ services:
     volumes:
     - pgdata:/var/lib/postgresql/data
     restart: always
+    ports:
+        ${DATABASE_PORT=5432
 
   radiodns:
     build: radiodns/.
