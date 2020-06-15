@@ -6,10 +6,6 @@ services:
     volumes:
     - pgdata:/var/lib/postgresql/data
     restart: always
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_DB: lpp
-      POSTGRES_PASSWORD: 1234
 
   radiodns:
     build: radiodns/.
@@ -21,7 +17,7 @@ services:
           context: Nginx/.
           dockerfile: Dockerfile.dev
       ports:
-          - "80:80"
+          - "${RADIODNS_PORT}:80"
       depends_on:
           - radiodns
 volumes:
