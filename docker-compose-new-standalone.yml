@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   radiodns:
@@ -16,7 +16,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
   nginx:
-    build: ./nginx
+    build: ./Nginx
     volumes:
       - static_volume:/opt/app/common/static
       - media_volume:/opt/app/common/media
