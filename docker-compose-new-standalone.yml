@@ -1,27 +1,31 @@
-version: '3'
+version: '3.7'
 
 services:
-  radiodns_database:
-    image: postgres
-    volumes:
-    - pgdata:/var/lib/postgresql/data
-    restart: always
-    ports:
-        ${DATABASE_PORT=5432
-
   radiodns:
-    build: radiodns/.
+    build:
+        ./radiodns
+    volumes:
+      - static_volume:/opt/app/common/static
+      - media_volume:/opt/app/common/media
+    expose:
+      - 8000
     depends_on:
-      - radiodns_database
+      - db
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/opt/app/common/static
+      - media_volume:/opt/app/common/media
+    ports:
+      - 80:80
+    depends_on:
+      - radiodns
 
-  reverse_proxy:
-      build:
-          context: Nginx/.
-          dockerfile: Dockerfile.dev
-      ports:
-          - "${RADIODNS_PORT}:80"
-      depends_on:
-          - radiodns
 volumes:
   pgdata:
-
+  static_volume:
+  media_volume:
