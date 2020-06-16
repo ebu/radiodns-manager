@@ -57,8 +57,8 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 }
 SOCIAL_AUTH_SAML_ENABLED_IDPS = {
     "ebu": {
-        "entity_id": "https://sso.ebu.ch:443/auth",
-        "url": "https://sso.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
+        "entity_id": "https://sso-qual.ebu.ch:443/auth",
+        "url": "https://sso-qual.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
         "x509cert": env.str("SOCIAL_AUTH_IPD_CERT")
     }
 }

@@ -140,7 +140,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-SETUP_EXEMPT_URLS = ["setup_error/", "admin/"]
+SETUP_EXEMPT_URLS = ["setup_error/", "admin/", "xml-metadata/", "static/"]
 
 DOMAIN = os.environ.get("DOMAIN", "127.0.0.1")
 
@@ -169,10 +169,6 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 LOGIN_EXEMPT_URLS = [
-    "/xml-metadata/",
-    "/static/"
-]
-SETUP_EXEMPT_URLS = [
     "/xml-metadata/",
     "/static/"
 ]
