@@ -6,9 +6,7 @@ import boto
 import boto.route53
 from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.key import Key
-
-import config
-
+from django.conf import settings
 
 # BUCKETS AND FILES
 
@@ -20,16 +18,16 @@ def get_or_create_bucket(bucket_name):
     :return: The bucket and a boolean flag stating that this bucket is new or not.
     """
     s3 = boto.connect_s3(
-        config.AWS_ACCESS_KEY,
-        config.AWS_SECRET_KEY,
-        host="s3-" + config.AWS_ZONE + ".amazonaws.com",
+        settings.AWS_ACCESS_KEY,
+        settings.AWS_SECRET_KEY,
+        host="s3-" + settings.AWS_ZONE + ".amazonaws.com",
         calling_format=OrdinaryCallingFormat(),
-    )  # host='s3-eu-central-1.amazonaws.com')
+    )
     try:
         bucket = s3.get_bucket(bucket_name)
         return bucket, False
     except boto.exception.S3ResponseError:
-        bucket = s3.create_bucket(bucket_name, location=config.AWS_ZONE)
+        bucket = s3.create_bucket(bucket_name, location=settings.AWS_ZONE)
         set_rights_for_bucket(bucket)
         return bucket, True
     except Exception as e:
@@ -124,9 +122,9 @@ def verify_srv_records():
     :raises: EnvironmentError if any check failed.
     :return: -
     """
-    route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
+    route53 = boto.connect_route53(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
     srv_records = []
-    second_hosted_zone = route53.get_zone(config.DOMAIN + ".")
+    second_hosted_zone = route53.get_zone(settings.DOMAIN + ".")
     second_hosted_zone_cnames = []
 
     for zone in route53.get_zones():
@@ -164,9 +162,9 @@ def verify_srv_records():
 
 def get_or_create_mainzone():
     """Returns the zone or creates a new one according to service_provider"""
-    route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
+    route53 = boto.connect_route53(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
 
-    zone_name = config.DOMAIN
+    zone_name = settings.DOMAIN
 
     zone = route53.get_zone(zone_name)
     if not zone:
@@ -180,7 +178,7 @@ def get_or_create_mainzone():
 
 def get_or_create_zone_forprovider(service_provider):
     """Returns the zone or creates a new one according to service_provider"""
-    route53 = boto.connect_route53(config.AWS_ACCESS_KEY, config.AWS_SECRET_KEY)
+    route53 = boto.connect_route53(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
 
     zone_name = service_provider.fqdn
 
@@ -230,7 +228,7 @@ def get_provider_cname(prefix, service_provider, zone):
 
 def update_or_create_vissrv_station(station):
     """Creates a new CNAME entry or updates it"""
-    if station.radiovis_enabled and station.service_provider and not config.STANDALONE:
+    if station.radiovis_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiovis._tcp"
 
@@ -248,7 +246,7 @@ def update_or_create_vissrv_station(station):
 
 def remove_vissrv_station(station):
     """Removes the VIS entry of a station"""
-    if station.radiovis_enabled and station.service_provider and not config.STANDALONE:
+    if station.radiovis_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiovis._tcp"
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
@@ -258,7 +256,7 @@ def remove_vissrv_station(station):
 def update_or_create_epgsrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radioepg_enabled and station.service_provider and not config.STANDALONE:
+    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp".lower(), station.fqdn.lower())
 
@@ -275,7 +273,7 @@ def update_or_create_epgsrv_station(station):
 def remove_epgsrv_station(station):
     """Removes the EPG entry of a station"""
 
-    if station.radioepg_enabled and station.service_provider and not config.STANDALONE:
+    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp", station.fqdn.lower())
         remove_srv(zone, name)
@@ -284,7 +282,7 @@ def remove_epgsrv_station(station):
 def update_or_create_spisrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radiospi_enabled and station.service_provider and not config.STANDALONE:
+    if station.radiospi_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radiospi._tcp", station.fqdn.lower())
 
@@ -301,7 +299,7 @@ def update_or_create_spisrv_station(station):
 def remove_spisrv_station(station):
     """Removes the SPI entry of a station"""
 
-    if station.radiospi_enabled and station.service_provider and not config.STANDALONE:
+    if station.radiospi_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp", station.fqdn.lower())
         remove_srv(zone, name)
@@ -310,7 +308,7 @@ def remove_spisrv_station(station):
 def update_or_create_tagsrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radiotag_enabled and station.service_provider and not config.STANDALONE:
+    if station.radiotag_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiotag._tcp"
 
@@ -328,7 +326,7 @@ def update_or_create_tagsrv_station(station):
 
 def remove_tagsrv_station(station):
     """Removes the TAG entry of a station"""
-    if station.radioepg_enabled and station.service_provider and not config.STANDALONE:
+    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiotag._tcp"
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
@@ -428,10 +426,10 @@ def check_mainzone():
     # FIXME Skip properly parent ns verification for mainzone
     # parent = get_parent_ns(mainzone)
     # parentns = parent.resource_records
-    visserver = get_cnames_until_a_record(mainzone, config.RADIOVIS_DNS)
-    epgserver = get_cnames_until_a_record(mainzone, config.RADIOEPG_DNS)
-    spiserver = get_cnames_until_a_record(mainzone, config.RADIOSPI_DNS)
-    tagserver = get_cnames_until_a_record(mainzone, config.RADIOTAG_DNS)
+    visserver = get_cnames_until_a_record(mainzone, settings.RADIOVIS_DNS)
+    epgserver = get_cnames_until_a_record(mainzone, settings.RADIOEPG_DNS)
+    spiserver = get_cnames_until_a_record(mainzone, settings.RADIOSPI_DNS)
+    tagserver = get_cnames_until_a_record(mainzone, settings.RADIOTAG_DNS)
     # WILDCARD Not Working in BOTO at this time : #1216 https://github.com/boto/boto/pull/1216
     # viswildcard = update_or_create_cname(mainzone, '*.'+config.RADIOVIS_DNS, config.RADIOVIS_DNS)
     # epgwildcard = update_or_create_cname(mainzone, '*.'+config.RADIOEPG_DNS, config.RADIOEPG_DNS)
@@ -448,18 +446,18 @@ def check_mainzone():
         },
         "services": {
             "vis": {
-                "name": config.RADIOVIS_DNS,
+                "name": settings.RADIOVIS_DNS,
                 "ip": visserver,
             },  # 'wildcard': viswildcard},
             "epg": {
-                "name": config.RADIOEPG_DNS,
+                "name": settings.RADIOEPG_DNS,
                 "ip": epgserver,
             },  # 'wildcard': epgwildcard},
             "spi": {
-                "name": config.RADIOSPI_DNS,
+                "name": settings.RADIOSPI_DNS,
                 "ip": spiserver,
             },  # 'wildcard': spiwildcard},
-            "tag": {"name": config.RADIOTAG_DNS, "ip": tagserver},
+            "tag": {"name": settings.RADIOTAG_DNS, "ip": tagserver},
         },
     }  # 'wildcard': tagwildcard}}}
 
@@ -482,10 +480,10 @@ def check_serviceprovider(sp):
         bucketisvalid = bucketendpoint == staticnamerecord
 
         mainzone = get_or_create_mainzone()
-        visservice = update_or_create_cname(mainzone, sp.vis_fqdn, config.RADIOVIS_DNS)
-        epgservice = update_or_create_cname(mainzone, sp.epg_fqdn, config.RADIOEPG_DNS)
-        spiservice = update_or_create_cname(mainzone, sp.spi_fqdn, config.RADIOSPI_DNS)
-        tagservice = update_or_create_cname(mainzone, sp.tag_fqdn, config.RADIOTAG_DNS)
+        visservice = update_or_create_cname(mainzone, sp.vis_fqdn, settings.RADIOVIS_DNS)
+        epgservice = update_or_create_cname(mainzone, sp.epg_fqdn, settings.RADIOEPG_DNS)
+        spiservice = update_or_create_cname(mainzone, sp.spi_fqdn, settings.RADIOSPI_DNS)
+        tagservice = update_or_create_cname(mainzone, sp.tag_fqdn, settings.RADIOTAG_DNS)
 
         isvalid = (
             nsisvalid and bucketisvalid and visservice and epgservice and tagservice

@@ -32,7 +32,7 @@ def LogoutView(request):
 
 
 def SamlMetadataView(request):
-    complete_url = redirect('social:complete', args=("saml",))
+    complete_url = redirect('social:complete', "saml")
     saml_backend = load_backend(
         load_strategy(request),
         "saml",

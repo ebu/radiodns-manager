@@ -41,6 +41,14 @@
             <label for="{{ form.identifier.auto_id }}" class="col-sm-3 col-md-3 control-label">Identifier</label>
             <div class="col-sm-9 col-md-7">
                 <input type="text" class="form-control" name="identifier" id="identifier" value="{% if form.identifier.value %}{{form.identifier.value}}{% endif %}"/>
+                <button
+                                            id="new_client_identifier_suggestion"
+                                            type="button"
+                                            class="btn btn-sm btn-primary"
+                                            onclick="suggest_identifier();"
+                                    >
+                                        Suggest Identifier
+                                    </button>
             </div>
         </div>
 
@@ -68,5 +76,16 @@
             </li>
         </ul>
     </div>
+    <script type="text/javascript">
+        function suggest_identifier(length = 128 ) {
+            let identifier = "";
+            const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (let i = 0; i < length; i++)
+                identifier += possible.charAt(Math.floor(Math.random() * possible.length));
+            $('#identifier').attr("value", identifier);
+            console.log(identifier);
+        }
+    </script>
+
 {% endblock %}
 

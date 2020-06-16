@@ -139,9 +139,9 @@ class Station(models.Model):
 
     @property
     def fqdn_prefix(self):
-        return filter(
-            lambda x: x in string.ascii_letters + string.digits, self.ascii_name.lower()
-        )
+        return "".join(filter(
+            lambda x: x in string.ascii_letters + string.digits, self.ascii_name.decode("ascii").lower()
+        ))
 
     @property
     def fqdn(self):
@@ -154,8 +154,8 @@ class Station(models.Model):
         return (
             str(self.id)
             + "."
-            + filter(
+            + "".join(filter(
                 lambda x: x in string.ascii_letters + string.digits,
-                self.ascii_name.lower(),
-            )
+                self.ascii_name.decode("ascii").lower(),
+            ))
         )
