@@ -19,19 +19,30 @@
     {% endblock %}
     {% block alerts %}
     {{ block.super }}
-    {{form.errors}}
+    {{ci.2.errors}}
     {% endblock %}
 
+
+    <ul class="nav nav-tabs" id="nav-tab-display">
+        {% for ci in client_instance_forms %}
+            <li id="nav_li_{{ ci.0.id }}" class="nav-item">
+                <a id="nav_tab_{{ ci.0.id }}" class="nav-link" href="" style="margin:0; display: inline-flex">
+                    {{ ci.0.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     <form id="stations_form" action="" method="POST" class="form-horizontal">
         {% csrf_token %}
-            <div id="tab_wrapper_{{ station.id }}">
+        {% for ci in client_instance_forms %}
+            <div id="tab_wrapper_{{ ci.0.id }}">
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_name" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_name" class="dot"></div>
                         <h2 style="display: inline-block;">Names</h2>
                         <button
-                                id="reset-override-name-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-name-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm btn-default btn-sm"
@@ -43,14 +54,14 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Name:</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" name="name" id="station-name_{{ station.id }}"
+                        <input type="text" name="{{ ci.0.id }}-name" id="station-name_{{ ci.0.id }}"
                                class="form-control"
-                               value="{% if form.name.value %}{{form.name.value}}{% endif %}"><br/>
+                               value="{% if ci.2.name.value %}{{ci.2.name.value}}{% endif %}"><br/>
                         <small>Technical Description for usernames and RadioDNS Naming.</small>
-                        {{ form.name.errors }}
+                        {{ ci.2.name.errors }}
                     </div>
                 </div>
-                    <div class="form-group" id="station-name-change-warning_{{ station.id }}"
+                    <div class="form-group" id="station-name-change-warning_{{ ci.0.id }}"
                          style="display:none;">
                         <div class="col-sm-9 col-md-7 col-sm-offset-3 alert alert-danger" role="alert">
                             <p><strong>Changing the Station's name is not recommended as this will require
@@ -65,29 +76,29 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Short name (8 chars)</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" name="short_name" id="short_name_{{ station.id }}"
+                        <input type="text" name="{{ ci.0.id }}-short_name" id="short_name_{{ ci.0.id }}"
                                class="form-control"
-                               value="{% if form.short_name.value %}{{form.short_name.value}}{% endif %}" maxlength="8">
-                        {{form.short_name.errors}}
+                               value="{% if ci.2.short_name.value %}{{ci.2.short_name.value}}{% endif %}" maxlength="8">
+                        {{ci.2.short_name.errors}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Medium name (16 chars)</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" name="medium_name" id="medium_name_{{ station.id }}"
+                        <input type="text" name="{{ ci.0.id }}-medium_name" id="medium_name_{{ ci.0.id }}"
                                class="form-control"
-                               value="{% if form.medium_name.value %}{{form.medium_name.value}}{% endif %}" maxlength="16">
-                        {{form.medium_name.errors}}
+                               value="{% if ci.2.medium_name.value %}{{ci.2.medium_name.value}}{% endif %}" maxlength="16">
+                        {{ci.2.medium_name.errors}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Long name (128 chars)</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" name="long_name" id="long_name_{{ station.id }}"
+                        <input type="text" name="{{ ci.0.id }}-long_name" id="long_name_{{ ci.0.id }}"
                                class="form-control"
-                               value="{% if form.long_name.value %}{{form.long_name.value}}{% endif %}"
+                               value="{% if ci.2.long_name.value %}{{ci.2.long_name.value}}{% endif %}"
                                maxlength="128">
-                        {{form.long_name.errors}}
+                        {{ci.2.long_name.errors}}
                     </div>
                 </div>
 
@@ -96,11 +107,11 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Short description (180 chars)</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" name="short_description"
-                               id="short_description_{{ station.id }}"
+                        <input type="text" name="{{ ci.0.id }}-short_description"
+                               id="short_description_{{ ci.0.id }}"
                                class="form-control"
-                               value="{% if form.short_description.value %}{{form.short_description.value}}{% endif %}" maxlength="180">
-                        {{form.short_description.errors}}
+                               value="{% if ci.2.short_description.value %}{{ci.2.short_description.value}}{% endif %}" maxlength="180">
+                        {{ci.2.short_description.errors}}
                     </div>
                 </div>
 
@@ -109,11 +120,11 @@
 
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_language" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_language" class="dot"></div>
                         <h2 style="display: inline-block;">Language</h2>
                         <button
-                                id="reset-override-language-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-language-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm"
@@ -126,7 +137,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label"></label>
                     <div class="col-sm-9 col-md-7">
-                        <button type="button" id="copyLanguageButton_{{ station.id }}" data-loading-text="Loading..."
+                        <button type="button" id="copyLanguageButton_{{ ci.0.id }}" data-loading-text="Loading..."
                                 class="btn btn-default btn-sm" autocomplete="off">
                             Same as Service Provider
                         </button>
@@ -136,13 +147,13 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Default Language</label>
                     <div class="col-sm-9 col-md-7">
-                        <select name="default_language" class="form-control"
-                                id="default_language_{{ station.id }}" >
+                        <select name="{{ ci.0.id }}-default_language" class="form-control"
+                                id="default_language_{{ ci.0.id }}" >
                                 {% for language in languages %}
-                                <option {% if form.default_language.id == language.id %} selected {% endif %} value="{{ language.id }}">{{ language.iso }} - {{ language.name }}</option>
+                                <option {% if ci.2.default_language.id == language.id %} selected {% endif %} value="{{ language.id }}">{{ language.iso }} - {{ language.name }}</option>
                                 {% endfor %}
                         </select>
-                        {{form.default_language.errors}}
+                        {{ci.2.default_language.errors}}
                     </div>
                 </div>
 
@@ -150,11 +161,11 @@
 
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_links" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_links" class="dot"></div>
                         <h2 style="display: inline-block;">Links</h2>
                         <button
-                                id="reset-override-links-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-links-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm">
@@ -166,11 +177,11 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Default Url:</label>
                     <div class="col-sm-9 col-md-7">
-                        <input id="default_url_{{ station.id }}" type="text" name="url_default"
+                        <input id="default_url_{{ ci.0.id }}" type="text" name="{{ ci.0.id }}-url_default"
                                class="form-control"
-                               value="{% if form.default_url.value %}{{form.default_url.value}}{% endif %}"
+                               value="{% if ci.2.default_url.value %}{{ci.2.default_url.value}}{% endif %}"
                                maxlength="255">
-                        {{form.url_default.errors}}
+                        {{ci.2.url_default.errors}}
                     </div>
                 </div>
                 <hr/>
@@ -178,11 +189,11 @@
 
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_address" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_address" class="dot"></div>
                         <h2 style="display: inline-block;">Address</h2>
                         <button
-                                id="reset-override-address-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-address-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm"
@@ -196,11 +207,11 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label"></label>
                     <div class="col-sm-9 col-md-7">
-                        <button type="button" id="copyAddressButton_{{ station.id }}" data-loading-text="Loading..."
+                        <button type="button" id="copyAddressButton_{{ ci.0.id }}" data-loading-text="Loading..."
                                 class="btn btn-default btn-sm" autocomplete="off">
                             Same as Service Provider
                         </button>
-                        <button type="button" id="keepNameButton_{{ station.id }}" data-loading-text="Loading..."
+                        <button type="button" id="keepNameButton_{{ ci.0.id }}" data-loading-text="Loading..."
                                 class="btn btn-default btn-sm"
                                 autocomplete="off">
                             Keep Channel Name
@@ -211,19 +222,19 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Postal Name</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" class="form-control" name="postal_name"
-                               id="postal_name_{{ station.id }}"
-                               value="{% if form.postal_name.value %}{{form.postal_name.value}}{% endif %}"/>
+                        <input type="text" class="form-control" name="{{ ci.0.id }}-postal_name"
+                               id="postal_name_{{ ci.0.id }}"
+                               value="{% if ci.2.postal_name.value %}{{ci.2.postal_name.value}}{% endif %}"/>
                     </div>
-                    {{form.postal_name.errors}}
+                    {{ci.2.postal_name.errors}}
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Street</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" class="form-control" name="street"
-                               id="street_{{ station.id }}"
-                               value="{% if form.street.value %}{{form.street.value}}{% endif %}"/>
-                    {{form.street.errors}}
+                        <input type="text" class="form-control" name="{{ ci.0.id }}-street"
+                               id="street_{{ ci.0.id }}"
+                               value="{% if ci.2.street.value %}{{ci.2.street.value}}{% endif %}"/>
+                    {{ci.2.street.errors}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -231,16 +242,16 @@
                     <div class="col-sm-9 col-md-7">
                         <div class="row">
                             <div class="col-lg-4">
-                                <input type="text" class="form-control pull-left" name="zipcode"
-                                       id="zipcode_{{ station.id }}"
-                                       value="{% if form.zipcode.value %}{{form.zipcode.value}}{% endif %}"/>
-                                {{form.zipcode.errors}}
+                                <input type="text" class="form-control pull-left" name="{{ ci.0.id }}-zipcode"
+                                       id="zipcode_{{ ci.0.id }}"
+                                       value="{% if ci.2.zipcode.value %}{{ci.2.zipcode.value}}{% endif %}"/>
+                                {{ci.2.zipcode.errors}}
                             </div>
                             <div class="col-lg-8">
-                                <input type="text" class="form-control" name="city"
-                                       id="city_{{ station.id }}"
-                                       value="{% if form.zipcode.value %}{{form.zipcode.value}}{% endif %}"/>
-                                {{form.city.errors}}
+                                <input type="text" class="form-control" name="{{ ci.0.id }}-city"
+                                       id="city_{{ ci.0.id }}"
+                                       value="{% if ci.2.zipcode.value %}{{ci.2.zipcode.value}}{% endif %}"/>
+                                {{ci.2.city.errors}}
                             </div>
                         </div>
                     </div>
@@ -248,23 +259,23 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Country</label>
                     <div class="col-sm-9 col-md-7">
-                        <select class="form-control" name="location_country"
-                                id="location_country_{{ station.id }}" >
+                        <select class="form-control" name="{{ ci.0.id }}-location_country"
+                                id="location_country_{{ ci.0.id }}" >
                                 {% for country in countries %}
-                                <option {% if form.location_country.id == country.id %} selected {% endif %} value="{{ country.id }}">{{ country.iso }} - {{ country.name }}</option>
+                                <option {% if ci.2.location_country.id == country.id %} selected {% endif %} value="{{ country.id }}">{{ country.iso }} - {{ country.name }}</option>
                                 {% endfor %}
                         </select>
-                        {{form.location_country.errors}}
+                        {{ci.2.location_country.errors}}
                     </div>
                 </div>
                 <hr/>
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_contact" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_contact" class="dot"></div>
                         <h2 style="display: inline-block;">Contact</h2>
                         <button
-                                id="reset-override-contact-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-contact-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm"
@@ -276,10 +287,10 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Phone Number</label>
                     <div class="col-sm-9 col-md-7">
-                        <input type="text" class="form-control" name="phone_number"
-                               id="phone_number_{{ station.id }}"
-                               value="{% if form.phone_number.value %}{{form.phone_number.value}}{% endif %}"/>
-                        {{form.phone_number.errors}}
+                        <input type="text" class="form-control" name="{{ ci.0.id }}-phone_number"
+                               id="phone_number_{{ ci.0.id }}"
+                               value="{% if ci.2.phone_number.value %}{{ci.2.phone_number.value}}{% endif %}"/>
+                        {{ci.2.phone_number.errors}}
                         <small>Format: +41-22-7172745</small>
                     </div>
                 </div>
@@ -287,24 +298,24 @@
                     <label class="col-sm-3 col-md-3 control-label">SMS</label>
                     <div class="col-sm-9 col-md-7">
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon-sms-number_{{ station.id }}">Number</span>
-                            <input type="text" class="form-control" name="sms_number"
-                                   id="sms_number_{{ station.id }}"
-                                   value="{% if form.sms_number.value %}{{form.sms_number.value}}{% endif %}" aria-describedby="basic-addon-sms-number"/>
+                            <span class="input-group-addon" id="basic-addon-sms-number_{{ ci.0.id }}">Number</span>
+                            <input type="text" class="form-control" name="{{ ci.0.id }}-sms_number"
+                                   id="sms_number_{{ ci.0.id }}"
+                                   value="{% if ci.2.sms_number.value %}{{ci.2.sms_number.value}}{% endif %}" aria-describedby="basic-addon-sms-number"/>
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon-sms-body_{{ station.id }}">Body</span>
-                            <input type="text" class="form-control" name="sms_body"
-                                   id="sms_body_{{ station.id }}"
-                                   value="{% if form.sms_body.value %}{{form.sms_body.value}}{% endif %}"
+                            <span class="input-group-addon" id="basic-addon-sms-body_{{ ci.0.id }}">Body</span>
+                            <input type="text" class="form-control" name="{{ ci.0.id }}-sms_body"
+                                   id="sms_body_{{ ci.0.id }}"
+                                   value="{% if ci.2.sms_body.value %}{{ci.2.sms_body.value}}{% endif %}"
                                    aria-describedby="basic-addon-sms-body"/>
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"
-                                  id="basic-addon-sms-descr_{{ station.id }}">Description</span>
-                            <input type="text" class="form-control" name="sms_description"
-                                   id="sms_description_{{ station.id }}"
-                                   value="{% if form.sms_description.value %}{{form.sms_description.value}}{% endif %}" aria-describedby="basic-addon-sms-descr"/>
+                                  id="basic-addon-sms-descr_{{ ci.0.id }}">Description</span>
+                            <input type="text" class="form-control" name="{{ ci.0.id }}-sms_description"
+                                   id="sms_description_{{ ci.0.id }}"
+                                   value="{% if ci.2.sms_description.value %}{{ci.2.sms_description.value}}{% endif %}" aria-describedby="basic-addon-sms-descr"/>
                         </div>
                         <small>Example: "Send 'STATION_A ' to 406" where 406 is the number, 'STATION_A' is the body. As
                             description use something like "Contact the Studio".
@@ -315,19 +326,19 @@
                     <label class="col-sm-3 col-md-3 control-label">E-Mail</label>
                     <div class="col-sm-9 col-md-7">
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon-email-address_{{ station.id }}">E-Mail</span>
-                            <input type="text" class="form-control" name="email_address"
-                                   id="email_address_{{ station.id }}"
-                                   value="{% if form.email_address.value %}{{form.email_address.value}}{% endif %}" aria-describedby="basic-addon-email-address"/>
-                            {{form.email_address.errors}}
+                            <span class="input-group-addon" id="basic-addon-email-address_{{ ci.0.id }}">E-Mail</span>
+                            <input type="text" class="form-control" name="{{ ci.0.id }}-email_address"
+                                   id="email_address_{{ ci.0.id }}"
+                                   value="{% if ci.2.email_address.value %}{{ci.2.email_address.value}}{% endif %}" aria-describedby="basic-addon-email-address"/>
+                            {{ci.2.email_address.errors}}
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"
-                                  id="basic-addon-email-descr_{{ station.id }}">Description</span>
-                            <input type="text" class="form-control" name="email_description"
-                                   id="email_description_{{ station.id }}"
-                                   value="{% if form.email_description.value %}{{form.email_description.value}}{% endif %}" aria-describedby="basic-addon-email-descr"/>
-                            {{form.email_description.errors}}
+                                  id="basic-addon-email-descr_{{ ci.0.id }}">Description</span>
+                            <input type="text" class="form-control" name="{{ ci.0.id }}-email_description"
+                                   id="email_description_{{ ci.0.id }}"
+                                   value="{% if ci.2.email_description.value %}{{ci.2.email_description.value}}{% endif %}" aria-describedby="basic-addon-email-descr"/>
+                            {{ci.2.email_description.errors}}
                         </div>
                     </div>
                 </div>
@@ -335,11 +346,11 @@
 
                 <div style="margin-bottom: 10px;">
                     <div class="row-centered">
-                        <div id="dot_grp_{{ station.id }}_genres" class="dot"></div>
+                        <div id="dot_grp_{{ ci.0.id }}_genres" class="dot"></div>
                         <h2 style="display: inline-block;">Genres</h2>
                         <button
-                                id="reset-override-genres-btn_{{ station.id }}"
-                                name="reset-override-btn_{{ station.id }}"
+                                id="reset-override-genres-btn_{{ ci.0.id }}"
+                                name="reset-override-btn_{{ ci.0.id }}"
                                 style="display: none; margin: 0 0 -15px 15px;"
                                 type="button"
                                 class="btn btn-default btn-sm"
@@ -351,8 +362,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-3 control-label">Genres:</label>
                     <div class="col-sm-9 col-md-7">
-                        <select class="form-control" name="genres"
-                                id="genres_{{ station.id }}" >
+                        <select class="form-control" name="{{ ci.0.id }}-genres"
+                                id="genres_{{ ci.0.id }}" >
                                         <option value="">--</option>
                                         <option value="3.1.1">News (PTy 1 - News)</option>
                                         <option value="3.1.1.11">Local/Regional</option>
@@ -406,59 +417,48 @@
                         </select>
                     </div>
                 </div>
-                </div>
-
-                <hr/>
+        {% if ci.0.id == 0 %}
+                <hr>
                     <div style="margin-bottom: 10px;">
                         <div class="row-centered">
-                            <div class="dot"></div>
                             <h2 style="display: inline-block;">Services</h2>
-                            <button
-                                    name="reset-override-btn_{{ station.id }}"
-                                    style="display: none; margin: 0 0 -15px 15px;;"
-                                    type="button"
-                                    class="btn btn-default btn-sm"
-                            >
-                                Reset overrides
-                            </button>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-3 col-md-3 control-label">Enable RadioVIS Services:</label>
                         <div class="col-sm-9 col-md-7">
-                            <input type="checkbox" name="radiovis_enabled"
-                                   id="radiovis_enabled_{{ station.id }}"
+                            <input type="checkbox" name="station-radiovis_enabled"
+                                   id="radiovis_enabled_{{ ci.0.id }}"
                                    class="form-control"
-                                   value="{% if form.radiovis_enabled.value %}{{form.radiovis_enabled.value}}{% endif %}"
-                                   {% if form.radiovis_enabled %}checked="checked" {% endif %}/>
-                            {{form.radiovis_enabled.errors}}
+                                   {% if station_form.radiovis_enabled.value %}checked="checked" {% endif %}/>
+                            {{station_form.radiovis_enabled.errors}}
                         </div>
                     </div>
-                    <div id="radiovis_enabled_options_{{ station.id }}" {% if not form.radiovis_enabled %}
-                          {% endif %}>
+                    <div id="radiovis_enabled_options_{{ ci.0.id }}" {% if not station_form.radiovis_enabled.value %}
+                         style="display:none;" {% endif %}>
                         <div class="form-group">
                             <label class="col-sm-3 col-md-3 control-label">RadioVIS SlideShow Service Uri:</label>
                             <div class="col-sm-9 col-md-7">
-                                <input type="text" name="radiovis_service"
-                                       id="radiovis_service_{{ station.id }}"
+                                <input type="text" name="station-radiovis_service"
+                                       id="radiovis_service_{{ ci.0.id }}"
                                        class="form-control"
-                                       value="{% if form.radiovis_service.value %}{{form.radiovis_service.value}}{% endif %}"/>
-                                {{form.radiovis_service.errors}}
+                                       value="{% if station_form.radiovis_service.value %}{{station_form.radiovis_service.value}}{% endif %}"/>
+                                {{station_form.radiovis_service.errors}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 col-md-3 control-label">IPs allowed to connect<br/> to the radiovis
                                 server:</label>
                             <div class="col-sm-9 col-md-7">
-                                <input id="ip_allowed_{{ station.id }}" type="text" name="ip_allowed"
+                                <input id="ip_allowed_{{ ci.0.id }}" type="text" name="station-ip_allowed"
                                        class="form-control"
-                                       value="{% if form.ip_allowed.value %}{{form.ip_allowed.value}}{% endif %}"><br/>
+                                       value="{% if station_form.ip_allowed.value %}{{station_form.ip_allowed.value}}{% endif %}"><br/>
                                 <small>
                                     A list of ip.ip.ip.ip/subnet, comma separted. E.g.: <i>127.0.0.1/32, 0.0.0.0/0,
                                     192.168.42.0/24</i>
                                 </small>
-                                {{form.ip_allowed.errors}}
+                                {{station_form.ip_allowed.errors}}
                             </div>
                         </div>
                     </div>
@@ -466,53 +466,54 @@
                         <label class="col-sm-3 col-md-3 control-label">Enable Service and Program Information
                             (SPI):</label>
                         <div class="col-sm-9 col-md-7">
-                            <input type="checkbox" name="radioepg_enabled"
-                                   id="radioepg_enabled_{{ station.id }}"
+                            <input type="checkbox" name="station-radioepg_enabled"
+                                   id="radioepg_enabled_{{ ci.0.id }}"
                                    class="form-control"
-                                   value="{% if form.radioepg_enabled.value %}{{form.radioepg_enabled.value}}{% endif %}"
-                                   {% if form.radioepg_enabled %}checked="checked" {% endif %}/>
-                            {{form.radioepg_enabled.errors}}
+                                   {% if station_form.radioepg_enabled.value %}checked="checked" {% endif %}/>
+                            {{station_form.radioepg_enabled.errors}}
                         </div>
                     </div>
-                    <div class="form-group" id="radioepg_enabled_options_{{ station.id }}"
-                            {% if not form.radioepg_enabled %}
-                        {% endif %}>
+                    <div class="form-group" id="radioepg_enabled_options_{{ ci.0.id }}"
+                            {% if not station_form.radioepg_enabled.value %}
+                         style="display:none;" {% endif %}>
                         <label class="col-sm-3 col-md-3 control-label">RadioEPG Service Uri:</label>
                         <div class="col-sm-9 col-md-7">
-                            <input type="text" name="radioepg_service"
-                                   id="radioepg_service_{{ station.id }}"
+                            <input type="text" name="station-radioepg_service"
+                                   id="radioepg_service_{{ ci.0.id }}"
                                    class="form-control"
-                                   value="{% if form.radioepg_service.value %}{{form.radioepg_service.value}}{% endif %}"/>
-                            {{form.radioepg_service.errors}}
+                                   value="{% if station_form.radioepg_service.value %}{{station_form.radioepg_service.value}}{% endif %}"/>
+                            {{station_form.radioepg_service.errors}}
                         </div>
                     </div>
-                    <div class="form-group" id="radiospi_enabled_options_{{ station.id }}"
-                            {% if not form.radioepg_enabled %}
-                          {% endif %}>
+                    <div class="form-group" id="radiospi_enabled_options_{{ ci.0.id }}"
+                           {% if not station_form.radioepg_enabled.value %}
+                         style="display:none;" {% endif %}>
                         <label class="col-sm-3 col-md-3 control-label">RadioSPI Service Uri:</label>
                         <div class="col-sm-9 col-md-7">
-                            <input type="text" name="radiospi_service"
-                                   id="radiospi_service_{{ station.id }}"
+                            <input type="text" name="station-radiospi_service"
+                                   id="radiospi_service_{{ ci.0.id }}"
                                    class="form-control"
-                                   value="{% if form.radiospi_service.value %}{{form.radiospi_service.value}}{% endif %}"/>
-                            {{form.radiospi_service.errors}}
+                                   value="{% if station_form.radiospi_service.value %}{{station_form.radiospi_service.value}}{% endif %}"/>
+                            {{station_form.radiospi_service.errors}}
                         </div>
                     </div>
-                    <div class="form-group" id="radioepgpi_enabled_options"
-                            {% if not form.radioepg_enabled %}
-                          {% endif %}>
+                    <div class="form-group" id="radioepgpi_enabled_options_{{ ci.0.id }}"
+                           {% if not station_form.radioepg_enabled.value %}
+                         style="display:none;" {% endif %}>
                         <label class="col-sm-3 col-md-3 control-label">Enable Program Information (EPG - PI):</label>
                         <div class="col-sm-9 col-md-7">
-                            <input type="checkbox" name="radioepgpi_enabled"
-                                   id="radioepgpi_enabled_{{ station.id }}"
+                            <input type="checkbox" name="station-radioepgpi_enabled"
+                                   id="radioepgpi_enabled_{{ ci.0.id }}"
                                    class="form-control"
-                                   value="{% if form.radioepgpi_enabled.value %}{{form.radioepgpi_enabled.value}}{% endif %}"
-                                   {% if form.radioepgpi_enabled %}checked="checked" {% endif %}/>
-                            {{form.radioepgpi_enabled.errors}}
+                                   {% if station_form.radioepgpi_enabled.value %}checked="checked" {% endif %}/>
+                            {{station_form.radioepgpi_enabled.errors}}
                         </div>
                     </div>
-                    <hr/>
+        {% endif %}
+                <hr>
+
             </div>
+        {% endfor %}
         <div class="form-group">
             <div class="col-sm-4 col-sm-offset-3">
                 <button type="submit" class="btn btn-primary"
@@ -533,7 +534,7 @@
         $(document).ready(function () {
             const module = StationModuleEdit.prototype;
             module.numberOfExistingDefaultGenre = {{ cs.0.1.genres_list|length }};
-            {% for cs in clients_stations %}
+            {% for cs in client_instance_forms %}
                 {% if cs.1.id and forloop.counter0 != 0 %}
                     module.onEditMode[{{ cs.0.id }}] = true;
                 {% endif %}
@@ -546,13 +547,13 @@
             module.init();
 
             VisibilityModule.prototype.init(
-                {{ clients_stations.0.0.id }},
+                0,
                 module.clientsIds,
                 module.updateTab
             );
 
             let defaultLanguage = "";
-            {% for cs in clients_stations %}
+            {% for cs in client_instance_forms %}
                 defaultLanguage = $('#default_language_{{ cs.0.id }}').attr('cval');
                 if (defaultLanguage !== "") {
                     $('#default_language_{{ cs.0.id }}').val(defaultLanguage);
@@ -562,24 +563,24 @@
                 module.attachEventsListenerToTab(
                     {{ cs.0.id }},
                     {
-                        id: {% if object.id %} {{ cs.1.id }} {% else %} null {% endif %},
+                        id: {% if cs.2.id %} {{ cs.1.id }} {% else %} null {% endif %},
                         short_name: {% if cs.1.short_name %} true {% else %} false {% endif %},
                         medium_name: {% if cs.1.medium_name %} true {% else %} false {% endif %},
                         long_name: {% if cs.1.long_name %} true {% else %} false {% endif %},
                         short_description: {% if cs.1.short_description %} true {% else %} false {% endif %},
                     },
                     {
-                        postal_name: '{{ sp.postal_name }}',
-                        street: '{{ sp.street }}',
-                        zipcode: '{{ sp.zipcode }}',
-                        city: '{{ sp.city }}',
-                        location_country: '{{ sp.location_country }}',
-                        default_language: '{{ sp.default_language }}',
+                        postal_name: '{{ organization.postal_name }}',
+                        street: '{{ organization.street }}',
+                        zipcode: '{{ organization.zipcode }}',
+                        city: '{{ organization.city }}',
+                        location_country: '{{ organization.location_country }}',
+                        default_language: '{{ organization.default_language }}',
                     },
-                    '{{ default_radiovis_service }}',
-                    '{{ default_radioepg_service }}',
-                    '{{ default_radiospi_service }}',
-                    '{{ default_radiotag_service }}',
+                    '{{ organization.radiovis_service }}',
+                    '{{ organization.radioepg_service }}',
+                    '{{ organization.radiospi_service }}',
+                    '{{ organization.radiotag_service }}',
                 );
             {% endfor %}
         });

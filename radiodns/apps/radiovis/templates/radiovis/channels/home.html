@@ -39,7 +39,7 @@
 		<tbody>
 			{% for channel in channels %}
 				<tr>
-					<td><strong>{{channel.station.name}}</strong></td>
+					<td><strong>{{channel.station.default_instance.name}}</strong></td>
                     <td>{{channel.type_id}}</td>
 					<td>{{channel.name}}</td>
 					<td>{{channel.topic}}</td>
@@ -58,7 +58,7 @@
 					</td>
 					<td>
 						<a href="{% url 'radiovis:channel_logs' channel.id %}" class="btn btn-default" title="Logs"><i class="ion-ios-list"></i> Logs</a>
-                        <a href="#" onclick="play_topic('{{channel.topic_no_slash}}', '{{channel.station.name}}', '{{channel.name}}' );" class="btn btn-default" title="Ajax player"><i class="ion-play"></i>  Player</a>
+                        <a href="#" onclick="play_topic('{{channel.topic_no_slash}}', '{{channel.station.default_instance.name}}', '{{channel.name}}' );" class="btn btn-default" title="Ajax player"><i class="ion-play"></i>  Player</a>
 
 					</td>
 				</tr>

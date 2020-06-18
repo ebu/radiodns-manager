@@ -7,11 +7,42 @@ from urllib import parse
 from django.db import models
 
 from apps.awsutils import awsutils
+from apps.clients.models import Client
 from apps.localization.models import Ecc, Language
 from apps.manager.models import Organization, LogoImage
 
 
 class Station(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    default_image = models.ForeignKey(
+        LogoImage, on_delete=models.SET_NULL, blank=True, null=True
+    )
+
+    radiovis_enabled = models.BooleanField(default=False)
+    radiovis_service = models.CharField(max_length=255, blank=True)
+    radioepg_enabled = models.BooleanField(default=False, blank=True)
+    radioepgpi_enabled = models.BooleanField(default=False)
+    radioepg_service = models.CharField(max_length=255, blank=True)
+    radiotag_enabled = models.BooleanField(default=False)
+    radiotag_service = models.CharField(max_length=255, blank=True)
+    radiospi_enabled = models.BooleanField(default=False)
+    radiospi_service = models.CharField(max_length=255, blank=True, null=True)
+
+    ip_allowed = models.CharField(
+        max_length=256, blank=True, null=True
+    )  # A list of ip/subnet, with , between
+
+    @property
+    def default_instance(self):
+        return self.stationinstance_set.filter(client=None).first()
+
+    @classmethod
+    def all_stations_in_organization(cls, organization_id):
+        return cls.objects.filter(organization__id=organization_id)
+
+
+class StationInstance(models.Model):
+    station = models.ForeignKey(Station, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     short_name = models.CharField(max_length=8)
     medium_name = models.CharField(max_length=16)
@@ -37,30 +68,9 @@ class Station(models.Model):
         Ecc, on_delete=models.SET_NULL, blank=True, null=True
     )
 
-    radiovis_enabled = models.BooleanField(default=False)
-    radiovis_service = models.CharField(max_length=255, blank=True)
-    radioepg_enabled = models.BooleanField(default=False, blank=True)
-    radioepgpi_enabled = models.BooleanField(default=False)
-    radioepg_service = models.CharField(max_length=255, blank=True)
-    radiotag_enabled = models.BooleanField(default=False)
-    radiotag_service = models.CharField(max_length=255, blank=True)
-    radiospi_enabled = models.BooleanField(default=False)
-    radiospi_service = models.CharField(max_length=255, blank=True, null=True)
-
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-
-    default_image = models.ForeignKey(
-        LogoImage, on_delete=models.SET_NULL, blank=True, null=True
-    )
-
-    ip_allowed = models.CharField(
-        max_length=256, blank=True, null=True
-    )  # A list of ip/subnet, with , between
     genres = models.TextField(blank=True, null=True)
 
-    @classmethod
-    def all_stations_in_organization(cls, organization_id):
-        return cls.objects.filter(organization__id=organization_id)
+    client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
 
     def escape_slash_rfc3986(self, value):
         if value:
@@ -111,9 +121,9 @@ class Station(models.Model):
 
     @property
     def service_identifier(self):
-        if self.organization:
-            if self.organization.codops:
-                return f"ebu{self.id}{self.organization.codops.lower()}"
+        if self.station.organization:
+            if self.station.organization.codops:
+                return f"ebu{self.id}{self.station.organization.codops.lower()}"
         return None
 
     @property
@@ -139,14 +149,17 @@ class Station(models.Model):
 
     @property
     def fqdn_prefix(self):
-        return "".join(filter(
-            lambda x: x in string.ascii_letters + string.digits, self.ascii_name.decode("ascii").lower()
-        ))
+        return "".join(
+            filter(
+                lambda x: x in string.ascii_letters + string.digits,
+                self.ascii_name.decode("ascii").lower(),
+            )
+        )
 
     @property
     def fqdn(self):
-        if self.organization:
-            return "%s.%s" % (self.fqdn_prefix, self.organization.fqdn)
+        if self.station.organization:
+            return "%s.%s" % (self.fqdn_prefix, self.station.organization.fqdn)
         return None
 
     @property
@@ -154,8 +167,10 @@ class Station(models.Model):
         return (
             str(self.id)
             + "."
-            + "".join(filter(
-                lambda x: x in string.ascii_letters + string.digits,
-                self.ascii_name.decode("ascii").lower(),
-            ))
+            + "".join(
+                filter(
+                    lambda x: x in string.ascii_letters + string.digits,
+                    self.ascii_name.decode("ascii").lower(),
+                )
+            )
         )

@@ -43,7 +43,7 @@
                         <td><img id="station-img-{{station.id}}" style="height: 32px;width: 32px; {% if not station.default_image.file %}display:none;{% endif %}"
                                  src="{{station.default_image.file.url}}">
                         </td>
-                        <td><h4>{{station.name}}</h4></td>
+                        <td><h4>{{station.default_instance.name}}</h4></td>
                         <td>
                             <select id="logo_select" style="margin-bottom: 0px;" class="form-control"
                                     onchange="switch_default($(this).val(), $(this));">
@@ -67,7 +67,7 @@
                                 For Directory Service Discovery on you Webpage, include the following in the head section of your webpages:
                                 <pre>
                                 <code class="language-html" data-lang="html">&lt;head&gt;
-                                    &lt;link rel="radioepg" href="http://{{station.radioepg_service}}/radiodns/spi/3.1/SI.xml"&gt;
+                                    &lt;link rel="radioepg" href="http://{{station.default_instance.radioepg_service}}/radiodns/spi/3.1/SI.xml"&gt;
                                 &lt;/head&gt;</code></pre>
                             </td>
                             <td></td>

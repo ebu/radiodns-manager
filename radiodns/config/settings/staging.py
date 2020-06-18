@@ -49,17 +49,17 @@ SOCIAL_AUTH_SAML_ORG_INFO = {
 }
 SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
     "givenName": "Pawel Glimos",
-    "emailAddress": "pawel.glimos@bravelab.io"
+    "emailAddress": "pawel.glimos@bravelab.io",
 }
 SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
     "givenName": "Pawel Glimos",
-    "emailAddress": "pawel.glimos@bravelab.io"
+    "emailAddress": "pawel.glimos@bravelab.io",
 }
 SOCIAL_AUTH_SAML_ENABLED_IDPS = {
     "ebu": {
         "entity_id": "https://sso-qual.ebu.ch:443/auth",
         "url": "https://sso-qual.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
-        "x509cert": env.str("SOCIAL_AUTH_IPD_CERT")
+        "x509cert": env.str("SOCIAL_AUTH_IPD_CERT"),
     }
 }
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
@@ -81,13 +81,13 @@ sentry_sdk.init(
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_DB', 'lpp'),
-        'USER': os.environ.get('POSTGRES_USER', 'root'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '1234'),
-        'HOST': os.environ.get('DATABASE_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DATABASE_PORT', '5432'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_DB", "lpp"),
+        "USER": os.environ.get("POSTGRES_USER", "root"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "1234"),
+        "HOST": os.environ.get("DATABASE_HOST", "127.0.0.1"),
+        "PORT": os.environ.get("DATABASE_PORT", "5432"),
     }
 }
 

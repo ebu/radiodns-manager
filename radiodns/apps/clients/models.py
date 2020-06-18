@@ -12,3 +12,13 @@ class Client(models.Model):
     @classmethod
     def all_clients_in_organization(cls, organization_id):
         return list(cls.objects.filter(organization__id=organization_id))
+
+    @classmethod
+    def generate_default(cls, organization):
+        return Client(
+            id=0,
+            name="default",
+            identifier="default",
+            email="default@client.com",
+            organization=organization,
+        )

@@ -51,12 +51,12 @@
                         {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'stations:details' station.id %}"><strong>{{ station.name }}</strong></a>
+                            <a href="{% url 'stations:details' station.id %}"><strong>{{ station.default_instance.name }}</strong></a>
                         </td>
                         <td>
                             {{ station.organization.short_name }}
                         </td>
-                        <td>{{ station.fqdn }}</td>
+                        <td>{{ station.default_instance.fqdn }}</td>
                         <td>
                             <span id="vis-{{ station.id }}">
                                 {% if station.radiovis_service %}

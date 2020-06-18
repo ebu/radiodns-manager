@@ -87,8 +87,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -163,12 +163,9 @@ RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")
 
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
+    "social_core.pipeline.user.get_username",
+    "social_core.pipeline.social_auth.associate_by_email",
+    "social_core.pipeline.user.create_user",
 )
 
-LOGIN_EXEMPT_URLS = [
-    "/xml-metadata/",
-    "/static/"
-]
+LOGIN_EXEMPT_URLS = ["/xml-metadata/", "/static/"]

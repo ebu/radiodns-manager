@@ -1,11 +1,27 @@
 from django.forms import ModelForm
 
-from apps.stations.models import Station
+from apps.stations.models import Station, StationInstance
 
 
 class StationForm(ModelForm):
     class Meta:
         model = Station
+        fields = [
+            "radiovis_enabled",
+            "radiovis_service",
+            "radioepg_enabled",
+            "radioepg_service",
+            "radiospi_service",
+            "radioepgpi_enabled",
+            "radiotag_enabled",
+            "radiotag_service",
+            "ip_allowed",
+        ]
+
+
+class StationInstanceForm(ModelForm):
+    class Meta:
+        model = StationInstance
         fields = [
             "name",
             "short_name",
@@ -25,5 +41,4 @@ class StationForm(ModelForm):
             "email_description",
             "default_language",
             "location_country",
-            "genres",
         ]

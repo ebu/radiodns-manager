@@ -17,7 +17,7 @@
 			{% block pagefunctions %}
                       Select Station : <select onchange="window.location=$(this).val();" class="form-control23">
 				{% for station in stations %}
-					<option value="{% url 'radioepg:station_services' station.id %}" {% if station.id == selected_station.id %}selected{% endif %}>{{station.name}}</option>
+					<option value="{% url 'radioepg:station_services' station.id %}" {% if station.id == selected_station.id %}selected{% endif %}>{{station.default_instance.name}}</option>
 				{% endfor %}
 				    </select>
 			{% if not stations %}

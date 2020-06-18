@@ -17,7 +17,7 @@
 			{% block pagefunctions %}
 			Select station : <select onchange="window.location=$(this).val();">
 				{% for station in stations %}
-					<option value="{% url 'radioepg:list_shows' station.id %}" {% if station.id == selected_station.id %}selected{% endif %}>{{station.name}}</option>
+					<option value="{% url 'radioepg:list_shows' station.id %}" {% if station.id == selected_station.id %}selected{% endif %}>{{station.default_instance.name}}</option>
 				{% endfor %}
 			</select>
 				<a href="{% url 'radioepg:station_schedule' selected_station.id %}" class="btn btn-default">Back to Schedule</a>

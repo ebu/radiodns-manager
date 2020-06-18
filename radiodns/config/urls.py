@@ -22,14 +22,13 @@ from django.urls import include, path
 admin.site.site_header = "RadioDNS Manager - Administration Panel"
 admin.site.index_title = "Manage organizations and users"
 admin.site.site_title = "HTML title from adminsitration"
-admin.site.unregister(Group)
 
 
 urlpatterns = [
     path("", include("common.urls")),
     path("", include("apps.manager.urls")),
     path("", include("apps.radiodns_auth.urls")),
-    path("", include('social_django.urls', namespace='social')),
+    path("", include("social_django.urls", namespace="social")),
     path("stations/", include("apps.stations.urls")),
     path("channels/", include("apps.channels.urls")),
     path("clients/", include("apps.clients.urls")),

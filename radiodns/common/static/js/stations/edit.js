@@ -34,7 +34,6 @@ StationModuleEdit.prototype.init = function () {
     });
 
     module.updateTab(module.clientsIds[0]);
-    module.load_countries();
 
     StationModuleEdit.prototype.inputsTouched = {
         "station-name_": module.initInputsTouchedValue("name"),
@@ -228,33 +227,6 @@ StationModuleEdit.prototype.append_genre_select = function () {
     StationModuleEdit.prototype.updateInputTouchedStatus(tabId, true, "genres", "genres");
 };
 
-/**
- * Fetches the list of countries and insert it on every tabs.
- */
-StationModuleEdit.prototype.load_countries = function () {
-    $.ajax({
-        url: ebuio_baseUrl + 'ecc_list',
-        dataType: 'json',
-        success: function (data) {
-            const clientsIds = StationModuleEdit.prototype.clientsIds;
-            for (let i = 0; i < clientsIds.length; i++) {
-                const countrySelect = $('#location_country_' + clientsIds[i]);
-                countrySelect.append('<option value=""></option>');
-
-                $(data.list).each(function (_, el) {
-                    const opt = '<option value="' + el.iso.toLowerCase() + '">' + el.name + ' (' + el.iso + ')</option>';
-                    countrySelect.append(opt);
-                });
-
-                if (countrySelect.attr('cval') !== "") {
-                    countrySelect.val(countrySelect.attr('cval'));
-                } else {
-                    countrySelect.val($('#location_country_0').attr('cval'));
-                }
-            }
-        }
-    })
-};
 
 /**
  * Deletes a selected genre.

@@ -228,7 +228,11 @@ def get_provider_cname(prefix, service_provider, zone):
 
 def update_or_create_vissrv_station(station):
     """Creates a new CNAME entry or updates it"""
-    if station.radiovis_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radiovis_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiovis._tcp"
 
@@ -246,7 +250,11 @@ def update_or_create_vissrv_station(station):
 
 def remove_vissrv_station(station):
     """Removes the VIS entry of a station"""
-    if station.radiovis_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radiovis_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiovis._tcp"
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
@@ -256,7 +264,11 @@ def remove_vissrv_station(station):
 def update_or_create_epgsrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radioepg_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp".lower(), station.fqdn.lower())
 
@@ -273,7 +285,11 @@ def update_or_create_epgsrv_station(station):
 def remove_epgsrv_station(station):
     """Removes the EPG entry of a station"""
 
-    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radioepg_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp", station.fqdn.lower())
         remove_srv(zone, name)
@@ -282,7 +298,11 @@ def remove_epgsrv_station(station):
 def update_or_create_spisrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radiospi_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radiospi_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radiospi._tcp", station.fqdn.lower())
 
@@ -299,7 +319,11 @@ def update_or_create_spisrv_station(station):
 def remove_spisrv_station(station):
     """Removes the SPI entry of a station"""
 
-    if station.radiospi_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radiospi_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         name = "%s.%s" % ("_radioepg._tcp", station.fqdn.lower())
         remove_srv(zone, name)
@@ -308,7 +332,11 @@ def remove_spisrv_station(station):
 def update_or_create_tagsrv_station(station):
     """Creates a new CNAME entry or updates it"""
 
-    if station.radiotag_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radiotag_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiotag._tcp"
 
@@ -326,7 +354,11 @@ def update_or_create_tagsrv_station(station):
 
 def remove_tagsrv_station(station):
     """Removes the TAG entry of a station"""
-    if station.radioepg_enabled and station.service_provider and not settings.STANDALONE:
+    if (
+        station.radioepg_enabled
+        and station.service_provider
+        and not settings.STANDALONE
+    ):
         zone = get_or_create_zone_forprovider(station.service_provider)
         prefix = "_radiotag._tcp"
         name = "%s.%s" % (prefix.lower(), station.fqdn.lower())
@@ -480,10 +512,18 @@ def check_serviceprovider(sp):
         bucketisvalid = bucketendpoint == staticnamerecord
 
         mainzone = get_or_create_mainzone()
-        visservice = update_or_create_cname(mainzone, sp.vis_fqdn, settings.RADIOVIS_DNS)
-        epgservice = update_or_create_cname(mainzone, sp.epg_fqdn, settings.RADIOEPG_DNS)
-        spiservice = update_or_create_cname(mainzone, sp.spi_fqdn, settings.RADIOSPI_DNS)
-        tagservice = update_or_create_cname(mainzone, sp.tag_fqdn, settings.RADIOTAG_DNS)
+        visservice = update_or_create_cname(
+            mainzone, sp.vis_fqdn, settings.RADIOVIS_DNS
+        )
+        epgservice = update_or_create_cname(
+            mainzone, sp.epg_fqdn, settings.RADIOEPG_DNS
+        )
+        spiservice = update_or_create_cname(
+            mainzone, sp.spi_fqdn, settings.RADIOSPI_DNS
+        )
+        tagservice = update_or_create_cname(
+            mainzone, sp.tag_fqdn, settings.RADIOTAG_DNS
+        )
 
         isvalid = (
             nsisvalid and bucketisvalid and visservice and epgservice and tagservice

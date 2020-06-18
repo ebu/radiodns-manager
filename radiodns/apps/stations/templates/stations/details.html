@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Station :: {{ station.name }}{% endblock %}
 
@@ -25,10 +26,22 @@
     {% block alerts %}
     {{ block.super }}
     {% endblock %}
+    <ul class="nav nav-tabs">
+        {% for instance in instances %}
+            <li class="nav-item">
+                {% if instance.client == None %}
+                    <a id="nav_tab_0" class="nav-link" href="">default</a>
+                {% else %}
+                    <a id="nav_tab_{{ instance.client.id }}" class="nav-link" href="">{{ instance.client.name }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
     <div role="tabpanel">
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="details">
-                <div id="tab_wrapper_{{ station.id }}">
+                {% for instance in instances %}
+                <div id="tab_wrapper_{% if instance.client == None %}0{% else %}{{ instance.client.id }}{% endif %}" style="display: none;">
                     <div class="row">
                         <div class="col-md-7">
                             <h3>Current configuration:</h3>
@@ -38,53 +51,53 @@
                                     <tbody>
                                     <tr>
                                         <th>Short Name</th>
-                                        <td>{{ station.short_name }}</td>
+                                        <td>{{ instance.short_name }}</td>
                                     </tr>
                                     <tr>
                                         <th>Medium Name</th>
-                                        <td>{{ station.medium_name }}</td>
+                                        <td>{{ instance.medium_name }}</td>
                                     </tr>
                                     <tr>
                                         <th>Long Name</th>
-                                        <td>{{ station.long_name }}</td>
+                                        <td>{{ instance.long_name }}</td>
                                     </tr>
                                     <tr>
                                         <th>Short Description</th>
-                                        <td>{{ station.short_description }}</td>
+                                        <td>{{ instance.short_description }}</td>
                                     </tr>
                                     <tr>
                                         <th>Default Url</th>
                                         <td>
-                                            {% if station.url_default %}
-                                                <a href="{{ station.url_default }}"
-                                                   target="_blank">{{ station.url_default }}</a>
+                                            {% if instance.url_default %}
+                                                <a href="{{ instance.url_default }}"
+                                                   target="_blank">{{ instance.url_default }}</a>
                                             {% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Default Language</th>
-                                        <td>{{ station.default_language }}</td>
+                                        <td>{{ instance.default_language }}</td>
                                     </tr>
                                     <tr>
                                         <th>Postal Address</th>
-                                        <td>{% if station.postal_name %}{{ station.postal_name }}{% endif %}<br/>
-                                            {% if station.street %}{{ station.street }}{% endif %}<br/>
-                                            {% if station.city %}{{ station.city }}{% endif %}{% if station.zipcode %}, {{ station.zipcode }}{% endif %}
+                                        <td>{% if instance.postal_name %}{{ instance.postal_name }}{% endif %}<br/>
+                                            {% if instance.street %}{{ instance.street }}{% endif %}<br/>
+                                            {% if instance.city %}{{ instance.city }}{% endif %}{% if instance.zipcode %}, {{ instance.zipcode }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Country</th>
-                                        {% if station.epg_country %}
-                                            <td>{{ station.epg_country }}</td>
+                                        {% if instance.epg_country %}
+                                            <td>{{ instance.epg_country }}</td>
                                         {% endif %}
                                     </tr>
                                     <tr>
                                         <th>Phone Number</th>
-                                        <td>{% if station.phone_number %}{{ station.phone_number }}{% endif %}</td>
+                                        <td>{% if instance.phone_number %}{{ instance.phone_number }}{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <th>SMS</th>
-                                        <td>{% if station.sms_description %} {{ station.sms_description }}
+                                        <td>{% if instance.sms_description %} {{ instance.sms_description }}
                                             : {% endif %}
                                             {% if station.sms_number %}
                                                 <a href="{{ station.epg_sms }}">Send {{ station.sms_body }}
@@ -129,10 +142,9 @@
                         {% endif %}
                     </div>
                     <hr/>
+                    {% if instance.client == None %}
                     <div class="row">
-
                         <h3>Services:</h3>
-
                         <div class="table-responsive">
                             <table class="table table-striped table-hover table-condensed">
                                 <tbody>
@@ -225,9 +237,28 @@
                             </table>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
+            {% endfor %}
             </div>
             </div>
             </div>
+                    <script src="{% static 'js/ajaxq.js' %}"></script>
+                    <script src="{% static 'js/visibility.js' %}"></script>
+                    <script src="{% static 'js/stations/detail.js' %}"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            const clientsIds = [];
+                            {% for instance in instances %}
+                               {% if instance.client == None %}
+                               clientsIds.push(0);
+                               {% else %}
+                               clientsIds.push({{instance.client.id}});
+                               {% endif %}
+                            {% endfor %}
+                            VisibilityModule.prototype.init(0, clientsIds);
+                        });
+
+                    </script>
 {% endblock %}
 
