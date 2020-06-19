@@ -8,4 +8,5 @@ urlpatterns = [
     path("edit/<int:channel_id>", views.EditChannelView, name="edit"),
     path("new/", views.EditChannelView, name="new"),
     path("delete/<int:channel_id>", views.DeleteChannelView, name="delete"),
+    path("export/", views.ExportChannelsView, name="export")
 ]

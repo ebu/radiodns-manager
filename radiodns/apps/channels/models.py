@@ -145,7 +145,7 @@ class Channel(models.Model):
     @property
     def station_ascii_name(self):
         if self.station:
-            return self.station.ascii_name
+            return self.station.default_instance.ascii_name.decode()
         else:
             return ""
 

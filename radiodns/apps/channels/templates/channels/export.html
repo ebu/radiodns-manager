@@ -1,11 +1,6 @@
-{% extends "plugIt/base.html" %}
-{% load plugit_tags %}
+{% extends "base.html" %}
 
 {% block title %}Channels :: RadioDNS{% endblock %}
-
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
 
 {% block content %}
 
@@ -20,17 +15,14 @@
         </div>
         <div id="page-functions" class="pull-right">
             {% block pagefunctions %}
-                <a href="{{ebuio_baseUrl}}channels/" class="btn btn-default">Back to the list</a>
-        		<a href="{{ebuio_baseUrl}}channels/export/?to=file" class="btn btn-primary">Download to file</a>
+                <a href="{% url 'channels:list' %}" class="btn btn-default">Back to the list</a>
+        		<a href="{% url 'channels:export' %}?to=file" class="btn btn-primary">Download to file</a>
             {% endblock %}
         </div>
-        <div id="page-search" class="pull-right">{% block pagesearch %} {% endblock %}</div>
     </div>
     {% endblock %}
 
-	<pre class="pre">{{retour}}</pre>
-
-
+	<pre class="pre">{{export}}</pre>
 
 {% endblock %}
 

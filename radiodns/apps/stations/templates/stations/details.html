@@ -115,7 +115,7 @@
                                 </table>
                             </div>
                         </div>
-                        {% if station.default_image %}
+                        {% if station.default_image and instance.client == None %}
                             <div class="col-md-4 col-md-offset-1">
                                 <h3>Current station logo:</h3>
                                 <div class="row">

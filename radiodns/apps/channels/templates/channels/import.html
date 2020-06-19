@@ -3,10 +3,6 @@
 
 {% block title %}Channels :: RadioDNS{% endblock %}
 
-{% block menubar %}
-    {% plugitInclude "menubar" %}
-{% endblock %}
-
 {% block content %}
 
     {% block pageheader %}
@@ -15,7 +11,7 @@
             <i class="ion-navicon"></i>
         </div>
         <div class="page-title">
-            {{ebuio_orga.name}} :: Import channels
+            {{ request.user.active_organization }} :: Import channels
             <small class="hidden-xs">{% block pagesubtitle %} {% endblock %}</small>
         </div>
         <div id="page-functions" class="pull-right">{% block pagefunctions %} {% endblock %}</div>
@@ -23,23 +19,10 @@
     </div>
     {% endblock %}
 
-	{% if errors %}
-		<div class="alert alert-warning">
-			<ul>
-				{% for e in errors %}
-					<li>{{e}}</li>
-				{% endfor %}
-			</ul>
-            {% if error_lines %}
-            <br />
-            <code>
-                {% for e in error_lines %}
-					{{e}}<br />
-				{% endfor %}
-            </code>
-            {% endif %}
-		</div>
-	{% endif %}
+    {% block alerts %}
+    {{ block.super }}
+    {{ form.errors }}
+    {% endblock %}
 
 	<form action="" method="POST" class="form-horizontal">
 		{% csrf_token %}
