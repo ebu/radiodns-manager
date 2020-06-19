@@ -32,8 +32,8 @@
                     {% for station in stations %}
                         <option value="{{ station.id }}"
                                 {% if form.station.id == s.id %}selected{% endif %}
-                                data-stationserviceid="{{ station.service_identifier }}"
-                                data-stationfqdn="{{ station.fqdn }}">{{ station.name }}</option>
+                                data-stationserviceid="{{ station.default_instance.service_identifier }}"
+                                data-stationfqdn="{{ station.default_instance.fqdn }}">{{ station.default_instance.name }}</option>
                     {% endfor %}
                 </select>
             </div>

@@ -49,13 +49,13 @@
                 {% for channel in channels %}
                     <tr>
 
-                        <td><strong>{{ channel.station.name }}</strong></td>
+                        <td><strong>{{ channel.station.default_instance.name }}</strong></td>
                         <td>{{ channel.type_id }}</td>
                         <td>{{ channel.name }}</td>
                         <td>{% if channel.type_id == 'id' %}
                             <a href="{{ channel.stream_url }}" target="_blank">{{ channel.stream_url }}</a>{% else %}
                             {{ channel.radiodns_entry }}{% endif %}</td>
-                        <td id="fqdn-{{ c.id }}">{{ channel.station.fqdn }}</td>
+                        <td id="fqdn-{{ c.id }}">{{ channel.station.default_instance.fqdn }}</td>
                         <td>
                             {% if channel.type_id == 'id' %} {% else %}
                                 <div id="vis-{{ channel.id }}">{% if channel.station.radiovis_service %}
