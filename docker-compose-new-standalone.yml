@@ -2,6 +2,8 @@ version: '3'
 
 services:
   radiodns:
+    env_file:
+      - .env
     build:
         ./radiodns
     volumes:
@@ -12,6 +14,8 @@ services:
     depends_on:
       - db
   db:
+    env_file:
+      - .env
     image: postgres:12.0-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data/

@@ -34,8 +34,8 @@ AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
 
 # SAML Integration
 # ------------------------------------------------------------------------------
-USE_SAML = True
-USE_LOGIN = False
+USE_SAML = False
+USE_LOGIN = True
 
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = env.str("SOCIAL_AUTH_SAML_SP_ENTITY_ID")
 SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = env.str("SOCIAL_AUTH_SAML_SP_PUBLIC_CERT")
@@ -67,13 +67,13 @@ SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 # Sentry Integration
 # ------------------------------------------------------------------------------
-sentry_sdk.init(
-    dsn="https://1c5dd39283e64477a67ff2eb9260dfa2@sentry.ebu.io/18",
-    integrations=[DjangoIntegration()],
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True,
-)
+#sentry_sdk.init(
+#    dsn="https://1c5dd39283e64477a67ff2eb9260dfa2@sentry.ebu.io/18",
+#    integrations=[DjangoIntegration()],
+#    # If you wish to associate users to errors (assuming you are using
+#    # django.contrib.auth) you may enable sending PII data.
+#    send_default_pii=True,
+#)
 
 # Database
 # ------------------------------------------------------------------------------
