@@ -81,6 +81,9 @@ class AWSSPI(BaseSPI):
     def on_request_schedule_1(self, path, date):
         return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=301)
 
+    def on_request_schedule_3(self, path, date):
+        return redirect(AWSSPI.get_file_url({"path": path, "date": str(date)}, type="pi"), code=301)
+
     @staticmethod
     def get_file_url(data, type="si"):
         """
