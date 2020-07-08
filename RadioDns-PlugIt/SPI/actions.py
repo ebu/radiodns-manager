@@ -117,6 +117,30 @@ def epg_sch_1_xml(path, date):
 
     return server.SPI_handler.on_request_schedule_1(path, date)
 
+@plugit.app.route('/radiodns/spi/3.1/<path:path>/<int:date>_PI.xml')
+@plugit.utils.cache(time=config.XML_CACHE_TIMEOUT)
+def epg_sch_3_xml(path, date):
+    """
+    Route for SPI/EPG scheduling xml.
+
+    :param path: The specified path of the requested resource.
+    It is of the shape /radiodns/epg/service_identifier>/<date>_PI.xml.
+    - The <service_identifier> is defined in this specification:
+        https://www.etsi.org/deliver/etsi_ts/103200_103299/103270/01.02.01_60/ts_103270v010201p.pdf
+
+    :param date: The date is of the shape <YEAR><MONTH><DAY>.
+    - <YEAR> is a four digit number representing the current year, eg: 2019
+    - <MONTH> is a two digit number representing the current month in the current year, eg: 01
+    - <DAY> is a two digit number representing the current day in the current month, eg: 01
+    :return: The requested file or its location if the SI/PI service is enabled. 404 if the requested resource was
+     not found. 501 otherwise.
+    """
+
+    if not config.XSISERVING_ENABLED:
+        abort(501)
+
+    return server.SPI_handler.on_request_schedule_3(path, date)
+
 
 # Override Cache Key for PI 1
 epg_sch_1_xml.make_cache_key = make_pi1_hostname_cache_key
