@@ -51,18 +51,7 @@ SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
     "givenName": "Pawel Glimos",
     "emailAddress": "pawel.glimos@bravelab.io",
 }
-SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
-    "givenName": "Pawel Glimos",
-    "emailAddress": "pawel.glimos@bravelab.io",
-}
-SOCIAL_AUTH_SAML_ENABLED_IDPS = {
-    "ebu": {
-        "entity_id": "https://sso-qual.ebu.ch:443/auth",
-        "url": "https://sso-qual.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
-        "x509cert": env.str("SOCIAL_AUTH_IPD_CERT"),
-    }
-}
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_SAML_SUPPORT_CONTACT = SOCIAL_AUTH_SAML_TECHNICAL_CONTACT
 
 
 # Sentry Integration

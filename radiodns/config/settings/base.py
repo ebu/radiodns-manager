@@ -163,9 +163,30 @@ RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")
 
 
 SOCIAL_AUTH_PIPELINE = (
-    "social_core.pipeline.user.get_username",
-    "social_core.pipeline.social_auth.associate_by_email",
-    "social_core.pipeline.user.create_user",
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'users.pipeline.set_user_groups',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
 )
+
+
+SOCIAL_AUTH_SAML_ENABLED_IDPS = {
+    "ebu": {
+        "entity_id": "https://sso.ebu.ch:443/auth",
+        "url": "https://sso.ebu.ch:443/auth/SSORedirect/metaAlias/idp",
+        "x509cert": "MIIDiTCCAnGgAwIBAgIEOloB2jANBgkqhkiG9w0BAQsFADB1MQswCQYDVQQGEwJDSDEPMA0GA1UECBMGR0VORVZBMRAwDgYDVQQHEwdVbmtub3duMQ8wDQYDVQQKEwZlYnUuY2gxEDAOBgNVBAsTB1Vua25vd24xIDAeBgNVBAMTF2h0dHBzOi8vc3NvLmVidS5jaC9hdXRoMB4XDTE2MDMxNjA5MDcyNFoXDTIxMDMxNTA5MDcyNFowdTELMAkGA1UEBhMCQ0gxDzANBgNVBAgTBkdFTkVWQTEQMA4GA1UEBxMHVW5rbm93bjEPMA0GA1UEChMGZWJ1LmNoMRAwDgYDVQQLEwdVbmtub3duMSAwHgYDVQQDExdodHRwczovL3Nzby5lYnUuY2gvYXV0aDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL0sc6I8Oz2jQZHuCxRJWG613PB98k98lCVmUmLKjq0UuNjwte3dza/BGgNOk/rgPR7sEGNkspTDfziMpKoZgwPgELgWr+/OhGRK5ZEAwx6vSxGspuuICsgotZMkegOkdfKmjtp2EENMBsInrAuoT/Muv8wrj4rfrVfbULbyTgcAzYIOEj+cHLfGwjIMVE6+D36DFQw9Cdov0OpvW9tFuW9ih70BFoIpigK1/pxREoGcSRr2WKz1qJd90k/zwnCwr5yvobhrmXIgofZl6WFLHiqoIcb0nQm6FoOhWtMsD/f1FgY5nHXOeMhvjQocmgaqtORhYaNcwBZYxOZKXLHKNh8CAwEAAaMhMB8wHQYDVR0OBBYEFEuExWSC058V2/zetqvRTbT0JcK3MA0GCSqGSIb3DQEBCwUAA4IBAQBo1QYME3T1jjR3q8C3HOBTsUuGrOvNZOG8LpQg4zCiW1SWm6TS35M+tUD7/Q+Uw7r1jqowiTI7gJKfkIvbDuQ9vIeTG46AHxyU7GxrwUDB0IuBIoyPb6EP9/86PAE/sgC4QHnR28dtBc+tpUoHRqs2rvyexQjK6a2SRIwnUcu/8vw2ludFcoqLEXLDJLNoZfjuCy93TGWFOEXTxjNNxLey4rBE0GyAEP7rWyRw2ELxSNFC/8okb2vxIPzD0INDYYxgR2QXqIeCui73/iqVriWVq+VOt9+8qOoc99ZHEo0EXDZx2YYHVXJrktVovsRt+zzLTMCKfbVbw3JteFRu4l4/",
+        "attr_user_permanent_id": 'uid',
+        "attr_username": "cn",
+        "attr_email": "email",
+        "attr_first_name": "firstName",
+        "attr_last_name": "lastName",
+    }
+}
+
 
 LOGIN_EXEMPT_URLS = ["/xml-metadata/", "/static/"]
