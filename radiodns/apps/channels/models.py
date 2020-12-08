@@ -15,7 +15,7 @@ class Image(models.Model):
 
 
 class Channel(models.Model):
-    station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
 
     TYPE_ID_CHOICES = [
