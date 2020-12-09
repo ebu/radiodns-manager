@@ -10,8 +10,8 @@ class Image(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     file = models.ImageField(blank=True, null=True)
-    radiotext = models.CharField(max_length=255)
-    radiolink = models.URLField()
+    radiotext = models.CharField(max_length=255, null=True)
+    radiolink = models.URLField(null=True)
 
 
 class Channel(models.Model):

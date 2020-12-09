@@ -5,13 +5,12 @@ from fixtures.raw_data_channel import channels
 from fixtures.raw_data_client import clients
 from fixtures.raw_data_organization import organizations
 from fixtures.raw_data_station import stations
+from fixtures.raw_logo_image import logo_images
 
 # ============================================================================================
 # LOCALIZATION
 # ============================================================================================
-from fixtures.raw_logo_image import logo_images
-
-COUNTRIES_N_CODES = list(map(lambda e: e[1] + (e[0],), enumerate([
+COUNTRIES_N_CODES = list(map(lambda e: e[1] + (e[0]+1,), enumerate([
     ("1", "9E0", "al", "Albania (AL)"),
     ("2", "2E0", "dz", "Algeria (DZ)"),
     ("3", "2E0", "dz", "Algeria (DZ)"),
@@ -264,7 +263,7 @@ COUNTRIES_N_CODES = list(map(lambda e: e[1] + (e[0],), enumerate([
     ("276", "2D2", "zw", "Zimbabwe (ZW)"),
 ])))
 
-LANGUAGES = list(map(lambda e: e[1] + (e[0],), enumerate([
+LANGUAGES = list(map(lambda e: e[1] + (e[0]+1,), enumerate([
     ("af", "Afrikaans"),
     ("ak", "Akan"),
     ("an", "aragonés"),
@@ -354,12 +353,14 @@ LANGUAGES = list(map(lambda e: e[1] + (e[0],), enumerate([
 ])))
 
 
-def reduce_by_iso(acc, v):
-    acc[v[2]] = v
+def pk_to_set(acc, v):
+    acc.add(v["pk"])
     return acc
 
 
-ecc_by_iso = reduce(lambda acc, v: reduce_by_iso(acc, v), COUNTRIES_N_CODES, {})
+def reduce_by_iso(acc, v):
+    acc[v[2]] = v
+    return acc
 
 
 def reduce_by_code(acc, v):
@@ -367,6 +368,7 @@ def reduce_by_code(acc, v):
     return acc
 
 
+ecc_by_iso = reduce(lambda acc, v: reduce_by_iso(acc, v), COUNTRIES_N_CODES, {})
 lang_by_code = reduce(lambda acc, v: reduce_by_code(acc, v), LANGUAGES, {})
 
 # ============================================================================================
@@ -403,13 +405,7 @@ with open('json_fixtures/new_organizations.json', 'w') as fp:
 # LOGO IMAGE
 # ============================================================================================
 
-
-def existing_orga_id_to_set(acc, v):
-    acc.add(v["pk"])
-    return acc
-
-
-existing_orgas = reduce(existing_orga_id_to_set, new_organizations, set())
+existing_orgas = reduce(pk_to_set, new_organizations, set())
 new_logo_images = []
 for logo_image in logo_images:
     if logo_image[1] not in existing_orgas:
@@ -419,9 +415,9 @@ for logo_image in logo_images:
         "model": "manager.LogoImage",
         "pk": logo_image[0],
         "fields": {
-            "organization": logo_image[1],
+            "organization": logo_image[8],
             "name": logo_image[10],
-            "file": logo_image[2],  # FIXME how the file is actually linked in DB? How to link existing one?
+            "file": logo_image[2],
             "scaled32x32": logo_image[3],
             "scaled112x32": logo_image[4],
             "scaled128x128": logo_image[5],
@@ -432,6 +428,32 @@ for logo_image in logo_images:
 
 with open('json_fixtures/new_logo_images.json', 'w') as fp:
     json.dump(new_logo_images, fp, indent=4, sort_keys=True)
+
+# ============================================================================================
+# CHANNEL PICTURE
+# ============================================================================================
+
+new_channel_pictures = []
+for channel in channels:
+    if channel[1] not in existing_orgas:
+        print(channel[1], "isn't a valid org. Skipping...")
+        continue
+    new_channel_pictures.append({
+        "model": "channels.Image",
+        "pk": channel[0],
+        "fields": {
+            "organization": channel[1],
+            "name": channel[2],
+            "file": channel[3],
+            "radiotext": channel[4],
+            "radiolink": channel[5],
+        }
+    })
+
+existing_channel_pictures = reduce(pk_to_set, new_channel_pictures, set())
+
+with open('json_fixtures/new_channel_pictures.json', 'w') as fp:
+    json.dump(new_channel_pictures, fp, indent=4, sort_keys=True)
 
 # ============================================================================================
 # CLIENT
@@ -461,7 +483,6 @@ with open('json_fixtures/new_clients.json', 'w') as fp:
 new_stations = []
 new_station_instances = []
 for index, station in enumerate(stations):
-    name = station[5]
 
     if station[1] not in existing_orgas:
         print(station[1], "isn't a valid org. Skipping...")
@@ -471,7 +492,7 @@ for index, station in enumerate(stations):
         "model": "stations.Station",
         "pk": station[0],
         "fields": {
-            "organization": station[1],  # ForeignKey
+            "organization": station[8],  # ForeignKey
             "default_image": station[15],  # ForeignKey
             "radiovis_enabled": station[13],
             "radiovis_service": station[14],
@@ -491,7 +512,7 @@ for index, station in enumerate(stations):
         "fields": {
             "station": station[0],  # ForeignKey
             "name": station[2],
-            "short_name": name,
+            "short_name": station[5],
             "medium_name": station[18],
             "long_name": station[17],
             "short_description": station[6],
@@ -513,6 +534,8 @@ for index, station in enumerate(stations):
         }
     })
 
+existing_stations = reduce(pk_to_set, new_stations, set())
+
 with open('json_fixtures/new_stations.json', 'w') as fp:
     json.dump(new_stations, fp, indent=4, sort_keys=True)
 
@@ -524,8 +547,16 @@ with open('json_fixtures/new_station_instances.json', 'w') as fp:
 # ============================================================================================
 new_channels = []
 for channel in channels:
+    if channel[16] not in existing_channel_pictures:
+        print(channel[16], "isn't a channel picture. Skipping...")
+        continue
+    if channel[1] not in existing_stations:
+        print(channel[1], "isn't a station. Skipping...")
+        continue
+
     new_channels.append({
         "model": "channels.Channel",
+        "pk": channel[0],
         "fields": {
             "station": channel[1],  # ForeignKey
             "name": channel[2],

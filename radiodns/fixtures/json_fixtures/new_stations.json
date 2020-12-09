@@ -3,7 +3,7 @@
         "fields": {
             "default_image": 361,
             "ip_allowed": "",
-            "organization": 24,
+            "organization": 2,
             "radioepg_enabled": 1,
             "radioepg_service": "chrsi.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -21,7 +21,7 @@
         "fields": {
             "default_image": 359,
             "ip_allowed": "",
-            "organization": 24,
+            "organization": 2,
             "radioepg_enabled": 1,
             "radioepg_service": "chrsi.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -39,7 +39,7 @@
         "fields": {
             "default_image": 360,
             "ip_allowed": "",
-            "organization": 24,
+            "organization": 2,
             "radioepg_enabled": 1,
             "radioepg_service": "chrsi.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -435,7 +435,7 @@
         "fields": {
             "default_image": 17,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 27,
+            "organization": 5,
             "radioepg_enabled": 1,
             "radioepg_service": "esrtve.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -453,7 +453,7 @@
         "fields": {
             "default_image": 30,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 27,
+            "organization": 5,
             "radioepg_enabled": 1,
             "radioepg_service": "esrtve.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -471,7 +471,7 @@
         "fields": {
             "default_image": 27,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 27,
+            "organization": 5,
             "radioepg_enabled": 1,
             "radioepg_service": "esrtve.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -489,7 +489,7 @@
         "fields": {
             "default_image": 29,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 27,
+            "organization": 5,
             "radioepg_enabled": 1,
             "radioepg_service": "esrtve.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -507,7 +507,7 @@
         "fields": {
             "default_image": 28,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 27,
+            "organization": 5,
             "radioepg_enabled": 1,
             "radioepg_service": "esrtve.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -525,7 +525,7 @@
         "fields": {
             "default_image": 101,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -633,7 +633,7 @@
         "fields": {
             "default_image": 362,
             "ip_allowed": "",
-            "organization": 5,
+            "organization": 7,
             "radioepg_enabled": 1,
             "radioepg_service": "chrts.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -651,7 +651,7 @@
         "fields": {
             "default_image": 365,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 5,
+            "organization": 7,
             "radioepg_enabled": 1,
             "radioepg_service": "chrts.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -669,7 +669,7 @@
         "fields": {
             "default_image": 363,
             "ip_allowed": "",
-            "organization": 5,
+            "organization": 7,
             "radioepg_enabled": 1,
             "radioepg_service": "chrts.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -687,7 +687,7 @@
         "fields": {
             "default_image": 364,
             "ip_allowed": "",
-            "organization": 5,
+            "organization": 7,
             "radioepg_enabled": 1,
             "radioepg_service": "chrts.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -705,7 +705,7 @@
         "fields": {
             "default_image": 352,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -723,7 +723,7 @@
         "fields": {
             "default_image": 351,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -741,7 +741,7 @@
         "fields": {
             "default_image": 349,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -759,7 +759,7 @@
         "fields": {
             "default_image": 348,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -777,7 +777,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -795,7 +795,7 @@
         "fields": {
             "default_image": 354,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -813,7 +813,7 @@
         "fields": {
             "default_image": 353,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -831,7 +831,7 @@
         "fields": {
             "default_image": 44,
             "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
-            "organization": 11,
+            "organization": 9,
             "radioepg_enabled": 1,
             "radioepg_service": "bertbf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -849,7 +849,7 @@
         "fields": {
             "default_image": 45,
             "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
-            "organization": 11,
+            "organization": 9,
             "radioepg_enabled": 1,
             "radioepg_service": "bertbf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -867,7 +867,7 @@
         "fields": {
             "default_image": 46,
             "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
-            "organization": 11,
+            "organization": 9,
             "radioepg_enabled": 1,
             "radioepg_service": "bertbf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -885,7 +885,7 @@
         "fields": {
             "default_image": 47,
             "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
-            "organization": 11,
+            "organization": 9,
             "radioepg_enabled": 1,
             "radioepg_service": "bertbf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -903,7 +903,7 @@
         "fields": {
             "default_image": 48,
             "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
-            "organization": 11,
+            "organization": 9,
             "radioepg_enabled": 1,
             "radioepg_service": "bertbf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -921,7 +921,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 22,
+            "organization": 10,
             "radioepg_enabled": 1,
             "radioepg_service": "humtva.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -939,7 +939,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 22,
+            "organization": 10,
             "radioepg_enabled": 1,
             "radioepg_service": "humtva.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -957,7 +957,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 22,
+            "organization": 10,
             "radioepg_enabled": 1,
             "radioepg_service": "humtva.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -975,7 +975,7 @@
         "fields": {
             "default_image": 56,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -993,7 +993,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1011,7 +1011,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1029,7 +1029,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1047,7 +1047,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1065,7 +1065,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1083,7 +1083,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1101,7 +1101,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1119,7 +1119,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1137,7 +1137,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1155,7 +1155,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 8,
+            "organization": 13,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1173,7 +1173,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 21,
+            "organization": 14,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1191,7 +1191,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 21,
+            "organization": 14,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1209,7 +1209,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 21,
+            "organization": 14,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1227,7 +1227,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 21,
+            "organization": 14,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1245,7 +1245,7 @@
         "fields": {
             "default_image": 51,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1263,7 +1263,7 @@
         "fields": {
             "default_image": 57,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1281,7 +1281,7 @@
         "fields": {
             "default_image": 55,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1299,7 +1299,7 @@
         "fields": {
             "default_image": 54,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1317,7 +1317,7 @@
         "fields": {
             "default_image": 53,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1335,7 +1335,7 @@
         "fields": {
             "default_image": 58,
             "ip_allowed": "",
-            "organization": 6,
+            "organization": 11,
             "radioepg_enabled": 1,
             "radioepg_service": "frsrf.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1353,7 +1353,7 @@
         "fields": {
             "default_image": 60,
             "ip_allowed": " 0.0.0.0/0",
-            "organization": 29,
+            "organization": 12,
             "radioepg_enabled": 1,
             "radioepg_service": "esaber.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1371,7 +1371,7 @@
         "fields": {
             "default_image": 61,
             "ip_allowed": " 0.0.0.0/0",
-            "organization": 29,
+            "organization": 12,
             "radioepg_enabled": 1,
             "radioepg_service": "esaber.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1389,7 +1389,7 @@
         "fields": {
             "default_image": 273,
             "ip_allowed": "0.0.0.0/24",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1407,7 +1407,7 @@
         "fields": {
             "default_image": 274,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1425,7 +1425,7 @@
         "fields": {
             "default_image": 275,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1443,7 +1443,7 @@
         "fields": {
             "default_image": 279,
             "ip_allowed": " 0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1461,7 +1461,7 @@
         "fields": {
             "default_image": 276,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1479,7 +1479,7 @@
         "fields": {
             "default_image": 271,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1497,7 +1497,7 @@
         "fields": {
             "default_image": 272,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1515,7 +1515,7 @@
         "fields": {
             "default_image": 278,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1533,7 +1533,7 @@
         "fields": {
             "default_image": 281,
             "ip_allowed": " 0.0.0.0/0",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1551,7 +1551,7 @@
         "fields": {
             "default_image": 277,
             "ip_allowed": "",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1569,7 +1569,7 @@
         "fields": {
             "default_image": 76,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1587,7 +1587,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1605,7 +1605,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1623,7 +1623,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1641,7 +1641,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1659,7 +1659,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1677,7 +1677,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1695,7 +1695,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1713,7 +1713,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1731,7 +1731,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1749,7 +1749,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1767,7 +1767,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 31,
+            "organization": 18,
             "radioepg_enabled": 1,
             "radioepg_service": "plpr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -1785,7 +1785,7 @@
         "fields": {
             "default_image": 130,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -1803,7 +1803,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1821,7 +1821,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1839,7 +1839,7 @@
         "fields": {
             "default_image": 78,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1857,7 +1857,7 @@
         "fields": {
             "default_image": 301,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1875,7 +1875,7 @@
         "fields": {
             "default_image": 300,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1893,7 +1893,7 @@
         "fields": {
             "default_image": 79,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1911,7 +1911,7 @@
         "fields": {
             "default_image": 299,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1929,7 +1929,7 @@
         "fields": {
             "default_image": 77,
             "ip_allowed": "",
-            "organization": 23,
+            "organization": 19,
             "radioepg_enabled": 1,
             "radioepg_service": "bevrt.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1947,7 +1947,7 @@
         "fields": {
             "default_image": 94,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1965,7 +1965,7 @@
         "fields": {
             "default_image": 192,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -1983,7 +1983,7 @@
         "fields": {
             "default_image": 191,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2001,7 +2001,7 @@
         "fields": {
             "default_image": 96,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2019,7 +2019,7 @@
         "fields": {
             "default_image": 97,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2037,7 +2037,7 @@
         "fields": {
             "default_image": 185,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2055,7 +2055,7 @@
         "fields": {
             "default_image": 95,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2073,7 +2073,7 @@
         "fields": {
             "default_image": 268,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2091,7 +2091,7 @@
         "fields": {
             "default_image": 267,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2109,7 +2109,7 @@
         "fields": {
             "default_image": 93,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2127,7 +2127,7 @@
         "fields": {
             "default_image": 102,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2145,7 +2145,7 @@
         "fields": {
             "default_image": 88,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2163,7 +2163,7 @@
         "fields": {
             "default_image": 99,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2181,7 +2181,7 @@
         "fields": {
             "default_image": 103,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2199,7 +2199,7 @@
         "fields": {
             "default_image": 199,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2217,7 +2217,7 @@
         "fields": {
             "default_image": 196,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2235,7 +2235,7 @@
         "fields": {
             "default_image": 264,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2253,7 +2253,7 @@
         "fields": {
             "default_image": 266,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2271,7 +2271,7 @@
         "fields": {
             "default_image": 255,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2289,7 +2289,7 @@
         "fields": {
             "default_image": 98,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2307,7 +2307,7 @@
         "fields": {
             "default_image": 91,
             "ip_allowed": "160.67.135.213,160.67.149.205,160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2325,7 +2325,7 @@
         "fields": {
             "default_image": 92,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2343,7 +2343,7 @@
         "fields": {
             "default_image": 193,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2361,7 +2361,7 @@
         "fields": {
             "default_image": 195,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2379,7 +2379,7 @@
         "fields": {
             "default_image": 263,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2397,7 +2397,7 @@
         "fields": {
             "default_image": 261,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2415,7 +2415,7 @@
         "fields": {
             "default_image": 258,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2433,7 +2433,7 @@
         "fields": {
             "default_image": 194,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2451,7 +2451,7 @@
         "fields": {
             "default_image": 262,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2469,7 +2469,7 @@
         "fields": {
             "default_image": 187,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2487,7 +2487,7 @@
         "fields": {
             "default_image": 257,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2505,7 +2505,7 @@
         "fields": {
             "default_image": 189,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2523,7 +2523,7 @@
         "fields": {
             "default_image": 198,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2541,7 +2541,7 @@
         "fields": {
             "default_image": 259,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2559,7 +2559,7 @@
         "fields": {
             "default_image": 265,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2577,7 +2577,7 @@
         "fields": {
             "default_image": 190,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2595,7 +2595,7 @@
         "fields": {
             "default_image": 197,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2613,7 +2613,7 @@
         "fields": {
             "default_image": 186,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2631,7 +2631,7 @@
         "fields": {
             "default_image": 256,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2649,7 +2649,7 @@
         "fields": {
             "default_image": 269,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2667,7 +2667,7 @@
         "fields": {
             "default_image": 260,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2685,7 +2685,7 @@
         "fields": {
             "default_image": 188,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2703,7 +2703,7 @@
         "fields": {
             "default_image": 103,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2721,7 +2721,7 @@
         "fields": {
             "default_image": 103,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2739,7 +2739,7 @@
         "fields": {
             "default_image": 108,
             "ip_allowed": "",
-            "organization": 37,
+            "organization": 22,
             "radioepg_enabled": 1,
             "radioepg_service": "chbeo.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2757,7 +2757,7 @@
         "fields": {
             "default_image": 110,
             "ip_allowed": "",
-            "organization": 38,
+            "organization": 23,
             "radioepg_enabled": 1,
             "radioepg_service": "chplts.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2775,7 +2775,7 @@
         "fields": {
             "default_image": 111,
             "ip_allowed": "",
-            "organization": 39,
+            "organization": 24,
             "radioepg_enabled": 1,
             "radioepg_service": "charga.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2793,7 +2793,7 @@
         "fields": {
             "default_image": 112,
             "ip_allowed": "",
-            "organization": 40,
+            "organization": 25,
             "radioepg_enabled": 1,
             "radioepg_service": "chrd24.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2811,7 +2811,7 @@
         "fields": {
             "default_image": 114,
             "ip_allowed": "",
-            "organization": 41,
+            "organization": 26,
             "radioepg_enabled": 1,
             "radioepg_service": "chsmda.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2829,7 +2829,7 @@
         "fields": {
             "default_image": 294,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 42,
+            "organization": 27,
             "radioepg_enabled": 1,
             "radioepg_service": "chbnan.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -2847,7 +2847,7 @@
         "fields": {
             "default_image": 118,
             "ip_allowed": "",
-            "organization": 43,
+            "organization": 28,
             "radioepg_enabled": 1,
             "radioepg_service": "chbnj.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2865,7 +2865,7 @@
         "fields": {
             "default_image": 119,
             "ip_allowed": "",
-            "organization": 43,
+            "organization": 28,
             "radioepg_enabled": 1,
             "radioepg_service": "chbnj.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2883,7 +2883,7 @@
         "fields": {
             "default_image": 120,
             "ip_allowed": "",
-            "organization": 43,
+            "organization": 28,
             "radioepg_enabled": 1,
             "radioepg_service": "chbnj.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2901,7 +2901,7 @@
         "fields": {
             "default_image": 117,
             "ip_allowed": "",
-            "organization": 43,
+            "organization": 28,
             "radioepg_enabled": 1,
             "radioepg_service": "chbnj.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -2919,7 +2919,7 @@
         "fields": {
             "default_image": 128,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -2937,7 +2937,7 @@
         "fields": {
             "default_image": 132,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -2955,7 +2955,7 @@
         "fields": {
             "default_image": 134,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -2973,7 +2973,7 @@
         "fields": {
             "default_image": 136,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -2991,7 +2991,7 @@
         "fields": {
             "default_image": 349,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3009,7 +3009,7 @@
         "fields": {
             "default_image": 348,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3027,7 +3027,7 @@
         "fields": {
             "default_image": 355,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3045,7 +3045,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3063,7 +3063,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3081,7 +3081,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3099,7 +3099,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3117,7 +3117,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3135,7 +3135,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3153,7 +3153,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3171,7 +3171,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3189,7 +3189,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3207,7 +3207,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3225,7 +3225,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3243,7 +3243,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3261,7 +3261,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3279,7 +3279,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3297,7 +3297,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3315,7 +3315,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3333,7 +3333,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3351,7 +3351,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3369,7 +3369,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3387,7 +3387,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3405,7 +3405,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3423,7 +3423,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3441,7 +3441,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3459,7 +3459,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3477,7 +3477,7 @@
         "fields": {
             "default_image": 145,
             "ip_allowed": "",
-            "organization": 47,
+            "organization": 30,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -3495,7 +3495,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 47,
+            "organization": 30,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -3513,7 +3513,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 47,
+            "organization": 30,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -3531,7 +3531,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 47,
+            "organization": 30,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -3549,7 +3549,7 @@
         "fields": {
             "default_image": 146,
             "ip_allowed": "",
-            "organization": 48,
+            "organization": 31,
             "radioepg_enabled": 1,
             "radioepg_service": "chspoo.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3567,7 +3567,7 @@
         "fields": {
             "default_image": 160,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3585,7 +3585,7 @@
         "fields": {
             "default_image": 164,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3603,7 +3603,7 @@
         "fields": {
             "default_image": 161,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3621,7 +3621,7 @@
         "fields": {
             "default_image": 168,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3639,7 +3639,7 @@
         "fields": {
             "default_image": 162,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3657,7 +3657,7 @@
         "fields": {
             "default_image": 163,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3675,7 +3675,7 @@
         "fields": {
             "default_image": null,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3693,7 +3693,7 @@
         "fields": {
             "default_image": 171,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3711,7 +3711,7 @@
         "fields": {
             "default_image": 167,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3729,7 +3729,7 @@
         "fields": {
             "default_image": 173,
             "ip_allowed": "",
-            "organization": 50,
+            "organization": 36,
             "radioepg_enabled": 1,
             "radioepg_service": "roror.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3765,7 +3765,7 @@
         "fields": {
             "default_image": 174,
             "ip_allowed": "",
-            "organization": 51,
+            "organization": 37,
             "radioepg_enabled": 1,
             "radioepg_service": "frdica.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3783,7 +3783,7 @@
         "fields": {
             "default_image": 176,
             "ip_allowed": "212.74.164.62/32",
-            "organization": 52,
+            "organization": 38,
             "radioepg_enabled": 1,
             "radioepg_service": "chmaxx.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3801,7 +3801,7 @@
         "fields": {
             "default_image": 179,
             "ip_allowed": "",
-            "organization": 14,
+            "organization": 39,
             "radioepg_enabled": 1,
             "radioepg_service": "frfg.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3819,7 +3819,7 @@
         "fields": {
             "default_image": 180,
             "ip_allowed": "",
-            "organization": 14,
+            "organization": 39,
             "radioepg_enabled": 1,
             "radioepg_service": "frfg.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3837,7 +3837,7 @@
         "fields": {
             "default_image": 181,
             "ip_allowed": "",
-            "organization": 12,
+            "organization": 40,
             "radioepg_enabled": 1,
             "radioepg_service": "frouifm.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3855,7 +3855,7 @@
         "fields": {
             "default_image": 183,
             "ip_allowed": "",
-            "organization": 13,
+            "organization": 41,
             "radioepg_enabled": 1,
             "radioepg_service": "frnova.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3873,7 +3873,7 @@
         "fields": {
             "default_image": 182,
             "ip_allowed": "",
-            "organization": 10,
+            "organization": 16,
             "radioepg_enabled": 1,
             "radioepg_service": "mcrmc.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3891,7 +3891,7 @@
         "fields": {
             "default_image": 201,
             "ip_allowed": "",
-            "organization": 22,
+            "organization": 10,
             "radioepg_enabled": 1,
             "radioepg_service": "humtva.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3909,7 +3909,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3927,7 +3927,7 @@
         "fields": {
             "default_image": 99,
             "ip_allowed": "",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 0,
@@ -3945,7 +3945,7 @@
         "fields": {
             "default_image": 200,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 51,
+            "organization": 37,
             "radioepg_enabled": 1,
             "radioepg_service": "frdica.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3963,7 +3963,7 @@
         "fields": {
             "default_image": 203,
             "ip_allowed": "0.0.0.0/0",
-            "organization": 51,
+            "organization": 37,
             "radioepg_enabled": 1,
             "radioepg_service": "frdica.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -3981,7 +3981,7 @@
         "fields": {
             "default_image": 356,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -3999,7 +3999,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178, 212.140.214.70",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 0,
             "radioepg_service": "",
             "radioepgpi_enabled": 1,
@@ -4017,7 +4017,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4035,7 +4035,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4053,7 +4053,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4071,7 +4071,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4089,7 +4089,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213/32, 160.67.149.205/32, 160.67.134.178/32, 0.0.0.0/0",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4107,7 +4107,7 @@
         "fields": {
             "default_image": 222,
             "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
-            "organization": 28,
+            "organization": 6,
             "radioepg_enabled": 1,
             "radioepg_service": "nonrk.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 1,
@@ -4125,7 +4125,7 @@
         "fields": {
             "default_image": 284,
             "ip_allowed": "",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -4143,7 +4143,7 @@
         "fields": {
             "default_image": 285,
             "ip_allowed": "",
-            "organization": 26,
+            "organization": 15,
             "radioepg_enabled": 1,
             "radioepg_service": "itrai.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -4179,7 +4179,7 @@
         "fields": {
             "default_image": 136,
             "ip_allowed": "",
-            "organization": 30,
+            "organization": 20,
             "radioepg_enabled": 1,
             "radioepg_service": "czcr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
@@ -4197,7 +4197,7 @@
         "fields": {
             "default_image": 347,
             "ip_allowed": "",
-            "organization": 9,
+            "organization": 8,
             "radioepg_enabled": 1,
             "radioepg_service": "sesr.epg.radio.ebu.io:80",
             "radioepgpi_enabled": 0,
