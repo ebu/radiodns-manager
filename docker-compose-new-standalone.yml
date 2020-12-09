@@ -12,13 +12,15 @@ services:
     expose:
       - 8000
     depends_on:
-      - db
-  db:
-    env_file:
-      - .env
+      - radiodns_database
+  radiodns_database:
     image: postgres:12.0-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_DB: lpp
+      POSTGRES_PASSWORD: 1234
   nginx:
     build:
       context: ./Nginx

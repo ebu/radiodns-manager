@@ -1,8 +1,11 @@
+from urllib.parse import urljoin
+
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.urls import reverse
 from social_django.utils import load_strategy, load_backend
 
 
@@ -32,10 +35,11 @@ def LogoutView(request):
 
 
 def SamlMetadataView(request):
-    complete_url = redirect("social:complete", "saml")
+    complete_url = urljoin(settings.HOST_URL, reverse('social:complete', args=("saml", )))
     saml_backend = load_backend(
         load_strategy(request), "saml", redirect_uri=complete_url,
     )
     metadata, errors = saml_backend.generate_metadata_xml()
     if not errors:
         return HttpResponse(content=metadata, content_type="text/xml")
+

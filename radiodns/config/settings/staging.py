@@ -12,6 +12,8 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
+HOST_URL = "staging.radio.ebu.io"
+
 # STATIC
 # ------------------------------------------------------------------------------
 STATIC_ROOT = os.path.join(BASE_DIR, "common/static/")
@@ -25,7 +27,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 
 # DEBUG
 # ------------------------------------------------------------------------------
-DEBUG = False
+DEBUG = True
 
 # AWS Integration
 # ------------------------------------------------------------------------------
@@ -49,7 +51,7 @@ SOCIAL_AUTH_SAML_ORG_INFO = {
 }
 SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
     "givenName": "Pawel Glimos",
-    "emailAddress": "pawel.glimos@bravelab.io",
+    "emailAddress": "glimos@ebu.ch",
 }
 SOCIAL_AUTH_SAML_SUPPORT_CONTACT = SOCIAL_AUTH_SAML_TECHNICAL_CONTACT
 
