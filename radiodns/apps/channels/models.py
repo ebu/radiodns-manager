@@ -10,12 +10,12 @@ class Image(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     file = models.ImageField(blank=True, null=True)
-    radiotext = models.CharField(max_length=255, null=True)
-    radiolink = models.URLField(null=True)
+    radiotext = models.CharField(max_length=255)
+    radiolink = models.URLField()
 
 
 class Channel(models.Model):
-    station = models.ForeignKey(Station, on_delete=models.CASCADE, null=True)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
 
     TYPE_ID_CHOICES = [

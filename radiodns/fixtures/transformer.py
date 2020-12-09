@@ -494,14 +494,14 @@ for index, station in enumerate(stations):
         "fields": {
             "organization": station[8],  # ForeignKey
             "default_image": station[15],  # ForeignKey
-            "radiovis_enabled": station[13],
+            "radiovis_enabled": station[13] if station[13] is not None else False,
             "radiovis_service": station[14],
-            "radioepg_enabled": station[9],
-            "radioepgpi_enabled": station[33],
+            "radioepg_enabled": station[9] if station[9] is not None else False,
+            "radioepgpi_enabled": station[33] if station[33] is not None else False,
             "radioepg_service": station[10],
-            "radiotag_enabled": station[11],
+            "radiotag_enabled": station[11] if station[11] is not None else False,
             "radiotag_service": station[12],
-            "radiospi_enabled": station[34],
+            "radiospi_enabled": station[34] if station[34] is not None else False,
             "radiospi_service": station[35],
             "ip_allowed": station[4],
         }

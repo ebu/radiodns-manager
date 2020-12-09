@@ -18,14 +18,14 @@ class Station(models.Model):
         LogoImage, on_delete=models.SET_NULL, blank=True, null=True
     )
 
-    radiovis_enabled = models.BooleanField(default=False, null=True)
+    radiovis_enabled = models.BooleanField(default=False)
     radiovis_service = models.CharField(max_length=255, blank=True, null=True)
-    radioepg_enabled = models.BooleanField(default=False, blank=True, null=True)
-    radioepgpi_enabled = models.BooleanField(default=False, null=True)
+    radioepg_enabled = models.BooleanField(default=False, blank=True)
+    radioepgpi_enabled = models.BooleanField(default=False)
     radioepg_service = models.CharField(max_length=255, blank=True, null=True)
-    radiotag_enabled = models.BooleanField(default=False, null=True)
+    radiotag_enabled = models.BooleanField(default=False)
     radiotag_service = models.CharField(max_length=255, blank=True, null=True)
-    radiospi_enabled = models.BooleanField(default=False, null=True)
+    radiospi_enabled = models.BooleanField(default=False)
     radiospi_service = models.CharField(max_length=255, blank=True, null=True)
 
     ip_allowed = models.CharField(
