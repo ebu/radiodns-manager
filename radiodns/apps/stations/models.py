@@ -19,12 +19,12 @@ class Station(models.Model):
     )
 
     radiovis_enabled = models.BooleanField(default=False)
-    radiovis_service = models.CharField(max_length=255, blank=True)
+    radiovis_service = models.CharField(max_length=255, blank=True, null=True)
     radioepg_enabled = models.BooleanField(default=False, blank=True)
     radioepgpi_enabled = models.BooleanField(default=False)
-    radioepg_service = models.CharField(max_length=255, blank=True)
+    radioepg_service = models.CharField(max_length=255, blank=True, null=True)
     radiotag_enabled = models.BooleanField(default=False)
-    radiotag_service = models.CharField(max_length=255, blank=True)
+    radiotag_service = models.CharField(max_length=255, blank=True, null=True)
     radiospi_enabled = models.BooleanField(default=False)
     radiospi_service = models.CharField(max_length=255, blank=True, null=True)
 

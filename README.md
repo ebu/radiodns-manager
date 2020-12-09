@@ -1,8 +1,7 @@
-RadioDNS-plugit
+RadioDNS
 ===============
 
-This project gathers a web interface based on [plugit](https://github.com/ebu/plugit) to manage RadioDNS
-services ([RadioVIS, RadioEPG and ServiceFollowing](http://www.radiodns.org)). 
+Project that provides a web interface to manage RadioDNS services ([RadioVIS, RadioEPG and ServiceFollowing](http://www.radiodns.org))
 
 Check each folder for specifics README about each part.
 
@@ -10,7 +9,7 @@ Check each folder for specifics README about each part.
 To start up a local demo instance
 
 ```
-docker-compose -f docker-compose-standalone-demo.yml up --build -d
+docker-compose -f docker-compose-new-standalone.yml up --build -d
 ```
 
 Then you may visit http://localhost:4000.
@@ -31,9 +30,7 @@ docker-compose -f docker-compose-standalone-demo.yml down
 To remove the database and start afresh
 
 ```
-docker volume rm radiodns-manager_db_data
-docker volume rm radiodns-manager_mock_api_data
-docker volume rm radiodns-manager_pgdata
+docker volume prune
 ```
 
 ## Getting Started
@@ -41,18 +38,20 @@ These instructions will get you a copy of the project up and running on your loc
 testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-- python 2.7 and 3.7
-- docker 18.06.1+
-- virtualenv 16.0.0+
-- docker-compose 1.23.2+
+- python 3.8
+- virtualenv 20.0.0+
+
+AND/OR
+
+- docker 19.0.0+
+- docker-compose 1.26+
 
 ### Installing
 To install automatically the python environment on an unix system use the `setup-envs.sh` script (in the scripts folder).
 
 On windows you'll have to setup a virtual env for the following projects (create and activate the venv + installing pip 
 dependencies):
-- LightweightPlugitProxy (python3)
-- RadioDns-PlugIt (python2)
+- RadioDns (python3)
 - RadioVisServer (python2)
 - MockApi (python3)
 - tests (python3)
@@ -60,10 +59,9 @@ dependencies):
 ### Running the dev stack
 Launch the dev databases with:
 
-    docker-compose -f docker-compose-dev.yml up -d
+    docker-compose -f docker-compose-dev.yml up --force-recreate
     
 Then head to each following folders in order and follow their README.md:
-- LightweightPlugitProxy 
 - RadioDns
 - RadioVisServer 
 - MockApi 
@@ -87,7 +85,7 @@ Please refer to their respective README for further instructions.
 ## Deployment in production - EBU.io
 Deployment instructions on a production server are detailed in [the docs](/docs/Radiodns_manual_deployment_EBU-IO.md).
 
-## Deployment in production
+## Deployment in staging
 Deployment instructions on a production server without EBU.io are detailed in [the docs](/docs/Radiodns_manual_deployment.md).
 
 ## General architecture
@@ -95,18 +93,19 @@ Architecture is described in [the docs](/docs/Radiodns_architecture.md)
 
 ## Contributing
 - Always fix version of dependencies.
-- Any new module that can be written in python 3 must be written in python 3.
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Contact
 Contact the EBU (Ben Poor poor@ebu.ch) if you need more information about RadioDNS and its associated developments.
 
 ## Contributors
+* Pawel Glimos [@pglimos](https://github.com/pglimos)
+* Ioannis Noukakis [@inoukakis](https://github.com/ioannisNoukakis)
 * Maximilien Cuony [@the-glu](https://github.com/the-glu)
 * Malik Bougacha [@gcmalloc](https://github.com/gcmalloc)
 * Michael Barroco [@barroco](https://github.com/barroco)
 * Mathieu Habegger [@mhabegger](https://github.com/mhabegger)
-* Ioannis Noukakis [@inoukakis](https://github.com/ioannisNoukakis)
+
 
 
 ## Copyright & License

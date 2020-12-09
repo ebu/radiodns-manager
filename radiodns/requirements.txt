@@ -3,6 +3,7 @@ asgiref==3.2.7
 attrs==19.3.0
 black==19.10b0
 boto==2.49.0
+boto3==1.16.32
 certifi==2020.4.5.2
 cffi==1.14.0
 chardet==3.0.4

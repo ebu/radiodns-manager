@@ -1,0 +1,4232 @@
+[
+    {
+        "fields": {
+            "default_image": 361,
+            "ip_allowed": "",
+            "organization": 2,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrsi.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrsi.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrsi.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "default_image": 359,
+            "ip_allowed": "",
+            "organization": 2,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrsi.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrsi.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrsi.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "default_image": 360,
+            "ip_allowed": "",
+            "organization": 2,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrsi.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrsi.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrsi.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "default_image": 9,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 27
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 28
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 29
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 30
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 31
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 32
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 33
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 34
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 35
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 36
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 38
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 39
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 40
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 41
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 42
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 43
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 44
+    },
+    {
+        "fields": {
+            "default_image": 10,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 3,
+            "radioepg_enabled": 1,
+            "radioepg_service": "zzebu.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "zzebu.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "zzebu.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 45
+    },
+    {
+        "fields": {
+            "default_image": 14,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 47
+    },
+    {
+        "fields": {
+            "default_image": 17,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 5,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esrtve.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esrtve.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esrtve.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 48
+    },
+    {
+        "fields": {
+            "default_image": 30,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 5,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esrtve.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esrtve.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esrtve.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 49
+    },
+    {
+        "fields": {
+            "default_image": 27,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 5,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esrtve.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esrtve.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esrtve.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 50
+    },
+    {
+        "fields": {
+            "default_image": 29,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 5,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esrtve.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esrtve.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esrtve.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 51
+    },
+    {
+        "fields": {
+            "default_image": 28,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 5,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esrtve.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esrtve.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esrtve.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 52
+    },
+    {
+        "fields": {
+            "default_image": 101,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 53
+    },
+    {
+        "fields": {
+            "default_image": 19,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 54
+    },
+    {
+        "fields": {
+            "default_image": 20,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 55
+    },
+    {
+        "fields": {
+            "default_image": 21,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 56
+    },
+    {
+        "fields": {
+            "default_image": 22,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 57
+    },
+    {
+        "fields": {
+            "default_image": 23,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 58
+    },
+    {
+        "fields": {
+            "default_image": 362,
+            "ip_allowed": "",
+            "organization": 7,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrts.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrts.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrts.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 59
+    },
+    {
+        "fields": {
+            "default_image": 365,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 7,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrts.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrts.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrts.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 60
+    },
+    {
+        "fields": {
+            "default_image": 363,
+            "ip_allowed": "",
+            "organization": 7,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrts.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrts.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrts.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 61
+    },
+    {
+        "fields": {
+            "default_image": 364,
+            "ip_allowed": "",
+            "organization": 7,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrts.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrts.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrts.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 62
+    },
+    {
+        "fields": {
+            "default_image": 352,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 65
+    },
+    {
+        "fields": {
+            "default_image": 351,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 68
+    },
+    {
+        "fields": {
+            "default_image": 349,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 69
+    },
+    {
+        "fields": {
+            "default_image": 348,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 70
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 73
+    },
+    {
+        "fields": {
+            "default_image": 354,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 74
+    },
+    {
+        "fields": {
+            "default_image": 353,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 75
+    },
+    {
+        "fields": {
+            "default_image": 44,
+            "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
+            "organization": 9,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bertbf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bertbf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bertbf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 77
+    },
+    {
+        "fields": {
+            "default_image": 45,
+            "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
+            "organization": 9,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bertbf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bertbf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bertbf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 78
+    },
+    {
+        "fields": {
+            "default_image": 46,
+            "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
+            "organization": 9,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bertbf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bertbf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bertbf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 79
+    },
+    {
+        "fields": {
+            "default_image": 47,
+            "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
+            "organization": 9,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bertbf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bertbf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bertbf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 80
+    },
+    {
+        "fields": {
+            "default_image": 48,
+            "ip_allowed": "185.153.41.32/32,185.153.43.32/32",
+            "organization": 9,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bertbf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bertbf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bertbf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 81
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 10,
+            "radioepg_enabled": 1,
+            "radioepg_service": "humtva.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "humtva.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "humtva.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 82
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 10,
+            "radioepg_enabled": 1,
+            "radioepg_service": "humtva.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "humtva.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "humtva.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 83
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 10,
+            "radioepg_enabled": 1,
+            "radioepg_service": "humtva.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "humtva.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "humtva.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 84
+    },
+    {
+        "fields": {
+            "default_image": 56,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 85
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 88
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 89
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 90
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 91
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 92
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 93
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 94
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 95
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 96
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 13,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 97
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 14,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 98
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 14,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 99
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 14,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 100
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 14,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 101
+    },
+    {
+        "fields": {
+            "default_image": 51,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 102
+    },
+    {
+        "fields": {
+            "default_image": 57,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 103
+    },
+    {
+        "fields": {
+            "default_image": 55,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 104
+    },
+    {
+        "fields": {
+            "default_image": 54,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 105
+    },
+    {
+        "fields": {
+            "default_image": 53,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 106
+    },
+    {
+        "fields": {
+            "default_image": 58,
+            "ip_allowed": "",
+            "organization": 11,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frsrf.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frsrf.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frsrf.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 107
+    },
+    {
+        "fields": {
+            "default_image": 60,
+            "ip_allowed": " 0.0.0.0/0",
+            "organization": 12,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esaber.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esaber.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esaber.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 108
+    },
+    {
+        "fields": {
+            "default_image": 61,
+            "ip_allowed": " 0.0.0.0/0",
+            "organization": 12,
+            "radioepg_enabled": 1,
+            "radioepg_service": "esaber.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "esaber.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "esaber.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 109
+    },
+    {
+        "fields": {
+            "default_image": 273,
+            "ip_allowed": "0.0.0.0/24",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 110
+    },
+    {
+        "fields": {
+            "default_image": 274,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 111
+    },
+    {
+        "fields": {
+            "default_image": 275,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 112
+    },
+    {
+        "fields": {
+            "default_image": 279,
+            "ip_allowed": " 0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 113
+    },
+    {
+        "fields": {
+            "default_image": 276,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 114
+    },
+    {
+        "fields": {
+            "default_image": 271,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 115
+    },
+    {
+        "fields": {
+            "default_image": 272,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 116
+    },
+    {
+        "fields": {
+            "default_image": 278,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 117
+    },
+    {
+        "fields": {
+            "default_image": 281,
+            "ip_allowed": " 0.0.0.0/0",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 118
+    },
+    {
+        "fields": {
+            "default_image": 277,
+            "ip_allowed": "",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 119
+    },
+    {
+        "fields": {
+            "default_image": 76,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 123
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 125
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 126
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 127
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 128
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 129
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 130
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 131
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 132
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 133
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 134
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 18,
+            "radioepg_enabled": 1,
+            "radioepg_service": "plpr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "plpr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "plpr.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 135
+    },
+    {
+        "fields": {
+            "default_image": 130,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 136
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 137
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 138
+    },
+    {
+        "fields": {
+            "default_image": 78,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 139
+    },
+    {
+        "fields": {
+            "default_image": 301,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 140
+    },
+    {
+        "fields": {
+            "default_image": 300,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 141
+    },
+    {
+        "fields": {
+            "default_image": 79,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 143
+    },
+    {
+        "fields": {
+            "default_image": 299,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 144
+    },
+    {
+        "fields": {
+            "default_image": 77,
+            "ip_allowed": "",
+            "organization": 19,
+            "radioepg_enabled": 1,
+            "radioepg_service": "bevrt.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "bevrt.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "bevrt.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 145
+    },
+    {
+        "fields": {
+            "default_image": 94,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 146
+    },
+    {
+        "fields": {
+            "default_image": 192,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 147
+    },
+    {
+        "fields": {
+            "default_image": 191,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 148
+    },
+    {
+        "fields": {
+            "default_image": 96,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 149
+    },
+    {
+        "fields": {
+            "default_image": 97,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 150
+    },
+    {
+        "fields": {
+            "default_image": 185,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 151
+    },
+    {
+        "fields": {
+            "default_image": 95,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 152
+    },
+    {
+        "fields": {
+            "default_image": 268,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 153
+    },
+    {
+        "fields": {
+            "default_image": 267,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 154
+    },
+    {
+        "fields": {
+            "default_image": 93,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 155
+    },
+    {
+        "fields": {
+            "default_image": 102,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 157
+    },
+    {
+        "fields": {
+            "default_image": 88,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 158
+    },
+    {
+        "fields": {
+            "default_image": 99,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 159
+    },
+    {
+        "fields": {
+            "default_image": 103,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 160
+    },
+    {
+        "fields": {
+            "default_image": 199,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 163
+    },
+    {
+        "fields": {
+            "default_image": 196,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 164
+    },
+    {
+        "fields": {
+            "default_image": 264,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 165
+    },
+    {
+        "fields": {
+            "default_image": 266,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 166
+    },
+    {
+        "fields": {
+            "default_image": 255,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 167
+    },
+    {
+        "fields": {
+            "default_image": 98,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 168
+    },
+    {
+        "fields": {
+            "default_image": 91,
+            "ip_allowed": "160.67.135.213,160.67.149.205,160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 169
+    },
+    {
+        "fields": {
+            "default_image": 92,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 170
+    },
+    {
+        "fields": {
+            "default_image": 193,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 171
+    },
+    {
+        "fields": {
+            "default_image": 195,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 172
+    },
+    {
+        "fields": {
+            "default_image": 263,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 173
+    },
+    {
+        "fields": {
+            "default_image": 261,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 174
+    },
+    {
+        "fields": {
+            "default_image": 258,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 176
+    },
+    {
+        "fields": {
+            "default_image": 194,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 177
+    },
+    {
+        "fields": {
+            "default_image": 262,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 178
+    },
+    {
+        "fields": {
+            "default_image": 187,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 179
+    },
+    {
+        "fields": {
+            "default_image": 257,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 180
+    },
+    {
+        "fields": {
+            "default_image": 189,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 181
+    },
+    {
+        "fields": {
+            "default_image": 198,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 182
+    },
+    {
+        "fields": {
+            "default_image": 259,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 183
+    },
+    {
+        "fields": {
+            "default_image": 265,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 184
+    },
+    {
+        "fields": {
+            "default_image": 190,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 185
+    },
+    {
+        "fields": {
+            "default_image": 197,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 186
+    },
+    {
+        "fields": {
+            "default_image": 186,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 187
+    },
+    {
+        "fields": {
+            "default_image": 256,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 188
+    },
+    {
+        "fields": {
+            "default_image": 269,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 189
+    },
+    {
+        "fields": {
+            "default_image": 260,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 190
+    },
+    {
+        "fields": {
+            "default_image": 188,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 191
+    },
+    {
+        "fields": {
+            "default_image": 103,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 193
+    },
+    {
+        "fields": {
+            "default_image": 103,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 194
+    },
+    {
+        "fields": {
+            "default_image": 108,
+            "ip_allowed": "",
+            "organization": 22,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbeo.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbeo.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbeo.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 200
+    },
+    {
+        "fields": {
+            "default_image": 110,
+            "ip_allowed": "",
+            "organization": 23,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chplts.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chplts.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chplts.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 201
+    },
+    {
+        "fields": {
+            "default_image": 111,
+            "ip_allowed": "",
+            "organization": 24,
+            "radioepg_enabled": 1,
+            "radioepg_service": "charga.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "charga.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "charga.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 202
+    },
+    {
+        "fields": {
+            "default_image": 112,
+            "ip_allowed": "",
+            "organization": 25,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chrd24.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chrd24.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrd24.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 203
+    },
+    {
+        "fields": {
+            "default_image": 114,
+            "ip_allowed": "",
+            "organization": 26,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chsmda.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chsmda.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chsmda.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 204
+    },
+    {
+        "fields": {
+            "default_image": 294,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 27,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbnan.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbnan.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbnan.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 205
+    },
+    {
+        "fields": {
+            "default_image": 118,
+            "ip_allowed": "",
+            "organization": 28,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbnj.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbnj.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbnj.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 206
+    },
+    {
+        "fields": {
+            "default_image": 119,
+            "ip_allowed": "",
+            "organization": 28,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbnj.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbnj.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbnj.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 207
+    },
+    {
+        "fields": {
+            "default_image": 120,
+            "ip_allowed": "",
+            "organization": 28,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbnj.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbnj.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbnj.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 208
+    },
+    {
+        "fields": {
+            "default_image": 117,
+            "ip_allowed": "",
+            "organization": 28,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chbnj.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chbnj.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chbnj.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 209
+    },
+    {
+        "fields": {
+            "default_image": 128,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 211
+    },
+    {
+        "fields": {
+            "default_image": 132,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 212
+    },
+    {
+        "fields": {
+            "default_image": 134,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 213
+    },
+    {
+        "fields": {
+            "default_image": 136,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 214
+    },
+    {
+        "fields": {
+            "default_image": 349,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 217
+    },
+    {
+        "fields": {
+            "default_image": 348,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 218
+    },
+    {
+        "fields": {
+            "default_image": 355,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 219
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 220
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 221
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 222
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 223
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 224
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 225
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 226
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 227
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 228
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 229
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 230
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 231
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 232
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 233
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 234
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 235
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 236
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 237
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 238
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 239
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 240
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 241
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 242
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 243
+    },
+    {
+        "fields": {
+            "default_image": 145,
+            "ip_allowed": "",
+            "organization": 30,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chrro.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 250
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 30,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 251
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 30,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 252
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 30,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 253
+    },
+    {
+        "fields": {
+            "default_image": 146,
+            "ip_allowed": "",
+            "organization": 31,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chspoo.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chspoo.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chspoo.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 254
+    },
+    {
+        "fields": {
+            "default_image": 160,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 263
+    },
+    {
+        "fields": {
+            "default_image": 164,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 264
+    },
+    {
+        "fields": {
+            "default_image": 161,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 265
+    },
+    {
+        "fields": {
+            "default_image": 168,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 266
+    },
+    {
+        "fields": {
+            "default_image": 162,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 267
+    },
+    {
+        "fields": {
+            "default_image": 163,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 268
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 269
+    },
+    {
+        "fields": {
+            "default_image": 171,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 270
+    },
+    {
+        "fields": {
+            "default_image": 167,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 271
+    },
+    {
+        "fields": {
+            "default_image": 173,
+            "ip_allowed": "",
+            "organization": 36,
+            "radioepg_enabled": 1,
+            "radioepg_service": "roror.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "roror.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "roror.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 272
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": "",
+            "organization": 4,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sirtvs.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sirtvs.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "sirtvs.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 273
+    },
+    {
+        "fields": {
+            "default_image": 174,
+            "ip_allowed": "",
+            "organization": 37,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frdica.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frdica.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frdica.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 274
+    },
+    {
+        "fields": {
+            "default_image": 176,
+            "ip_allowed": "212.74.164.62/32",
+            "organization": 38,
+            "radioepg_enabled": 1,
+            "radioepg_service": "chmaxx.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "chmaxx.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "chmaxx.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 275
+    },
+    {
+        "fields": {
+            "default_image": 179,
+            "ip_allowed": "",
+            "organization": 39,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frfg.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frfg.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frfg.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 276
+    },
+    {
+        "fields": {
+            "default_image": 180,
+            "ip_allowed": "",
+            "organization": 39,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frfg.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frfg.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frfg.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 277
+    },
+    {
+        "fields": {
+            "default_image": 181,
+            "ip_allowed": "",
+            "organization": 40,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frouifm.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frouifm.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frouifm.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 278
+    },
+    {
+        "fields": {
+            "default_image": 183,
+            "ip_allowed": "",
+            "organization": 41,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frnova.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frnova.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frnova.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 279
+    },
+    {
+        "fields": {
+            "default_image": 182,
+            "ip_allowed": "",
+            "organization": 16,
+            "radioepg_enabled": 1,
+            "radioepg_service": "mcrmc.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "mcrmc.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "mcrmc.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 280
+    },
+    {
+        "fields": {
+            "default_image": 201,
+            "ip_allowed": "",
+            "organization": 10,
+            "radioepg_enabled": 1,
+            "radioepg_service": "humtva.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "humtva.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "humtva.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 281
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 284
+    },
+    {
+        "fields": {
+            "default_image": 99,
+            "ip_allowed": "",
+            "organization": 6,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": false,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 286
+    },
+    {
+        "fields": {
+            "default_image": 200,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 37,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frdica.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frdica.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frdica.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 287
+    },
+    {
+        "fields": {
+            "default_image": 203,
+            "ip_allowed": "0.0.0.0/0",
+            "organization": 37,
+            "radioepg_enabled": 1,
+            "radioepg_service": "frdica.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "frdica.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "frdica.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 296
+    },
+    {
+        "fields": {
+            "default_image": 356,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 306
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178, 212.140.214.70",
+            "organization": 6,
+            "radioepg_enabled": 0,
+            "radioepg_service": "",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 0,
+            "radiospi_service": "",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 307
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 308
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 309
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 310
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 311
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213/32, 160.67.149.205/32, 160.67.134.178/32, 0.0.0.0/0",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 312
+    },
+    {
+        "fields": {
+            "default_image": 222,
+            "ip_allowed": "160.67.135.213, 160.67.149.205, 160.67.134.178",
+            "organization": 6,
+            "radioepg_enabled": 1,
+            "radioepg_service": "nonrk.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 1,
+            "radiospi_enabled": 1,
+            "radiospi_service": "nonrk.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "nonrk.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 313
+    },
+    {
+        "fields": {
+            "default_image": 284,
+            "ip_allowed": "",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 346
+    },
+    {
+        "fields": {
+            "default_image": 285,
+            "ip_allowed": "",
+            "organization": 15,
+            "radioepg_enabled": 1,
+            "radioepg_service": "itrai.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "itrai.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 1,
+            "radiovis_service": "itrai.vis.radio.ebu.io:61613"
+        },
+        "model": "stations.Station",
+        "pk": 347
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": null,
+            "organization": 3,
+            "radioepg_enabled": 0,
+            "radioepg_service": null,
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 0,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": null
+        },
+        "model": "stations.Station",
+        "pk": 348
+    },
+    {
+        "fields": {
+            "default_image": 136,
+            "ip_allowed": "",
+            "organization": 20,
+            "radioepg_enabled": 1,
+            "radioepg_service": "czcr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "czcr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 368
+    },
+    {
+        "fields": {
+            "default_image": 347,
+            "ip_allowed": "",
+            "organization": 8,
+            "radioepg_enabled": 1,
+            "radioepg_service": "sesr.epg.radio.ebu.io:80",
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 1,
+            "radiospi_service": "sesr.spi.radio.ebu.io:443",
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": ""
+        },
+        "model": "stations.Station",
+        "pk": 395
+    },
+    {
+        "fields": {
+            "default_image": null,
+            "ip_allowed": null,
+            "organization": 3,
+            "radioepg_enabled": 0,
+            "radioepg_service": null,
+            "radioepgpi_enabled": 0,
+            "radiospi_enabled": 0,
+            "radiospi_service": null,
+            "radiotag_enabled": 0,
+            "radiotag_service": null,
+            "radiovis_enabled": 0,
+            "radiovis_service": null
+        },
+        "model": "stations.Station",
+        "pk": 400
+    }
+]

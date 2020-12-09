@@ -30,14 +30,16 @@ SECRET_KEY = "%eea1za680a5x$ah=ts7u+!96=m#%%h1(b4s$w!v_%q1%!o^h*"
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
+
 ALLOWED_HOSTS = []
 
+# Use custom user model
 AUTH_USER_MODEL = "radiodns_auth.User"
 
+# Redirect to trailing slash to avoid linking problems
 APPEND_SLASH = True
 
 # Application definition
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -62,6 +64,7 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 
+# Two custom middlewares were implemented - check login, and check whether organisation is set up
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -73,6 +76,11 @@ MIDDLEWARE = [
     "apps.radiodns_auth.middleware.LoginRequiredMiddleware",
     "apps.manager.middleware.SetupRequiredMiddleware",
 ]
+
+# URLs, where user does not need to be logged in
+LOGIN_EXEMPT_URLS = ["/xml-metadata/", "/static/"]
+
+
 
 ROOT_URLCONF = "config.urls"
 
@@ -162,6 +170,10 @@ RADIOSPI_SERVICE_DEFAULT = RADIOSPI_DNS + ":" + RADIOSPI_PORT
 RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")
 
 
+
+# SAML Integration
+# ------------------------------------------------------------------------------
+
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
@@ -188,4 +200,4 @@ SOCIAL_AUTH_SAML_ENABLED_IDPS = {
 }
 
 
-LOGIN_EXEMPT_URLS = ["/xml-metadata/", "/static/"]
+
