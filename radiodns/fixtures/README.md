@@ -1,4 +1,4 @@
-# To do the migration
+# How to do the migration
 
 Prepare the DB:
 
@@ -19,3 +19,10 @@ Migrate:
     python manage.py loaddata fixtures/json_fixtures/new_stations.json --app stations.Station
     python manage.py loaddata fixtures/json_fixtures/new_station_instances.json --app stations.StationInstance
     python manage.py loaddata fixtures/json_fixtures/new_channels.json --app channels.Channel
+
+# How the migration script was done
+The idea was to take the SQL DUMP which has a structure close to python tuple when it comes to populate data
+and to transform this data population script from SQL to a list of Python tuple, each tuple being a line in the old
+database. Then one has to map this data with the new models and voilà.
+
+Note that organization if the old schema are not the same as new organization as they are in fact service providers.
