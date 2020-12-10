@@ -42,10 +42,10 @@ class Event(models.Model):
 
 
 class GenericServiceFollowingEntry(models.Model):
-    station = models.ForeignKey(Station, on_delete=models.CASCADE)
-    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE, null=True)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null=True)
     active = models.BooleanField()
     cost = models.IntegerField()
     offset = models.IntegerField()
-    mime_type = models.CharField(max_length=255, blank=True)
+    mime_type = models.CharField(max_length=255, blank=True, null=True)
     bitrate = models.IntegerField(null=True, blank=True)

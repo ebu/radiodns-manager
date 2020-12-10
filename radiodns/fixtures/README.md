@@ -19,6 +19,9 @@ Migrate:
     python manage.py loaddata fixtures/json_fixtures/new_stations.json --app stations.Station
     python manage.py loaddata fixtures/json_fixtures/new_station_instances.json --app stations.StationInstance
     python manage.py loaddata fixtures/json_fixtures/new_channels.json --app channels.Channel
+    python manage.py loaddata fixtures/json_fixtures/new_shows.json --app radioepg.Show
+    python manage.py loaddata fixtures/json_fixtures/new_events.json --app radioepg.Event
+    python manage.py loaddata fixtures/json_fixtures/new_generic_service_following_entry.json --app radioepg.GenericServiceFollowingEntry
 
 # How the migration script was done
 The idea was to take the SQL DUMP which has a structure close to python tuple when it comes to populate data
