@@ -19,6 +19,12 @@ HOST_URL = "staging.radio.ebu.io"
 STATIC_ROOT = os.path.join(BASE_DIR, "common/static/")
 STATIC_URL = "/static/"
 
+# MEDIA
+# ------------------------------------------------------------------------------
+MEDIA_ROOT = os.path.join(BASE_DIR, "common/media/")
+MEDIA_URL = "/media/"
+
+
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
@@ -36,7 +42,7 @@ AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
 
 # SAML Integration
 # ------------------------------------------------------------------------------
-USE_SAML = False
+USE_SAML = True
 USE_LOGIN = True
 
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = env.str("SOCIAL_AUTH_SAML_SP_ENTITY_ID")

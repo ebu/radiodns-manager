@@ -78,7 +78,7 @@ MIDDLEWARE = [
 ]
 
 # URLs, where user does not need to be logged in
-LOGIN_EXEMPT_URLS = ["/xml-metadata/", "/static/"]
+LOGIN_EXEMPT_URLS = ["xml-metadata", "/static/", "auth/login/saml"]
 
 
 
