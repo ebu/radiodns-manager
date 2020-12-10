@@ -1,0 +1,673 @@
+[
+    {
+        "fields": {
+            "color": "#ffff33",
+            "description": "Blabla text",
+            "long_name": "Show A Long Text",
+            "medium_name": "Show A",
+            "station": 3
+        },
+        "model": "radioepg.Show",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Blabla 2",
+            "long_name": "Show B Test",
+            "medium_name": "Show B",
+            "station": 3
+        },
+        "model": "radioepg.Show",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Sport",
+            "long_name": "NRK Sport",
+            "medium_name": "NRK Sport",
+            "station": 53
+        },
+        "model": "radioepg.Show",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Radio 1",
+            "long_name": "Radio 1",
+            "medium_name": "R1",
+            "station": 50
+        },
+        "model": "radioepg.Show",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "color": "#f781bf",
+            "description": "On Rete Uno : )",
+            "long_name": "Great time",
+            "medium_name": "Show : )",
+            "station": 3
+        },
+        "model": "radioepg.Show",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "C",
+            "long_name": "B",
+            "medium_name": "A",
+            "station": 200
+        },
+        "model": "radioepg.Show",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "This is a test",
+            "long_name": "Test",
+            "medium_name": "Test",
+            "station": 48
+        },
+        "model": "radioepg.Show",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "Generalista",
+            "long_name": "Las ma\u00f1anas de RNE con Alfredo Menendez",
+            "medium_name": "Las ma\u00f1anas",
+            "station": 48
+        },
+        "model": "radioepg.Show",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Sports",
+            "long_name": "Test 2",
+            "medium_name": "Test 2",
+            "station": 48
+        },
+        "model": "radioepg.Show",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "Music non-stop",
+            "long_name": "Music",
+            "medium_name": "Music",
+            "station": 205
+        },
+        "model": "radioepg.Show",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Makropolis information",
+            "long_name": "Makropolis",
+            "medium_name": "Makropolis",
+            "station": 205
+        },
+        "model": "radioepg.Show",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "Music selection for a travel allong the night",
+            "long_name": "Be different at night",
+            "medium_name": "Be different at night",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "color": "#ff7f00",
+            "description": "DJ Mixes Session\r\nCris del Pilone - WarmUp Selection\r\nSebastien Adonis - From Deep House To Progressive",
+            "long_name": "La Cartoucherie",
+            "medium_name": "La Cartoucherie",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Eclectic Electronic Music with Aymeric V",
+            "long_name": "Beatscape",
+            "medium_name": "Beatscape",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Radio Show by Deepinside.\r\nHouse, DeepHouse, Soulful",
+            "long_name": "Deepinside",
+            "medium_name": "Deepinside",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Morning selection, Wakup",
+            "long_name": "R\u00e9veil, Trompette",
+            "medium_name": "R\u00e9veil, Trompette",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Soft and deep",
+            "long_name": "Electro Deep",
+            "medium_name": "Electro Deep",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "DJ Freud Session",
+            "long_name": "DJ Freud Session",
+            "medium_name": "DJ Freud",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 21
+    },
+    {
+        "fields": {
+            "color": "#999999",
+            "description": "DJ Cyxbee",
+            "long_name": "DJ Cyxbee",
+            "medium_name": "DJ Cyxbee",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 22
+    },
+    {
+        "fields": {
+            "color": "#f781bf",
+            "description": "Presented by MikeDaSilk\r\nHouse Remember, Oldschool Selection",
+            "long_name": "Undergroov",
+            "medium_name": "Undergroov",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 23
+    },
+    {
+        "fields": {
+            "color": "#999999",
+            "description": "MikeDaSilk, Relaxed selection for the last week period",
+            "long_name": "SOfa Mix",
+            "medium_name": "Sofa Mix",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 24
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Sunday morning take it easy, smooth vibes for relaxed morning and brunch !",
+            "long_name": "Finest Modern Lounge & Electro",
+            "medium_name": "Finest Modern L&E",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 25
+    },
+    {
+        "fields": {
+            "color": "#a65628",
+            "description": "Your sunday with style ;)",
+            "long_name": "Jazz House-Electro",
+            "medium_name": "Jazz House-Electro",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 26
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Rave, Minimal, Bass, Prog, House",
+            "long_name": "Rave the night",
+            "medium_name": "Rave the night",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 27
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Music mix with an accent on House music from the 90' until today",
+            "long_name": "House Remember",
+            "medium_name": "House Remember",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 28
+    },
+    {
+        "fields": {
+            "color": "#a65628",
+            "description": "Deep 'House Sound'  Funky & RnB",
+            "long_name": "Deep & Sexy",
+            "medium_name": "Deep & Sexy",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 29
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Soulful and deep Housem the afternoon start here",
+            "long_name": "Deep & Soulful",
+            "medium_name": "Deep & Soulful",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 30
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Steve Price for a Soulful'n'House selection",
+            "long_name": "Souldistrict",
+            "medium_name": "Souldistrict",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 31
+    },
+    {
+        "fields": {
+            "color": "#ff7f00",
+            "description": "Maxxima music mix mix blended with upfront tracks  ",
+            "long_name": "Be different",
+            "medium_name": "Be different",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 32
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Live session or Maxxima Housefloor selection.  Saturday evening on the trend",
+            "long_name": "Live or Maxxima Housefloor",
+            "medium_name": "Live or Housefloor",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 33
+    },
+    {
+        "fields": {
+            "color": "#ffff33",
+            "description": "Underground Maxx",
+            "long_name": "Underground Maxx",
+            "medium_name": "Underground Maxx",
+            "station": 275
+        },
+        "model": "radioepg.Show",
+        "pk": 34
+    },
+    {
+        "fields": {
+            "color": "#f781bf",
+            "description": "Tous les jours \u00e0 19h, notre rendez-vous quotidien 100% jazz anim\u00e9 par Jane Villenet et Charlotte Bibring... \u00e0 r\u00e9-\u00e9couter et podcaster en int\u00e9gralit\u00e9.",
+            "long_name": "Club Jazzafip",
+            "medium_name": "Jazzafip",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 42
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Chaque lundi de 20h \u00e0 22h, une \u00e9mission anim\u00e9e par Alexandre Desurmont et Luc Frelon.",
+            "long_name": "Sous les jupes de FIP",
+            "medium_name": "Sous les jupes de FIP",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 43
+    },
+    {
+        "fields": {
+            "color": "#ff7f00",
+            "description": "Chaque mardi de 20h \u00e0 22h, une \u00e9mission anim\u00e9e par Fr\u00e9d\u00e9rique Labussi\u00e8re et r\u00e9alis\u00e9e par Massimo Bellini.",
+            "long_name": "C'est magnifip !",
+            "medium_name": "C'est magnifip !",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 44
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Chaque mercredi de 20h \u00e0 22h, une \u00e9mission anim\u00e9e par Susana Poveda et r\u00e9alis\u00e9e par Denis Soula.",
+            "long_name": "Certains l'aiment Fip",
+            "medium_name": "Certains l'aiment Fip",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 45
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Toute la musique vivante de FIP. Les plus grands artistes live en studio, en public en session priv\u00e9e ou sur des festivals se savoure chaque jeudi \u00e0 20h. Une \u00e9mission pr\u00e9sent\u00e9e par St\u00e9phanie Daniel et r\u00e9alis\u00e9e par Jo\u00ebl Lemar\u00e9chal.",
+            "long_name": "Live \u00e0 Fip",
+            "medium_name": "Live \u00e0 Fip",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 46
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "FIP Musique",
+            "long_name": "FIP",
+            "medium_name": "FIP",
+            "station": 105
+        },
+        "model": "radioepg.Show",
+        "pk": 47
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Music NON Stop",
+            "long_name": "Music NON Stop",
+            "medium_name": "Music NON Stop",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 48
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "Guilhem",
+            "long_name": "Guilhem",
+            "medium_name": "Guilhem",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 49
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "Vos d\u00e9dicaces en LIVE !",
+            "long_name": "Baptiste",
+            "medium_name": "Baptiste",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 50
+    },
+    {
+        "fields": {
+            "color": "#ffff33",
+            "description": "Le classement de vos titres pr\u00e9f\u00e9r\u00e9s du jour !",
+            "long_name": "TOP FLOP",
+            "medium_name": "TOP FLOP",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 51
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Only 90s - Anthony",
+            "long_name": "Only 90s - Anthony",
+            "medium_name": "Only 90s - Anthony",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 52
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Urban Session - R\u00e9mi",
+            "long_name": "Urban Session - R\u00e9mi",
+            "medium_name": "Urban Session - R\u00e9mi",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 53
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Only 2K - Zack",
+            "long_name": "Only 2K - Zack",
+            "medium_name": "Only 2K - Zack",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 54
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Only ROCK",
+            "long_name": "Only ROCK",
+            "medium_name": "Only ROCK",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 55
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - La playlist",
+            "long_name": "Club MIX - La playlist",
+            "medium_name": "Club MIX - La playlist",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 56
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Jeremy Ducasse",
+            "long_name": "Club MIX - Jeremy Ducasse",
+            "medium_name": "Club MIX - Jeremy Ducasse",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 57
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Dorian Gamon",
+            "long_name": "Club MIX - Dorian Gamon",
+            "medium_name": "Club MIX - Dorian Gamon",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 58
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Romuald Martins",
+            "long_name": "Club MIX - Romuald Martins",
+            "medium_name": "Club MIX - Romuald Martins",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 59
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Nicko Vibe",
+            "long_name": "Club MIX - Nicko Vibe",
+            "medium_name": "Club MIX - Nicko Vibe",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 60
+    },
+    {
+        "fields": {
+            "color": "#377eb8",
+            "description": "RAPH",
+            "long_name": "RAPH",
+            "medium_name": "RAPH",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 61
+    },
+    {
+        "fields": {
+            "color": "#984ea3",
+            "description": "LAURENT",
+            "long_name": "LAURENT",
+            "medium_name": "LAURENT",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 62
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Sylvain Diems",
+            "long_name": "Club MIX - Sylvain Diems",
+            "medium_name": "Club MIX - Sylvain Diems",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 63
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Jordan Patural",
+            "long_name": "Club MIX - Jordan Patural",
+            "medium_name": "Club MIX - Jordan Patural",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 64
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Fabien JORA",
+            "long_name": "Club MIX - Fabien JORA",
+            "medium_name": "Club MIX - Fabien JORA",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 65
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Laurent Schark",
+            "long_name": "Club MIX - Laurent Schark",
+            "medium_name": "Club MIX - Laurent Schark",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 66
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "Club MIX - Quentin Elocta",
+            "long_name": "Club MIX - Quentin Elocta",
+            "medium_name": "Club MIX - Quentin Elocta",
+            "station": 287
+        },
+        "model": "radioepg.Show",
+        "pk": 67
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Long name",
+            "long_name": "Long name",
+            "medium_name": "Med name",
+            "station": 83
+        },
+        "model": "radioepg.Show",
+        "pk": 68
+    },
+    {
+        "fields": {
+            "color": "#4daf4a",
+            "description": "N\u00f3t\u00e1k mindenkinek, nem csak annak, aki \u00e9hes.",
+            "long_name": "J\u00f3eb\u00e9dhez sz\u00f3l a n\u00f3ta",
+            "medium_name": "Sz\u00f3l a n\u00f3ta",
+            "station": 281
+        },
+        "model": "radioepg.Show",
+        "pk": 69
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "fdgf",
+            "long_name": "dsfgds",
+            "medium_name": "sfsd",
+            "station": 169
+        },
+        "model": "radioepg.Show",
+        "pk": 70
+    },
+    {
+        "fields": {
+            "color": "#e41a1c",
+            "description": "Marcello plays the greatest hit frmo Italian music",
+            "long_name": "Cello",
+            "medium_name": "Marcello Hour",
+            "station": 7
+        },
+        "model": "radioepg.Show",
+        "pk": 72
+    }
+]
