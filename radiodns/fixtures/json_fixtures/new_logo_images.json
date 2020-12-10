@@ -1121,6 +1121,62 @@
     },
     {
         "fields": {
+            "file": "039d44b8-38eb-4f5f-99de-b007d700a452.jpg",
+            "name": "RTR logo",
+            "organization": 21,
+            "scaled112x32": "112x32/039d44b8-38eb-4f5f-99de-b007d700a452.jpg",
+            "scaled128x128": "128x128/039d44b8-38eb-4f5f-99de-b007d700a452.jpg",
+            "scaled320x240": "320x240/039d44b8-38eb-4f5f-99de-b007d700a452.jpg",
+            "scaled32x32": "32x32/039d44b8-38eb-4f5f-99de-b007d700a452.jpg",
+            "scaled600x600": "600x600/039d44b8-38eb-4f5f-99de-b007d700a452.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 104
+    },
+    {
+        "fields": {
+            "file": "4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg",
+            "name": "Vesti FM",
+            "organization": 21,
+            "scaled112x32": "112x32/4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg",
+            "scaled128x128": "128x128/4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg",
+            "scaled320x240": "320x240/4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg",
+            "scaled32x32": "32x32/4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg",
+            "scaled600x600": "600x600/4d4dfd5b-6f2b-4d99-98e5-1694a8283c54.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 105
+    },
+    {
+        "fields": {
+            "file": "b2ee3866-3696-4ac0-921e-09758a57a641.JPG",
+            "name": "Mayak logo",
+            "organization": 21,
+            "scaled112x32": "112x32/b2ee3866-3696-4ac0-921e-09758a57a641.JPG",
+            "scaled128x128": "128x128/b2ee3866-3696-4ac0-921e-09758a57a641.JPG",
+            "scaled320x240": "320x240/b2ee3866-3696-4ac0-921e-09758a57a641.JPG",
+            "scaled32x32": "32x32/b2ee3866-3696-4ac0-921e-09758a57a641.JPG",
+            "scaled600x600": "600x600/b2ee3866-3696-4ac0-921e-09758a57a641.JPG"
+        },
+        "model": "manager.LogoImage",
+        "pk": 106
+    },
+    {
+        "fields": {
+            "file": "50f15418-50ec-4666-918b-a4262e6cb4d2.jpg",
+            "name": "Logo Kultura",
+            "organization": 21,
+            "scaled112x32": "112x32/50f15418-50ec-4666-918b-a4262e6cb4d2.jpg",
+            "scaled128x128": "128x128/50f15418-50ec-4666-918b-a4262e6cb4d2.jpg",
+            "scaled320x240": "320x240/50f15418-50ec-4666-918b-a4262e6cb4d2.jpg",
+            "scaled32x32": "32x32/50f15418-50ec-4666-918b-a4262e6cb4d2.jpg",
+            "scaled600x600": "600x600/50f15418-50ec-4666-918b-a4262e6cb4d2.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 107
+    },
+    {
+        "fields": {
             "file": "df8fb621-301c-4f92-b792-0dd340451d8f.jpg",
             "name": "Radio BEO",
             "organization": 22,
@@ -1289,6 +1345,34 @@
     },
     {
         "fields": {
+            "file": "d4055bfb-f578-4b95-8438-ef8602dd20fd.png",
+            "name": "TRT",
+            "organization": 29,
+            "scaled112x32": "112x32/d4055bfb-f578-4b95-8438-ef8602dd20fd.png",
+            "scaled128x128": "128x128/d4055bfb-f578-4b95-8438-ef8602dd20fd.png",
+            "scaled320x240": "320x240/d4055bfb-f578-4b95-8438-ef8602dd20fd.png",
+            "scaled32x32": "32x32/d4055bfb-f578-4b95-8438-ef8602dd20fd.png",
+            "scaled600x600": "600x600/d4055bfb-f578-4b95-8438-ef8602dd20fd.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 122
+    },
+    {
+        "fields": {
+            "file": "3a2b0f4d-c2b0-4753-aa97-3658439d463c.png",
+            "name": "Radyo 1",
+            "organization": 29,
+            "scaled112x32": "112x32/3a2b0f4d-c2b0-4753-aa97-3658439d463c.png",
+            "scaled128x128": "128x128/3a2b0f4d-c2b0-4753-aa97-3658439d463c.png",
+            "scaled320x240": "320x240/3a2b0f4d-c2b0-4753-aa97-3658439d463c.png",
+            "scaled32x32": "32x32/3a2b0f4d-c2b0-4753-aa97-3658439d463c.png",
+            "scaled600x600": "600x600/3a2b0f4d-c2b0-4753-aa97-3658439d463c.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 126
+    },
+    {
+        "fields": {
             "file": "7ad53d17-4950-4ef3-8e48-59e3b1dabd1f.jpg",
             "name": "Dvojka",
             "organization": 20,
@@ -1429,6 +1513,90 @@
     },
     {
         "fields": {
+            "file": "1047b93a-89a0-4f41-b22d-d8571a661188.png",
+            "name": "Radyo3",
+            "organization": 29,
+            "scaled112x32": "112x32/1047b93a-89a0-4f41-b22d-d8571a661188.png",
+            "scaled128x128": "128x128/1047b93a-89a0-4f41-b22d-d8571a661188.png",
+            "scaled320x240": "320x240/1047b93a-89a0-4f41-b22d-d8571a661188.png",
+            "scaled32x32": "32x32/1047b93a-89a0-4f41-b22d-d8571a661188.png",
+            "scaled600x600": "600x600/1047b93a-89a0-4f41-b22d-d8571a661188.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 138
+    },
+    {
+        "fields": {
+            "file": "f638f2a1-183c-4b10-ba39-aaf412c3581e.png",
+            "name": "TRTFM",
+            "organization": 29,
+            "scaled112x32": "112x32/f638f2a1-183c-4b10-ba39-aaf412c3581e.png",
+            "scaled128x128": "128x128/f638f2a1-183c-4b10-ba39-aaf412c3581e.png",
+            "scaled320x240": "320x240/f638f2a1-183c-4b10-ba39-aaf412c3581e.png",
+            "scaled32x32": "32x32/f638f2a1-183c-4b10-ba39-aaf412c3581e.png",
+            "scaled600x600": "600x600/f638f2a1-183c-4b10-ba39-aaf412c3581e.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 139
+    },
+    {
+        "fields": {
+            "file": "31ad064c-b9f3-4b87-be3e-78edb848bd80.png",
+            "name": "TRTTurku",
+            "organization": 29,
+            "scaled112x32": "112x32/31ad064c-b9f3-4b87-be3e-78edb848bd80.png",
+            "scaled128x128": "128x128/31ad064c-b9f3-4b87-be3e-78edb848bd80.png",
+            "scaled320x240": "320x240/31ad064c-b9f3-4b87-be3e-78edb848bd80.png",
+            "scaled32x32": "32x32/31ad064c-b9f3-4b87-be3e-78edb848bd80.png",
+            "scaled600x600": "600x600/31ad064c-b9f3-4b87-be3e-78edb848bd80.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 140
+    },
+    {
+        "fields": {
+            "file": "dcb38f36-4567-4e71-9618-1bc38f78aeea.png",
+            "name": "TRTNagme",
+            "organization": 29,
+            "scaled112x32": "112x32/dcb38f36-4567-4e71-9618-1bc38f78aeea.png",
+            "scaled128x128": "128x128/dcb38f36-4567-4e71-9618-1bc38f78aeea.png",
+            "scaled320x240": "320x240/dcb38f36-4567-4e71-9618-1bc38f78aeea.png",
+            "scaled32x32": "32x32/dcb38f36-4567-4e71-9618-1bc38f78aeea.png",
+            "scaled600x600": "600x600/dcb38f36-4567-4e71-9618-1bc38f78aeea.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 141
+    },
+    {
+        "fields": {
+            "file": "b0d70a42-9f70-455e-950c-8d1d7192c5e3.png",
+            "name": "FM4",
+            "organization": 17,
+            "scaled112x32": "112x32/b0d70a42-9f70-455e-950c-8d1d7192c5e3.png",
+            "scaled128x128": "128x128/b0d70a42-9f70-455e-950c-8d1d7192c5e3.png",
+            "scaled320x240": "320x240/b0d70a42-9f70-455e-950c-8d1d7192c5e3.png",
+            "scaled32x32": "32x32/b0d70a42-9f70-455e-950c-8d1d7192c5e3.png",
+            "scaled600x600": "600x600/b0d70a42-9f70-455e-950c-8d1d7192c5e3.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 142
+    },
+    {
+        "fields": {
+            "file": "9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg",
+            "name": "ORF",
+            "organization": 17,
+            "scaled112x32": "112x32/9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg",
+            "scaled128x128": "128x128/9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg",
+            "scaled320x240": "320x240/9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg",
+            "scaled32x32": "32x32/9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg",
+            "scaled600x600": "600x600/9fa1ea91-b10f-4734-aedc-bd514fe043a1.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 144
+    },
+    {
+        "fields": {
             "file": "95d66082-ead8-4bb6-a816-2d5c2c3d8418.png",
             "name": "RRO",
             "organization": 30,
@@ -1454,6 +1622,160 @@
         },
         "model": "manager.LogoImage",
         "pk": 146
+    },
+    {
+        "fields": {
+            "file": "3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png",
+            "name": "OE1",
+            "organization": 17,
+            "scaled112x32": "112x32/3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png",
+            "scaled128x128": "128x128/3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png",
+            "scaled320x240": "320x240/3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png",
+            "scaled32x32": "32x32/3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png",
+            "scaled600x600": "600x600/3bc2f6c9-d6e7-4c5b-b26a-465cc258af3b.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 147
+    },
+    {
+        "fields": {
+            "file": "b30d701a-74fc-4c57-b6b6-debef4312b55.png",
+            "name": "Hitradio OE3",
+            "organization": 17,
+            "scaled112x32": "112x32/b30d701a-74fc-4c57-b6b6-debef4312b55.png",
+            "scaled128x128": "128x128/b30d701a-74fc-4c57-b6b6-debef4312b55.png",
+            "scaled320x240": "320x240/b30d701a-74fc-4c57-b6b6-debef4312b55.png",
+            "scaled32x32": "32x32/b30d701a-74fc-4c57-b6b6-debef4312b55.png",
+            "scaled600x600": "600x600/b30d701a-74fc-4c57-b6b6-debef4312b55.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 148
+    },
+    {
+        "fields": {
+            "file": "89d2d6b2-3af0-44a8-9969-dc2d3271c792.png",
+            "name": "Burgenland",
+            "organization": 17,
+            "scaled112x32": "112x32/89d2d6b2-3af0-44a8-9969-dc2d3271c792.png",
+            "scaled128x128": "128x128/89d2d6b2-3af0-44a8-9969-dc2d3271c792.png",
+            "scaled320x240": "320x240/89d2d6b2-3af0-44a8-9969-dc2d3271c792.png",
+            "scaled32x32": "32x32/89d2d6b2-3af0-44a8-9969-dc2d3271c792.png",
+            "scaled600x600": "600x600/89d2d6b2-3af0-44a8-9969-dc2d3271c792.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 149
+    },
+    {
+        "fields": {
+            "file": "39a05e73-70e8-4347-b85c-832d8bdc0f07.png",
+            "name": "Kaernten",
+            "organization": 17,
+            "scaled112x32": "112x32/39a05e73-70e8-4347-b85c-832d8bdc0f07.png",
+            "scaled128x128": "128x128/39a05e73-70e8-4347-b85c-832d8bdc0f07.png",
+            "scaled320x240": "320x240/39a05e73-70e8-4347-b85c-832d8bdc0f07.png",
+            "scaled32x32": "32x32/39a05e73-70e8-4347-b85c-832d8bdc0f07.png",
+            "scaled600x600": "600x600/39a05e73-70e8-4347-b85c-832d8bdc0f07.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 150
+    },
+    {
+        "fields": {
+            "file": "f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png",
+            "name": "Niederoesterreich",
+            "organization": 17,
+            "scaled112x32": "112x32/f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png",
+            "scaled128x128": "128x128/f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png",
+            "scaled320x240": "320x240/f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png",
+            "scaled32x32": "32x32/f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png",
+            "scaled600x600": "600x600/f677573e-2215-4e29-a0d0-dd2e06cfd1e3.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 151
+    },
+    {
+        "fields": {
+            "file": "d3cc4d57-8157-4239-9971-be73ff2a83ff.png",
+            "name": "Oberoesterreich",
+            "organization": 17,
+            "scaled112x32": "112x32/d3cc4d57-8157-4239-9971-be73ff2a83ff.png",
+            "scaled128x128": "128x128/d3cc4d57-8157-4239-9971-be73ff2a83ff.png",
+            "scaled320x240": "320x240/d3cc4d57-8157-4239-9971-be73ff2a83ff.png",
+            "scaled32x32": "32x32/d3cc4d57-8157-4239-9971-be73ff2a83ff.png",
+            "scaled600x600": "600x600/d3cc4d57-8157-4239-9971-be73ff2a83ff.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 152
+    },
+    {
+        "fields": {
+            "file": "1cd36139-fdfe-44de-b210-c91e2fc1ed03.png",
+            "name": "Salzburg",
+            "organization": 17,
+            "scaled112x32": "112x32/1cd36139-fdfe-44de-b210-c91e2fc1ed03.png",
+            "scaled128x128": "128x128/1cd36139-fdfe-44de-b210-c91e2fc1ed03.png",
+            "scaled320x240": "320x240/1cd36139-fdfe-44de-b210-c91e2fc1ed03.png",
+            "scaled32x32": "32x32/1cd36139-fdfe-44de-b210-c91e2fc1ed03.png",
+            "scaled600x600": "600x600/1cd36139-fdfe-44de-b210-c91e2fc1ed03.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 153
+    },
+    {
+        "fields": {
+            "file": "cc77bf73-4222-4fd7-80cc-804ea18e3571.png",
+            "name": "Steiermark",
+            "organization": 17,
+            "scaled112x32": "112x32/cc77bf73-4222-4fd7-80cc-804ea18e3571.png",
+            "scaled128x128": "128x128/cc77bf73-4222-4fd7-80cc-804ea18e3571.png",
+            "scaled320x240": "320x240/cc77bf73-4222-4fd7-80cc-804ea18e3571.png",
+            "scaled32x32": "32x32/cc77bf73-4222-4fd7-80cc-804ea18e3571.png",
+            "scaled600x600": "600x600/cc77bf73-4222-4fd7-80cc-804ea18e3571.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 154
+    },
+    {
+        "fields": {
+            "file": "51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png",
+            "name": "Tirol",
+            "organization": 17,
+            "scaled112x32": "112x32/51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png",
+            "scaled128x128": "128x128/51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png",
+            "scaled320x240": "320x240/51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png",
+            "scaled32x32": "32x32/51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png",
+            "scaled600x600": "600x600/51cb64e5-cc68-4ae7-a6c7-6f47566747b1.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 155
+    },
+    {
+        "fields": {
+            "file": "41f1c7e6-173c-4c30-9159-4a701be4efb5.png",
+            "name": "Vorarlberg",
+            "organization": 17,
+            "scaled112x32": "112x32/41f1c7e6-173c-4c30-9159-4a701be4efb5.png",
+            "scaled128x128": "128x128/41f1c7e6-173c-4c30-9159-4a701be4efb5.png",
+            "scaled320x240": "320x240/41f1c7e6-173c-4c30-9159-4a701be4efb5.png",
+            "scaled32x32": "32x32/41f1c7e6-173c-4c30-9159-4a701be4efb5.png",
+            "scaled600x600": "600x600/41f1c7e6-173c-4c30-9159-4a701be4efb5.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 156
+    },
+    {
+        "fields": {
+            "file": "275c911a-6eed-4fee-bc7a-2ac974f2cd52.png",
+            "name": "Wien",
+            "organization": 17,
+            "scaled112x32": "112x32/275c911a-6eed-4fee-bc7a-2ac974f2cd52.png",
+            "scaled128x128": "128x128/275c911a-6eed-4fee-bc7a-2ac974f2cd52.png",
+            "scaled320x240": "320x240/275c911a-6eed-4fee-bc7a-2ac974f2cd52.png",
+            "scaled32x32": "32x32/275c911a-6eed-4fee-bc7a-2ac974f2cd52.png",
+            "scaled600x600": "600x600/275c911a-6eed-4fee-bc7a-2ac974f2cd52.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 157
     },
     {
         "fields": {
@@ -1821,6 +2143,20 @@
     },
     {
         "fields": {
+            "file": "75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg",
+            "name": "AUDI_Logo",
+            "organization": 42,
+            "scaled112x32": "112x32/75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg",
+            "scaled128x128": "128x128/75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg",
+            "scaled320x240": "320x240/75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg",
+            "scaled32x32": "32x32/75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg",
+            "scaled600x600": "600x600/75e91517-7c1b-4728-a71f-cf7dcf5e826e.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 184
+    },
+    {
+        "fields": {
             "file": "0275274a-ff69-4e98-ab60-03173c175bb5.png",
             "name": "NRK P1 Buskerud",
             "organization": 6,
@@ -2087,6 +2423,216 @@
     },
     {
         "fields": {
+            "file": "4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg",
+            "name": "RadioDNSLogo",
+            "organization": 42,
+            "scaled112x32": "112x32/4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg",
+            "scaled128x128": "128x128/4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg",
+            "scaled320x240": "320x240/4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg",
+            "scaled32x32": "32x32/4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg",
+            "scaled600x600": "600x600/4d2a9505-c168-48c5-a7ed-b4c4b348f3aa.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 204
+    },
+    {
+        "fields": {
+            "file": "89d571ed-e345-4b61-889b-3f623c75b230.png",
+            "name": "testpicture",
+            "organization": 42,
+            "scaled112x32": "112x32/89d571ed-e345-4b61-889b-3f623c75b230.png",
+            "scaled128x128": "128x128/89d571ed-e345-4b61-889b-3f623c75b230.png",
+            "scaled320x240": "320x240/89d571ed-e345-4b61-889b-3f623c75b230.png",
+            "scaled32x32": "32x32/89d571ed-e345-4b61-889b-3f623c75b230.png",
+            "scaled600x600": "600x600/89d571ed-e345-4b61-889b-3f623c75b230.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 206
+    },
+    {
+        "fields": {
+            "file": "ced75e96-e9b4-4499-8a87-0b092569e99b.jpg",
+            "name": "audi_logo_new",
+            "organization": 42,
+            "scaled112x32": "112x32/ced75e96-e9b4-4499-8a87-0b092569e99b.jpg",
+            "scaled128x128": "128x128/ced75e96-e9b4-4499-8a87-0b092569e99b.jpg",
+            "scaled320x240": "320x240/ced75e96-e9b4-4499-8a87-0b092569e99b.jpg",
+            "scaled32x32": "32x32/ced75e96-e9b4-4499-8a87-0b092569e99b.jpg",
+            "scaled600x600": "600x600/ced75e96-e9b4-4499-8a87-0b092569e99b.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 207
+    },
+    {
+        "fields": {
+            "file": "05b5acfe-0474-4f6d-9132-b7a49f31fee7.png",
+            "name": "Test PNG",
+            "organization": 43,
+            "scaled112x32": "112x32/05b5acfe-0474-4f6d-9132-b7a49f31fee7.png",
+            "scaled128x128": "128x128/05b5acfe-0474-4f6d-9132-b7a49f31fee7.png",
+            "scaled320x240": "320x240/05b5acfe-0474-4f6d-9132-b7a49f31fee7.png",
+            "scaled32x32": "32x32/05b5acfe-0474-4f6d-9132-b7a49f31fee7.png",
+            "scaled600x600": "600x600/05b5acfe-0474-4f6d-9132-b7a49f31fee7.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 210
+    },
+    {
+        "fields": {
+            "file": "0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg",
+            "name": "Test JPG",
+            "organization": 43,
+            "scaled112x32": "112x32/0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg",
+            "scaled128x128": "128x128/0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg",
+            "scaled320x240": "320x240/0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg",
+            "scaled32x32": "32x32/0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg",
+            "scaled600x600": "600x600/0d1d1c4c-1111-4f34-8846-cf012a9fd80c.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 211
+    },
+    {
+        "fields": {
+            "file": "a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg",
+            "name": "rteradio1",
+            "organization": 43,
+            "scaled112x32": "112x32/a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg",
+            "scaled128x128": "128x128/a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg",
+            "scaled320x240": "320x240/a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg",
+            "scaled32x32": "32x32/a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg",
+            "scaled600x600": "600x600/a9b5e98f-15f6-4173-8726-a793c8a81e17.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 212
+    },
+    {
+        "fields": {
+            "file": "d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg",
+            "name": "rte2fm",
+            "organization": 43,
+            "scaled112x32": "112x32/d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg",
+            "scaled128x128": "128x128/d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg",
+            "scaled320x240": "320x240/d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg",
+            "scaled32x32": "32x32/d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg",
+            "scaled600x600": "600x600/d4394eca-fcea-40e1-a1c8-3760e8add9fd.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 213
+    },
+    {
+        "fields": {
+            "file": "07152b16-d727-4f91-a262-5748cdd74733.jpg",
+            "name": "rte2xm",
+            "organization": 43,
+            "scaled112x32": "112x32/07152b16-d727-4f91-a262-5748cdd74733.jpg",
+            "scaled128x128": "128x128/07152b16-d727-4f91-a262-5748cdd74733.jpg",
+            "scaled320x240": "320x240/07152b16-d727-4f91-a262-5748cdd74733.jpg",
+            "scaled32x32": "32x32/07152b16-d727-4f91-a262-5748cdd74733.jpg",
+            "scaled600x600": "600x600/07152b16-d727-4f91-a262-5748cdd74733.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 214
+    },
+    {
+        "fields": {
+            "file": "c93214e3-40c1-40ca-903f-233bd0176a09.jpg",
+            "name": "rteradio1extra",
+            "organization": 43,
+            "scaled112x32": "112x32/c93214e3-40c1-40ca-903f-233bd0176a09.jpg",
+            "scaled128x128": "128x128/c93214e3-40c1-40ca-903f-233bd0176a09.jpg",
+            "scaled320x240": "320x240/c93214e3-40c1-40ca-903f-233bd0176a09.jpg",
+            "scaled32x32": "32x32/c93214e3-40c1-40ca-903f-233bd0176a09.jpg",
+            "scaled600x600": "600x600/c93214e3-40c1-40ca-903f-233bd0176a09.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 215
+    },
+    {
+        "fields": {
+            "file": "4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg",
+            "name": "rtegold",
+            "organization": 43,
+            "scaled112x32": "112x32/4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg",
+            "scaled128x128": "128x128/4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg",
+            "scaled320x240": "320x240/4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg",
+            "scaled32x32": "32x32/4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg",
+            "scaled600x600": "600x600/4ddbbb20-4026-4123-b22e-6a8b7436fc45.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 216
+    },
+    {
+        "fields": {
+            "file": "02243c4e-08bb-411e-ab0f-e947dfebd444.jpg",
+            "name": "rtepulse",
+            "organization": 43,
+            "scaled112x32": "112x32/02243c4e-08bb-411e-ab0f-e947dfebd444.jpg",
+            "scaled128x128": "128x128/02243c4e-08bb-411e-ab0f-e947dfebd444.jpg",
+            "scaled320x240": "320x240/02243c4e-08bb-411e-ab0f-e947dfebd444.jpg",
+            "scaled32x32": "32x32/02243c4e-08bb-411e-ab0f-e947dfebd444.jpg",
+            "scaled600x600": "600x600/02243c4e-08bb-411e-ab0f-e947dfebd444.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 217
+    },
+    {
+        "fields": {
+            "file": "4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg",
+            "name": "rtelyric",
+            "organization": 43,
+            "scaled112x32": "112x32/4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg",
+            "scaled128x128": "128x128/4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg",
+            "scaled320x240": "320x240/4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg",
+            "scaled32x32": "32x32/4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg",
+            "scaled600x600": "600x600/4ca20917-649c-4828-ba9c-aac4c78b8f24.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 218
+    },
+    {
+        "fields": {
+            "file": "5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg",
+            "name": "rtejr",
+            "organization": 43,
+            "scaled112x32": "112x32/5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg",
+            "scaled128x128": "128x128/5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg",
+            "scaled320x240": "320x240/5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg",
+            "scaled32x32": "32x32/5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg",
+            "scaled600x600": "600x600/5519f9b3-5a1a-43a9-8d77-600d3ff23c54.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 219
+    },
+    {
+        "fields": {
+            "file": "1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg",
+            "name": "rternag",
+            "organization": 43,
+            "scaled112x32": "112x32/1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg",
+            "scaled128x128": "128x128/1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg",
+            "scaled320x240": "320x240/1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg",
+            "scaled32x32": "32x32/1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg",
+            "scaled600x600": "600x600/1af39f9e-8216-414d-b1d9-dc2284c9f7cb.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 220
+    },
+    {
+        "fields": {
+            "file": "b2be5a25-ac0e-49db-baa5-23ae81f19caf.png",
+            "name": "rtelogo",
+            "organization": 43,
+            "scaled112x32": "112x32/b2be5a25-ac0e-49db-baa5-23ae81f19caf.png",
+            "scaled128x128": "128x128/b2be5a25-ac0e-49db-baa5-23ae81f19caf.png",
+            "scaled320x240": "320x240/b2be5a25-ac0e-49db-baa5-23ae81f19caf.png",
+            "scaled32x32": "32x32/b2be5a25-ac0e-49db-baa5-23ae81f19caf.png",
+            "scaled600x600": "600x600/b2be5a25-ac0e-49db-baa5-23ae81f19caf.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 221
+    },
+    {
+        "fields": {
             "file": "b8a347d0-cd03-46eb-b340-09da8b6ffef1.png",
             "name": "NRK Trafikk",
             "organization": 6,
@@ -2098,6 +2644,48 @@
         },
         "model": "manager.LogoImage",
         "pk": 222
+    },
+    {
+        "fields": {
+            "file": "fa255c2f-8223-4c49-affa-5dde69b255b4.jpg",
+            "name": "SRF",
+            "organization": 44,
+            "scaled112x32": "112x32/fa255c2f-8223-4c49-affa-5dde69b255b4.jpg",
+            "scaled128x128": "128x128/fa255c2f-8223-4c49-affa-5dde69b255b4.jpg",
+            "scaled320x240": "320x240/fa255c2f-8223-4c49-affa-5dde69b255b4.jpg",
+            "scaled32x32": "32x32/fa255c2f-8223-4c49-affa-5dde69b255b4.jpg",
+            "scaled600x600": "600x600/fa255c2f-8223-4c49-affa-5dde69b255b4.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 223
+    },
+    {
+        "fields": {
+            "file": "7f0f68be-185a-4258-abeb-dad2d30e1092.png",
+            "name": "RADIOSwissJazz_600x600.png",
+            "organization": 44,
+            "scaled112x32": "112x32/7f0f68be-185a-4258-abeb-dad2d30e1092.png",
+            "scaled128x128": "128x128/7f0f68be-185a-4258-abeb-dad2d30e1092.png",
+            "scaled320x240": "320x240/7f0f68be-185a-4258-abeb-dad2d30e1092.png",
+            "scaled32x32": "32x32/7f0f68be-185a-4258-abeb-dad2d30e1092.png",
+            "scaled600x600": "600x600/7f0f68be-185a-4258-abeb-dad2d30e1092.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 231
+    },
+    {
+        "fields": {
+            "file": "73e72900-a201-4e13-9712-5b35e84bb767.png",
+            "name": "RADIOSwissPop_600x600.png",
+            "organization": 44,
+            "scaled112x32": "112x32/73e72900-a201-4e13-9712-5b35e84bb767.png",
+            "scaled128x128": "128x128/73e72900-a201-4e13-9712-5b35e84bb767.png",
+            "scaled320x240": "320x240/73e72900-a201-4e13-9712-5b35e84bb767.png",
+            "scaled32x32": "32x32/73e72900-a201-4e13-9712-5b35e84bb767.png",
+            "scaled600x600": "600x600/73e72900-a201-4e13-9712-5b35e84bb767.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 232
     },
     {
         "fields": {
@@ -2168,6 +2756,76 @@
         },
         "model": "manager.LogoImage",
         "pk": 248
+    },
+    {
+        "fields": {
+            "file": "58ca7808-1eaa-4dab-8395-3ee057668edb.png",
+            "name": "Ilmwelle90s",
+            "organization": 42,
+            "scaled112x32": "112x32/58ca7808-1eaa-4dab-8395-3ee057668edb.png",
+            "scaled128x128": "128x128/58ca7808-1eaa-4dab-8395-3ee057668edb.png",
+            "scaled320x240": "320x240/58ca7808-1eaa-4dab-8395-3ee057668edb.png",
+            "scaled32x32": "32x32/58ca7808-1eaa-4dab-8395-3ee057668edb.png",
+            "scaled600x600": "600x600/58ca7808-1eaa-4dab-8395-3ee057668edb.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 249
+    },
+    {
+        "fields": {
+            "file": "d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg",
+            "name": "AUDI_SommerKonzerte",
+            "organization": 42,
+            "scaled112x32": "112x32/d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg",
+            "scaled128x128": "128x128/d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg",
+            "scaled320x240": "320x240/d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg",
+            "scaled32x32": "32x32/d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg",
+            "scaled600x600": "600x600/d8028dca-5004-4d4a-a2ed-53d75ef3dafa.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 250
+    },
+    {
+        "fields": {
+            "file": "821e6641-eeed-4e72-b48a-01a3c3c77fae.png",
+            "name": "Radio Wroc\u0142aw",
+            "organization": 45,
+            "scaled112x32": "112x32/821e6641-eeed-4e72-b48a-01a3c3c77fae.png",
+            "scaled128x128": "128x128/821e6641-eeed-4e72-b48a-01a3c3c77fae.png",
+            "scaled320x240": "320x240/821e6641-eeed-4e72-b48a-01a3c3c77fae.png",
+            "scaled32x32": "32x32/821e6641-eeed-4e72-b48a-01a3c3c77fae.png",
+            "scaled600x600": "600x600/821e6641-eeed-4e72-b48a-01a3c3c77fae.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 252
+    },
+    {
+        "fields": {
+            "file": "752e0b86-c6f5-4564-bce2-6d4a4d70847a.png",
+            "name": "Radio RAM",
+            "organization": 45,
+            "scaled112x32": "112x32/752e0b86-c6f5-4564-bce2-6d4a4d70847a.png",
+            "scaled128x128": "128x128/752e0b86-c6f5-4564-bce2-6d4a4d70847a.png",
+            "scaled320x240": "320x240/752e0b86-c6f5-4564-bce2-6d4a4d70847a.png",
+            "scaled32x32": "32x32/752e0b86-c6f5-4564-bce2-6d4a4d70847a.png",
+            "scaled600x600": "600x600/752e0b86-c6f5-4564-bce2-6d4a4d70847a.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 253
+    },
+    {
+        "fields": {
+            "file": "cca4ebb3-23fc-4a14-88a9-062f1a770a70.png",
+            "name": "Radio Wroc\u0142aw Kultura",
+            "organization": 45,
+            "scaled112x32": "112x32/cca4ebb3-23fc-4a14-88a9-062f1a770a70.png",
+            "scaled128x128": "128x128/cca4ebb3-23fc-4a14-88a9-062f1a770a70.png",
+            "scaled320x240": "320x240/cca4ebb3-23fc-4a14-88a9-062f1a770a70.png",
+            "scaled32x32": "32x32/cca4ebb3-23fc-4a14-88a9-062f1a770a70.png",
+            "scaled600x600": "600x600/cca4ebb3-23fc-4a14-88a9-062f1a770a70.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 254
     },
     {
         "fields": {
@@ -2535,6 +3193,20 @@
     },
     {
         "fields": {
+            "file": "24f1ff97-9936-4924-878a-41f111c85860.JPG",
+            "name": "Aptiv_black",
+            "organization": 42,
+            "scaled112x32": "112x32/24f1ff97-9936-4924-878a-41f111c85860.JPG",
+            "scaled128x128": "128x128/24f1ff97-9936-4924-878a-41f111c85860.JPG",
+            "scaled320x240": "320x240/24f1ff97-9936-4924-878a-41f111c85860.JPG",
+            "scaled32x32": "32x32/24f1ff97-9936-4924-878a-41f111c85860.JPG",
+            "scaled600x600": "600x600/24f1ff97-9936-4924-878a-41f111c85860.JPG"
+        },
+        "model": "manager.LogoImage",
+        "pk": 282
+    },
+    {
+        "fields": {
             "file": "64e35aac-34b7-4d6b-9654-65617a7c1dab.png",
             "name": "rairadio1sport_logo2",
             "organization": 15,
@@ -2563,6 +3235,90 @@
     },
     {
         "fields": {
+            "file": "360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg",
+            "name": "IRTLogo",
+            "organization": 46,
+            "scaled112x32": "112x32/360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg",
+            "scaled128x128": "128x128/360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg",
+            "scaled320x240": "320x240/360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg",
+            "scaled32x32": "32x32/360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg",
+            "scaled600x600": "600x600/360a57ed-6cf9-4c80-ab7b-675313e7ab1e.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 286
+    },
+    {
+        "fields": {
+            "file": "bfec62eb-4399-413b-bd13-424c4cc0a0e0.png",
+            "name": "RadioKrakow",
+            "organization": 42,
+            "scaled112x32": "112x32/bfec62eb-4399-413b-bd13-424c4cc0a0e0.png",
+            "scaled128x128": "128x128/bfec62eb-4399-413b-bd13-424c4cc0a0e0.png",
+            "scaled320x240": "320x240/bfec62eb-4399-413b-bd13-424c4cc0a0e0.png",
+            "scaled32x32": "32x32/bfec62eb-4399-413b-bd13-424c4cc0a0e0.png",
+            "scaled600x600": "600x600/bfec62eb-4399-413b-bd13-424c4cc0a0e0.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 287
+    },
+    {
+        "fields": {
+            "file": "e49fd611-5473-44aa-954e-4f832268f06b.png",
+            "name": "RadioPoland",
+            "organization": 42,
+            "scaled112x32": "112x32/e49fd611-5473-44aa-954e-4f832268f06b.png",
+            "scaled128x128": "128x128/e49fd611-5473-44aa-954e-4f832268f06b.png",
+            "scaled320x240": "320x240/e49fd611-5473-44aa-954e-4f832268f06b.png",
+            "scaled32x32": "32x32/e49fd611-5473-44aa-954e-4f832268f06b.png",
+            "scaled600x600": "600x600/e49fd611-5473-44aa-954e-4f832268f06b.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 288
+    },
+    {
+        "fields": {
+            "file": "ac70879c-54c1-474e-acbb-cecd784250ed.jpg",
+            "name": "Telemotive",
+            "organization": 42,
+            "scaled112x32": "112x32/ac70879c-54c1-474e-acbb-cecd784250ed.jpg",
+            "scaled128x128": "128x128/ac70879c-54c1-474e-acbb-cecd784250ed.jpg",
+            "scaled320x240": "320x240/ac70879c-54c1-474e-acbb-cecd784250ed.jpg",
+            "scaled32x32": "32x32/ac70879c-54c1-474e-acbb-cecd784250ed.jpg",
+            "scaled600x600": "600x600/ac70879c-54c1-474e-acbb-cecd784250ed.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 289
+    },
+    {
+        "fields": {
+            "file": "70980b22-f135-42ea-a7bb-dd663b125793.png",
+            "name": "OffRadioKrakow",
+            "organization": 42,
+            "scaled112x32": "112x32/70980b22-f135-42ea-a7bb-dd663b125793.png",
+            "scaled128x128": "128x128/70980b22-f135-42ea-a7bb-dd663b125793.png",
+            "scaled320x240": "320x240/70980b22-f135-42ea-a7bb-dd663b125793.png",
+            "scaled32x32": "32x32/70980b22-f135-42ea-a7bb-dd663b125793.png",
+            "scaled600x600": "600x600/70980b22-f135-42ea-a7bb-dd663b125793.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 290
+    },
+    {
+        "fields": {
+            "file": "689ecbff-5379-42bc-aa5c-2c28c2712291.png",
+            "name": "PRTrojka",
+            "organization": 42,
+            "scaled112x32": "112x32/689ecbff-5379-42bc-aa5c-2c28c2712291.png",
+            "scaled128x128": "128x128/689ecbff-5379-42bc-aa5c-2c28c2712291.png",
+            "scaled320x240": "320x240/689ecbff-5379-42bc-aa5c-2c28c2712291.png",
+            "scaled32x32": "32x32/689ecbff-5379-42bc-aa5c-2c28c2712291.png",
+            "scaled600x600": "600x600/689ecbff-5379-42bc-aa5c-2c28c2712291.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 291
+    },
+    {
+        "fields": {
             "file": "4979a2e6-72d1-45df-a28a-b0bf4fb28e87.png",
             "name": "test demo 2",
             "organization": 3,
@@ -2577,6 +3333,20 @@
     },
     {
         "fields": {
+            "file": "16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png",
+            "name": "HD-RADIO",
+            "organization": 42,
+            "scaled112x32": "112x32/16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png",
+            "scaled128x128": "128x128/16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png",
+            "scaled320x240": "320x240/16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png",
+            "scaled32x32": "32x32/16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png",
+            "scaled600x600": "600x600/16046b7b-ed82-4cc7-8db2-61d6f8526dc9.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 293
+    },
+    {
+        "fields": {
             "file": "78137f5a-8940-4a09-bf6a-c52e823577bc.jpeg",
             "name": "Banane Logo Jaune",
             "organization": 27,
@@ -2588,6 +3358,62 @@
         },
         "model": "manager.LogoImage",
         "pk": 294
+    },
+    {
+        "fields": {
+            "file": "d4709c0b-961d-4f74-bf71-5dc7b8a10850.png",
+            "name": "IRT-default-Logo",
+            "organization": 46,
+            "scaled112x32": "112x32/d4709c0b-961d-4f74-bf71-5dc7b8a10850.png",
+            "scaled128x128": "128x128/d4709c0b-961d-4f74-bf71-5dc7b8a10850.png",
+            "scaled320x240": "320x240/d4709c0b-961d-4f74-bf71-5dc7b8a10850.png",
+            "scaled32x32": "32x32/d4709c0b-961d-4f74-bf71-5dc7b8a10850.png",
+            "scaled600x600": "600x600/d4709c0b-961d-4f74-bf71-5dc7b8a10850.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 295
+    },
+    {
+        "fields": {
+            "file": "3e9998e6-ee33-4b68-a58c-0cd3313298c7.png",
+            "name": "BR-BRAND",
+            "organization": 48,
+            "scaled112x32": "112x32/3e9998e6-ee33-4b68-a58c-0cd3313298c7.png",
+            "scaled128x128": "128x128/3e9998e6-ee33-4b68-a58c-0cd3313298c7.png",
+            "scaled320x240": "320x240/3e9998e6-ee33-4b68-a58c-0cd3313298c7.png",
+            "scaled32x32": "32x32/3e9998e6-ee33-4b68-a58c-0cd3313298c7.png",
+            "scaled600x600": "600x600/3e9998e6-ee33-4b68-a58c-0cd3313298c7.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 296
+    },
+    {
+        "fields": {
+            "file": "e2b94626-439f-4141-9d1c-0750bd4bec29.png",
+            "name": "Bayern1",
+            "organization": 48,
+            "scaled112x32": "112x32/e2b94626-439f-4141-9d1c-0750bd4bec29.png",
+            "scaled128x128": "128x128/e2b94626-439f-4141-9d1c-0750bd4bec29.png",
+            "scaled320x240": "320x240/e2b94626-439f-4141-9d1c-0750bd4bec29.png",
+            "scaled32x32": "32x32/e2b94626-439f-4141-9d1c-0750bd4bec29.png",
+            "scaled600x600": "600x600/e2b94626-439f-4141-9d1c-0750bd4bec29.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 297
+    },
+    {
+        "fields": {
+            "file": "7b420f98-b919-4a28-b33e-a2035cc0a745.png",
+            "name": "Bayern2",
+            "organization": 48,
+            "scaled112x32": "112x32/7b420f98-b919-4a28-b33e-a2035cc0a745.png",
+            "scaled128x128": "128x128/7b420f98-b919-4a28-b33e-a2035cc0a745.png",
+            "scaled320x240": "320x240/7b420f98-b919-4a28-b33e-a2035cc0a745.png",
+            "scaled32x32": "32x32/7b420f98-b919-4a28-b33e-a2035cc0a745.png",
+            "scaled600x600": "600x600/7b420f98-b919-4a28-b33e-a2035cc0a745.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 298
     },
     {
         "fields": {
@@ -2633,6 +3459,286 @@
     },
     {
         "fields": {
+            "file": "5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png",
+            "name": "Bayern3",
+            "organization": 48,
+            "scaled112x32": "112x32/5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png",
+            "scaled128x128": "128x128/5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png",
+            "scaled320x240": "320x240/5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png",
+            "scaled32x32": "32x32/5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png",
+            "scaled600x600": "600x600/5e3641f3-b9bb-4ff3-bbf3-c9764f658bc5.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 302
+    },
+    {
+        "fields": {
+            "file": "e9adba53-ee8b-4fdc-88af-977f5bb0f829.png",
+            "name": "BR-Klassik",
+            "organization": 48,
+            "scaled112x32": "112x32/e9adba53-ee8b-4fdc-88af-977f5bb0f829.png",
+            "scaled128x128": "128x128/e9adba53-ee8b-4fdc-88af-977f5bb0f829.png",
+            "scaled320x240": "320x240/e9adba53-ee8b-4fdc-88af-977f5bb0f829.png",
+            "scaled32x32": "32x32/e9adba53-ee8b-4fdc-88af-977f5bb0f829.png",
+            "scaled600x600": "600x600/e9adba53-ee8b-4fdc-88af-977f5bb0f829.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 303
+    },
+    {
+        "fields": {
+            "file": "3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png",
+            "name": "B5-aktuell",
+            "organization": 48,
+            "scaled112x32": "112x32/3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png",
+            "scaled128x128": "128x128/3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png",
+            "scaled320x240": "320x240/3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png",
+            "scaled32x32": "32x32/3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png",
+            "scaled600x600": "600x600/3c970d8c-a3e6-4db4-83fc-4d6f20f2cb80.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 304
+    },
+    {
+        "fields": {
+            "file": "c35c2a18-0c03-4159-9227-57cffc092d4c.png",
+            "name": "B5 plus",
+            "organization": 48,
+            "scaled112x32": "112x32/c35c2a18-0c03-4159-9227-57cffc092d4c.png",
+            "scaled128x128": "128x128/c35c2a18-0c03-4159-9227-57cffc092d4c.png",
+            "scaled320x240": "320x240/c35c2a18-0c03-4159-9227-57cffc092d4c.png",
+            "scaled32x32": "32x32/c35c2a18-0c03-4159-9227-57cffc092d4c.png",
+            "scaled600x600": "600x600/c35c2a18-0c03-4159-9227-57cffc092d4c.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 305
+    },
+    {
+        "fields": {
+            "file": "e57156d2-092d-47d4-ba61-fcf9f554bfb6.png",
+            "name": "Bayern+",
+            "organization": 48,
+            "scaled112x32": "112x32/e57156d2-092d-47d4-ba61-fcf9f554bfb6.png",
+            "scaled128x128": "128x128/e57156d2-092d-47d4-ba61-fcf9f554bfb6.png",
+            "scaled320x240": "320x240/e57156d2-092d-47d4-ba61-fcf9f554bfb6.png",
+            "scaled32x32": "32x32/e57156d2-092d-47d4-ba61-fcf9f554bfb6.png",
+            "scaled600x600": "600x600/e57156d2-092d-47d4-ba61-fcf9f554bfb6.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 306
+    },
+    {
+        "fields": {
+            "file": "595a9c39-75ab-4457-a648-0a53c8f3b1ff.png",
+            "name": "PULS",
+            "organization": 48,
+            "scaled112x32": "112x32/595a9c39-75ab-4457-a648-0a53c8f3b1ff.png",
+            "scaled128x128": "128x128/595a9c39-75ab-4457-a648-0a53c8f3b1ff.png",
+            "scaled320x240": "320x240/595a9c39-75ab-4457-a648-0a53c8f3b1ff.png",
+            "scaled32x32": "32x32/595a9c39-75ab-4457-a648-0a53c8f3b1ff.png",
+            "scaled600x600": "600x600/595a9c39-75ab-4457-a648-0a53c8f3b1ff.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 307
+    },
+    {
+        "fields": {
+            "file": "8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png",
+            "name": "BR Heimat",
+            "organization": 48,
+            "scaled112x32": "112x32/8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png",
+            "scaled128x128": "128x128/8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png",
+            "scaled320x240": "320x240/8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png",
+            "scaled32x32": "32x32/8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png",
+            "scaled600x600": "600x600/8fb6ee69-c401-4cd8-8e33-b7eab3b3be69.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 308
+    },
+    {
+        "fields": {
+            "file": "3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png",
+            "name": "HR-Brand",
+            "organization": 49,
+            "scaled112x32": "112x32/3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png",
+            "scaled128x128": "128x128/3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png",
+            "scaled320x240": "320x240/3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png",
+            "scaled32x32": "32x32/3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png",
+            "scaled600x600": "600x600/3a41f2f6-5ce7-4a59-93e8-84b63c250cff.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 309
+    },
+    {
+        "fields": {
+            "file": "e0cf32ae-26e0-4c1f-8cbc-685324886556.png",
+            "name": "hr1",
+            "organization": 49,
+            "scaled112x32": "112x32/e0cf32ae-26e0-4c1f-8cbc-685324886556.png",
+            "scaled128x128": "128x128/e0cf32ae-26e0-4c1f-8cbc-685324886556.png",
+            "scaled320x240": "320x240/e0cf32ae-26e0-4c1f-8cbc-685324886556.png",
+            "scaled32x32": "32x32/e0cf32ae-26e0-4c1f-8cbc-685324886556.png",
+            "scaled600x600": "600x600/e0cf32ae-26e0-4c1f-8cbc-685324886556.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 310
+    },
+    {
+        "fields": {
+            "file": "6d3dff01-f235-442c-9aa6-d3bd012bffd4.png",
+            "name": "hr2 kultur",
+            "organization": 49,
+            "scaled112x32": "112x32/6d3dff01-f235-442c-9aa6-d3bd012bffd4.png",
+            "scaled128x128": "128x128/6d3dff01-f235-442c-9aa6-d3bd012bffd4.png",
+            "scaled320x240": "320x240/6d3dff01-f235-442c-9aa6-d3bd012bffd4.png",
+            "scaled32x32": "32x32/6d3dff01-f235-442c-9aa6-d3bd012bffd4.png",
+            "scaled600x600": "600x600/6d3dff01-f235-442c-9aa6-d3bd012bffd4.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 311
+    },
+    {
+        "fields": {
+            "file": "3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png",
+            "name": "hr3",
+            "organization": 49,
+            "scaled112x32": "112x32/3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png",
+            "scaled128x128": "128x128/3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png",
+            "scaled320x240": "320x240/3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png",
+            "scaled32x32": "32x32/3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png",
+            "scaled600x600": "600x600/3b70f414-0ae2-4b5c-afea-e2313a70c8c4.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 312
+    },
+    {
+        "fields": {
+            "file": "6073983b-084e-479c-a468-dbcc86ec4d3c.png",
+            "name": "hr4",
+            "organization": 49,
+            "scaled112x32": "112x32/6073983b-084e-479c-a468-dbcc86ec4d3c.png",
+            "scaled128x128": "128x128/6073983b-084e-479c-a468-dbcc86ec4d3c.png",
+            "scaled320x240": "320x240/6073983b-084e-479c-a468-dbcc86ec4d3c.png",
+            "scaled32x32": "32x32/6073983b-084e-479c-a468-dbcc86ec4d3c.png",
+            "scaled600x600": "600x600/6073983b-084e-479c-a468-dbcc86ec4d3c.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 313
+    },
+    {
+        "fields": {
+            "file": "c206df38-480b-408b-89a9-c2b621c69334.png",
+            "name": "youfm",
+            "organization": 49,
+            "scaled112x32": "112x32/c206df38-480b-408b-89a9-c2b621c69334.png",
+            "scaled128x128": "128x128/c206df38-480b-408b-89a9-c2b621c69334.png",
+            "scaled320x240": "320x240/c206df38-480b-408b-89a9-c2b621c69334.png",
+            "scaled32x32": "32x32/c206df38-480b-408b-89a9-c2b621c69334.png",
+            "scaled600x600": "600x600/c206df38-480b-408b-89a9-c2b621c69334.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 314
+    },
+    {
+        "fields": {
+            "file": "94e79c09-d53b-4778-9e60-9b50f880923a.png",
+            "name": "hr iNFO",
+            "organization": 49,
+            "scaled112x32": "112x32/94e79c09-d53b-4778-9e60-9b50f880923a.png",
+            "scaled128x128": "128x128/94e79c09-d53b-4778-9e60-9b50f880923a.png",
+            "scaled320x240": "320x240/94e79c09-d53b-4778-9e60-9b50f880923a.png",
+            "scaled32x32": "32x32/94e79c09-d53b-4778-9e60-9b50f880923a.png",
+            "scaled600x600": "600x600/94e79c09-d53b-4778-9e60-9b50f880923a.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 315
+    },
+    {
+        "fields": {
+            "file": "949a1811-e407-49f2-b7e2-28330c5f7e79.jpg",
+            "name": "etron_gt",
+            "organization": 42,
+            "scaled112x32": "112x32/949a1811-e407-49f2-b7e2-28330c5f7e79.jpg",
+            "scaled128x128": "128x128/949a1811-e407-49f2-b7e2-28330c5f7e79.jpg",
+            "scaled320x240": "320x240/949a1811-e407-49f2-b7e2-28330c5f7e79.jpg",
+            "scaled32x32": "32x32/949a1811-e407-49f2-b7e2-28330c5f7e79.jpg",
+            "scaled600x600": "600x600/949a1811-e407-49f2-b7e2-28330c5f7e79.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 316
+    },
+    {
+        "fields": {
+            "file": "306497b7-a4c3-4a78-9330-bb0f6faed684.png",
+            "name": "audiringe",
+            "organization": 42,
+            "scaled112x32": "112x32/306497b7-a4c3-4a78-9330-bb0f6faed684.png",
+            "scaled128x128": "128x128/306497b7-a4c3-4a78-9330-bb0f6faed684.png",
+            "scaled320x240": "320x240/306497b7-a4c3-4a78-9330-bb0f6faed684.png",
+            "scaled32x32": "32x32/306497b7-a4c3-4a78-9330-bb0f6faed684.png",
+            "scaled600x600": "600x600/306497b7-a4c3-4a78-9330-bb0f6faed684.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 317
+    },
+    {
+        "fields": {
+            "file": "c1cec402-80de-4812-a379-5b06a2805383.jpg",
+            "name": "AudiA1",
+            "organization": 42,
+            "scaled112x32": "112x32/c1cec402-80de-4812-a379-5b06a2805383.jpg",
+            "scaled128x128": "128x128/c1cec402-80de-4812-a379-5b06a2805383.jpg",
+            "scaled320x240": "320x240/c1cec402-80de-4812-a379-5b06a2805383.jpg",
+            "scaled32x32": "32x32/c1cec402-80de-4812-a379-5b06a2805383.jpg",
+            "scaled600x600": "600x600/c1cec402-80de-4812-a379-5b06a2805383.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 318
+    },
+    {
+        "fields": {
+            "file": "ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg",
+            "name": "A5",
+            "organization": 42,
+            "scaled112x32": "112x32/ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg",
+            "scaled128x128": "128x128/ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg",
+            "scaled320x240": "320x240/ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg",
+            "scaled32x32": "32x32/ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg",
+            "scaled600x600": "600x600/ffe51c54-9b85-4d77-85e2-ff74c6a42c5a.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 319
+    },
+    {
+        "fields": {
+            "file": "64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg",
+            "name": "RS7",
+            "organization": 42,
+            "scaled112x32": "112x32/64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg",
+            "scaled128x128": "128x128/64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg",
+            "scaled320x240": "320x240/64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg",
+            "scaled32x32": "32x32/64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg",
+            "scaled600x600": "600x600/64c181bd-867c-4ad1-b1c5-02c9f2bdfcb0.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 320
+    },
+    {
+        "fields": {
+            "file": "600019db-9478-4c65-a730-c1b7a678724c.jpg",
+            "name": "Q8",
+            "organization": 42,
+            "scaled112x32": "112x32/600019db-9478-4c65-a730-c1b7a678724c.jpg",
+            "scaled128x128": "128x128/600019db-9478-4c65-a730-c1b7a678724c.jpg",
+            "scaled320x240": "320x240/600019db-9478-4c65-a730-c1b7a678724c.jpg",
+            "scaled32x32": "32x32/600019db-9478-4c65-a730-c1b7a678724c.jpg",
+            "scaled600x600": "600x600/600019db-9478-4c65-a730-c1b7a678724c.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 321
+    },
+    {
+        "fields": {
             "file": "ffbefc2e-6955-4f63-becd-b31f3eb574ea.png",
             "name": "rairadio3classica_logo",
             "organization": 15,
@@ -2644,6 +3750,328 @@
         },
         "model": "manager.LogoImage",
         "pk": 322
+    },
+    {
+        "fields": {
+            "file": "59192fc1-63e6-49b3-95e9-38a7bc246776.png",
+            "name": "SWR-Brand",
+            "organization": 50,
+            "scaled112x32": "112x32/59192fc1-63e6-49b3-95e9-38a7bc246776.png",
+            "scaled128x128": "128x128/59192fc1-63e6-49b3-95e9-38a7bc246776.png",
+            "scaled320x240": "320x240/59192fc1-63e6-49b3-95e9-38a7bc246776.png",
+            "scaled32x32": "32x32/59192fc1-63e6-49b3-95e9-38a7bc246776.png",
+            "scaled600x600": "600x600/59192fc1-63e6-49b3-95e9-38a7bc246776.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 323
+    },
+    {
+        "fields": {
+            "file": "dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png",
+            "name": "SWR1",
+            "organization": 50,
+            "scaled112x32": "112x32/dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png",
+            "scaled128x128": "128x128/dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png",
+            "scaled320x240": "320x240/dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png",
+            "scaled32x32": "32x32/dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png",
+            "scaled600x600": "600x600/dd58b6c8-6d2d-4593-a47e-ceee6ca0f341.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 324
+    },
+    {
+        "fields": {
+            "file": "d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png",
+            "name": "SWR2",
+            "organization": 50,
+            "scaled112x32": "112x32/d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png",
+            "scaled128x128": "128x128/d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png",
+            "scaled320x240": "320x240/d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png",
+            "scaled32x32": "32x32/d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png",
+            "scaled600x600": "600x600/d7a3858a-41f0-4c74-b7be-fb7b56f7ad2c.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 325
+    },
+    {
+        "fields": {
+            "file": "ca166c0b-b717-4c11-864e-513568641afd.png",
+            "name": "SWR3",
+            "organization": 50,
+            "scaled112x32": "112x32/ca166c0b-b717-4c11-864e-513568641afd.png",
+            "scaled128x128": "128x128/ca166c0b-b717-4c11-864e-513568641afd.png",
+            "scaled320x240": "320x240/ca166c0b-b717-4c11-864e-513568641afd.png",
+            "scaled32x32": "32x32/ca166c0b-b717-4c11-864e-513568641afd.png",
+            "scaled600x600": "600x600/ca166c0b-b717-4c11-864e-513568641afd.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 326
+    },
+    {
+        "fields": {
+            "file": "228a4eb8-5f3f-488d-91e7-6b1270056455.png",
+            "name": "DASDING",
+            "organization": 50,
+            "scaled112x32": "112x32/228a4eb8-5f3f-488d-91e7-6b1270056455.png",
+            "scaled128x128": "128x128/228a4eb8-5f3f-488d-91e7-6b1270056455.png",
+            "scaled320x240": "320x240/228a4eb8-5f3f-488d-91e7-6b1270056455.png",
+            "scaled32x32": "32x32/228a4eb8-5f3f-488d-91e7-6b1270056455.png",
+            "scaled600x600": "600x600/228a4eb8-5f3f-488d-91e7-6b1270056455.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 327
+    },
+    {
+        "fields": {
+            "file": "5857a3d3-3b44-4435-9559-135d208bfc89.png",
+            "name": "SWRAktuell",
+            "organization": 50,
+            "scaled112x32": "112x32/5857a3d3-3b44-4435-9559-135d208bfc89.png",
+            "scaled128x128": "128x128/5857a3d3-3b44-4435-9559-135d208bfc89.png",
+            "scaled320x240": "320x240/5857a3d3-3b44-4435-9559-135d208bfc89.png",
+            "scaled32x32": "32x32/5857a3d3-3b44-4435-9559-135d208bfc89.png",
+            "scaled600x600": "600x600/5857a3d3-3b44-4435-9559-135d208bfc89.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 328
+    },
+    {
+        "fields": {
+            "file": "b25fc4ec-8322-4134-9036-4e50ca7d91cc.png",
+            "name": "SWR4Stuttgart",
+            "organization": 50,
+            "scaled112x32": "112x32/b25fc4ec-8322-4134-9036-4e50ca7d91cc.png",
+            "scaled128x128": "128x128/b25fc4ec-8322-4134-9036-4e50ca7d91cc.png",
+            "scaled320x240": "320x240/b25fc4ec-8322-4134-9036-4e50ca7d91cc.png",
+            "scaled32x32": "32x32/b25fc4ec-8322-4134-9036-4e50ca7d91cc.png",
+            "scaled600x600": "600x600/b25fc4ec-8322-4134-9036-4e50ca7d91cc.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 329
+    },
+    {
+        "fields": {
+            "file": "54af0056-507f-4cd7-86b8-a99498e1afbc.png",
+            "name": "SWR4Karlsruhe",
+            "organization": 50,
+            "scaled112x32": "112x32/54af0056-507f-4cd7-86b8-a99498e1afbc.png",
+            "scaled128x128": "128x128/54af0056-507f-4cd7-86b8-a99498e1afbc.png",
+            "scaled320x240": "320x240/54af0056-507f-4cd7-86b8-a99498e1afbc.png",
+            "scaled32x32": "32x32/54af0056-507f-4cd7-86b8-a99498e1afbc.png",
+            "scaled600x600": "600x600/54af0056-507f-4cd7-86b8-a99498e1afbc.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 330
+    },
+    {
+        "fields": {
+            "file": "fcd00b0b-467a-4a72-970e-07783ebe2819.png",
+            "name": "SWR4Suedbaden",
+            "organization": 50,
+            "scaled112x32": "112x32/fcd00b0b-467a-4a72-970e-07783ebe2819.png",
+            "scaled128x128": "128x128/fcd00b0b-467a-4a72-970e-07783ebe2819.png",
+            "scaled320x240": "320x240/fcd00b0b-467a-4a72-970e-07783ebe2819.png",
+            "scaled32x32": "32x32/fcd00b0b-467a-4a72-970e-07783ebe2819.png",
+            "scaled600x600": "600x600/fcd00b0b-467a-4a72-970e-07783ebe2819.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 331
+    },
+    {
+        "fields": {
+            "file": "7380e064-12f0-4abf-a9c5-c682b73120e6.png",
+            "name": "SWR4Friedrichshafen",
+            "organization": 50,
+            "scaled112x32": "112x32/7380e064-12f0-4abf-a9c5-c682b73120e6.png",
+            "scaled128x128": "128x128/7380e064-12f0-4abf-a9c5-c682b73120e6.png",
+            "scaled320x240": "320x240/7380e064-12f0-4abf-a9c5-c682b73120e6.png",
+            "scaled32x32": "32x32/7380e064-12f0-4abf-a9c5-c682b73120e6.png",
+            "scaled600x600": "600x600/7380e064-12f0-4abf-a9c5-c682b73120e6.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 332
+    },
+    {
+        "fields": {
+            "file": "f2d65e52-0dad-498f-a372-df6320711647.png",
+            "name": "SWR4Heilbronn",
+            "organization": 50,
+            "scaled112x32": "112x32/f2d65e52-0dad-498f-a372-df6320711647.png",
+            "scaled128x128": "128x128/f2d65e52-0dad-498f-a372-df6320711647.png",
+            "scaled320x240": "320x240/f2d65e52-0dad-498f-a372-df6320711647.png",
+            "scaled32x32": "32x32/f2d65e52-0dad-498f-a372-df6320711647.png",
+            "scaled600x600": "600x600/f2d65e52-0dad-498f-a372-df6320711647.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 333
+    },
+    {
+        "fields": {
+            "file": "d872c6f7-3f43-4141-925b-167d82b81e6b.png",
+            "name": "SWR4Kaiserslautern",
+            "organization": 50,
+            "scaled112x32": "112x32/d872c6f7-3f43-4141-925b-167d82b81e6b.png",
+            "scaled128x128": "128x128/d872c6f7-3f43-4141-925b-167d82b81e6b.png",
+            "scaled320x240": "320x240/d872c6f7-3f43-4141-925b-167d82b81e6b.png",
+            "scaled32x32": "32x32/d872c6f7-3f43-4141-925b-167d82b81e6b.png",
+            "scaled600x600": "600x600/d872c6f7-3f43-4141-925b-167d82b81e6b.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 334
+    },
+    {
+        "fields": {
+            "file": "294acf33-1c81-4999-addf-caa86607b72e.png",
+            "name": "SWR4Koblenz",
+            "organization": 50,
+            "scaled112x32": "112x32/294acf33-1c81-4999-addf-caa86607b72e.png",
+            "scaled128x128": "128x128/294acf33-1c81-4999-addf-caa86607b72e.png",
+            "scaled320x240": "320x240/294acf33-1c81-4999-addf-caa86607b72e.png",
+            "scaled32x32": "32x32/294acf33-1c81-4999-addf-caa86607b72e.png",
+            "scaled600x600": "600x600/294acf33-1c81-4999-addf-caa86607b72e.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 335
+    },
+    {
+        "fields": {
+            "file": "6fa2bf96-3a71-463b-8cf0-af740d54c93e.png",
+            "name": "SWR4Ludwigshafen",
+            "organization": 50,
+            "scaled112x32": "112x32/6fa2bf96-3a71-463b-8cf0-af740d54c93e.png",
+            "scaled128x128": "128x128/6fa2bf96-3a71-463b-8cf0-af740d54c93e.png",
+            "scaled320x240": "320x240/6fa2bf96-3a71-463b-8cf0-af740d54c93e.png",
+            "scaled32x32": "32x32/6fa2bf96-3a71-463b-8cf0-af740d54c93e.png",
+            "scaled600x600": "600x600/6fa2bf96-3a71-463b-8cf0-af740d54c93e.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 336
+    },
+    {
+        "fields": {
+            "file": "41f4c5da-d043-40e2-8e69-15242137412f.png",
+            "name": "SWR4Mainz",
+            "organization": 50,
+            "scaled112x32": "112x32/41f4c5da-d043-40e2-8e69-15242137412f.png",
+            "scaled128x128": "128x128/41f4c5da-d043-40e2-8e69-15242137412f.png",
+            "scaled320x240": "320x240/41f4c5da-d043-40e2-8e69-15242137412f.png",
+            "scaled32x32": "32x32/41f4c5da-d043-40e2-8e69-15242137412f.png",
+            "scaled600x600": "600x600/41f4c5da-d043-40e2-8e69-15242137412f.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 337
+    },
+    {
+        "fields": {
+            "file": "cbd4f82c-b413-405d-934c-5b099bb8c784.png",
+            "name": "SWR4Mannheim",
+            "organization": 50,
+            "scaled112x32": "112x32/cbd4f82c-b413-405d-934c-5b099bb8c784.png",
+            "scaled128x128": "128x128/cbd4f82c-b413-405d-934c-5b099bb8c784.png",
+            "scaled320x240": "320x240/cbd4f82c-b413-405d-934c-5b099bb8c784.png",
+            "scaled32x32": "32x32/cbd4f82c-b413-405d-934c-5b099bb8c784.png",
+            "scaled600x600": "600x600/cbd4f82c-b413-405d-934c-5b099bb8c784.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 338
+    },
+    {
+        "fields": {
+            "file": "53b7f293-92f9-4e0e-bbff-d655bf85b924.png",
+            "name": "SWR4Trier",
+            "organization": 50,
+            "scaled112x32": "112x32/53b7f293-92f9-4e0e-bbff-d655bf85b924.png",
+            "scaled128x128": "128x128/53b7f293-92f9-4e0e-bbff-d655bf85b924.png",
+            "scaled320x240": "320x240/53b7f293-92f9-4e0e-bbff-d655bf85b924.png",
+            "scaled32x32": "32x32/53b7f293-92f9-4e0e-bbff-d655bf85b924.png",
+            "scaled600x600": "600x600/53b7f293-92f9-4e0e-bbff-d655bf85b924.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 339
+    },
+    {
+        "fields": {
+            "file": "d9aa23d6-0518-459a-a4b9-90bc172d6362.png",
+            "name": "SWR4Tuebingen",
+            "organization": 50,
+            "scaled112x32": "112x32/d9aa23d6-0518-459a-a4b9-90bc172d6362.png",
+            "scaled128x128": "128x128/d9aa23d6-0518-459a-a4b9-90bc172d6362.png",
+            "scaled320x240": "320x240/d9aa23d6-0518-459a-a4b9-90bc172d6362.png",
+            "scaled32x32": "32x32/d9aa23d6-0518-459a-a4b9-90bc172d6362.png",
+            "scaled600x600": "600x600/d9aa23d6-0518-459a-a4b9-90bc172d6362.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 340
+    },
+    {
+        "fields": {
+            "file": "e31c4de8-ba44-4397-bc6d-6aefeabcf280.png",
+            "name": "SWR4Ulm",
+            "organization": 50,
+            "scaled112x32": "112x32/e31c4de8-ba44-4397-bc6d-6aefeabcf280.png",
+            "scaled128x128": "128x128/e31c4de8-ba44-4397-bc6d-6aefeabcf280.png",
+            "scaled320x240": "320x240/e31c4de8-ba44-4397-bc6d-6aefeabcf280.png",
+            "scaled32x32": "32x32/e31c4de8-ba44-4397-bc6d-6aefeabcf280.png",
+            "scaled600x600": "600x600/e31c4de8-ba44-4397-bc6d-6aefeabcf280.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 341
+    },
+    {
+        "fields": {
+            "file": "45d80368-4a16-46f6-9043-8c369bda8b06.png",
+            "name": "SWR4BW",
+            "organization": 50,
+            "scaled112x32": "112x32/45d80368-4a16-46f6-9043-8c369bda8b06.png",
+            "scaled128x128": "128x128/45d80368-4a16-46f6-9043-8c369bda8b06.png",
+            "scaled320x240": "320x240/45d80368-4a16-46f6-9043-8c369bda8b06.png",
+            "scaled32x32": "32x32/45d80368-4a16-46f6-9043-8c369bda8b06.png",
+            "scaled600x600": "600x600/45d80368-4a16-46f6-9043-8c369bda8b06.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 342
+    },
+    {
+        "fields": {
+            "file": "4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png",
+            "name": "SWR4RP",
+            "organization": 50,
+            "scaled112x32": "112x32/4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png",
+            "scaled128x128": "128x128/4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png",
+            "scaled320x240": "320x240/4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png",
+            "scaled32x32": "32x32/4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png",
+            "scaled600x600": "600x600/4afa2b7f-c2af-4dee-b25d-3fcc4fb043cd.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 343
+    },
+    {
+        "fields": {
+            "file": "4da10285-0412-4545-95ad-5ed6580b964f.png",
+            "name": "SWR1BW",
+            "organization": 50,
+            "scaled112x32": "112x32/4da10285-0412-4545-95ad-5ed6580b964f.png",
+            "scaled128x128": "128x128/4da10285-0412-4545-95ad-5ed6580b964f.png",
+            "scaled320x240": "320x240/4da10285-0412-4545-95ad-5ed6580b964f.png",
+            "scaled32x32": "32x32/4da10285-0412-4545-95ad-5ed6580b964f.png",
+            "scaled600x600": "600x600/4da10285-0412-4545-95ad-5ed6580b964f.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 344
+    },
+    {
+        "fields": {
+            "file": "d1158651-bb6d-4857-998f-df5de9aeacb0.png",
+            "name": "SWR1RP",
+            "organization": 50,
+            "scaled112x32": "112x32/d1158651-bb6d-4857-998f-df5de9aeacb0.png",
+            "scaled128x128": "128x128/d1158651-bb6d-4857-998f-df5de9aeacb0.png",
+            "scaled320x240": "320x240/d1158651-bb6d-4857-998f-df5de9aeacb0.png",
+            "scaled32x32": "32x32/d1158651-bb6d-4857-998f-df5de9aeacb0.png",
+            "scaled600x600": "600x600/d1158651-bb6d-4857-998f-df5de9aeacb0.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 345
     },
     {
         "fields": {
@@ -2773,6 +4201,20 @@
     },
     {
         "fields": {
+            "file": "377d214f-7052-4ecd-a538-7317f26d061a.png",
+            "name": "Radio RTR",
+            "organization": 47,
+            "scaled112x32": "112x32/377d214f-7052-4ecd-a538-7317f26d061a.png",
+            "scaled128x128": "128x128/377d214f-7052-4ecd-a538-7317f26d061a.png",
+            "scaled320x240": "320x240/377d214f-7052-4ecd-a538-7317f26d061a.png",
+            "scaled32x32": "32x32/377d214f-7052-4ecd-a538-7317f26d061a.png",
+            "scaled600x600": "600x600/377d214f-7052-4ecd-a538-7317f26d061a.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 357
+    },
+    {
+        "fields": {
             "file": "9b64d06d-192d-4e3b-b327-1cd49b0533a8.jpg",
             "name": "Rete Due",
             "organization": 2,
@@ -2868,5 +4310,831 @@
         },
         "model": "manager.LogoImage",
         "pk": 365
+    },
+    {
+        "fields": {
+            "file": "022599dc-fdf3-4c6e-9252-370b1b138af8.png",
+            "name": "RADIO SRF 1",
+            "organization": 44,
+            "scaled112x32": "112x32/022599dc-fdf3-4c6e-9252-370b1b138af8.png",
+            "scaled128x128": "128x128/022599dc-fdf3-4c6e-9252-370b1b138af8.png",
+            "scaled320x240": "320x240/022599dc-fdf3-4c6e-9252-370b1b138af8.png",
+            "scaled32x32": "32x32/022599dc-fdf3-4c6e-9252-370b1b138af8.png",
+            "scaled600x600": "600x600/022599dc-fdf3-4c6e-9252-370b1b138af8.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 366
+    },
+    {
+        "fields": {
+            "file": "8fd47802-5006-4fd1-ace8-ce9145e957bf.png",
+            "name": "RADIO SRF 1 Regionaljournal AG SO",
+            "organization": 44,
+            "scaled112x32": "112x32/8fd47802-5006-4fd1-ace8-ce9145e957bf.png",
+            "scaled128x128": "128x128/8fd47802-5006-4fd1-ace8-ce9145e957bf.png",
+            "scaled320x240": "320x240/8fd47802-5006-4fd1-ace8-ce9145e957bf.png",
+            "scaled32x32": "32x32/8fd47802-5006-4fd1-ace8-ce9145e957bf.png",
+            "scaled600x600": "600x600/8fd47802-5006-4fd1-ace8-ce9145e957bf.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 367
+    },
+    {
+        "fields": {
+            "file": "0c0c4f85-4b71-4a00-9ea2-980868334d46.png",
+            "name": "RADIO SRF 1 Regionaljournal BE FR VS",
+            "organization": 44,
+            "scaled112x32": "112x32/0c0c4f85-4b71-4a00-9ea2-980868334d46.png",
+            "scaled128x128": "128x128/0c0c4f85-4b71-4a00-9ea2-980868334d46.png",
+            "scaled320x240": "320x240/0c0c4f85-4b71-4a00-9ea2-980868334d46.png",
+            "scaled32x32": "32x32/0c0c4f85-4b71-4a00-9ea2-980868334d46.png",
+            "scaled600x600": "600x600/0c0c4f85-4b71-4a00-9ea2-980868334d46.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 368
+    },
+    {
+        "fields": {
+            "file": "23715adc-49a2-4132-a781-00a35f3eeba0.png",
+            "name": "RADIO SRF 1 Regionaljournal BS BL",
+            "organization": 44,
+            "scaled112x32": "112x32/23715adc-49a2-4132-a781-00a35f3eeba0.png",
+            "scaled128x128": "128x128/23715adc-49a2-4132-a781-00a35f3eeba0.png",
+            "scaled320x240": "320x240/23715adc-49a2-4132-a781-00a35f3eeba0.png",
+            "scaled32x32": "32x32/23715adc-49a2-4132-a781-00a35f3eeba0.png",
+            "scaled600x600": "600x600/23715adc-49a2-4132-a781-00a35f3eeba0.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 369
+    },
+    {
+        "fields": {
+            "file": "55f4db1d-7599-4776-b28c-48fb05d24a09.png",
+            "name": "RADIO SRF 1 Regionaljournal GR",
+            "organization": 44,
+            "scaled112x32": "112x32/55f4db1d-7599-4776-b28c-48fb05d24a09.png",
+            "scaled128x128": "128x128/55f4db1d-7599-4776-b28c-48fb05d24a09.png",
+            "scaled320x240": "320x240/55f4db1d-7599-4776-b28c-48fb05d24a09.png",
+            "scaled32x32": "32x32/55f4db1d-7599-4776-b28c-48fb05d24a09.png",
+            "scaled600x600": "600x600/55f4db1d-7599-4776-b28c-48fb05d24a09.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 370
+    },
+    {
+        "fields": {
+            "file": "24f8298f-3485-4aed-87d7-69c68e2132b8.png",
+            "name": "RADIO SRF 1 Regionaljournal Ost",
+            "organization": 44,
+            "scaled112x32": "112x32/24f8298f-3485-4aed-87d7-69c68e2132b8.png",
+            "scaled128x128": "128x128/24f8298f-3485-4aed-87d7-69c68e2132b8.png",
+            "scaled320x240": "320x240/24f8298f-3485-4aed-87d7-69c68e2132b8.png",
+            "scaled32x32": "32x32/24f8298f-3485-4aed-87d7-69c68e2132b8.png",
+            "scaled600x600": "600x600/24f8298f-3485-4aed-87d7-69c68e2132b8.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 371
+    },
+    {
+        "fields": {
+            "file": "54321d15-64fc-484e-9596-b12ad0fc1638.png",
+            "name": "RADIO SRF 1 Regionaljournal Zentralschweiz",
+            "organization": 44,
+            "scaled112x32": "112x32/54321d15-64fc-484e-9596-b12ad0fc1638.png",
+            "scaled128x128": "128x128/54321d15-64fc-484e-9596-b12ad0fc1638.png",
+            "scaled320x240": "320x240/54321d15-64fc-484e-9596-b12ad0fc1638.png",
+            "scaled32x32": "32x32/54321d15-64fc-484e-9596-b12ad0fc1638.png",
+            "scaled600x600": "600x600/54321d15-64fc-484e-9596-b12ad0fc1638.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 372
+    },
+    {
+        "fields": {
+            "file": "a8373849-b3ea-46af-a4fb-252b472345cd.png",
+            "name": "RADIO SRF 1 Regionaljournal ZH SH",
+            "organization": 44,
+            "scaled112x32": "112x32/a8373849-b3ea-46af-a4fb-252b472345cd.png",
+            "scaled128x128": "128x128/a8373849-b3ea-46af-a4fb-252b472345cd.png",
+            "scaled320x240": "320x240/a8373849-b3ea-46af-a4fb-252b472345cd.png",
+            "scaled32x32": "32x32/a8373849-b3ea-46af-a4fb-252b472345cd.png",
+            "scaled600x600": "600x600/a8373849-b3ea-46af-a4fb-252b472345cd.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 373
+    },
+    {
+        "fields": {
+            "file": "cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png",
+            "name": "RADIO SRF 2 Kultur",
+            "organization": 44,
+            "scaled112x32": "112x32/cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png",
+            "scaled128x128": "128x128/cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png",
+            "scaled320x240": "320x240/cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png",
+            "scaled32x32": "32x32/cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png",
+            "scaled600x600": "600x600/cd743c5e-514c-4e7c-bc9a-c551aa992a1a.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 374
+    },
+    {
+        "fields": {
+            "file": "4bfd05d0-d385-4b4e-b165-590da002ff84.png",
+            "name": "RADIO SRF 3",
+            "organization": 44,
+            "scaled112x32": "112x32/4bfd05d0-d385-4b4e-b165-590da002ff84.png",
+            "scaled128x128": "128x128/4bfd05d0-d385-4b4e-b165-590da002ff84.png",
+            "scaled320x240": "320x240/4bfd05d0-d385-4b4e-b165-590da002ff84.png",
+            "scaled32x32": "32x32/4bfd05d0-d385-4b4e-b165-590da002ff84.png",
+            "scaled600x600": "600x600/4bfd05d0-d385-4b4e-b165-590da002ff84.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 375
+    },
+    {
+        "fields": {
+            "file": "e4783dd2-d69b-437c-b852-aa5afe9d4385.png",
+            "name": "RADIO SRF Musikwelle",
+            "organization": 44,
+            "scaled112x32": "112x32/e4783dd2-d69b-437c-b852-aa5afe9d4385.png",
+            "scaled128x128": "128x128/e4783dd2-d69b-437c-b852-aa5afe9d4385.png",
+            "scaled320x240": "320x240/e4783dd2-d69b-437c-b852-aa5afe9d4385.png",
+            "scaled32x32": "32x32/e4783dd2-d69b-437c-b852-aa5afe9d4385.png",
+            "scaled600x600": "600x600/e4783dd2-d69b-437c-b852-aa5afe9d4385.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 377
+    },
+    {
+        "fields": {
+            "file": "dd1a41a3-141f-479b-b073-d828779e6c77.png",
+            "name": "RADIO SWISS CLASSIC (D)",
+            "organization": 44,
+            "scaled112x32": "112x32/dd1a41a3-141f-479b-b073-d828779e6c77.png",
+            "scaled128x128": "128x128/dd1a41a3-141f-479b-b073-d828779e6c77.png",
+            "scaled320x240": "320x240/dd1a41a3-141f-479b-b073-d828779e6c77.png",
+            "scaled32x32": "32x32/dd1a41a3-141f-479b-b073-d828779e6c77.png",
+            "scaled600x600": "600x600/dd1a41a3-141f-479b-b073-d828779e6c77.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 378
+    },
+    {
+        "fields": {
+            "file": "a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png",
+            "name": "RADIO SWISS CLASSIC (F)",
+            "organization": 44,
+            "scaled112x32": "112x32/a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png",
+            "scaled128x128": "128x128/a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png",
+            "scaled320x240": "320x240/a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png",
+            "scaled32x32": "32x32/a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png",
+            "scaled600x600": "600x600/a079f0dd-8b6a-44a8-a4ac-d6e5af2e1484.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 379
+    },
+    {
+        "fields": {
+            "file": "6b23d4df-473d-4beb-9b98-22823af39311.png",
+            "name": "RADIO SWISS CLASSIC (I)",
+            "organization": 44,
+            "scaled112x32": "112x32/6b23d4df-473d-4beb-9b98-22823af39311.png",
+            "scaled128x128": "128x128/6b23d4df-473d-4beb-9b98-22823af39311.png",
+            "scaled320x240": "320x240/6b23d4df-473d-4beb-9b98-22823af39311.png",
+            "scaled32x32": "32x32/6b23d4df-473d-4beb-9b98-22823af39311.png",
+            "scaled600x600": "600x600/6b23d4df-473d-4beb-9b98-22823af39311.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 380
+    },
+    {
+        "fields": {
+            "file": "8815f2b0-4d08-409b-ba95-980b899b6eac.png",
+            "name": "RADIO SRF Virus",
+            "organization": 44,
+            "scaled112x32": "112x32/8815f2b0-4d08-409b-ba95-980b899b6eac.png",
+            "scaled128x128": "128x128/8815f2b0-4d08-409b-ba95-980b899b6eac.png",
+            "scaled320x240": "320x240/8815f2b0-4d08-409b-ba95-980b899b6eac.png",
+            "scaled32x32": "32x32/8815f2b0-4d08-409b-ba95-980b899b6eac.png",
+            "scaled600x600": "600x600/8815f2b0-4d08-409b-ba95-980b899b6eac.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 381
+    },
+    {
+        "fields": {
+            "file": "b24b358a-aadb-4467-9ed5-53342b9ec3f1.png",
+            "name": "RADIO SWISS POP",
+            "organization": 44,
+            "scaled112x32": "112x32/b24b358a-aadb-4467-9ed5-53342b9ec3f1.png",
+            "scaled128x128": "128x128/b24b358a-aadb-4467-9ed5-53342b9ec3f1.png",
+            "scaled320x240": "320x240/b24b358a-aadb-4467-9ed5-53342b9ec3f1.png",
+            "scaled32x32": "32x32/b24b358a-aadb-4467-9ed5-53342b9ec3f1.png",
+            "scaled600x600": "600x600/b24b358a-aadb-4467-9ed5-53342b9ec3f1.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 382
+    },
+    {
+        "fields": {
+            "file": "33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png",
+            "name": "RADIO SWISS JAZZ",
+            "organization": 44,
+            "scaled112x32": "112x32/33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png",
+            "scaled128x128": "128x128/33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png",
+            "scaled320x240": "320x240/33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png",
+            "scaled32x32": "32x32/33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png",
+            "scaled600x600": "600x600/33278eb2-a8c2-4f7b-ab4f-1a35cff80fda.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 383
+    },
+    {
+        "fields": {
+            "file": "60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png",
+            "name": "RADIO SRF 4 News",
+            "organization": 44,
+            "scaled112x32": "112x32/60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png",
+            "scaled128x128": "128x128/60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png",
+            "scaled320x240": "320x240/60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png",
+            "scaled32x32": "32x32/60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png",
+            "scaled600x600": "600x600/60d0ed9a-f5ac-41c1-92bf-02e237e648a6.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 384
+    },
+    {
+        "fields": {
+            "file": "badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png",
+            "name": "WDR-BRAND",
+            "organization": 51,
+            "scaled112x32": "112x32/badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png",
+            "scaled128x128": "128x128/badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png",
+            "scaled320x240": "320x240/badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png",
+            "scaled32x32": "32x32/badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png",
+            "scaled600x600": "600x600/badd0d36-bb68-49a2-a144-7dbf5e76c9f2.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 385
+    },
+    {
+        "fields": {
+            "file": "810cedb8-9909-48d4-a25b-14f1ec6cbcae.png",
+            "name": "1LIVE",
+            "organization": 51,
+            "scaled112x32": "112x32/810cedb8-9909-48d4-a25b-14f1ec6cbcae.png",
+            "scaled128x128": "128x128/810cedb8-9909-48d4-a25b-14f1ec6cbcae.png",
+            "scaled320x240": "320x240/810cedb8-9909-48d4-a25b-14f1ec6cbcae.png",
+            "scaled32x32": "32x32/810cedb8-9909-48d4-a25b-14f1ec6cbcae.png",
+            "scaled600x600": "600x600/810cedb8-9909-48d4-a25b-14f1ec6cbcae.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 386
+    },
+    {
+        "fields": {
+            "file": "e2b27305-489f-4f37-9d8b-01cc6813a179.png",
+            "name": "1LIVE diggi",
+            "organization": 51,
+            "scaled112x32": "112x32/e2b27305-489f-4f37-9d8b-01cc6813a179.png",
+            "scaled128x128": "128x128/e2b27305-489f-4f37-9d8b-01cc6813a179.png",
+            "scaled320x240": "320x240/e2b27305-489f-4f37-9d8b-01cc6813a179.png",
+            "scaled32x32": "32x32/e2b27305-489f-4f37-9d8b-01cc6813a179.png",
+            "scaled600x600": "600x600/e2b27305-489f-4f37-9d8b-01cc6813a179.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 387
+    },
+    {
+        "fields": {
+            "file": "8900a590-8e3b-40f2-8863-b73360af6248.jpg",
+            "name": "WDR-Maus",
+            "organization": 51,
+            "scaled112x32": "112x32/8900a590-8e3b-40f2-8863-b73360af6248.jpg",
+            "scaled128x128": "128x128/8900a590-8e3b-40f2-8863-b73360af6248.jpg",
+            "scaled320x240": "320x240/8900a590-8e3b-40f2-8863-b73360af6248.jpg",
+            "scaled32x32": "32x32/8900a590-8e3b-40f2-8863-b73360af6248.jpg",
+            "scaled600x600": "600x600/8900a590-8e3b-40f2-8863-b73360af6248.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 388
+    },
+    {
+        "fields": {
+            "file": "9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png",
+            "name": "COSMO",
+            "organization": 51,
+            "scaled112x32": "112x32/9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png",
+            "scaled128x128": "128x128/9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png",
+            "scaled320x240": "320x240/9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png",
+            "scaled32x32": "32x32/9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png",
+            "scaled600x600": "600x600/9d1d2dc0-14df-4867-9d5e-a3c6b95c63f1.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 389
+    },
+    {
+        "fields": {
+            "file": "871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png",
+            "name": "WDR2",
+            "organization": 51,
+            "scaled112x32": "112x32/871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png",
+            "scaled128x128": "128x128/871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png",
+            "scaled320x240": "320x240/871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png",
+            "scaled32x32": "32x32/871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png",
+            "scaled600x600": "600x600/871a58e8-ed0f-4f50-a3b9-f8ac9c110f6d.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 390
+    },
+    {
+        "fields": {
+            "file": "357a5384-b2a8-4572-9e56-d0b2309f3c92.png",
+            "name": "WDR3",
+            "organization": 51,
+            "scaled112x32": "112x32/357a5384-b2a8-4572-9e56-d0b2309f3c92.png",
+            "scaled128x128": "128x128/357a5384-b2a8-4572-9e56-d0b2309f3c92.png",
+            "scaled320x240": "320x240/357a5384-b2a8-4572-9e56-d0b2309f3c92.png",
+            "scaled32x32": "32x32/357a5384-b2a8-4572-9e56-d0b2309f3c92.png",
+            "scaled600x600": "600x600/357a5384-b2a8-4572-9e56-d0b2309f3c92.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 391
+    },
+    {
+        "fields": {
+            "file": "baed85df-393b-47a8-8c12-7e608a55b4b3.png",
+            "name": "WDR4",
+            "organization": 51,
+            "scaled112x32": "112x32/baed85df-393b-47a8-8c12-7e608a55b4b3.png",
+            "scaled128x128": "128x128/baed85df-393b-47a8-8c12-7e608a55b4b3.png",
+            "scaled320x240": "320x240/baed85df-393b-47a8-8c12-7e608a55b4b3.png",
+            "scaled32x32": "32x32/baed85df-393b-47a8-8c12-7e608a55b4b3.png",
+            "scaled600x600": "600x600/baed85df-393b-47a8-8c12-7e608a55b4b3.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 392
+    },
+    {
+        "fields": {
+            "file": "fdb83e7b-4790-4e31-b75e-7f988d56fc75.png",
+            "name": "WDR5",
+            "organization": 51,
+            "scaled112x32": "112x32/fdb83e7b-4790-4e31-b75e-7f988d56fc75.png",
+            "scaled128x128": "128x128/fdb83e7b-4790-4e31-b75e-7f988d56fc75.png",
+            "scaled320x240": "320x240/fdb83e7b-4790-4e31-b75e-7f988d56fc75.png",
+            "scaled32x32": "32x32/fdb83e7b-4790-4e31-b75e-7f988d56fc75.png",
+            "scaled600x600": "600x600/fdb83e7b-4790-4e31-b75e-7f988d56fc75.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 393
+    },
+    {
+        "fields": {
+            "file": "0dfde526-2dd2-4065-b956-83779123f26f.png",
+            "name": "VERA",
+            "organization": 51,
+            "scaled112x32": "112x32/0dfde526-2dd2-4065-b956-83779123f26f.png",
+            "scaled128x128": "128x128/0dfde526-2dd2-4065-b956-83779123f26f.png",
+            "scaled320x240": "320x240/0dfde526-2dd2-4065-b956-83779123f26f.png",
+            "scaled32x32": "32x32/0dfde526-2dd2-4065-b956-83779123f26f.png",
+            "scaled600x600": "600x600/0dfde526-2dd2-4065-b956-83779123f26f.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 394
+    },
+    {
+        "fields": {
+            "file": "7d0ea6f2-de0a-41be-94df-abc55c060f99.png",
+            "name": "WDREVENT",
+            "organization": 51,
+            "scaled112x32": "112x32/7d0ea6f2-de0a-41be-94df-abc55c060f99.png",
+            "scaled128x128": "128x128/7d0ea6f2-de0a-41be-94df-abc55c060f99.png",
+            "scaled320x240": "320x240/7d0ea6f2-de0a-41be-94df-abc55c060f99.png",
+            "scaled32x32": "32x32/7d0ea6f2-de0a-41be-94df-abc55c060f99.png",
+            "scaled600x600": "600x600/7d0ea6f2-de0a-41be-94df-abc55c060f99.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 395
+    },
+    {
+        "fields": {
+            "file": "36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png",
+            "name": "SR-Brand",
+            "organization": 52,
+            "scaled112x32": "112x32/36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png",
+            "scaled128x128": "128x128/36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png",
+            "scaled320x240": "320x240/36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png",
+            "scaled32x32": "32x32/36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png",
+            "scaled600x600": "600x600/36fb2449-98ec-4ab3-98cc-b6d44c3b48c0.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 396
+    },
+    {
+        "fields": {
+            "file": "eb03d170-ea91-44f8-9a87-1a7a39fca99b.png",
+            "name": "UnserDing",
+            "organization": 52,
+            "scaled112x32": "112x32/eb03d170-ea91-44f8-9a87-1a7a39fca99b.png",
+            "scaled128x128": "128x128/eb03d170-ea91-44f8-9a87-1a7a39fca99b.png",
+            "scaled320x240": "320x240/eb03d170-ea91-44f8-9a87-1a7a39fca99b.png",
+            "scaled32x32": "32x32/eb03d170-ea91-44f8-9a87-1a7a39fca99b.png",
+            "scaled600x600": "600x600/eb03d170-ea91-44f8-9a87-1a7a39fca99b.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 397
+    },
+    {
+        "fields": {
+            "file": "ce354236-5064-4d85-a662-f0a6b77d44c5.png",
+            "name": "SR1 Europawelle",
+            "organization": 52,
+            "scaled112x32": "112x32/ce354236-5064-4d85-a662-f0a6b77d44c5.png",
+            "scaled128x128": "128x128/ce354236-5064-4d85-a662-f0a6b77d44c5.png",
+            "scaled320x240": "320x240/ce354236-5064-4d85-a662-f0a6b77d44c5.png",
+            "scaled32x32": "32x32/ce354236-5064-4d85-a662-f0a6b77d44c5.png",
+            "scaled600x600": "600x600/ce354236-5064-4d85-a662-f0a6b77d44c5.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 398
+    },
+    {
+        "fields": {
+            "file": "43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png",
+            "name": "SR2 Kulturradio",
+            "organization": 52,
+            "scaled112x32": "112x32/43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png",
+            "scaled128x128": "128x128/43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png",
+            "scaled320x240": "320x240/43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png",
+            "scaled32x32": "32x32/43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png",
+            "scaled600x600": "600x600/43a7298d-7fd0-4720-ad6a-13726bfcfcf0.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 399
+    },
+    {
+        "fields": {
+            "file": "641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png",
+            "name": "SR3 Saarlandwelle",
+            "organization": 52,
+            "scaled112x32": "112x32/641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png",
+            "scaled128x128": "128x128/641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png",
+            "scaled320x240": "320x240/641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png",
+            "scaled32x32": "32x32/641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png",
+            "scaled600x600": "600x600/641d5a88-d5f0-4ee3-b3e6-360ce0b79144.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 400
+    },
+    {
+        "fields": {
+            "file": "aa1a68f5-a765-485b-88f2-e80bf371affd.png",
+            "name": "AntenneSaar",
+            "organization": 52,
+            "scaled112x32": "112x32/aa1a68f5-a765-485b-88f2-e80bf371affd.png",
+            "scaled128x128": "128x128/aa1a68f5-a765-485b-88f2-e80bf371affd.png",
+            "scaled320x240": "320x240/aa1a68f5-a765-485b-88f2-e80bf371affd.png",
+            "scaled32x32": "32x32/aa1a68f5-a765-485b-88f2-e80bf371affd.png",
+            "scaled600x600": "600x600/aa1a68f5-a765-485b-88f2-e80bf371affd.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 401
+    },
+    {
+        "fields": {
+            "file": "05ff4364-6aab-4ca2-b86b-d481f89693c8.png",
+            "name": "RadioBremen",
+            "organization": 53,
+            "scaled112x32": "112x32/05ff4364-6aab-4ca2-b86b-d481f89693c8.png",
+            "scaled128x128": "128x128/05ff4364-6aab-4ca2-b86b-d481f89693c8.png",
+            "scaled320x240": "320x240/05ff4364-6aab-4ca2-b86b-d481f89693c8.png",
+            "scaled32x32": "32x32/05ff4364-6aab-4ca2-b86b-d481f89693c8.png",
+            "scaled600x600": "600x600/05ff4364-6aab-4ca2-b86b-d481f89693c8.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 402
+    },
+    {
+        "fields": {
+            "file": "57a49740-95c2-44f8-bfac-967b863cf7db.png",
+            "name": "Bremen eins",
+            "organization": 53,
+            "scaled112x32": "112x32/57a49740-95c2-44f8-bfac-967b863cf7db.png",
+            "scaled128x128": "128x128/57a49740-95c2-44f8-bfac-967b863cf7db.png",
+            "scaled320x240": "320x240/57a49740-95c2-44f8-bfac-967b863cf7db.png",
+            "scaled32x32": "32x32/57a49740-95c2-44f8-bfac-967b863cf7db.png",
+            "scaled600x600": "600x600/57a49740-95c2-44f8-bfac-967b863cf7db.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 403
+    },
+    {
+        "fields": {
+            "file": "cf219400-6b0c-457e-bf0b-ed3882c3028c.png",
+            "name": "Bremen vier",
+            "organization": 53,
+            "scaled112x32": "112x32/cf219400-6b0c-457e-bf0b-ed3882c3028c.png",
+            "scaled128x128": "128x128/cf219400-6b0c-457e-bf0b-ed3882c3028c.png",
+            "scaled320x240": "320x240/cf219400-6b0c-457e-bf0b-ed3882c3028c.png",
+            "scaled32x32": "32x32/cf219400-6b0c-457e-bf0b-ed3882c3028c.png",
+            "scaled600x600": "600x600/cf219400-6b0c-457e-bf0b-ed3882c3028c.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 404
+    },
+    {
+        "fields": {
+            "file": "b19dc659-01e5-40ff-8863-646b183b541f.png",
+            "name": "Bremen zwei",
+            "organization": 53,
+            "scaled112x32": "112x32/b19dc659-01e5-40ff-8863-646b183b541f.png",
+            "scaled128x128": "128x128/b19dc659-01e5-40ff-8863-646b183b541f.png",
+            "scaled320x240": "320x240/b19dc659-01e5-40ff-8863-646b183b541f.png",
+            "scaled32x32": "32x32/b19dc659-01e5-40ff-8863-646b183b541f.png",
+            "scaled600x600": "600x600/b19dc659-01e5-40ff-8863-646b183b541f.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 405
+    },
+    {
+        "fields": {
+            "file": "abae58a5-50ba-4795-bd61-35dc06d9bf4e.png",
+            "name": "Bremen next",
+            "organization": 53,
+            "scaled112x32": "112x32/abae58a5-50ba-4795-bd61-35dc06d9bf4e.png",
+            "scaled128x128": "128x128/abae58a5-50ba-4795-bd61-35dc06d9bf4e.png",
+            "scaled320x240": "320x240/abae58a5-50ba-4795-bd61-35dc06d9bf4e.png",
+            "scaled32x32": "32x32/abae58a5-50ba-4795-bd61-35dc06d9bf4e.png",
+            "scaled600x600": "600x600/abae58a5-50ba-4795-bd61-35dc06d9bf4e.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 406
+    },
+    {
+        "fields": {
+            "file": "04590e95-9885-46e9-a90b-3454f9eba6c9.png",
+            "name": "MDR_Brand",
+            "organization": 54,
+            "scaled112x32": "112x32/04590e95-9885-46e9-a90b-3454f9eba6c9.png",
+            "scaled128x128": "128x128/04590e95-9885-46e9-a90b-3454f9eba6c9.png",
+            "scaled320x240": "320x240/04590e95-9885-46e9-a90b-3454f9eba6c9.png",
+            "scaled32x32": "32x32/04590e95-9885-46e9-a90b-3454f9eba6c9.png",
+            "scaled600x600": "600x600/04590e95-9885-46e9-a90b-3454f9eba6c9.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 407
+    },
+    {
+        "fields": {
+            "file": "0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png",
+            "name": "MDR SchlagerW",
+            "organization": 54,
+            "scaled112x32": "112x32/0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png",
+            "scaled128x128": "128x128/0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png",
+            "scaled320x240": "320x240/0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png",
+            "scaled32x32": "32x32/0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png",
+            "scaled600x600": "600x600/0b3e4f0e-9847-46f0-a638-8a395c1cb25e.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 408
+    },
+    {
+        "fields": {
+            "file": "1a0f197b-4f1a-41a7-afc4-13154b3021e5.png",
+            "name": "MDR-TH\u00dcRINGEN",
+            "organization": 54,
+            "scaled112x32": "112x32/1a0f197b-4f1a-41a7-afc4-13154b3021e5.png",
+            "scaled128x128": "128x128/1a0f197b-4f1a-41a7-afc4-13154b3021e5.png",
+            "scaled320x240": "320x240/1a0f197b-4f1a-41a7-afc4-13154b3021e5.png",
+            "scaled32x32": "32x32/1a0f197b-4f1a-41a7-afc4-13154b3021e5.png",
+            "scaled600x600": "600x600/1a0f197b-4f1a-41a7-afc4-13154b3021e5.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 410
+    },
+    {
+        "fields": {
+            "file": "01a4d13b-ef4d-4edf-b005-03d4807ae035.png",
+            "name": "MDR-SACHSEN",
+            "organization": 54,
+            "scaled112x32": "112x32/01a4d13b-ef4d-4edf-b005-03d4807ae035.png",
+            "scaled128x128": "128x128/01a4d13b-ef4d-4edf-b005-03d4807ae035.png",
+            "scaled320x240": "320x240/01a4d13b-ef4d-4edf-b005-03d4807ae035.png",
+            "scaled32x32": "32x32/01a4d13b-ef4d-4edf-b005-03d4807ae035.png",
+            "scaled600x600": "600x600/01a4d13b-ef4d-4edf-b005-03d4807ae035.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 411
+    },
+    {
+        "fields": {
+            "file": "99176d01-ccfc-45bb-875b-79cc5660d6a1.png",
+            "name": "MDR-SPUTNIK",
+            "organization": 54,
+            "scaled112x32": "112x32/99176d01-ccfc-45bb-875b-79cc5660d6a1.png",
+            "scaled128x128": "128x128/99176d01-ccfc-45bb-875b-79cc5660d6a1.png",
+            "scaled320x240": "320x240/99176d01-ccfc-45bb-875b-79cc5660d6a1.png",
+            "scaled32x32": "32x32/99176d01-ccfc-45bb-875b-79cc5660d6a1.png",
+            "scaled600x600": "600x600/99176d01-ccfc-45bb-875b-79cc5660d6a1.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 412
+    },
+    {
+        "fields": {
+            "file": "07449f72-1627-4597-aee2-bfb7b4e132d8.png",
+            "name": "MDR-TWEENS",
+            "organization": 54,
+            "scaled112x32": "112x32/07449f72-1627-4597-aee2-bfb7b4e132d8.png",
+            "scaled128x128": "128x128/07449f72-1627-4597-aee2-bfb7b4e132d8.png",
+            "scaled320x240": "320x240/07449f72-1627-4597-aee2-bfb7b4e132d8.png",
+            "scaled32x32": "32x32/07449f72-1627-4597-aee2-bfb7b4e132d8.png",
+            "scaled600x600": "600x600/07449f72-1627-4597-aee2-bfb7b4e132d8.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 417
+    },
+    {
+        "fields": {
+            "file": "37d41205-7a00-4030-9270-c05b3128dbf3.png",
+            "name": "MDR-SACHSEN-SORB",
+            "organization": 54,
+            "scaled112x32": "112x32/37d41205-7a00-4030-9270-c05b3128dbf3.png",
+            "scaled128x128": "128x128/37d41205-7a00-4030-9270-c05b3128dbf3.png",
+            "scaled320x240": "320x240/37d41205-7a00-4030-9270-c05b3128dbf3.png",
+            "scaled32x32": "32x32/37d41205-7a00-4030-9270-c05b3128dbf3.png",
+            "scaled600x600": "600x600/37d41205-7a00-4030-9270-c05b3128dbf3.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 418
+    },
+    {
+        "fields": {
+            "file": "36f43b68-3a5c-47f8-a5d7-02a28d01c809.png",
+            "name": "MDR-KULTUR",
+            "organization": 54,
+            "scaled112x32": "112x32/36f43b68-3a5c-47f8-a5d7-02a28d01c809.png",
+            "scaled128x128": "128x128/36f43b68-3a5c-47f8-a5d7-02a28d01c809.png",
+            "scaled320x240": "320x240/36f43b68-3a5c-47f8-a5d7-02a28d01c809.png",
+            "scaled32x32": "32x32/36f43b68-3a5c-47f8-a5d7-02a28d01c809.png",
+            "scaled600x600": "600x600/36f43b68-3a5c-47f8-a5d7-02a28d01c809.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 419
+    },
+    {
+        "fields": {
+            "file": "a96b8b45-458d-4571-8e96-34b1729c1006.png",
+            "name": "MDR-KLASSIK",
+            "organization": 54,
+            "scaled112x32": "112x32/a96b8b45-458d-4571-8e96-34b1729c1006.png",
+            "scaled128x128": "128x128/a96b8b45-458d-4571-8e96-34b1729c1006.png",
+            "scaled320x240": "320x240/a96b8b45-458d-4571-8e96-34b1729c1006.png",
+            "scaled32x32": "32x32/a96b8b45-458d-4571-8e96-34b1729c1006.png",
+            "scaled600x600": "600x600/a96b8b45-458d-4571-8e96-34b1729c1006.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 421
+    },
+    {
+        "fields": {
+            "file": "1528208e-9581-4958-a42b-a9a60843d6e8.png",
+            "name": "MDR-AKTUELL",
+            "organization": 54,
+            "scaled112x32": "112x32/1528208e-9581-4958-a42b-a9a60843d6e8.png",
+            "scaled128x128": "128x128/1528208e-9581-4958-a42b-a9a60843d6e8.png",
+            "scaled320x240": "320x240/1528208e-9581-4958-a42b-a9a60843d6e8.png",
+            "scaled32x32": "32x32/1528208e-9581-4958-a42b-a9a60843d6e8.png",
+            "scaled600x600": "600x600/1528208e-9581-4958-a42b-a9a60843d6e8.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 422
+    },
+    {
+        "fields": {
+            "file": "3f541920-0a8a-4167-921c-29179cfbc488.png",
+            "name": "MDR-JUMP",
+            "organization": 54,
+            "scaled112x32": "112x32/3f541920-0a8a-4167-921c-29179cfbc488.png",
+            "scaled128x128": "128x128/3f541920-0a8a-4167-921c-29179cfbc488.png",
+            "scaled320x240": "320x240/3f541920-0a8a-4167-921c-29179cfbc488.png",
+            "scaled32x32": "32x32/3f541920-0a8a-4167-921c-29179cfbc488.png",
+            "scaled600x600": "600x600/3f541920-0a8a-4167-921c-29179cfbc488.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 423
+    },
+    {
+        "fields": {
+            "file": "c3977737-ff3e-4a97-9ddb-be0408cea732.png",
+            "name": "MDR-SACHSEN-ANHALT",
+            "organization": 54,
+            "scaled112x32": "112x32/c3977737-ff3e-4a97-9ddb-be0408cea732.png",
+            "scaled128x128": "128x128/c3977737-ff3e-4a97-9ddb-be0408cea732.png",
+            "scaled320x240": "320x240/c3977737-ff3e-4a97-9ddb-be0408cea732.png",
+            "scaled32x32": "32x32/c3977737-ff3e-4a97-9ddb-be0408cea732.png",
+            "scaled600x600": "600x600/c3977737-ff3e-4a97-9ddb-be0408cea732.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 425
+    },
+    {
+        "fields": {
+            "file": "59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg",
+            "name": "rbb_brand",
+            "organization": 55,
+            "scaled112x32": "112x32/59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg",
+            "scaled128x128": "128x128/59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg",
+            "scaled320x240": "320x240/59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg",
+            "scaled32x32": "32x32/59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg",
+            "scaled600x600": "600x600/59f00cd2-cd84-49ba-a0af-b5fece2bd60f.jpg"
+        },
+        "model": "manager.LogoImage",
+        "pk": 426
+    },
+    {
+        "fields": {
+            "file": "6ba0c044-8938-492d-82ef-4b7829198a7d.png",
+            "name": "rbb88.8",
+            "organization": 55,
+            "scaled112x32": "112x32/6ba0c044-8938-492d-82ef-4b7829198a7d.png",
+            "scaled128x128": "128x128/6ba0c044-8938-492d-82ef-4b7829198a7d.png",
+            "scaled320x240": "320x240/6ba0c044-8938-492d-82ef-4b7829198a7d.png",
+            "scaled32x32": "32x32/6ba0c044-8938-492d-82ef-4b7829198a7d.png",
+            "scaled600x600": "600x600/6ba0c044-8938-492d-82ef-4b7829198a7d.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 427
+    },
+    {
+        "fields": {
+            "file": "4644b143-31bf-44ef-ae5b-d4c5803b56ce.png",
+            "name": "rbbKultur",
+            "organization": 55,
+            "scaled112x32": "112x32/4644b143-31bf-44ef-ae5b-d4c5803b56ce.png",
+            "scaled128x128": "128x128/4644b143-31bf-44ef-ae5b-d4c5803b56ce.png",
+            "scaled320x240": "320x240/4644b143-31bf-44ef-ae5b-d4c5803b56ce.png",
+            "scaled32x32": "32x32/4644b143-31bf-44ef-ae5b-d4c5803b56ce.png",
+            "scaled600x600": "600x600/4644b143-31bf-44ef-ae5b-d4c5803b56ce.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 428
+    },
+    {
+        "fields": {
+            "file": "9690a656-7c20-4ceb-8b4d-739a197c4d9a.png",
+            "name": "Inforadio",
+            "organization": 55,
+            "scaled112x32": "112x32/9690a656-7c20-4ceb-8b4d-739a197c4d9a.png",
+            "scaled128x128": "128x128/9690a656-7c20-4ceb-8b4d-739a197c4d9a.png",
+            "scaled320x240": "320x240/9690a656-7c20-4ceb-8b4d-739a197c4d9a.png",
+            "scaled32x32": "32x32/9690a656-7c20-4ceb-8b4d-739a197c4d9a.png",
+            "scaled600x600": "600x600/9690a656-7c20-4ceb-8b4d-739a197c4d9a.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 429
+    },
+    {
+        "fields": {
+            "file": "ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png",
+            "name": "Antenne Brandenburg",
+            "organization": 55,
+            "scaled112x32": "112x32/ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png",
+            "scaled128x128": "128x128/ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png",
+            "scaled320x240": "320x240/ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png",
+            "scaled32x32": "32x32/ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png",
+            "scaled600x600": "600x600/ea0111c0-0bec-4e8e-81e0-8d6b7f9e373d.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 430
+    },
+    {
+        "fields": {
+            "file": "59a27771-9c2b-4a83-8028-bbd8d17fcbce.png",
+            "name": "Fritz",
+            "organization": 55,
+            "scaled112x32": "112x32/59a27771-9c2b-4a83-8028-bbd8d17fcbce.png",
+            "scaled128x128": "128x128/59a27771-9c2b-4a83-8028-bbd8d17fcbce.png",
+            "scaled320x240": "320x240/59a27771-9c2b-4a83-8028-bbd8d17fcbce.png",
+            "scaled32x32": "32x32/59a27771-9c2b-4a83-8028-bbd8d17fcbce.png",
+            "scaled600x600": "600x600/59a27771-9c2b-4a83-8028-bbd8d17fcbce.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 431
+    },
+    {
+        "fields": {
+            "file": "f68c57cc-5e0f-406b-9dc8-460bf6511da6.png",
+            "name": "radioeins",
+            "organization": 55,
+            "scaled112x32": "112x32/f68c57cc-5e0f-406b-9dc8-460bf6511da6.png",
+            "scaled128x128": "128x128/f68c57cc-5e0f-406b-9dc8-460bf6511da6.png",
+            "scaled320x240": "320x240/f68c57cc-5e0f-406b-9dc8-460bf6511da6.png",
+            "scaled32x32": "32x32/f68c57cc-5e0f-406b-9dc8-460bf6511da6.png",
+            "scaled600x600": "600x600/f68c57cc-5e0f-406b-9dc8-460bf6511da6.png"
+        },
+        "model": "manager.LogoImage",
+        "pk": 432
     }
 ]

@@ -2,7 +2,11 @@ import json
 from functools import reduce
 
 from fixtures.raw_data_channel import channels
+from fixtures.raw_data_channel_pictures import channel_pictures
 from fixtures.raw_data_client import clients
+from fixtures.raw_data_epg_shows import epg_shows
+from fixtures.raw_data_event import events
+from fixtures.raw_data_generic_service_following_entry import generic_service_following_entry
 from fixtures.raw_data_organization import organizations
 from fixtures.raw_data_station import stations
 from fixtures.raw_logo_image import logo_images
@@ -408,8 +412,8 @@ with open('json_fixtures/new_organizations.json', 'w') as fp:
 existing_orgas = reduce(pk_to_set, new_organizations, set())
 new_logo_images = []
 for logo_image in logo_images:
-    if logo_image[1] not in existing_orgas:
-        print(logo_image[1], "isn't a valid org. Skipping...")
+    if logo_image[8] not in existing_orgas:
+        print(logo_image[8], "isn't a valid org. Skipping...")
         continue
     new_logo_images.append({
         "model": "manager.LogoImage",
@@ -433,20 +437,28 @@ with open('json_fixtures/new_logo_images.json', 'w') as fp:
 # CHANNEL PICTURE
 # ============================================================================================
 
+
+def orga_tuple_to_set(acc, v):
+    acc[v[1]] = v[8]
+    return acc
+
+
+sp_to_orga_mapping = reduce(orga_tuple_to_set, logo_images, {})
+
 new_channel_pictures = []
-for channel in channels:
-    if channel[1] not in existing_orgas:
-        print(channel[1], "isn't a valid org. Skipping...")
+for picture in channel_pictures:
+    if picture[1] not in existing_orgas:
+        print(picture[1], "isn't a valid org. Skipping...")
         continue
     new_channel_pictures.append({
         "model": "channels.Image",
-        "pk": channel[0],
+        "pk": picture[0],
         "fields": {
-            "organization": channel[1],
-            "name": channel[2],
-            "file": channel[3],
-            "radiotext": channel[4],
-            "radiolink": channel[5],
+            "organization": sp_to_orga_mapping[picture[1]],
+            "name": picture[2],
+            "file": picture[3],
+            "radiotext": picture[4],
+            "radiolink": picture[5],
         }
     })
 
@@ -468,7 +480,7 @@ for client in clients:
         "pk": client[0],
         "fields": {
             "name": client[1],
-            "organization": client[2],
+            "organization": sp_to_orga_mapping[client[2]],
             "identifier": client[3],
             "email": client[4],
         }
@@ -582,3 +594,84 @@ for channel in channels:
 
 with open('json_fixtures/new_channels.json', 'w') as fp:
     json.dump(new_channels, fp, indent=4, sort_keys=True)
+
+existing_channels = reduce(pk_to_set, new_channels, set())
+
+# ============================================================================================
+# EPG - SHOWS
+# ============================================================================================
+
+new_shows = []
+for show in epg_shows:
+    if show[6] is None:
+        print("A show must be attached to a station. Skipping...")
+        continue
+    new_shows.append({
+        "model": "radioepg.Show",
+        "pk": show[0],
+        "fields": {
+            "station": show[6],
+            "medium_name": show[2],
+            "long_name": show[3],
+            "description": show[4],
+            "color": show[5],
+        }
+    })
+
+with open('json_fixtures/new_shows.json', 'w') as fp:
+    json.dump(new_shows, fp, indent=4, sort_keys=True)
+
+# ============================================================================================
+# EPG - EVENT
+# ============================================================================================
+
+existing_shows = reduce(pk_to_set, new_shows, set())
+
+new_events = []
+for event in events:
+    if event[1] not in existing_shows:
+        print(event[1], "isn't a show. Skipping...")
+        continue
+    new_events.append({
+        "model": "radioepg.Event",
+        "pk": event[0],
+        "fields": {
+            "day": event[3],
+            "start_hour": event[4],
+            "start_minute": event[5],
+            "length": event[6],
+            "show": event[1],
+        }
+    })
+
+with open('json_fixtures/new_events.json', 'w') as fp:
+    json.dump(new_events, fp, indent=4, sort_keys=True)
+
+# ============================================================================================
+# EPG - generic service following entry
+# ============================================================================================
+
+new_generic_service_following_entry = []
+for entry in generic_service_following_entry:
+    if entry[5] not in existing_stations and entry[5] is not None:
+        print(entry[5], "isn't a station. Skipping...")
+        continue
+    if entry[4] not in existing_channels and entry[4] is not None:
+        print(entry[4], "isn't a channel. Skipping...")
+        continue
+    new_generic_service_following_entry.append({
+        "model": "radioepg.GenericServiceFollowingEntry",
+        "pk": entry[0],
+        "fields": {
+            "station": entry[5],
+            "channel": entry[4],
+            "active": entry[1],
+            "cost": entry[2],
+            "offset": entry[3],
+            "mime_type": entry[7],
+            "bitrate": entry[8],
+        }
+    })
+
+with open('json_fixtures/new_generic_service_following_entry.json', 'w') as fp:
+    json.dump(new_generic_service_following_entry, fp, indent=4, sort_keys=True)

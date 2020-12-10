@@ -1,0 +1,1762 @@
+[
+    {
+        "fields": {
+            "day": 0,
+            "length": 480,
+            "show": 1,
+            "start_hour": 5,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 420,
+            "show": 2,
+            "start_hour": 13,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 6,
+            "start_hour": 1,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 6,
+            "start_hour": 21,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 6,
+            "start_hour": 15,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 270,
+            "show": 6,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 570,
+            "show": 1,
+            "start_hour": 5,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 150,
+            "show": 2,
+            "start_hour": 14,
+            "start_minute": 45
+        },
+        "model": "radioepg.Event",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 165,
+            "show": 2,
+            "start_hour": 2,
+            "start_minute": 15
+        },
+        "model": "radioepg.Event",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 225,
+            "show": 8,
+            "start_hour": 17,
+            "start_minute": 15
+        },
+        "model": "radioepg.Event",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 225,
+            "show": 9,
+            "start_hour": 2,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 135,
+            "show": 10,
+            "start_hour": 3,
+            "start_minute": 45
+        },
+        "model": "radioepg.Event",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 135,
+            "show": 10,
+            "start_hour": 3,
+            "start_minute": 45
+        },
+        "model": "radioepg.Event",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 360,
+            "show": 11,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 360,
+            "show": 11,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 360,
+            "show": 11,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 360,
+            "show": 11,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 21
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 360,
+            "show": 11,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 22
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 10,
+            "start_hour": 0,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 23
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 60,
+            "show": 10,
+            "start_hour": 4,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 24
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 10,
+            "start_hour": 4,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 25
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 1230,
+            "show": 12,
+            "start_hour": 12,
+            "start_minute": 45
+        },
+        "model": "radioepg.Event",
+        "pk": 26
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 570,
+            "show": 12,
+            "start_hour": 13,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 27
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 1080,
+            "show": 13,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 28
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 14,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 29
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 1320,
+            "show": 13,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 30
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 1320,
+            "show": 13,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 31
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 1320,
+            "show": 13,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 32
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 1320,
+            "show": 13,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 33
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 14,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 34
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 14,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 35
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 14,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 36
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 14,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 37
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 3120,
+            "show": 13,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 38
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 360,
+            "show": 15,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 39
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 360,
+            "show": 15,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 40
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 360,
+            "show": 15,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 41
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 360,
+            "show": 15,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 42
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 360,
+            "show": 15,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 43
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 16,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 44
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 18,
+            "start_hour": 22,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 45
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 17,
+            "start_hour": 22,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 46
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 47
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 48
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 49
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 50
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 51
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 52
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 53
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 54
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 180,
+            "show": 19,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 55
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 56
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 57
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 120,
+            "show": 20,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 58
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 60,
+            "show": 24,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 59
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 180,
+            "show": 23,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 60
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 21,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 61
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 120,
+            "show": 26,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 62
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 360,
+            "show": 25,
+            "start_hour": 6,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 63
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 360,
+            "show": 27,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 64
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 360,
+            "show": 27,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 65
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 66
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 67
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 68
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 69
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 70
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 180,
+            "show": 28,
+            "start_hour": 9,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 71
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 120,
+            "show": 31,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 72
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 240,
+            "show": 29,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 73
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 74
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 75
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 76
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 77
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 78
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 180,
+            "show": 30,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 79
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 80
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 81
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 82
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 83
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 84
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 180,
+            "show": 32,
+            "start_hour": 17,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 85
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 240,
+            "show": 34,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 86
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 240,
+            "show": 34,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 87
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 60,
+            "show": 34,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 90
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 60,
+            "show": 34,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 91
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 22,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 92
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 240,
+            "show": 33,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 93
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 96
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 97
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 98
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 99
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 100
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 101
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 60,
+            "show": 42,
+            "start_hour": 19,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 102
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 43,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 103
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 44,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 104
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 45,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 105
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 46,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 106
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 1140,
+            "show": 47,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 107
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 1140,
+            "show": 47,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 108
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 1140,
+            "show": 47,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 109
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 720,
+            "show": 48,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 110
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 720,
+            "show": 48,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 111
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 720,
+            "show": 48,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 112
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 720,
+            "show": 48,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 113
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 720,
+            "show": 48,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 114
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 115
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 48,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 116
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 117
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 60,
+            "show": 48,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 118
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 119
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 120
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 121
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 60,
+            "show": 48,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 122
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 60,
+            "show": 48,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 123
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 600,
+            "show": 48,
+            "start_hour": 2,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 125
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 126
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 540,
+            "show": 48,
+            "start_hour": 3,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 127
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 240,
+            "show": 48,
+            "start_hour": 14,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 128
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 180,
+            "show": 48,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 129
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 49,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 130
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 50,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 131
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 51,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 132
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 120,
+            "show": 52,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 133
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 49,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 134
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 50,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 135
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 60,
+            "show": 51,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 136
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 50,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 137
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 49,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 138
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 49,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 139
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 49,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 140
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 50,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 141
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 120,
+            "show": 50,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 142
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 60,
+            "show": 51,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 143
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 60,
+            "show": 51,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 144
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 51,
+            "start_hour": 20,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 145
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 120,
+            "show": 53,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 146
+    },
+    {
+        "fields": {
+            "day": 2,
+            "length": 120,
+            "show": 54,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 147
+    },
+    {
+        "fields": {
+            "day": 3,
+            "length": 120,
+            "show": 55,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 148
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 56,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 149
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 57,
+            "start_hour": 22,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 150
+    },
+    {
+        "fields": {
+            "day": 4,
+            "length": 60,
+            "show": 58,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 151
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 59,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 152
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 60,
+            "start_hour": 1,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 153
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 120,
+            "show": 61,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 154
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 180,
+            "show": 62,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 155
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 56,
+            "start_hour": 21,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 156
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 63,
+            "start_hour": 22,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 157
+    },
+    {
+        "fields": {
+            "day": 5,
+            "length": 60,
+            "show": 64,
+            "start_hour": 23,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 158
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 60,
+            "show": 65,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 159
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 60,
+            "show": 66,
+            "start_hour": 1,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 160
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 60,
+            "show": 67,
+            "start_hour": 2,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 161
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 120,
+            "show": 61,
+            "start_hour": 12,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 162
+    },
+    {
+        "fields": {
+            "day": 6,
+            "length": 180,
+            "show": 62,
+            "start_hour": 18,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 163
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 240,
+            "show": 68,
+            "start_hour": 4,
+            "start_minute": 45
+        },
+        "model": "radioepg.Event",
+        "pk": 164
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 60,
+            "show": 68,
+            "start_hour": 11,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 165
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 195,
+            "show": 69,
+            "start_hour": 13,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 166
+    },
+    {
+        "fields": {
+            "day": 1,
+            "length": 495,
+            "show": 69,
+            "start_hour": 13,
+            "start_minute": 30
+        },
+        "model": "radioepg.Event",
+        "pk": 167
+    },
+    {
+        "fields": {
+            "day": -1,
+            "length": 1020,
+            "show": 72,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 169
+    },
+    {
+        "fields": {
+            "day": 0,
+            "length": 1020,
+            "show": 72,
+            "start_hour": 0,
+            "start_minute": 0
+        },
+        "model": "radioepg.Event",
+        "pk": 171
+    }
+]
