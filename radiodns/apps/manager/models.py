@@ -51,7 +51,7 @@ class Organization(models.Model):
                 self.escape_slash_rfc3986(self.street),
                 self.escape_slash_rfc3986(self.city),
                 self.escape_slash_rfc3986(self.zipcode),
-                self.escape_slash_rfc3986(self.location_country.name),
+                self.escape_slash_rfc3986(self.location_country.name if self.location_country else ""),
             )
         return None
 

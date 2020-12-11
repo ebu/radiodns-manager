@@ -34,11 +34,12 @@ urlpatterns = [
     path("clients/", include("apps.clients.urls")),
     path("radiovis/", include("apps.radiovis.urls")),
     path("radioepg/", include("apps.radioepg.urls")),
+    path("radiodns/", include("apps.si_pi.urls")),
     path("system/", include("apps.system.urls")),
     path("admin/", admin.site.urls),
 ]
 #if settings.DEBUG:
-#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 handler404 = "common.views.handler404"
 handler403 = "common.views.handler403"

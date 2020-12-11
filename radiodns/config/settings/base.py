@@ -60,6 +60,7 @@ LOCAL_APPS = [
     "apps.radioepg",
     "apps.radiovis",
     "apps.localization",
+    "apps.si_pi"
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
@@ -78,7 +79,7 @@ MIDDLEWARE = [
 ]
 
 # URLs, where user does not need to be logged in
-LOGIN_EXEMPT_URLS = ["xml-metadata", "/static/", "auth/login/saml"]
+LOGIN_EXEMPT_URLS = ["xml-metadata", "/static/", "auth/login/saml", "radiodns/*"]
 
 
 
