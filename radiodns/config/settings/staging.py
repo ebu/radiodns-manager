@@ -11,8 +11,12 @@ from .base import *
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+# PROXY
+# -----------------------------------------------------------------------------
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-HOST_URL = "staging.radio.ebu.io"
 
 # STATIC
 # ------------------------------------------------------------------------------
