@@ -149,7 +149,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-SETUP_EXEMPT_URLS = ["setup_error/", "admin/", "xml-metadata/", "static/"]
+SETUP_EXEMPT_URLS = ["setup_error/", "admin/", "xml-metadata/", "static/", "login", "logout"]
 
 DOMAIN = os.environ.get("DOMAIN", "127.0.0.1")
 
