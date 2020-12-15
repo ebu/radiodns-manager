@@ -1,5 +1,5 @@
 {% load static %}
-{% if request.user.is_authenticated and request.user.active_organization %}
+
 <div class="main-sidebar navbar" id="sidebar-flat">
 
     <div id="ebu-menulogo">
@@ -8,28 +8,28 @@
             <img id="ebu-menulogo-small" src="{% static 'images/ebu-black.png' %}">
         </a>
     </div>
-
-
+	{% if request.user.is_authenticated %}
 <!-- User -->
-<div class="current-user">
-    <a href="#" class="name">
-        <img class="avatar" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=blank"/>
-        <span>
-            {{request.user.first_name}}
-            <i class="fa fa-chevron-down"></i>
-        </span>
-    </a>
-    <ul class="menu">
-        <li>
-            <a href="{% url 'radiodns_auth:logout' %}">
-                <i class="ion-log-out"></i>
-                <span>Logout</span>
-            </a>
-        </li>
+    <div class="current-user">
+        <a href="#" class="name">
+            <img class="avatar" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=blank"/>
+            <span>
+                {{request.user.email}}
+                <i class="fa fa-chevron-down"></i>
+            </span>
+        </a>
+        <ul class="menu">
+            <li>
+                <a href="{% url 'radiodns_auth:logout' %}">
+                    <i class="ion-log-out"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
 
 
-    </ul>
-</div>
+        </ul>
+    </div>
+    {% if request.user.active_organization %}
         <!-- OrgaMode Selector -->
     <div class="menu-section">
         <h3>Organization</h3>
@@ -79,5 +79,9 @@
     <div class="menu-section">
         <h3><a href="{% url 'common:terms' %}">Terms of Use</a></h3>
     </div>
-</div>
+    {% endif%}
+
 {% endif%}
+</div>
+
+

@@ -46,9 +46,7 @@ AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
 
 # SAML Integration
 # ------------------------------------------------------------------------------
-USE_SAML = True
-USE_LOGIN = True
-
+HOST_URL = "staging.radio.ebu.io"
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = env.str("SOCIAL_AUTH_SAML_SP_ENTITY_ID")
 SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = env.str("SOCIAL_AUTH_SAML_SP_PUBLIC_CERT")
 SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = env.str("SOCIAL_AUTH_SAML_SP_PRIVATE_KEY")
