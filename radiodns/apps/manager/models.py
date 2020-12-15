@@ -33,7 +33,7 @@ class Organization(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self):
-        return f"{self.medium_name} {self.codops}"
+        return f"{self.medium_name}"
 
     def check_aws(self):
         return awsutils.check_serviceprovider(self)

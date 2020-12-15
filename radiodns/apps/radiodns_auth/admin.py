@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from apps.radiodns_auth.models import User
 from social_django.models import Association, Nonce, UserSocialAuth
-
+from apps.manager.admin import OrganizationAdminInline
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -18,6 +18,7 @@ class UserAdmin(admin.ModelAdmin):
         "is_superuser",
         "is_active",
     )
+    inlines = (OrganizationAdminInline, )
 
 admin.site.unregister(Group)
 admin.site.unregister(Association)

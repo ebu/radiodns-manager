@@ -4,6 +4,11 @@ from django.contrib import admin
 from apps.manager.models import Organization
 
 
+class OrganizationAdminInline(admin.TabularInline):
+    model = Organization.users.through
+    show_change_link = True
+    extra = 1
+
 class OrganizationAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Cocops", {"fields": ["codops"]}),
@@ -26,6 +31,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         ),
         ("Users", {"fields": ["users"]}),
     ]
+    filter_horizontal = ('users',)
     list_display = (
         "medium_name",
         "long_name",
