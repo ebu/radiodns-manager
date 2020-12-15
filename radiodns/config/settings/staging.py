@@ -93,3 +93,9 @@ DATABASES = {
 # ------------------------------------------------------------------------------
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
+
+# SI_PI Serving
+# ------------------------------------------------------------------------------
+SI_PI_SERVING_MODE = "AWS"
+SP_PI_BUCKET_NAME = os.environ.get("SP_PI_BUCKET_NAME", "")
+SP_PI_CLOUDFRONT_DOMAIN = os.environ.get("SP_PI_CLOUDFRONT_DOMAIN", "")

@@ -39,23 +39,23 @@
 
                 <mediaDescription>
                     <multimedia type="logo_colour_square" width="32" height="32"
-                                url="{{ media_root }}{{ service_provider_images.scaled32x32 }}"/>
+                                url="{{ service_provider_images.scaled32x32.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia type="logo_colour_rectangle" width="112" height="32"
-                                url="{{ media_root }}{{ service_provider_images.scaled112x32 }}"/>
+                                url="{{ service_provider_images.scaled112x32.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia type="logo_unrestricted" width="128" height="128"
-                                url="{{ media_root }}{{ service_provider_images.scaled128x128 }}"/>
+                                url="{{ service_provider_images.scaled128x128.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia type="logo_unrestricted" width="320" height="240"
-                                url="{{ media_root }}{{ service_provider_images.scaled320x240 }}"/>
+                                url="{{ service_provider_images.scaled320x240.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia type="logo_unrestricted" width="600" height="600"
-                                url="{{ media_root }}{{ service_provider_images.scaled600x600 }}"/>
+                                url="{{ service_provider_images.scaled600x600.url }}"/>
                 </mediaDescription>
                 <geolocation>
                     {% if service_provider.location_country %}
@@ -98,20 +98,20 @@
                 <radiodns fqdn="{{ station.0.fqdn.strip }}" serviceIdentifier="{{ station.0.service_identifier }}"/>
 
 
-                {% for entry in station.2 %}
+                {% for entry in station.1 %}
                     <bearer
-                            id="{{ entry.0 }}"
-                            {% if entry.1.cost %}
-                                cost="{{ entry.1.cost }}"
+                            id="{{ entry.id }}"
+                            {% if entry.cost %}
+                                cost="{{ entry.cost }}"
                             {% endif %}
-                            {% if entry.1.offset %}
-                                offset="{{ entry.1.offset }}"
+                            {% if entry.offset %}
+                                offset="{{ entry.offset }}"
                             {% endif %}
-                            {% if entry.1.mime_type %}
-                                mimeValue="{{ entry.1.mime_type }}"
+                            {% if entry.mime_type %}
+                                mimeValue="{{ entry.mime_type }}"
                             {% endif %}
-                            {% if entry.1.bitrate %}
-                                bitrate="{{ entry.1.bitrate }}"
+                            {% if entry.bitrate %}
+                                bitrate="{{ entry.bitrate }}"
                             {% endif %}/>
                 {% endfor %}
 
@@ -123,23 +123,23 @@
 
                 <mediaDescription>
                     <multimedia height="32" width="32" type="logo_colour_square"
-                                url="{{ media_root }}{{ station.1.default_image.scaled32x32 }}"/>
+                                url="{{ station.0.default_image.scaled32x32.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia height="32" width="112" type="logo_colour_rectangle"
-                                url="{{ media_root }}{{ station.1.default_image.scaled112x32 }}"/>
+                                url="{{ station.0.default_image.scaled112x32.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia height="128" width="128" type="logo_unrestricted"
-                                url="{{ media_root }}{{ station.1.default_image.scaled128x128 }}"/>
+                                url="{{ station.0.default_image.scaled128x128.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia height="240" width="320" type="logo_unrestricted"
-                                url="{{ media_root }}{{ station.1.default_image.scaled320x240 }}"/>
+                                url="{{ station.0.default_image.scaled320x240.url }}"/>
                 </mediaDescription>
                 <mediaDescription>
                     <multimedia height="600" width="600" type="logo_unrestricted"
-                                url="{{ media_root }}{{ station.1.default_image.scaled600x600 }}"/>
+                                url="{{ station.0.default_image.scaled600x600.url }}"/>
                 </mediaDescription>
 
                 {% for genre in station.0.genres_list %}

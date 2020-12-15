@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceInformation xmlns="http://schemas.radiodns.org/epg/11"
+                    xmlns:epg="http://www.worlddab.org/schemas/epgDataTypes/14"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creationTime="{{ creation_time }}"
+                    originator="RadioDNS Manager 4.1.0 (http://ebu.io/rdns)"
+                    xml:lang="{{ service_provider.default_language }}"
+                    xsi:schemaLocation="http://schemas.radiodns.org/epg/11 http://schemas.radiodns.org/epg/11/radioepg_xsi_11.xsd">
+    <services>
+        {% if service_provider %}
+            <serviceProvider>
+                {% if service_provider.short_name %}
+                    <epg:shortName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_name }}</epg:shortName>{% endif %}
+                {% if service_provider.medium_name %}
+                    <epg:mediumName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.medium_name }}</epg:mediumName>{% endif %}
+                {% if service_provider.long_name %}
+                    <epg:longName
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.long_name }}</epg:longName>{% endif %}
+                {% if service_provider.short_description %}
+                    <epg:shortDescription
+                            xml:lang="{{ service_provider.default_language }}">{{ service_provider.short_description }}</epg:shortDescription>{% endif %}
+                {% if service_provider.url_default %}
+                    <epg:link url="{{ service_provider.url_default }}" mimeValue="text/html"
+                              description="{{ service_provider.short_name }} Web"
+                              xml:lang="{{ service_provider.default_language }}"/>{% endif %}
+                <mediaDescription>
+                    <epg:multimedia url="{{ service_provider.default_logo_image_data.public_32x32_url }}" width="32"
+                                    height="32"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia url="{{ service_provider.default_logo_image_data.public_112x32_url }}" width="112"
+                                    height="32"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia url="{{ service_provider.default_logo_image_data.public_128x128_url }}" width="128"
+                                    height="128"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia url="{{ service_provider.default_logo_image_data.public_320x240_url }}" width="320"
+                                    height="240"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia url="{{ service_provider.default_logo_image_data.public_600x600_url }}" width="600"
+                                    height="600"/>
+                </mediaDescription>
+                <location>
+                    {% if service_provider.location_country %}
+                        <country>{{ service_provider.location_country }}</country>{% endif %}
+                </location>
+            </serviceProvider>
+        {% endif %}
+        {% for station in stations %}
+            <service>
+                {% if station.0.short_name %}
+                    <epg:shortName>{{ station.0.short_name }}</epg:shortName>{% endif %}
+                {% if station.0.medium_name %}
+                    <epg:mediumName>{{ station.0.medium_name }}</epg:mediumName>{% endif %}
+                {% if station.0.long_name %}
+                    <epg:longName>{{ station.0.long_name }}</epg:longName>{% endif %}
+                {% if station.0.short_description %}
+                    <epg:shortDescription
+                            xml:lang="fr">{{ station.0.short_description }}</epg:shortDescription>{% endif %}
+                {% if station.0.url_default %}
+                    <epg:link url="{{ station.0.url_default }}" mimeValue="text/html"
+                              xml:lang="{{ service_provider.default_language }}"/>{% endif %}
+                <radiodns fqdn="{{ station.0.fqdn }}" serviceIdentifier="{{ station.0.service_identifier }}"/>
+                {% for entry in station.1 %}
+                    <serviceID id="{{ entry.uri }}" {% if entry.cost %}cost="{{ entry.cost }}"{% endif %}
+                               {% if entry.offset %}offset="{{ entry.offset }}"{% endif %}
+                               {% if entry.mime_type %}mime="{{ entry.mime_type }}"{% endif %}/>
+                {% endfor %}
+                <mediaDescription>
+                    <epg:multimedia height="32" width="32" type="logo_colour_square"
+                                    url="{{ station.0.default_image.scaled32x32.url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia height="32" width="112" type="logo_unrestricted"
+                                    url="{{ station.0.default_image.scaled112x32.url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia height="128" width="128" type="logo_unrestricted"
+                                    url="{{ station.0.default_image.scaled128x128.url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia height="240" width="320" type="logo_unrestricted"
+                                    url="{{ station.0.default_image.scaled320x240.url }}"/>
+                </mediaDescription>
+                <mediaDescription>
+                    <epg:multimedia height="600" width="600" type="logo_unrestricted"
+                                    url="{{ station.0.default_image.scaled600x600.url }}"/>
+                </mediaDescription>
+                {% for genre in station.0.genres_list %}
+                    <epg:genre href="{{ genre.href }}">
+                        <epg:name>{{ genre.name }}</epg:name>
+                    </epg:genre>
+                {% endfor %}
+            </service>
+        {% endfor %}
+
+    </services>
+</serviceInformation>

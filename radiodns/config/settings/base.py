@@ -200,5 +200,16 @@ SOCIAL_AUTH_SAML_ENABLED_IDPS = {
     }
 }
 
+# SI_PI Serving
+# ------------------------------------------------------------------------------
+ETSI_SPEC = "https://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf"
+SI_PI_SERVING_MODE = "STANDALONE"
+SI_PI_SERVING_DOMAIN = os.environ.get("SP_PI_BUCKET_NAME", "radio.ebu.io")
+SP_PI_BUCKET_NAME = os.environ.get("SP_PI_BUCKET_NAME", "")
+SP_PI_CLOUDFRONT_DOMAIN = os.environ.get("SP_PI_CLOUDFRONT_DOMAIN", "")
+
+# Clients
+# ------------------------------------------------------------------------------
+API_SECRET = os.environ.get("API_SECRET", "")
 
 
