@@ -1,13 +1,19 @@
 from django.contrib import admin
 
 # Register your models here.
-from apps.manager.models import Organization
+from apps.manager.models import Organization, LogoImage
 
 
 class OrganizationAdminInline(admin.TabularInline):
     model = Organization.users.through
     show_change_link = True
     extra = 1
+
+
+class LogoAdminInline(admin.TabularInline):
+    model = LogoImage
+    extra = 1
+
 
 class OrganizationAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -30,8 +36,10 @@ class OrganizationAdmin(admin.ModelAdmin):
             },
         ),
         ("Users", {"fields": ["users"]}),
+        ("Logo", {"fields": ["default_image_id"]}),
     ]
     filter_horizontal = ('users',)
+    inlines = (LogoAdminInline,)
     list_display = (
         "medium_name",
         "long_name",

@@ -41,7 +41,7 @@ Select organization you want to delete and choose action `Delete selected organi
 
 Go to `Administration Panel -> Manager -> Organization` or visit `/admin/manager/organization/`
 
-Using form, select an image from the available logos. Press save.
+Using form, pick a logo from the available list, and insert it in the `default image id` field. Press save.
 
 * **How to add a new user to an organization?**
 
