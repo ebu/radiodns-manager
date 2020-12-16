@@ -3,8 +3,10 @@ from django.contrib.auth.models import Group
 from apps.radiodns_auth.models import User
 from social_django.models import Association, Nonce, UserSocialAuth
 from apps.manager.admin import OrganizationAdminInline
+from django.contrib.auth.admin import UserAdmin
 
-class UserAdmin(admin.ModelAdmin):
+
+class UserAdmin(UserAdmin):
     fieldsets = [
         ("Authentication Data", {"fields": ["username", "password"]}),
         ("Personal Data", {"fields": ["first_name", "last_name", "email"]}),
