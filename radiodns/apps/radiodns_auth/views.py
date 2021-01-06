@@ -22,7 +22,9 @@ def LoginView(request):
                     login(request, user)
                     return redirect("manager:details")
     context = {
-        "form": form
+        "form": form,
+        "password_login": settings.PASSWORD_LOGIN,
+        "saml_login": settings.SAML_LOGIN
     }
     return render(request, "radiodns_auth/login.html", context=context)
 

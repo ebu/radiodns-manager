@@ -14,16 +14,18 @@
         </div>
     {% endblock %}
     <div class="row">
-
+    {% if password_login %}
       <div class="col-sm-6">
         <div class="card text-center">
           <div class="card-body">
             <h3 class="card-title">Login using EBU-SSO</h3>
-<br>
+            <br>
             <a class="btn btn-primary" href="{% url 'social:begin' 'saml' %}?idp=ebu">Login with EBU</a>
           </div>
         </div>
       </div>
+        {% endif %}
+        {% if saml_login %}
       <div class="col-sm-6">
         <div class="card">
           <div class="card-body">
@@ -60,6 +62,7 @@
           </div>
         </div>
       </div>
+        {% endif %}
     </div>
 {% endblock %}
 

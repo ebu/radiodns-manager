@@ -125,7 +125,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
+PASSWORD_LOGIN = True
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -171,10 +171,9 @@ RADIOSPI_SERVICE_DEFAULT = RADIOSPI_DNS + ":" + RADIOSPI_PORT
 RADIOTAG_ENABLED = "True" == os.environ.get("RADIOTAG_ENABLED", "False")
 
 
-
 # SAML Integration
 # ------------------------------------------------------------------------------
-
+SAML_LOGIN = True
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
