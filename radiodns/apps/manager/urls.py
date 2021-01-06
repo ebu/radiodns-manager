@@ -10,6 +10,7 @@ urlpatterns = [
         name="SetOrganizationView",
     ),
     path("", views.OrganizationDetailsView, name="details"),
+    path("check/", views.OrganizationCheckView, name="check"),
     path("edit/", views.EditOrganizationView, name="edit"),
     path("images/", views.ListImagesView, name="list_images"),
     path("images/new/", views.EditImageView, name="new_image"),

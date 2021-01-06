@@ -31,6 +31,15 @@ def OrganizationDetailsView(request):
     )
 
 
+def OrganizationCheckView(request):
+    selected_organization = get_object_or_404(
+        Organization, id=request.user.active_organization.id
+    )
+    if not selected_organization.codops:
+        return {'isvalid': False}
+    return selected_organization.check_aws()
+
+
 def EditOrganizationView(request):
     selected_organization = get_object_or_404(
         Organization, id=request.user.active_organization.id

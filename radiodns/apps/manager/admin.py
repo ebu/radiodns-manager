@@ -17,7 +17,7 @@ class LogoAdminInline(admin.TabularInline):
 
 class OrganizationAdmin(admin.ModelAdmin):
     fieldsets = [
-        ("Cocops", {"fields": ["codops"]}),
+        ("Codops", {"fields": ["codops"]}),
         ("Name", {"fields": ["short_name", "medium_name", "long_name"]}),
         ("Description", {"fields": ["short_description", "long_description"]}),
         ("Language", {"fields": ["default_language"]}),

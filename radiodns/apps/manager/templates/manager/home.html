@@ -173,7 +173,7 @@
             <script type="text/javascript">
                 function checkProvider() {
                     $.ajaxq("rdns-serviceproviderq", {
-                        url: '{{ebuio_baseUrl}}serviceprovider/check',
+                        url: "{% url 'manager:check' %}",
                         dataType: 'json',
                         success: function (data) {
                             if (data.isvalid) {
@@ -247,4 +247,5 @@
 
 
 {% endblock %}
+
 

@@ -74,7 +74,7 @@
     <script type="text/javascript">
         function checkSystem() {
             $.ajaxq("rdns-systemq", {
-                url: '{{ebuio_baseUrl}}system/check',
+                url: "{% url 'system:check' %}",
                 dataType: 'json',
                 success: function (data) {
                     if (data.isvalid) {
