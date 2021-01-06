@@ -15,12 +15,17 @@ class User(AbstractUser):
 
     @property
     def organizations_list(self):
+        if self.is_superuser:
+            return list(Organization.objects.all())
         return list(self.organization_set.all())
 
     @property
     def active_organization(self):
         if not self.current_organization:
-            self.current_organization = self.organization_set.first()
+            if self.is_superuser:
+                self.current_organization = Organization.objects.first()
+            else:
+                self.current_organization = self.organization_set.first()
         return self.current_organization
 
     @active_organization.setter
