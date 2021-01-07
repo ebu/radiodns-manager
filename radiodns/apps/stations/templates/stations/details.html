@@ -99,16 +99,16 @@
                                         <th>SMS</th>
                                         <td>{% if instance.sms_description %} {{ instance.sms_description }}
                                             : {% endif %}
-                                            {% if station.sms_number %}
-                                                <a href="{{ station.epg_sms }}">Send {{ station.sms_body }}
-                                                    to {{ station.sms_number }}</a>{% endif %}</td>
+                                            {% if instance.sms_number %}
+                                                <a href="{{ instance.sms_number }}">Send {{ instance.epg_sms }}
+                                                    to {{ instance.sms_number }}</a>{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <th>E-Mail</th>
-                                        <td>{% if station.email_description %}{{ station.email_description }}
+                                        <td>{% if instances.email_description %}{{ instances.email_description }}
                                             : {% endif %}
-                                            {% if station.epg_email %}
-                                                <a href="{{ station.epg_email }}">{{ station.email_address }}</a>{% endif %}
+                                            {% if instances.epg_email %}
+                                                <a href="{{ instances.epg_email }}">{{ instances.email_address }}</a>{% endif %}
                                         </td>
                                     </tr>
                                     </tbody>
