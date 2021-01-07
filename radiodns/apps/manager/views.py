@@ -1,4 +1,7 @@
+from urllib.parse import urlencode
+
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from apps.localization.models import Language, Ecc
 from apps.manager.forms import OrganizationForm, LogoImageForm
@@ -23,11 +26,12 @@ def OrganizationDetailsView(request):
     selected_organization = get_object_or_404(
         Organization, id=request.user.active_organization.id
     )
+    message = request.GET.get("message")
     logo = LogoImage.objects.filter(id=selected_organization.default_image_id).first()
     return render(
         request,
         "manager/home.html",
-        context={"organization": selected_organization, "logo": logo},
+        context={"organization": selected_organization, "logo": logo, "message": message},
     )
 
 
@@ -117,4 +121,7 @@ def SetDefaultImageView(request, image_id):
     )
     organization.default_image_id = image_id
     organization.save()
-    return redirect("manager:list_images")
+    base_url = reverse("manager:details")
+    query_string = urlencode({"message": "Service Provider configuration has been saved"})
+    url = "{}?{}".format(base_url, query_string)
+    return redirect(url)

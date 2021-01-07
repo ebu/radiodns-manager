@@ -21,6 +21,11 @@
     {% endblock %}
     {% block alerts %}
     {{ block.super }}
+        {% if message %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
         {% if not logo %}
             <div class="alert alert-danger" role="alert">
                   <p><strong>No Default Provider Image has been defined.</strong> <br/>
