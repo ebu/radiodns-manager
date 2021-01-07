@@ -100,7 +100,7 @@ def EditStationView(request, station_id=None):
                 if client[0].id != 0:
                     station_instance.client = client[0]
                 station_instance.save()
-            return redirect("stations:list")
+            return redirect("stations:details", station_id=station_id)
     return render(
         request,
         "stations/edit.html",
@@ -110,6 +110,7 @@ def EditStationView(request, station_id=None):
             "organization": request.user.active_organization,
             "languages": languages,
             "countries": countries,
+            "station_id": station_id
         },
     )
 
