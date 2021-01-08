@@ -170,7 +170,9 @@ def ListStationLogosView(request):
     )
 
 
-def SetStationLogoView(request, station_id, logo_id):
+def SetStationLogoView(request):
+    station_id = request.GET.get("station_id")
+    logo_id = request.GET.get("logo_id")
     station = get_object_or_404(
         Station, id=station_id, organization__id=request.user.active_organization.id
     )

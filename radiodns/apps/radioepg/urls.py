@@ -26,11 +26,7 @@ urlpatterns = [
         name="delete_show",
     ),
     path("logos/", views.ListStationLogosView, name="station_logos"),
-    path(
-        "logos/set/?station_id=<int:station_id>&logo_id=<int:logo_id>",
-        views.SetStationLogoView,
-        name="set_logo",
-    ),
+    path("logos/set/", views.SetStationLogoView, name="set_logo"),
     path("servicefollowing/", views.ListServicesView, name="default_services"),
     path(
         "servicefollowing/<int:station_id>/",

@@ -47,9 +47,9 @@
                         <td>
                             <select id="logo_select" style="margin-bottom: 0px;" class="form-control"
                                     onchange="switch_default($(this).val(), $(this));">
-                                <option value="{% url 'radioepg:set_logo' station.id 0 %}" {% if not station.default_image.id %} selected{% endif %}><i>Disabled</i></option>
+                                <option value="{% url 'radioepg:set_logo' %}?station_id={{station.id}}&logo_id=0" {% if not station.default_image.id %} selected{% endif %}><i>Disabled</i></option>
                                 {% for logo in logos %}
-                                    <option value="{% url 'radioepg:set_logo' station.id logo.id %}" data- data-public_url="{{logo.file.url}}" {% if station.default_image.id == logo.id %}selected{% endif %}>{{logo.name}}</option>
+                                    <option value="{% url 'radioepg:set_logo' %}?station_id={{station.id}}&logo_id={{logo.id}}" data- data-public_url="{{logo.file.url}}" {% if station.default_image.id == logo.id %}selected{% endif %}>{{logo.name}}</option>
                                 {% endfor %}
                             </select>
                         </td>

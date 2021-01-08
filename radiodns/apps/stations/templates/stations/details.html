@@ -105,9 +105,9 @@
                                     </tr>
                                     <tr>
                                         <th>E-Mail</th>
-                                        <td>{% if instances.email_description %}{{ instances.email_description }}
+                                        <td>{% if instance.email_description %}{{ instances.email_description }}
                                             : {% endif %}
-                                            {% if instances.epg_email %}
+                                            {% if instance.epg_email %}
                                                 <a href="{{ instances.epg_email }}">{{ instances.email_address }}</a>{% endif %}
                                         </td>
                                     </tr>
@@ -126,14 +126,11 @@
                                     </div>
                                     <div class="col-md-12">
                                         <h4>Change logo</h4>
-                                        <select style="margin-bottom: 0px;" class="form-control"
-                                                onchange="StationModuleDetails.prototype.switch_default({{ station.id }}, $(this).val(), $(this));">
-                                            <option value="0" {% if not station.default_image %}
-                                                    selected{% endif %}><i>Disabled</i></option>
-                                            {% for image in images %}
-                                                <option value="{{ image.id }}"
-                                                        data-public_url="{{ image.scaled600x600.url  }}"
-                                                        {% if station.default_image.id == image.id %}selected{% endif %}>{{ image.name }}</option>
+                                        <select id="logo_select" style="margin-bottom: 0px;" class="form-control"
+                                                onchange="switch_default($(this).val(), $(this));">
+                                            <option value="{% url 'radioepg:set_logo' %}?station_id={{station.id}}&logo_id=0" {% if not station.default_image.id %} selected{% endif %}><i>Disabled</i></option>
+                                            {% for logo in images %}
+                                                <option value="{% url 'radioepg:set_logo' %}?station_id={{station.id}}&logo_id={{logo.id}}" data- data-public_url="{{logo.file.url}}" {% if station.default_image.id == logo.id %}selected{% endif %}>{{logo.name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -245,7 +242,29 @@
             </div>
                     <script src="{% static 'js/ajaxq.js' %}"></script>
                     <script src="{% static 'js/visibility.js' %}"></script>
-                    <script src="{% static 'js/stations/detail.js' %}"></script>
+                    <script type="text/javascript">
+                        function switch_default( val, elemToBlink) {
+                            $.ajax({
+                                url: val,
+                                success: function(data) {
+                                    elemToBlink.css('backgroundColor', 'green');
+                                    elemToBlink.css('opacity', '0.25');
+                                    elemToBlink.animate({ opacity: 1 }, 500, function() {
+                                        elemToBlink.css('backgroundColor', '#ffffff');
+                                    } );
+                                    // Update inline image
+                                    if(data["logo_id"] == 0) {
+                                        $('#station-img-'+data["station_id"]).hide();
+                                    } else {
+                                        $('#station-img-'+data["station_id"]).show();
+                                        var selected = elemToBlink.find('option:selected');
+                                        var new_public_url = selected.data('public_url');
+                                        $('#station-img-'+data["station_id"]).attr("src", new_public_url);
+                                    }
+                                }
+                            })
+                        }
+                    </script>
                     <script type="text/javascript">
                         $(document).ready(function () {
                             const clientsIds = [];
