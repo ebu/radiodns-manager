@@ -192,22 +192,23 @@
                                 <tr>
                                     <th>SPI Service Details:</th>
                                     <td>
+                                        {% if station.radioepg_enabled %}
                                         <span id="epg-{{ station.id }}">
-                                            {% if station.radioepg_enabled %}
                                                 <small>EPG</small>
                                                 {{ station.radioepg_service }}
-                                            {% else %}
-                                                <small>EPG epg disabled</small>
-                                            {% endif %}
                                         </span><br/>
                                         <span id="spi-{{ station.id }}">
-                                            {% if station.radiospi_service %}
                                                 <small>SPI</small>
                                                 {{ station.radiospi_service }}
-                                            {% else %}
-                                                <small>SPI spi disabled</small>
-                                            {% endif %}
                                         </span>
+                                        {% else %}
+                                        <span id="epg-{{ station.id }}">
+                                                <small>EPG epg disabled</small>
+                                        </span><br/>
+                                        <span id="spi-{{ station.id }}">
+                                                <small>SPI spi disabled</small>
+                                        </span>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
