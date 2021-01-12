@@ -49,9 +49,17 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
-    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}" />
-
     </div>
+     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}"/>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#radiovis-img-table').DataTable({
+                    "paging": false,
+                    "ordering": true,
+                    "info": true
+                });
+            });
+
+     </script>
 {% endblock %}
