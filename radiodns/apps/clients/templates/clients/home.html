@@ -1,4 +1,7 @@
+  GNU nano 2.9.3                                                                radiodns/apps/clients/templates/clients/home.html
+
 {% extends "base.html" %}
+{% load i18n static %}
 
 {% block title %}Clients :: RadioDNS{% endblock %}
 
@@ -25,7 +28,7 @@
     {% endblock %}
 
      <div class="table-responsive">
-         <table id="radiodns-channel-table" class="display" cellspacing="0" width="100%">
+         <table id="radiodns-client-table" class="display" cellspacing="0" width="100%">
              <thead>
                  <tr role="row">
                      <th>Name</th>
@@ -52,4 +55,17 @@
              </tbody>
          </table>
      </div>
+     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}"/>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#radiodns-client-table').DataTable({
+                    "paging": false,
+                    "ordering": true,
+                    "info": true
+                });
+            });
+
+     </script>
+
 {% endblock %}
