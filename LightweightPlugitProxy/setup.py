@@ -17,7 +17,7 @@ setup(name='lightweight_plugIt_proxy',
           'requests-toolbelt==0.8.0',
           'psycopg2==2.7.6.1',
           'backoff==1.6.0',
-          'Pillow==5.0.0',
+          'Pillow==8.3.2',
           'whitenoise==4.1.2'
       ],
       tests_require=[
