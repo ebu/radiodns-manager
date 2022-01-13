@@ -25,7 +25,7 @@ setup(
         'requests==2.21.0',
         'raven==6.9.0',
         'boto==2.43.0',
-        'Pillow==6.0.0',
+        'Pillow==9.0.0',
         'plugit==0.3.12',
         'MySQL-python==1.2.5',
         'Werkzeug==0.14.1',
