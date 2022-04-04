@@ -1,4 +1,4 @@
-FROM nginx:1.15
+FROM nginx:1.21
 
 SHELL ["/bin/bash", "-c"]
 COPY /certificates/ /opt/app/
