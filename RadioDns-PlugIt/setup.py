@@ -28,7 +28,7 @@ setup(
         'Pillow==6.0.0',
         'plugit==0.3.12',
         'MySQL-python==1.2.5',
-        'Werkzeug==0.14.1',
+        'Werkzeug==0.15.5',
         'pylint==1.9.3',
         'backoff==1.6.0',
         'jsonschema==2.6.0',
