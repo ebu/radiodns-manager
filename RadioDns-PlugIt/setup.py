@@ -17,7 +17,7 @@ setup(
     long_description="",
     long_description_content_type='',
     install_requires=[
-        'flask==1.0.2',
+        'flask==2.3.2',
         'sqlalchemy==1.2.18',
         'Flask-SQLAlchemy==2.3.2',
         'alembic==1.0.0',
