@@ -551,6 +551,8 @@ def channels_export(request):
             # Add Entries for all channels in ns and iso format
             wildcard_elem = '*' + elem.dns_entry[elem.dns_entry.find('.'):]
             wildcards = Channel.query.join(Station).filter(Channel.dns_entry == wildcard_elem).all()
+            if !elem.station.fqdn.endswith('.'):
+                elem.station.fqdn += '.'
             if wildcard_elem not in dns_elements or elem.dns_entry == wildcard_elem:
                 retour += elem.dns_entry.ljust(40) + '\tIN\tCNAME\t' + elem.station.fqdn + '\n'
                 if elem.ecc_id:  # Output ISO version if element has ECC
